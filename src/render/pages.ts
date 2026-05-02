@@ -107,7 +107,7 @@ const archiveHref = (locale: Locale, category?: PrimaryCategory, subcategory?: S
 const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, locale: Locale): string =>
   text(categories.find((category) => category.key === key)?.label ?? { ko: key, en: key }, locale);
 
-const assetVersion = "20260503-reference-pass";
+const assetVersion = "20260503-reading-pass";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -234,7 +234,6 @@ const renderArchiveRows = (articleList: Article[], site: SiteContent, locale: Lo
         <span class="archive-date">${formatDate(article.date, locale)}</span>
         <span class="archive-title">${escapeHtml(text(article.title, locale))}</span>
         <span class="archive-category">${escapeHtml(label)}</span>
-        <span class="archive-action">${escapeHtml(locale === "ko" ? "읽기" : "Read")}</span>
       </a>`;
   })
   .join("");
@@ -342,7 +341,6 @@ const renderDepartmentCards = (site: SiteContent, articleList: Article[], locale
         </span>
         <span class="department-name">${escapeHtml(label)}</span>
         <span class="department-desc">${escapeHtml(text(category.description, locale))}</span>
-        <span class="department-action">${escapeHtml(locale === "ko" ? "이 경로로 읽기" : "Read this route")}</span>
         <span class="subcategory-chips" aria-label="${escapeHtml(`${label} ${locale === "ko" ? "하위 카테고리" : "subcategories"}`)}">
           ${category.subcategories
             .map((subcategory) => `<span>${escapeHtml(text(subcategory.label, locale))}</span>`)
