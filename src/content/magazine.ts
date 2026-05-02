@@ -1,4 +1,4 @@
-import type { Article, CategoryDefinition, Note, SiteContent } from "../types";
+import type { Article, CategoryDefinition, IssueProject, Note, SiteContent } from "../types";
 
 export const categories: CategoryDefinition[] = [
   {
@@ -553,13 +553,105 @@ export const notes: Note[] = [
   }
 ];
 
+export const issueProject: IssueProject = {
+  number: "No. 01",
+  title: { ko: "Screen of Things", en: "Screen of Things" },
+  subtitle: {
+    ko: "사물이 화면이 되고, 화면이 다시 감각의 기준이 되는 첫 번째 디지털 에디션",
+    en: "A first digital edition on objects becoming screens, and screens becoming a measure of sense."
+  },
+  deck: {
+    ko: "첫 번째 이슈는 기존 카테고리를 한데 묶은 색인이 아니라 하나의 독립 편집 프로젝트입니다. 작업실의 표면, 조용한 인터페이스, 데이터의 독서성, 브랜드 시스템의 여백을 같은 질문 아래 새로 배치했습니다.",
+    en: "The first issue is not an index of existing categories, but a standalone editorial project. Studio surfaces, quiet interfaces, readable data, and breathable brand systems are newly arranged under one question."
+  },
+  date: { ko: "2026년 5월", en: "May 2026" },
+  format: { ko: "온라인 에디션 / 5개 피처", en: "Online edition / 5 features" },
+  availability: { ko: "오픈 액세스", en: "Open access" },
+  coverCredit: {
+    ko: "커버 이미지: 편집부가 구성한 가상 작업대 스터디",
+    en: "Cover image: an editorial study of an imagined studio surface."
+  },
+  editorNote: {
+    ko: "이번 호는 분야별 묶음보다 편집된 장면의 연쇄에 가깝습니다. 한 작가의 작업대에서 시작해 화면의 기본값까지 이동하지만, 모든 글은 같은 질문을 반복합니다. 무엇이 사물의 감각을 화면으로 옮기고, 어떤 화면은 다시 우리의 판단을 바꾸는가.",
+    en: "This issue is closer to a sequence of edited scenes than a set of departments. It moves from an artist's desk to the defaults of a screen, while repeating one question: what turns the sense of objects into screens, and which screens return to alter judgment?"
+  },
+  credits: [
+    { label: { ko: "편집", en: "Editor" }, value: { ko: "The Thing Editorial Desk", en: "The Thing Editorial Desk" } },
+    { label: { ko: "아트 디렉션", en: "Art Direction" }, value: { ko: "Surface Studies", en: "Surface Studies" } },
+    { label: { ko: "리서치", en: "Research" }, value: { ko: "서울 / 베를린 원격 노트", en: "Seoul / Berlin remote notes" } }
+  ],
+  features: [
+    {
+      role: { ko: "Cover Story", en: "Cover Story" },
+      title: { ko: "오프닝이 끝난 뒤 이미지가 남는 방식", en: "How Images Remain After the Opening" },
+      excerpt: {
+        ko: "전시는 행사보다 오래 남는 시선의 구조입니다. 사람이 빠진 뒤 작품이 낮은 목소리로 다시 보이는 시간을 따라갑니다.",
+        en: "An exhibition is a structure of looking that outlasts the event. We follow the time when work becomes visible again after the crowd leaves."
+      },
+      credit: { ko: "Essay / Editorial Desk", en: "Essay / Editorial Desk" },
+      location: { ko: "서울", en: "Seoul" },
+      readTime: { ko: "6분", en: "6 min" },
+      heroClass: "image-atelier"
+    },
+    {
+      role: { ko: "Studio Visit", en: "Studio Visit" },
+      title: { ko: "작업대는 작가의 가장 작은 지도다", en: "The Desk Is the Artist's Smallest Map" },
+      excerpt: {
+        ko: "흩어진 도구와 표시된 모서리는 작업의 방향을 감춥니다. 정리되지 않은 표면에서 다음 장면의 질서를 읽습니다.",
+        en: "Scattered tools and marked corners hide the direction of work. We read the order of the next scene from an unresolved surface."
+      },
+      credit: { ko: "Visit / Field Notes", en: "Visit / Field Notes" },
+      location: { ko: "성수", en: "Seongsu" },
+      readTime: { ko: "5분", en: "5 min" },
+      heroClass: "image-field"
+    },
+    {
+      role: { ko: "Interface Report", en: "Interface Report" },
+      title: { ko: "과시하지 않는 AI 인터페이스", en: "An AI Interface Without Performance" },
+      excerpt: {
+        ko: "좋은 도구는 자신의 능력을 계속 증명하지 않습니다. 사용자의 흐름을 방해하지 않는 낮은 화면의 조건을 묻습니다.",
+        en: "A good tool does not keep proving its intelligence. This report asks what makes a low, useful screen that interrupts less."
+      },
+      credit: { ko: "Report / Systems Desk", en: "Report / Systems Desk" },
+      location: { ko: "원격", en: "Remote" },
+      readTime: { ko: "7분", en: "7 min" },
+      heroClass: "image-interface"
+    },
+    {
+      role: { ko: "Design Study", en: "Design Study" },
+      title: { ko: "숨 쉴 공간이 있는 브랜드 시스템", en: "A Brand System With Room to Breathe" },
+      excerpt: {
+        ko: "강한 로고보다 오래 남는 것은 반복 가능한 여백입니다. 브랜드가 매번 소리치지 않고도 기억되는 구조를 봅니다.",
+        en: "What lasts longer than a loud logo is repeatable space. We look at a structure that lets a brand be remembered without shouting."
+      },
+      credit: { ko: "Study / Design Notes", en: "Study / Design Notes" },
+      location: { ko: "도쿄", en: "Tokyo" },
+      readTime: { ko: "5분", en: "5 min" },
+      heroClass: "image-system"
+    },
+    {
+      role: { ko: "Closing Essay", en: "Closing Essay" },
+      title: { ko: "기본값의 윤리", en: "The Ethics of Default Settings" },
+      excerpt: {
+        ko: "기본값은 중립적인 설정이 아니라 가장 강한 제안입니다. 화면 뒤에 숨은 책임의 위치를 다시 묻습니다.",
+        en: "A default is not a neutral setting but the strongest proposal. The closing essay returns to responsibility hidden behind the screen."
+      },
+      credit: { ko: "Essay / Philosophy Desk", en: "Essay / Philosophy Desk" },
+      location: { ko: "서울", en: "Seoul" },
+      readTime: { ko: "6분", en: "6 min" },
+      heroClass: "image-thought"
+    }
+  ]
+};
+
 export const site: SiteContent = {
   title: { ko: "The Thing", en: "The Thing" },
   description: {
     ko: "예술, 테크, 디자인, 철학을 하나의 감각적 편집면으로 엮는 디지털 저널",
     en: "A digital journal connecting art, tech, design, and philosophy through a quiet editorial lens."
   },
-  issue: "Issue 01",
+  issue: issueProject.number,
+  issueProject,
   month: { ko: "2026년 5월", en: "May 2026" },
   heroKicker: { ko: "Objects, Screens, Systems", en: "Objects, Screens, Systems" },
   heroTitle: {

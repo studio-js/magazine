@@ -5448,6 +5448,383 @@ html[lang="ko"] .archive-heading h2 {
   }
 }
 
+/* Issue project and archive hierarchy pass */
+.department-card,
+.archive-row,
+.issue-feature-row {
+  position: relative;
+}
+
+.department-card,
+.department-card:nth-child(2n),
+.department-card:last-child {
+  border-top-color: var(--hairline) !important;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+
+.department-card::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: var(--ink);
+  opacity: 1;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 140ms ease;
+}
+
+.department-card:hover,
+.department-card:focus-visible {
+  border-top-color: transparent !important;
+  background: var(--surface-wash) !important;
+}
+
+.department-card:hover::before,
+.department-card:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.department-card:hover .department-name,
+.department-card:focus-visible .department-name {
+  transform: translateX(0.28rem);
+}
+
+.department-card:hover .department-desc,
+.department-card:focus-visible .department-desc,
+.department-card:hover .department-meta,
+.department-card:focus-visible .department-meta {
+  color: var(--ink);
+}
+
+.archive-page .archive-heading {
+  margin-bottom: clamp(1rem, 2vw, 1.7rem);
+}
+
+.filter-shell-category {
+  gap: 0.55rem;
+  padding-block: clamp(0.95rem, 1.6vw, 1.35rem);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.filter-shell-category .category-filter-panel {
+  grid-template-columns: minmax(7rem, 0.14fr) minmax(0, 0.38fr) minmax(18rem, 0.48fr);
+  gap: clamp(0.9rem, 2vw, 1.8rem);
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.filter-shell-category .category-filter-panel strong {
+  font-size: clamp(0.98rem, 1.1vw, 1.18rem);
+  font-weight: 520;
+  letter-spacing: 0;
+}
+
+.filter-shell-category .category-filter-panel p {
+  color: var(--muted);
+  font-size: clamp(0.94rem, 1vw, 1.05rem);
+}
+
+.filter-shell-category .filter-status {
+  color: var(--faint);
+  font-size: 0.78rem;
+}
+
+.archive-row::after,
+.issue-feature-row::before {
+  content: "";
+  display: block !important;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 140ms ease;
+}
+
+.archive-row::after {
+  bottom: 0;
+}
+
+.archive-row:hover::after,
+.archive-row:focus-visible::after,
+.archive-row.is-active::after,
+.issue-feature-row:hover::before,
+.issue-feature-row:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.archive-row:hover,
+.archive-row:focus-visible {
+  background: var(--surface-wash) !important;
+}
+
+.archive-row:hover .archive-category,
+.archive-row:focus-visible .archive-category,
+.archive-row:hover .archive-info,
+.archive-row:focus-visible .archive-info {
+  color: var(--ink);
+}
+
+.issue-project-page {
+  gap: clamp(2.1rem, 4vw, 5rem);
+}
+
+.issue-project-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.62fr) minmax(22rem, 0.38fr);
+  gap: clamp(1.6rem, 4.8vw, 6rem);
+  align-items: end;
+  padding-top: clamp(2.8rem, 5vw, 6rem);
+}
+
+.issue-project-title {
+  display: grid;
+  gap: clamp(0.8rem, 1.5vw, 1.35rem);
+}
+
+.issue-project-no {
+  display: block;
+  color: var(--ink);
+  font-size: clamp(5rem, 17vw, 19rem);
+  font-weight: 430;
+  letter-spacing: -0.08em;
+  line-height: 0.78;
+}
+
+.issue-project-title h1 {
+  max-width: 11ch;
+  margin: 0;
+  font-size: clamp(2.4rem, 6vw, 8rem);
+  font-weight: 410;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+.issue-project-title p:not(.kicker) {
+  max-width: 48rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1.05rem, 1.45vw, 1.55rem);
+  line-height: 1.64;
+  word-break: keep-all;
+}
+
+.issue-cover-card {
+  display: grid;
+  gap: 0.8rem;
+  padding: clamp(0.75rem, 1.3vw, 1rem);
+  background: var(--surface-wash);
+  transition: background 140ms ease;
+}
+
+.issue-cover-card:hover {
+  background: var(--surface-wash-strong);
+}
+
+.issue-cover-card .image-block {
+  aspect-ratio: 4 / 5;
+}
+
+.issue-cover-card small,
+.issue-cover-card em,
+.issue-project-ledger small,
+.issue-credit-grid small,
+.issue-feature-meta {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.issue-cover-card strong {
+  font-size: clamp(1.25rem, 1.75vw, 2rem);
+  font-weight: 430;
+  line-height: 1.18;
+  word-break: keep-all;
+}
+
+.issue-cover-card em {
+  font-style: normal;
+  line-height: 1.5;
+  text-transform: none;
+}
+
+.issue-project-ledger,
+.issue-credit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2.6vw, 3rem);
+  padding-block: clamp(1rem, 1.8vw, 1.45rem);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.issue-project-ledger span,
+.issue-credit-grid span {
+  display: grid;
+  gap: 0.36rem;
+}
+
+.issue-project-ledger strong,
+.issue-credit-grid strong {
+  font-size: clamp(1.05rem, 1.35vw, 1.45rem);
+  font-weight: 430;
+  letter-spacing: 0.002em;
+  line-height: 1.25;
+  word-break: keep-all;
+}
+
+.issue-editorial-note {
+  display: grid;
+  grid-template-columns: minmax(0, 0.36fr) minmax(20rem, 0.64fr);
+  gap: clamp(1.4rem, 4vw, 5rem);
+  align-items: start;
+}
+
+.issue-editorial-note h2 {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2rem, 4.2vw, 5.4rem);
+  font-weight: 410;
+  letter-spacing: -0.018em;
+  line-height: 1.02;
+  word-break: keep-all;
+}
+
+.issue-editorial-copy {
+  display: grid;
+  gap: 1rem;
+}
+
+.issue-editorial-copy p {
+  max-width: 68ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1.02rem, 1.2vw, 1.28rem);
+  line-height: 1.78;
+  word-break: keep-all;
+}
+
+.issue-toc {
+  border-top: 1px solid var(--hairline);
+}
+
+.issue-feature-row,
+.issue-feature-row:hover,
+.issue-feature-row:focus-visible {
+  display: grid;
+  grid-template-columns: 3.8rem minmax(8rem, 0.14fr) minmax(0, 0.34fr) minmax(10rem, 0.18fr) minmax(16rem, 0.24fr) minmax(8rem, 0.1fr);
+  gap: clamp(0.8rem, 1.8vw, 1.8rem);
+  align-items: start;
+  padding: clamp(1rem, 1.8vw, 1.55rem) 0;
+  background: transparent;
+  box-shadow: inset 0 -1px 0 var(--hairline);
+}
+
+.issue-feature-row:hover,
+.issue-feature-row:focus-visible {
+  background: var(--surface-wash);
+}
+
+.issue-feature-row::before {
+  top: 0;
+}
+
+.issue-feature-row strong {
+  font-size: clamp(1.25rem, 2.05vw, 2.7rem);
+  font-weight: 410;
+  letter-spacing: 0.004em;
+  line-height: 1.2;
+  word-break: keep-all;
+  transition: transform 140ms ease;
+}
+
+.issue-feature-row:hover strong,
+.issue-feature-row:focus-visible strong {
+  transform: translateX(0.38rem);
+}
+
+.issue-feature-row em {
+  color: var(--muted);
+  font-style: normal;
+  line-height: 1.58;
+  word-break: keep-all;
+}
+
+.issue-feature-row .image-block {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  opacity: 0.88;
+}
+
+.issue-feature-row:hover .image-block,
+.issue-feature-row:focus-visible .image-block,
+.issue-cover-card:hover .image-block {
+  filter: contrast(1.08) saturate(0.88);
+  transform: scale(1.012);
+}
+
+html[lang="ko"] .issue-project-title h1,
+html[lang="ko"] .issue-editorial-note h2,
+html[lang="ko"] .issue-feature-row strong,
+html[lang="ko"] .issue-project-ledger strong,
+html[lang="ko"] .issue-credit-grid strong {
+  font-weight: 410;
+  font-variation-settings: "wght" 410;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 1180px) {
+  .issue-feature-row,
+  .issue-feature-row:hover,
+  .issue-feature-row:focus-visible {
+    grid-template-columns: 3rem minmax(7rem, 0.18fr) minmax(0, 1fr) minmax(9rem, 0.2fr);
+  }
+
+  .issue-feature-row em,
+  .issue-feature-row .image-block {
+    grid-column: 3 / -1;
+  }
+}
+
+@media (max-width: 960px) {
+  .issue-project-hero,
+  .issue-editorial-note,
+  .issue-project-ledger,
+  .issue-credit-grid,
+  .filter-shell-category .category-filter-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-shell-category .subcategory-filter {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 680px) {
+  .issue-project-no {
+    font-size: clamp(4.4rem, 28vw, 8rem);
+  }
+
+  .issue-feature-row,
+  .issue-feature-row:hover,
+  .issue-feature-row:focus-visible {
+    grid-template-columns: 1fr;
+  }
+
+  .issue-feature-row em,
+  .issue-feature-row .image-block {
+    grid-column: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

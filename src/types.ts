@@ -77,10 +77,40 @@ export interface Note {
   body: LocalizedText;
 }
 
+export interface IssueCredit {
+  label: LocalizedText;
+  value: LocalizedText;
+}
+
+export interface IssueFeature {
+  role: LocalizedText;
+  title: LocalizedText;
+  excerpt: LocalizedText;
+  credit: LocalizedText;
+  location: LocalizedText;
+  readTime: LocalizedText;
+  heroClass: VisualClass;
+}
+
+export interface IssueProject {
+  number: string;
+  title: LocalizedText;
+  subtitle: LocalizedText;
+  deck: LocalizedText;
+  date: LocalizedText;
+  format: LocalizedText;
+  availability: LocalizedText;
+  coverCredit: LocalizedText;
+  editorNote: LocalizedText;
+  credits: IssueCredit[];
+  features: IssueFeature[];
+}
+
 export interface SiteContent {
   title: LocalizedText;
   description: LocalizedText;
   issue: string;
+  issueProject: IssueProject;
   month: LocalizedText;
   heroKicker: LocalizedText;
   heroTitle: LocalizedText;

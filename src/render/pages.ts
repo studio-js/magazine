@@ -109,7 +109,7 @@ const archiveHref = (locale: Locale, category?: PrimaryCategory, subcategory?: S
 const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, locale: Locale): string =>
   text(categories.find((category) => category.key === key)?.label ?? { ko: key, en: key }, locale);
 
-const assetVersion = "20260503-issue-nav-pass";
+const assetVersion = "20260503-issue-project-pass";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -126,8 +126,8 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
             <span>${escapeHtml(labels.issue)}</span>
           </a>
           <div class="nav-submenu issue-submenu" aria-label="${escapeHtml(locale === "ko" ? "이슈 안내" : "Issue guide")}">
-            <p>${escapeHtml(locale === "ko" ? "여러 분야의 글을 하나의 발행 단위로 묶어 읽습니다." : "Read multiple fields gathered as one publication unit.")}</p>
-            <a href="${withLocale("/issues", locale)}"><span>${escapeHtml(site.issue)}</span></a>
+            <p>${escapeHtml(locale === "ko" ? "별도로 기획한 디지털 발행 프로젝트를 읽습니다." : "Read a standalone digital publication project.")}</p>
+            <a href="${withLocale("/issues", locale)}"><span>${escapeHtml(`${site.issueProject.number} · ${text(site.issueProject.title, locale)}`)}</span></a>
           </div>
         </div>`;
   const categoryLinks = site.categories
@@ -219,23 +219,34 @@ const renderNotes = (notes: Note[], locale: Locale): string => notes
   )
   .join("");
 
-const renderArchiveRows = (articleList: Article[], site: SiteContent, locale: Locale): string => articleList
+const renderArchiveRows = (
+  articleList: Article[],
+  site: SiteContent,
+  locale: Locale,
+  selectedCategory?: PrimaryCategory,
+  selectedSubcategory?: SubcategoryKey
+): string => articleList
   .map((article) => {
-    const label = `${categoryLabel(site.categories, article.category, locale)} / ${text(article.subcategory, locale)}`;
+    const fullLabel = `${categoryLabel(site.categories, article.category, locale)} / ${text(article.subcategory, locale)}`;
+    const rowLabel = selectedSubcategory
+      ? article.tags[locale].slice(0, 2).join(" / ")
+      : selectedCategory
+        ? text(article.subcategory, locale)
+        : fullLabel;
 
     return `
       <a
         href="${articleHref(article, locale)}"
         class="archive-row"
         data-preview-class="${article.heroClass}"
-        data-preview-kicker="${escapeHtml(label)}"
+        data-preview-kicker="${escapeHtml(fullLabel)}"
         data-preview-title="${escapeHtml(text(article.title, locale))}"
         data-category="${article.category}"
         data-action-card
       >
         <span class="archive-date">${formatDate(article.date, locale)}</span>
         <span class="archive-title">${escapeHtml(text(article.title, locale))}</span>
-        <span class="archive-category">${escapeHtml(label)}</span>
+        <span class="archive-category">${escapeHtml(rowLabel)}</span>
         <span class="archive-info">
           <span>${escapeHtml(text(article.readTime, locale))}</span>
           <span>${escapeHtml(text(article.location, locale))}</span>
@@ -265,17 +276,19 @@ const renderArchiveBoard = (
 
     return !selectedSubcategoryDefinition || articleHasSubcategory(article, selectedSubcategoryDefinition.key);
   });
-  const activeLabel = selectedCategoryDefinition && selectedSubcategoryDefinition
-    ? `${text(selectedCategoryDefinition.label, locale)} / ${text(selectedSubcategoryDefinition.label, locale)}`
-    : selectedCategoryDefinition
-      ? text(selectedCategoryDefinition.label, locale)
-      : ui[locale].all;
+  const visibleStatus = locale === "ko" ? `${visibleArticles.length}개의 글 표시 중` : `${visibleArticles.length} articles showing`;
   const filters = includeFilters
     ? selectedCategoryDefinition
       ? `<div class="filter-shell filter-shell-category" data-filter-shell>
           <div class="filter-panel category-filter-panel is-active" aria-live="polite">
-            <strong>${escapeHtml(activeLabel)}</strong>
-            <p>${escapeHtml(text(selectedCategoryDefinition.description, locale))}</p>
+            <strong>${escapeHtml(locale === "ko" ? `${visibleArticles.length}개의 글` : `${visibleArticles.length} articles`)}</strong>
+            <p>${escapeHtml(selectedSubcategoryDefinition
+              ? locale === "ko"
+                ? `${text(selectedSubcategoryDefinition.label, locale)}에 해당하는 글만 남겼습니다.`
+                : `Only ${text(selectedSubcategoryDefinition.label, locale).toLowerCase()} articles are shown.`
+              : locale === "ko"
+                ? "하위 분류만 남겨 이 분야를 더 좁게 읽습니다."
+                : "Use subcategories to narrow this department without repeating the main label.")}</p>
             <span class="subcategory-filter" aria-label="${escapeHtml(locale === "ko" ? "하위 카테고리 필터" : "Subcategory filter")}">
               <a class="${selectedSubcategoryDefinition ? "" : "is-active"}" href="${archiveHref(locale, selectedCategoryDefinition.key)}"${selectedSubcategoryDefinition ? "" : " aria-current=\"page\""}>${escapeHtml(locale === "ko" ? "전체" : "All")}</a>
               ${selectedCategoryDefinition.subcategories
@@ -287,7 +300,7 @@ const renderArchiveBoard = (
                 .join("")}
             </span>
           </div>
-          <p class="filter-status" data-filter-status>${escapeHtml(activeLabel)} · ${visibleArticles.length} ${escapeHtml(locale === "ko" ? "개의 글 표시 중" : "articles showing")}</p>
+          <p class="filter-status" data-filter-status>${escapeHtml(visibleStatus)}</p>
         </div>`
       : `<div class="filter-shell" data-filter-shell>
           <div class="filter-row" aria-label="Archive category filter">
@@ -312,7 +325,7 @@ const renderArchiveBoard = (
               <p>${escapeHtml(locale === "ko" ? "카테고리를 선택하면 해당 분야의 하위 분류만 남겨 더 좁게 읽습니다." : "Choose a department to continue with only its subcategories.")}</p>
             </div>
           </div>
-          <p class="filter-status" data-filter-status>${escapeHtml(activeLabel)} · ${visibleArticles.length} ${escapeHtml(locale === "ko" ? "개의 글 표시 중" : "articles showing")}</p>
+          <p class="filter-status" data-filter-status>${escapeHtml(visibleStatus)}</p>
         </div>`
     : "";
 
@@ -321,7 +334,7 @@ const renderArchiveBoard = (
     <div class="archive-board ${visibleArticles.length === 0 ? "is-empty" : ""}" data-archive-board data-reveal>
       <div class="archive-list" data-archive-list>
         ${visibleArticles.length > 0
-          ? renderArchiveRows(visibleArticles, site, locale)
+          ? renderArchiveRows(visibleArticles, site, locale, selectedCategory, selectedSubcategory)
           : `<p class="archive-empty">${escapeHtml(locale === "ko" ? "아직 이 하위 카테고리로 묶인 글이 없습니다. 다른 하위 카테고리를 선택해 주세요." : "No articles are filed under this subcategory yet. Choose another subcategory to continue reading.")}</p>`}
       </div>
     </div>`;
@@ -503,65 +516,71 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
   return renderLayout({ title: text(site.title, locale), description: text(site.description, locale), body, locale, currentPath, site });
 };
 
-export const renderIssuePage = (site: SiteContent, articleList: Article[], locale: Locale, currentPath: string): string => {
-  const leadArticle = articleList[0];
-  const issueIntro = locale === "ko"
-    ? "이슈는 단일 칼럼이 아니라 여러 분야의 글을 하나의 발행 단위로 묶은 판입니다. 예술, 테크, 디자인, 철학을 한 번에 읽는 흐름으로 정리했습니다."
-    : "An issue is not a single column, but a publication unit that binds multiple fields into one reading flow.";
-  const issueRows = articleList
-    .map((article, index) => {
-      const label = `${categoryLabel(site.categories, article.category, locale)} / ${text(article.subcategory, locale)}`;
-
-      return `
-        <a class="issue-toc-row" href="${articleHref(article, locale)}" data-reveal>
+export const renderIssuePage = (site: SiteContent, _articleList: Article[], locale: Locale, currentPath: string): string => {
+  const issue = site.issueProject;
+  const coverFeature = issue.features[0];
+  const issueRows = issue.features
+    .map((feature, index) => `        <article class="issue-toc-row issue-feature-row" data-reveal>
           <span class="issue-toc-no">${String(index + 1).padStart(2, "0")}</span>
-          <span class="issue-toc-meta">${escapeHtml(formatDate(article.date, locale))} / ${escapeHtml(label)}</span>
-          <strong>${escapeHtml(text(article.title, locale))}</strong>
-          <em>${escapeHtml(text(article.excerpt, locale))}</em>
-        </a>`;
-    })
-    .join("");
-  const routeCards = site.categories
-    .map((category, index) => {
-      const categoryArticles = articleList.filter((article) => article.category === category.key);
-      const firstArticle = categoryArticles[0];
-
-      return `
-        <a class="issue-route-card" href="${archiveHref(locale, category.key)}" data-reveal>
-          <span>${String(index + 1).padStart(2, "0")}</span>
-          <strong>${escapeHtml(text(category.label, locale))}</strong>
-          <small>${escapeHtml(locale === "ko" ? `${categoryArticles.length}편` : `${categoryArticles.length} stories`)}</small>
-          <em>${firstArticle ? escapeHtml(text(firstArticle.title, locale)) : escapeHtml(text(category.description, locale))}</em>
-        </a>`;
-    })
-    .join("");
+          <span class="issue-toc-meta">${escapeHtml(text(feature.role, locale))}</span>
+          <strong>${escapeHtml(text(feature.title, locale))}</strong>
+          <span class="issue-feature-meta">${escapeHtml(text(feature.credit, locale))} / ${escapeHtml(text(feature.location, locale))} / ${escapeHtml(text(feature.readTime, locale))}</span>
+          <em>${escapeHtml(text(feature.excerpt, locale))}</em>
+          <span class="image-block ${feature.heroClass}" aria-hidden="true"></span>
+        </article>`)
+    .join("\n");
+  const credits = issue.credits
+    .map((credit) => `        <span>
+          <small>${escapeHtml(text(credit.label, locale))}</small>
+          <strong>${escapeHtml(text(credit.value, locale))}</strong>
+        </span>`)
+    .join("\n");
 
   const body = `
-    <section class="issue-page section-pad" aria-labelledby="issue-page-title">
-      <header class="issue-page-hero" data-reveal>
-        <div>
+    <section class="issue-page issue-project-page section-pad" aria-labelledby="issue-page-title">
+      <header class="issue-project-hero" data-reveal>
+        <div class="issue-project-title">
           <p class="kicker">Magazine Issue</p>
-          <h1 id="issue-page-title">${escapeHtml(site.issue)}</h1>
+          <span class="issue-project-no">${escapeHtml(issue.number)}</span>
+          <h1 id="issue-page-title">${escapeHtml(text(issue.title, locale))}</h1>
+          <p>${escapeHtml(text(issue.subtitle, locale))}</p>
         </div>
-        <p>${escapeHtml(issueIntro)}</p>
+
+        <aside class="issue-cover-card" aria-label="${escapeHtml(locale === "ko" ? "이슈 커버" : "Issue cover")}">
+          <span class="image-block ${coverFeature.heroClass}" aria-hidden="true"></span>
+          <small>${escapeHtml(locale === "ko" ? "커버 스토리" : "Cover Story")}</small>
+          <strong>${escapeHtml(text(coverFeature.title, locale))}</strong>
+          <em>${escapeHtml(text(issue.coverCredit, locale))}</em>
+        </aside>
       </header>
 
-      <div class="issue-page-ledger" data-reveal>
-        <span><small>${escapeHtml(locale === "ko" ? "발행" : "Published")}</small><strong>${escapeHtml(text(site.month, locale))}</strong></span>
-        <span><small>${escapeHtml(locale === "ko" ? "대표 글" : "Lead")}</small><strong>${escapeHtml(text(leadArticle.title, locale))}</strong></span>
-        <span><small>${escapeHtml(locale === "ko" ? "수록" : "Volume")}</small><strong>${escapeHtml(locale === "ko" ? `${articleList.length}편` : `${articleList.length} stories`)}</strong></span>
+      <div class="issue-project-ledger" data-reveal>
+        <span><small>${escapeHtml(locale === "ko" ? "발행" : "Published")}</small><strong>${escapeHtml(text(issue.date, locale))}</strong></span>
+        <span><small>${escapeHtml(locale === "ko" ? "형식" : "Format")}</small><strong>${escapeHtml(text(issue.format, locale))}</strong></span>
+        <span><small>${escapeHtml(locale === "ko" ? "상태" : "Access")}</small><strong>${escapeHtml(text(issue.availability, locale))}</strong></span>
       </div>
 
-      <div class="issue-route-cards" aria-label="${escapeHtml(locale === "ko" ? "이슈 분야" : "Issue departments")}">
-        ${routeCards}
-      </div>
+      <section class="issue-editorial-note" aria-label="${escapeHtml(locale === "ko" ? "편집 노트" : "Editor's note")}" data-reveal>
+        <div>
+          <p class="kicker">Editor's Note</p>
+          <h2>${escapeHtml(locale === "ko" ? "기존 카테고리 밖에서 시작한 호" : "An issue that begins outside the departments")}</h2>
+        </div>
+        <div class="issue-editorial-copy">
+          <p>${escapeHtml(text(issue.deck, locale))}</p>
+          <p>${escapeHtml(text(issue.editorNote, locale))}</p>
+        </div>
+      </section>
 
       <div class="issue-toc" aria-label="${escapeHtml(locale === "ko" ? "이슈 목차" : "Issue table of contents")}">
-        ${issueRows}
+${issueRows}
+      </div>
+
+      <div class="issue-credit-grid" aria-label="${escapeHtml(locale === "ko" ? "이슈 크레딧" : "Issue credits")}" data-reveal>
+${credits}
       </div>
     </section>`;
 
-  return renderLayout({ title: `${site.issue} | ${text(site.title, locale)}`, description: issueIntro, body, locale, currentPath, site });
+  return renderLayout({ title: `${issue.number} · ${text(issue.title, locale)} | ${text(site.title, locale)}`, description: text(issue.deck, locale), body, locale, currentPath, site });
 };
 
 export const renderArticlePage = (
@@ -665,17 +684,22 @@ export const renderArchivePage = (
   const labels = ui[locale];
   const selectedCategoryDefinition = selectedCategory ? site.categories.find((category) => category.key === selectedCategory) : undefined;
   const selectedSubcategoryDefinition = selectedCategoryDefinition?.subcategories.find((subcategory) => subcategory.key === selectedSubcategory);
-  const archiveTitle = selectedCategoryDefinition && selectedSubcategoryDefinition
-    ? `${text(selectedCategoryDefinition.label, locale)} / ${text(selectedSubcategoryDefinition.label, locale)}`
+  const archiveTitle = selectedSubcategoryDefinition
+    ? text(selectedSubcategoryDefinition.label, locale)
     : selectedCategoryDefinition
       ? text(selectedCategoryDefinition.label, locale)
       : labels.fullArchive;
   const archiveLead = selectedCategoryDefinition ? text(selectedCategoryDefinition.description, locale) : labels.archiveLead;
+  const archiveKicker = selectedCategoryDefinition && selectedSubcategoryDefinition
+    ? `${text(selectedCategoryDefinition.label, locale)} ${locale === "ko" ? "아카이브" : "Archive"}`
+    : selectedCategoryDefinition
+      ? "Department Archive"
+      : "Full Archive";
   const body = `
     <section class="archive archive-page section-pad" aria-labelledby="archive-title">
       <div class="archive-heading" data-reveal>
         <div>
-          <p class="kicker">${escapeHtml(selectedCategoryDefinition ? "Department Archive" : "Full Archive")}</p>
+          <p class="kicker">${escapeHtml(archiveKicker)}</p>
           <h1 id="archive-title">${escapeHtml(archiveTitle)}</h1>
         </div>
         <p>${escapeHtml(archiveLead)}</p>

@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="An issue is not a single column, but a publication unit that binds multiple fields into one reading flow." />
-    <title>Issue 01 | The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-issue-nav-pass" />
-    <script src="/magazine/client.js?v=20260503-issue-nav-pass" defer></script>
+    <meta name="description" content="The first issue is not an index of existing categories, but a standalone editorial project. Studio surfaces, quiet interfaces, readable data, and breathable brand systems are newly arranged under one question." />
+    <title>No. 01 · Screen of Things | The Thing</title>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-issue-project-pass" />
+    <script src="/magazine/client.js?v=20260503-issue-project-pass" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -22,8 +22,8 @@
             <span>Issue</span>
           </a>
           <div class="nav-submenu issue-submenu" aria-label="Issue guide">
-            <p>Read multiple fields gathered as one publication unit.</p>
-            <a href="/magazine/en/issues"><span>Issue 01</span></a>
+            <p>Read a standalone digital publication project.</p>
+            <a href="/magazine/en/issues"><span>No. 01 · Screen of Things</span></a>
           </div>
         </div>
         <div class="nav-item ">
@@ -127,8 +127,8 @@
             <span>Issue</span>
           </a>
           <div class="nav-submenu issue-submenu" aria-label="Issue guide">
-            <p>Read multiple fields gathered as one publication unit.</p>
-            <a href="/magazine/en/issues"><span>Issue 01</span></a>
+            <p>Read a standalone digital publication project.</p>
+            <a href="/magazine/en/issues"><span>No. 01 · Screen of Things</span></a>
           </div>
         </div>
         <div class="nav-item ">
@@ -222,99 +222,96 @@
     </div>
 
     <main id="top">
-    <section class="issue-page section-pad" aria-labelledby="issue-page-title">
-      <header class="issue-page-hero" data-reveal>
-        <div>
+    <section class="issue-page issue-project-page section-pad" aria-labelledby="issue-page-title">
+      <header class="issue-project-hero" data-reveal>
+        <div class="issue-project-title">
           <p class="kicker">Magazine Issue</p>
-          <h1 id="issue-page-title">Issue 01</h1>
+          <span class="issue-project-no">No. 01</span>
+          <h1 id="issue-page-title">Screen of Things</h1>
+          <p>A first digital edition on objects becoming screens, and screens becoming a measure of sense.</p>
         </div>
-        <p>An issue is not a single column, but a publication unit that binds multiple fields into one reading flow.</p>
+
+        <aside class="issue-cover-card" aria-label="Issue cover">
+          <span class="image-block image-atelier" aria-hidden="true"></span>
+          <small>Cover Story</small>
+          <strong>How Images Remain After the Opening</strong>
+          <em>Cover image: an editorial study of an imagined studio surface.</em>
+        </aside>
       </header>
 
-      <div class="issue-page-ledger" data-reveal>
+      <div class="issue-project-ledger" data-reveal>
         <span><small>Published</small><strong>May 2026</strong></span>
-        <span><small>Lead</small><strong>How Images Remain After the Opening</strong></span>
-        <span><small>Volume</small><strong>8 stories</strong></span>
+        <span><small>Format</small><strong>Online edition / 5 features</strong></span>
+        <span><small>Access</small><strong>Open access</strong></span>
       </div>
 
-      <div class="issue-route-cards" aria-label="Issue departments">
-        
-        <a class="issue-route-card" href="/magazine/en/archive/art/" data-reveal>
-          <span>01</span>
-          <strong>Art</strong>
-          <small>2 stories</small>
-          <em>How Images Remain After the Opening</em>
-        </a>
-        <a class="issue-route-card" href="/magazine/en/archive/tech/" data-reveal>
-          <span>02</span>
-          <strong>Tech</strong>
-          <small>2 stories</small>
-          <em>An AI Interface Without Performance</em>
-        </a>
-        <a class="issue-route-card" href="/magazine/en/archive/design/" data-reveal>
-          <span>03</span>
-          <strong>Design</strong>
-          <small>2 stories</small>
-          <em>A Brand System With Room to Breathe</em>
-        </a>
-        <a class="issue-route-card" href="/magazine/en/archive/philosophy/" data-reveal>
-          <span>04</span>
-          <strong>Philosophy</strong>
-          <small>2 stories</small>
-          <em>Thinking Slowly Inside Fast Tools</em>
-        </a>
-      </div>
+      <section class="issue-editorial-note" aria-label="Editor&#39;s note" data-reveal>
+        <div>
+          <p class="kicker">Editor's Note</p>
+          <h2>An issue that begins outside the departments</h2>
+        </div>
+        <div class="issue-editorial-copy">
+          <p>The first issue is not an index of existing categories, but a standalone editorial project. Studio surfaces, quiet interfaces, readable data, and breathable brand systems are newly arranged under one question.</p>
+          <p>This issue is closer to a sequence of edited scenes than a set of departments. It moves from an artist&#39;s desk to the defaults of a screen, while repeating one question: what turns the sense of objects into screens, and which screens return to alter judgment?</p>
+        </div>
+      </section>
 
       <div class="issue-toc" aria-label="Issue table of contents">
-        
-        <a class="issue-toc-row" href="/magazine/en/articles/quiet-images-after-the-opening" data-reveal>
+        <article class="issue-toc-row issue-feature-row" data-reveal>
           <span class="issue-toc-no">01</span>
-          <span class="issue-toc-meta">May 02, 2026 / Art / Exhibitions</span>
+          <span class="issue-toc-meta">Cover Story</span>
           <strong>How Images Remain After the Opening</strong>
-          <em>Seeing a show is closer to remembering the work afterward than standing in front of it.</em>
-        </a>
-        <a class="issue-toc-row" href="/magazine/en/articles/artist-desk-as-studio-map" data-reveal>
+          <span class="issue-feature-meta">Essay / Editorial Desk / Seoul / 6 min</span>
+          <em>An exhibition is a structure of looking that outlasts the event. We follow the time when work becomes visible again after the crowd leaves.</em>
+          <span class="image-block image-atelier" aria-hidden="true"></span>
+        </article>
+        <article class="issue-toc-row issue-feature-row" data-reveal>
           <span class="issue-toc-no">02</span>
-          <span class="issue-toc-meta">Apr 26, 2026 / Art / Artists</span>
+          <span class="issue-toc-meta">Studio Visit</span>
           <strong>The Desk Is the Artist&#39;s Smallest Map</strong>
-          <em>The arrangement of a desk shows what an artist holds onto and what they postpone.</em>
-        </a>
-        <a class="issue-toc-row" href="/magazine/en/articles/ai-interface-without-performance" data-reveal>
+          <span class="issue-feature-meta">Visit / Field Notes / Seongsu / 5 min</span>
+          <em>Scattered tools and marked corners hide the direction of work. We read the order of the next scene from an unresolved surface.</em>
+          <span class="image-block image-field" aria-hidden="true"></span>
+        </article>
+        <article class="issue-toc-row issue-feature-row" data-reveal>
           <span class="issue-toc-no">03</span>
-          <span class="issue-toc-meta">Apr 18, 2026 / Tech / AI</span>
+          <span class="issue-toc-meta">Interface Report</span>
           <strong>An AI Interface Without Performance</strong>
-          <em>A good AI interface shortens the time users spend noticing the technology.</em>
-        </a>
-        <a class="issue-toc-row" href="/magazine/en/articles/data-dashboard-as-reading-room" data-reveal>
+          <span class="issue-feature-meta">Report / Systems Desk / Remote / 7 min</span>
+          <em>A good tool does not keep proving its intelligence. This report asks what makes a low, useful screen that interrupts less.</em>
+          <span class="image-block image-interface" aria-hidden="true"></span>
+        </article>
+        <article class="issue-toc-row issue-feature-row" data-reveal>
           <span class="issue-toc-no">04</span>
-          <span class="issue-toc-meta">Apr 08, 2026 / Tech / Systems</span>
-          <strong>Making a Data Dashboard Feel Like a Reading Room</strong>
-          <em>The point of a dashboard is not to show every metric at once, but to move the viewer toward the next question.</em>
-        </a>
-        <a class="issue-toc-row" href="/magazine/en/articles/brand-system-with-room-to-breathe" data-reveal>
-          <span class="issue-toc-no">05</span>
-          <span class="issue-toc-meta">Mar 30, 2026 / Design / Brand</span>
+          <span class="issue-toc-meta">Design Study</span>
           <strong>A Brand System With Room to Breathe</strong>
-          <em>A brand system is less a set of rules than a repeatable attitude.</em>
-        </a>
-        <a class="issue-toc-row" href="/magazine/en/articles/chair-prototype-and-its-shadow" data-reveal>
-          <span class="issue-toc-no">06</span>
-          <span class="issue-toc-meta">Mar 21, 2026 / Design / Product</span>
-          <strong>What a Chair&#39;s Shadow Says First</strong>
-          <em>A chair&#39;s silhouette reveals both the body it expects and the atmosphere it creates.</em>
-        </a>
-        <a class="issue-toc-row" href="/magazine/en/articles/slow-thinking-in-fast-tools" data-reveal>
-          <span class="issue-toc-no">07</span>
-          <span class="issue-toc-meta">Mar 12, 2026 / Philosophy / Time</span>
-          <strong>Thinking Slowly Inside Fast Tools</strong>
-          <em>Fast tools do not always create better thought. Sometimes pause matters more than features.</em>
-        </a>
-        <a class="issue-toc-row" href="/magazine/en/articles/ethics-of-default-settings" data-reveal>
-          <span class="issue-toc-no">08</span>
-          <span class="issue-toc-meta">Mar 04, 2026 / Philosophy / Ethics</span>
+          <span class="issue-feature-meta">Study / Design Notes / Tokyo / 5 min</span>
+          <em>What lasts longer than a loud logo is repeatable space. We look at a structure that lets a brand be remembered without shouting.</em>
+          <span class="image-block image-system" aria-hidden="true"></span>
+        </article>
+        <article class="issue-toc-row issue-feature-row" data-reveal>
+          <span class="issue-toc-no">05</span>
+          <span class="issue-toc-meta">Closing Essay</span>
           <strong>The Ethics of Default Settings</strong>
-          <em>Defaults look like small settings, yet they change behavior for the longest time.</em>
-        </a>
+          <span class="issue-feature-meta">Essay / Philosophy Desk / Seoul / 6 min</span>
+          <em>A default is not a neutral setting but the strongest proposal. The closing essay returns to responsibility hidden behind the screen.</em>
+          <span class="image-block image-thought" aria-hidden="true"></span>
+        </article>
+      </div>
+
+      <div class="issue-credit-grid" aria-label="Issue credits" data-reveal>
+        <span>
+          <small>Editor</small>
+          <strong>The Thing Editorial Desk</strong>
+        </span>
+        <span>
+          <small>Art Direction</small>
+          <strong>Surface Studies</strong>
+        </span>
+        <span>
+          <small>Research</small>
+          <strong>Seoul / Berlin remote notes</strong>
+        </span>
       </div>
     </section></main>
 
