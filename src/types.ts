@@ -83,9 +83,12 @@ export interface IssueCredit {
 }
 
 export interface IssueFeature {
+  slug: string;
   role: LocalizedText;
   title: LocalizedText;
+  intro: LocalizedText;
   excerpt: LocalizedText;
+  body: LocalizedList;
   credit: LocalizedText;
   location: LocalizedText;
   readTime: LocalizedText;

@@ -561,8 +561,8 @@ export const issueProject: IssueProject = {
     en: "A first digital edition on objects becoming screens, and screens becoming a measure of sense."
   },
   deck: {
-    ko: "첫 번째 이슈는 기존 카테고리를 한데 묶은 색인이 아니라 하나의 독립 편집 프로젝트입니다. 작업실의 표면, 조용한 인터페이스, 데이터의 독서성, 브랜드 시스템의 여백을 같은 질문 아래 새로 배치했습니다.",
-    en: "The first issue is not an index of existing categories, but a standalone editorial project. Studio surfaces, quiet interfaces, readable data, and breathable brand systems are newly arranged under one question."
+    ko: "첫 번째 이슈는 작업실의 표면, 조용한 인터페이스, 데이터의 독서성, 브랜드 시스템의 여백을 하나의 질문 아래 새로 배치한 디지털 발행물입니다.",
+    en: "The first issue is a digital publication that newly arranges studio surfaces, quiet interfaces, readable data, and breathable brand systems under one question."
   },
   date: { ko: "2026년 5월", en: "May 2026" },
   format: { ko: "온라인 에디션 / 5개 피처", en: "Online edition / 5 features" },
@@ -572,8 +572,8 @@ export const issueProject: IssueProject = {
     en: "Cover image: an editorial study of an imagined studio surface."
   },
   editorNote: {
-    ko: "이번 호는 분야별 묶음보다 편집된 장면의 연쇄에 가깝습니다. 한 작가의 작업대에서 시작해 화면의 기본값까지 이동하지만, 모든 글은 같은 질문을 반복합니다. 무엇이 사물의 감각을 화면으로 옮기고, 어떤 화면은 다시 우리의 판단을 바꾸는가.",
-    en: "This issue is closer to a sequence of edited scenes than a set of departments. It moves from an artist's desk to the defaults of a screen, while repeating one question: what turns the sense of objects into screens, and which screens return to alter judgment?"
+    ko: "이번 호는 다섯 개의 장면으로 구성됩니다. 커버 이미지, 포트폴리오, 대화, 리서치 파일, 애프터워드가 서로 다른 방식으로 같은 질문을 이어받습니다. 무엇이 사물의 감각을 화면으로 옮기고, 어떤 화면은 다시 우리의 판단을 바꾸는가.",
+    en: "This issue is built as five scenes: cover image, portfolio, conversation, research file, and afterword. Each carries the same question differently: what turns the sense of objects into screens, and which screens return to alter judgment?"
   },
   credits: [
     { label: { ko: "편집", en: "Editor" }, value: { ko: "The Thing Editorial Desk", en: "The Thing Editorial Desk" } },
@@ -582,63 +582,138 @@ export const issueProject: IssueProject = {
   ],
   features: [
     {
-      role: { ko: "Cover Story", en: "Cover Story" },
-      title: { ko: "오프닝이 끝난 뒤 이미지가 남는 방식", en: "How Images Remain After the Opening" },
-      excerpt: {
-        ko: "전시는 행사보다 오래 남는 시선의 구조입니다. 사람이 빠진 뒤 작품이 낮은 목소리로 다시 보이는 시간을 따라갑니다.",
-        en: "An exhibition is a structure of looking that outlasts the event. We follow the time when work becomes visible again after the crowd leaves."
+      slug: "cover-note",
+      role: { ko: "Cover Note", en: "Cover Note" },
+      title: { ko: "사물이 화면이 되기 전", en: "Before Objects Become Screens" },
+      intro: {
+        ko: "커버는 이번 호의 질문을 압축한 한 장의 표면입니다.",
+        en: "The cover compresses the issue's question into one surface."
       },
-      credit: { ko: "Essay / Editorial Desk", en: "Essay / Editorial Desk" },
-      location: { ko: "서울", en: "Seoul" },
-      readTime: { ko: "6분", en: "6 min" },
+      excerpt: {
+        ko: "커버는 기사 하나의 대표 이미지가 아니라 이번 호의 질문을 압축한 별도의 장면입니다. 사물, 화면, 빛, 여백이 같은 평면에서 만납니다.",
+        en: "The cover is not a lead article image, but a separate scene that compresses the issue's question: objects, screens, light, and space on one plane."
+      },
+      body: {
+        ko: [
+          "이번 호의 커버는 특정 기사의 섬네일이 아니라 독립된 편집 이미지입니다. 정물처럼 놓인 사물과 화면의 기하학이 서로의 경계를 흐리며, 발행 전체의 분위기를 먼저 제안합니다.",
+          "잡지의 커버 소개처럼 표지는 발행물의 첫 문장입니다. 무엇을 열어 보는지보다 어떤 세계에 들어가는지를 먼저 알리는 장치로 다룹니다."
+        ],
+        en: [
+          "The cover is not a thumbnail for one article, but an independent editorial image. Objects and screen geometry blur their borders and set the atmosphere of the edition first.",
+          "Like a magazine cover note, it acts as the first sentence of the publication: less about what is being opened, more about the world being entered."
+        ]
+      },
+      credit: { ko: "Cover / Surface Studies", en: "Cover / Surface Studies" },
+      location: { ko: "Editorial", en: "Editorial" },
+      readTime: { ko: "소개", en: "Intro" },
       heroClass: "image-atelier"
     },
     {
-      role: { ko: "Studio Visit", en: "Studio Visit" },
-      title: { ko: "작업대는 작가의 가장 작은 지도다", en: "The Desk Is the Artist's Smallest Map" },
-      excerpt: {
-        ko: "흩어진 도구와 표시된 모서리는 작업의 방향을 감춥니다. 정리되지 않은 표면에서 다음 장면의 질서를 읽습니다.",
-        en: "Scattered tools and marked corners hide the direction of work. We read the order of the next scene from an unresolved surface."
+      slug: "portfolio",
+      role: { ko: "Portfolio", en: "Portfolio" },
+      title: { ko: "다섯 개의 표면", en: "Five Surfaces" },
+      intro: {
+        ko: "이번 호를 이루는 이미지 문법을 따로 펼친 포트폴리오입니다.",
+        en: "A portfolio that unfolds the image grammar of this issue."
       },
-      credit: { ko: "Visit / Field Notes", en: "Visit / Field Notes" },
-      location: { ko: "성수", en: "Seongsu" },
-      readTime: { ko: "5분", en: "5 min" },
+      excerpt: {
+        ko: "작업대, 대시보드, 의자의 그림자, 브랜드 여백, 기본값 화면을 한 호의 시각적 재료로 다시 배열합니다.",
+        en: "Desk, dashboard, chair shadow, brand space, and default screen are rearranged as the visual material of one issue."
+      },
+      body: {
+        ko: [
+          "포트폴리오는 분야별 색인이 아니라 장면의 연결입니다. 서로 다른 소재를 같은 눈높이로 놓아 이번 호의 리듬을 만들고, 각 이미지가 다음 텍스트로 넘어가는 속도를 조절합니다.",
+          "이미지 중심 매거진의 카드처럼 이미지와 한 줄의 정보가 우선하지만, 여기서는 카테고리명이 아니라 발행물 내부의 장면 번호가 정보의 기준이 됩니다."
+        ],
+        en: [
+          "The portfolio is not a category index, but a connection of scenes. Different materials are placed at the same eye level to set the rhythm of the issue.",
+          "Like image-led magazine cards, image and a thin line of information come first, but the reference point is the issue's internal sequence rather than a category name."
+        ]
+      },
+      credit: { ko: "Images / Editorial Desk", en: "Images / Editorial Desk" },
+      location: { ko: "5 plates", en: "5 plates" },
+      readTime: { ko: "시각 노트", en: "Visual note" },
       heroClass: "image-field"
     },
     {
-      role: { ko: "Interface Report", en: "Interface Report" },
-      title: { ko: "과시하지 않는 AI 인터페이스", en: "An AI Interface Without Performance" },
-      excerpt: {
-        ko: "좋은 도구는 자신의 능력을 계속 증명하지 않습니다. 사용자의 흐름을 방해하지 않는 낮은 화면의 조건을 묻습니다.",
-        en: "A good tool does not keep proving its intelligence. This report asks what makes a low, useful screen that interrupts less."
+      slug: "conversation",
+      role: { ko: "Conversation", en: "Conversation" },
+      title: { ko: "낮게 말하는 도구", en: "A Tool That Speaks Low" },
+      intro: {
+        ko: "이번 호가 기술을 다루는 태도를 대화 형식으로 소개합니다.",
+        en: "A conversation-format introduction to how the issue treats technology."
       },
-      credit: { ko: "Report / Systems Desk", en: "Report / Systems Desk" },
-      location: { ko: "원격", en: "Remote" },
-      readTime: { ko: "7분", en: "7 min" },
+      excerpt: {
+        ko: "기술을 능력의 전시가 아니라 낮은 목소리의 편집 장치로 봅니다. 화면이 덜 말할 때 사용자는 더 오래 판단합니다.",
+        en: "Technology is treated less as a display of capability and more as a low editorial device. When the screen speaks less, judgment lasts longer."
+      },
+      body: {
+        ko: [
+          "대화는 특정 제품 리뷰가 아니라 이번 호의 기술 감각을 설명합니다. 좋은 인터페이스가 무엇을 더하는지보다 무엇을 비워두는지를 묻고, 빠른 응답 뒤에 남는 피로를 편집의 문제로 옮깁니다.",
+          "이 장은 기사 목록으로 이동하는 목차가 아니라 이슈의 방법론을 설명하는 소개입니다."
+        ],
+        en: [
+          "The conversation is not a product review, but an explanation of the issue's technological sense. It asks what a good interface leaves empty before asking what it adds.",
+          "This chapter introduces a method for the issue rather than sending the reader to a category list."
+        ]
+      },
+      credit: { ko: "Dialogue / Interface Desk", en: "Dialogue / Interface Desk" },
+      location: { ko: "Remote notes", en: "Remote notes" },
+      readTime: { ko: "대화", en: "Dialogue" },
       heroClass: "image-interface"
     },
     {
-      role: { ko: "Design Study", en: "Design Study" },
-      title: { ko: "숨 쉴 공간이 있는 브랜드 시스템", en: "A Brand System With Room to Breathe" },
-      excerpt: {
-        ko: "강한 로고보다 오래 남는 것은 반복 가능한 여백입니다. 브랜드가 매번 소리치지 않고도 기억되는 구조를 봅니다.",
-        en: "What lasts longer than a loud logo is repeatable space. We look at a structure that lets a brand be remembered without shouting."
+      slug: "dossier",
+      role: { ko: "Dossier", en: "Dossier" },
+      title: { ko: "읽히는 데이터의 방", en: "A Room for Readable Data" },
+      intro: {
+        ko: "숫자와 표가 이미지처럼 읽히는 조건을 모은 파일입니다.",
+        en: "A file on the conditions that let numbers and tables read like images."
       },
-      credit: { ko: "Study / Design Notes", en: "Study / Design Notes" },
-      location: { ko: "도쿄", en: "Tokyo" },
-      readTime: { ko: "5분", en: "5 min" },
+      excerpt: {
+        ko: "대시보드와 색인, 표의 간격을 한 편의 방처럼 다룹니다. 데이터가 보이는 것이 아니라 읽히는 순간을 정리합니다.",
+        en: "Dashboard, index, and table spacing are treated like one room. The dossier studies the moment data becomes readable, not merely visible."
+      },
+      body: {
+        ko: [
+          "도시에 대한 리포트도, 도구에 대한 사용기도 아닙니다. 이번 호가 화면을 읽기 위한 간격을 어떻게 설정하는지 보여주는 내부 파일에 가깝습니다.",
+          "잡지 상세 페이지가 작품과 이름을 길게 이어 소개하듯, 이 도시에 없는 방은 발행물의 세부 장면을 문장으로 쌓아 올립니다."
+        ],
+        en: [
+          "This is neither a city report nor a tool review. It is closer to an internal file showing how the issue sets intervals for reading screens.",
+          "Like a magazine product page that builds the issue through names and works, this room is assembled through details."
+        ]
+      },
+      credit: { ko: "Dossier / Reading Systems", en: "Dossier / Reading Systems" },
+      location: { ko: "Index room", en: "Index room" },
+      readTime: { ko: "파일", en: "File" },
       heroClass: "image-system"
     },
     {
-      role: { ko: "Closing Essay", en: "Closing Essay" },
-      title: { ko: "기본값의 윤리", en: "The Ethics of Default Settings" },
-      excerpt: {
-        ko: "기본값은 중립적인 설정이 아니라 가장 강한 제안입니다. 화면 뒤에 숨은 책임의 위치를 다시 묻습니다.",
-        en: "A default is not a neutral setting but the strongest proposal. The closing essay returns to responsibility hidden behind the screen."
+      slug: "afterword",
+      role: { ko: "Afterword", en: "Afterword" },
+      title: { ko: "기본값은 편집이다", en: "Defaults Are Editorial" },
+      intro: {
+        ko: "마지막 장은 이번 호의 질문을 책임의 문제로 닫습니다.",
+        en: "The final chapter closes the issue as a question of responsibility."
       },
-      credit: { ko: "Essay / Philosophy Desk", en: "Essay / Philosophy Desk" },
-      location: { ko: "서울", en: "Seoul" },
-      readTime: { ko: "6분", en: "6 min" },
+      excerpt: {
+        ko: "기본값은 설정이 아니라 편집된 방향입니다. 이슈의 마지막 장은 사소한 선택이 생활의 리듬을 바꾸는 방식을 묻습니다.",
+        en: "A default is not a setting but an edited direction. The afterword asks how a small choice changes the rhythm of living."
+      },
+      body: {
+        ko: [
+          "애프터워드는 윤리라는 큰 단어를 앞세우기보다 작은 기본값이 어디에서 결정되는지를 따라갑니다. 사용자가 보지 못한 선택도 결국 누군가 편집한 문장입니다.",
+          "이 장은 다음 호로 넘어가기 전, 화면을 만드는 사람과 읽는 사람이 같은 질문 앞에 서도록 남겨둔 끝문장입니다."
+        ],
+        en: [
+          "The afterword follows where small defaults are decided rather than placing a large word like ethics in front. Choices a user never sees are still edited sentences.",
+          "It is the closing line left before the next issue, placing makers and readers of screens before the same question."
+        ]
+      },
+      credit: { ko: "Afterword / Editorial Desk", en: "Afterword / Editorial Desk" },
+      location: { ko: "Closing", en: "Closing" },
+      readTime: { ko: "후기", en: "Afterword" },
       heroClass: "image-thought"
     }
   ]
