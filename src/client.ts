@@ -5,6 +5,17 @@ const mobileMenu = document.querySelector<HTMLElement>("[data-mobile-menu]");
 const progressBar = document.querySelector<HTMLElement>("[data-scroll-progress]");
 const header = document.querySelector<HTMLElement>("[data-header]");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const scrollMotionItems = document.querySelectorAll<HTMLElement>("[data-scroll-motion]");
+const imageClasses = [
+  "image-atelier",
+  "image-signal",
+  "image-interface",
+  "image-thought",
+  "image-material",
+  "image-system",
+  "image-library",
+  "image-field"
+];
 
 const setMenuOpen = (isOpen: boolean): void => {
   if (!menuButton || !mobileMenu) {
@@ -54,6 +65,16 @@ const updateScrollState = (): void => {
     const progress = Math.min(window.scrollY / maxScroll, 1);
     progressBar.style.transform = `scaleX(${progress})`;
   }
+
+  if (!reduceMotion) {
+    scrollMotionItems.forEach((item) => {
+      const rect = item.getBoundingClientRect();
+      const itemCenter = rect.top + rect.height / 2;
+      const viewportCenter = window.innerHeight / 2;
+      const shift = Math.max(-1, Math.min(1, (itemCenter - viewportCenter) / window.innerHeight));
+      item.style.setProperty("--scroll-shift", shift.toFixed(3));
+    });
+  }
 };
 
 const requestScrollState = (): void => {
@@ -95,17 +116,6 @@ const previewTitle = document.querySelector<HTMLElement>("[data-preview-title]")
 let setArchivePreview: ((row: HTMLElement) => void) | null = null;
 
 if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
-  const imageClasses = [
-    "image-atelier",
-    "image-signal",
-    "image-interface",
-    "image-thought",
-    "image-material",
-    "image-system",
-    "image-library",
-    "image-field"
-  ];
-
   setArchivePreview = (row: HTMLElement): void => {
     const imageClass = row.dataset.previewClass;
 
@@ -138,6 +148,66 @@ if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
   });
 
   setArchivePreview(previewRows[0]);
+}
+
+const featureCard = document.querySelector<HTMLAnchorElement>("[data-feature-card]");
+const featureImage = document.querySelector<HTMLElement>("[data-feature-image]");
+const featureKicker = document.querySelector<HTMLElement>("[data-feature-kicker]");
+const featureTitle = document.querySelector<HTMLElement>("[data-feature-title]");
+const featureLinks = document.querySelectorAll<HTMLAnchorElement>("[data-feature-link]");
+
+if (featureCard && featureImage && featureKicker && featureTitle && featureLinks.length > 0) {
+  const setFeaturePreview = (link: HTMLAnchorElement): void => {
+    const imageClass = link.dataset.featureClass;
+    const kicker = link.dataset.featureKicker;
+    const title = link.dataset.featureTitle;
+
+    if (!imageClass || !kicker || !title) {
+      return;
+    }
+
+    featureCard.href = link.href;
+    featureImage.classList.remove(...imageClasses);
+    featureImage.classList.add(imageClass);
+    featureKicker.textContent = kicker;
+    featureTitle.textContent = title;
+
+    featureLinks.forEach((featureLink) => featureLink.classList.toggle("is-active", featureLink === link));
+
+    if (!reduceMotion) {
+      featureImage.animate(
+        [
+          { clipPath: "inset(0 100% 0 0)" },
+          { clipPath: "inset(0 0 0 0)" }
+        ],
+        { duration: 210, easing: "cubic-bezier(.2,.8,.2,1)" }
+      );
+    }
+  };
+
+  featureLinks.forEach((link) => {
+    link.addEventListener("mouseenter", () => setFeaturePreview(link));
+    link.addEventListener("focus", () => setFeaturePreview(link));
+  });
+}
+
+const scrollSections = document.querySelectorAll<HTMLElement>("[data-scroll-section]");
+
+if (scrollSections.length > 0) {
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle("is-current-section", entry.isIntersecting);
+        });
+      },
+      { rootMargin: "-34% 0px -48%" }
+    );
+
+    scrollSections.forEach((section) => sectionObserver.observe(section));
+  } else {
+    scrollSections.forEach((section) => section.classList.add("is-current-section"));
+  }
 }
 
 const filterButtons = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
@@ -224,26 +294,6 @@ if (filterButtons.length > 0) {
   if (fallbackButton) {
     applyFilter(fallbackButton, false);
   }
-}
-
-const tiltCards = document.querySelectorAll<HTMLElement>("[data-tilt]");
-const canTilt = window.matchMedia("(hover: hover) and (pointer: fine)").matches && !reduceMotion;
-
-if (canTilt) {
-  tiltCards.forEach((card) => {
-    card.addEventListener("pointermove", (event) => {
-      const rect = card.getBoundingClientRect();
-      const x = ((event.clientX - rect.left) / rect.width - 0.5) * 5;
-      const y = ((event.clientY - rect.top) / rect.height - 0.5) * -5;
-      card.style.setProperty("--tilt-x", `${y}deg`);
-      card.style.setProperty("--tilt-y", `${x}deg`);
-    });
-
-    card.addEventListener("pointerleave", () => {
-      card.style.removeProperty("--tilt-x");
-      card.style.removeProperty("--tilt-y");
-    });
-  });
 }
 
 const subscribeForm = document.querySelector<HTMLFormElement>(".subscribe-form");
