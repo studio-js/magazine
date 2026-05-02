@@ -12,7 +12,8 @@ export const categories: CategoryDefinition[] = [
       { key: "exhibitions", label: { ko: "전시", en: "Exhibitions" } },
       { key: "artists", label: { ko: "작가", en: "Artists" } },
       { key: "images", label: { ko: "이미지", en: "Images" } },
-      { key: "sound", label: { ko: "사운드", en: "Sound" } }
+      { key: "sound", label: { ko: "사운드", en: "Sound" } },
+      { key: "architecture", label: { ko: "건축", en: "Architecture" } }
     ]
   },
   {
@@ -41,6 +42,20 @@ export const categories: CategoryDefinition[] = [
       { key: "product", label: { ko: "제품", en: "Product" } },
       { key: "space", label: { ko: "공간", en: "Space" } },
       { key: "brand", label: { ko: "브랜드", en: "Brand" } }
+    ]
+  },
+  {
+    key: "beauty",
+    label: { ko: "뷰티", en: "Beauty" },
+    description: {
+      ko: "피부, 색, 향, 루틴이 만드는 감각의 표면을 읽습니다.",
+      en: "Skin, color, scent, and routines as surfaces of daily perception."
+    },
+    subcategories: [
+      { key: "skincare", label: { ko: "스킨케어", en: "Skincare" } },
+      { key: "makeup", label: { ko: "메이크업", en: "Makeup" } },
+      { key: "fragrance", label: { ko: "향", en: "Fragrance" } },
+      { key: "haircare", label: { ko: "헤어케어", en: "Haircare" } }
     ]
   },
   {
@@ -722,8 +737,8 @@ export const issueProject: IssueProject = {
 export const site: SiteContent = {
   title: { ko: "The Thing", en: "The Thing" },
   description: {
-    ko: "예술, 테크, 디자인, 철학을 하나의 감각적 편집면으로 엮는 디지털 저널",
-    en: "A digital journal connecting art, tech, design, and philosophy through a quiet editorial lens."
+    ko: "예술, 테크, 디자인, 뷰티, 철학을 하나의 감각적 편집면으로 엮는 디지털 저널",
+    en: "A digital journal connecting art, tech, design, beauty, and philosophy through a quiet editorial lens."
   },
   issue: issueProject.number,
   issueProject,

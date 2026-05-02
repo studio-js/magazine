@@ -6446,6 +6446,117 @@ html[lang="ko"] .river-card-copy strong {
   }
 }
 
+/* Navigation taxonomy pass */
+@media (min-width: 961px) {
+  .nav {
+    gap: clamp(0.78rem, 2vw, 2.8rem);
+  }
+}
+
+.nav-submenu {
+  min-width: clamp(10rem, 15vw, 14rem);
+  padding: 0.2rem 0;
+  border-radius: 0;
+  background: rgba(var(--paper-rgb), 0.96);
+  box-shadow: none;
+  clip-path: inset(0 0 100% 0);
+  opacity: 0;
+  transform: translate(-50%, -0.25rem);
+  transition: opacity 140ms ease, clip-path 180ms ease, transform 180ms ease;
+}
+
+.nav-item:hover .nav-submenu,
+.nav-item:focus-within .nav-submenu {
+  clip-path: inset(0);
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.nav-submenu p {
+  display: none !important;
+}
+
+.nav-submenu a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 2.85rem;
+  padding: 0.68rem 0;
+  border-top: 1px solid var(--hairline);
+  background: transparent !important;
+  color: var(--muted);
+  overflow: hidden;
+}
+
+.nav-submenu a:first-child {
+  border-top-color: var(--hairline);
+}
+
+.nav-submenu a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: var(--ink);
+  transform: translateX(-102%);
+  transition: transform 150ms ease;
+}
+
+.nav-submenu a:hover,
+.nav-submenu a:focus-visible,
+.nav-submenu a.is-active {
+  color: var(--ink);
+}
+
+.nav-submenu a:hover::before,
+.nav-submenu a:focus-visible::before,
+.nav-submenu a.is-active::before {
+  transform: translateX(0);
+}
+
+.nav-submenu a span {
+  font-size: clamp(0.92rem, 1vw, 1.08rem);
+  font-weight: 520;
+  letter-spacing: 0;
+  transition: color 140ms ease, transform 150ms ease;
+}
+
+.nav-submenu a:hover span,
+.nav-submenu a:focus-visible span,
+.nav-submenu a.is-active span {
+  letter-spacing: 0;
+  transform: translateX(0.42rem);
+}
+
+html[lang="ko"] .nav-submenu a span {
+  font-weight: 500;
+  font-variation-settings: "wght" 500;
+}
+
+.department-list {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+@media (max-width: 1180px) {
+  .department-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 960px) {
+  .department-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .department-list {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

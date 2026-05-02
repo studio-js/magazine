@@ -109,7 +109,7 @@ const archiveHref = (locale: Locale, category?: PrimaryCategory, subcategory?: S
 const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, locale: Locale): string =>
   text(categories.find((category) => category.key === key)?.label ?? { ko: key, en: key }, locale);
 
-const assetVersion = "20260503-article-rail-pass";
+const assetVersion = "20260503-nav-taxonomy-pass";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -126,7 +126,6 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
             <span>${escapeHtml(labels.issue)}</span>
           </a>
           <div class="nav-submenu issue-submenu" aria-label="${escapeHtml(locale === "ko" ? "이슈 안내" : "Issue guide")}">
-            <p>${escapeHtml(locale === "ko" ? "별도로 기획한 디지털 발행 프로젝트를 읽습니다." : "Read a standalone digital publication project.")}</p>
             <a href="${withLocale("/issues", locale)}"><span>${escapeHtml(`${site.issueProject.number} · ${text(site.issueProject.title, locale)}`)}</span></a>
           </div>
         </div>`;
@@ -141,7 +140,6 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
             <span>${escapeHtml(text(category.label, locale))}</span>
           </a>
           <div class="nav-submenu" aria-label="${escapeHtml(`${text(category.label, locale)} ${locale === "ko" ? "하위 카테고리" : "subcategories"}`)}">
-            <p>${escapeHtml(text(category.description, locale))}</p>
             ${category.subcategories
               .map((subcategory) => {
                 const subcategoryPath = `/archive/${category.key}/${subcategory.key}`;
@@ -202,7 +200,7 @@ ${categoryLinks}
 
     <footer class="site-footer">
       <p>${escapeHtml(text(site.title, locale))}</p>
-      <p>${escapeHtml(locale === "ko" ? "예술, 기술, 디자인, 사유를 위한 편집 표면" : "An editorial surface for art, technology, design, and thought")}</p>
+      <p>${escapeHtml(locale === "ko" ? "예술, 기술, 디자인, 뷰티, 사유를 위한 편집 표면" : "An editorial surface for art, technology, design, beauty, and thought")}</p>
     </footer>
   </body>
 </html>`;
@@ -351,7 +349,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
           <div class="cover-edition" aria-label="Publication context">
             <span>${escapeHtml(formatDate(featuredArticle.date, locale))}</span>
             <span>${escapeHtml(text(site.month, locale))}</span>
-            <span>${escapeHtml(locale === "ko" ? "예술 / 테크 / 디자인 / 철학" : "Art / Tech / Design / Philosophy")}</span>
+            <span>${escapeHtml(locale === "ko" ? "예술 / 테크 / 디자인 / 뷰티 / 철학" : "Art / Tech / Design / Beauty / Philosophy")}</span>
           </div>
           <p class="kicker">${escapeHtml(text(site.heroKicker, locale))}</p>
           <h1 id="hero-title">${escapeHtml(text(site.heroTitle, locale))}</h1>
