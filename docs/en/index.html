@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="An independent digital magazine connecting art, tech, design, and philosophy through a quiet editorial lens." />
+    <meta name="description" content="A digital journal connecting art, tech, design, and philosophy through a quiet editorial lens." />
     <title>The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-reading-pass" />
-    <script src="/magazine/client.js?v=20260503-reading-pass" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-issue-nav-pass" />
+    <script src="/magazine/client.js?v=20260503-issue-nav-pass" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -17,15 +17,22 @@
       </a>
 
       <nav class="nav" aria-label="Primary navigation">
-        
+        <div class="nav-item issue-nav-item ">
+          <a class="nav-link " href="/magazine/en/issues">
+            <span>Issue</span>
+          </a>
+          <div class="nav-submenu issue-submenu" aria-label="Issue guide">
+            <p>Read multiple fields gathered as one publication unit.</p>
+            <a href="/magazine/en/issues"><span>Issue 01</span></a>
+          </div>
+        </div>
         <div class="nav-item ">
           <a class="nav-link " href="/magazine/en/archive/art/">
             <span>Art</span>
           </a>
           <div class="nav-submenu" aria-label="Art subcategories">
             <p>Images that remain after the gallery and the material traces of studio practice.</p>
-            
-                  <a class="" href="/magazine/en/archive/art/exhibitions/">
+                              <a class="" href="/magazine/en/archive/art/exhibitions/">
                     <span>Exhibitions</span>
                   </a>
                   <a class="" href="/magazine/en/archive/art/artists/">
@@ -45,8 +52,7 @@
           </a>
           <div class="nav-submenu" aria-label="Tech subcategories">
             <p>Less interested in smart performance than in structures that interrupt less.</p>
-            
-                  <a class="" href="/magazine/en/archive/tech/ai/">
+                              <a class="" href="/magazine/en/archive/tech/ai/">
                     <span>AI</span>
                   </a>
                   <a class="" href="/magazine/en/archive/tech/interface/">
@@ -66,8 +72,7 @@
           </a>
           <div class="nav-submenu" aria-label="Design subcategories">
             <p>Forms at work, from the shadow of a product to the margins of a brand system.</p>
-            
-                  <a class="" href="/magazine/en/archive/design/graphic/">
+                              <a class="" href="/magazine/en/archive/design/graphic/">
                     <span>Graphic</span>
                   </a>
                   <a class="" href="/magazine/en/archive/design/product/">
@@ -87,8 +92,7 @@
           </a>
           <div class="nav-submenu" aria-label="Philosophy subcategories">
             <p>Judgments hidden behind screens: speed, defaults, ethics, and time.</p>
-            
-                  <a class="" href="/magazine/en/archive/philosophy/thought/">
+                              <a class="" href="/magazine/en/archive/philosophy/thought/">
                     <span>Thought</span>
                   </a>
                   <a class="" href="/magazine/en/archive/philosophy/ethics/">
@@ -118,15 +122,22 @@
     </header>
 
     <div class="mobile-menu" id="mobile-menu" data-mobile-menu>
-      
+        <div class="nav-item issue-nav-item ">
+          <a class="nav-link " href="/magazine/en/issues">
+            <span>Issue</span>
+          </a>
+          <div class="nav-submenu issue-submenu" aria-label="Issue guide">
+            <p>Read multiple fields gathered as one publication unit.</p>
+            <a href="/magazine/en/issues"><span>Issue 01</span></a>
+          </div>
+        </div>
         <div class="nav-item ">
           <a class="nav-link " href="/magazine/en/archive/art/">
             <span>Art</span>
           </a>
           <div class="nav-submenu" aria-label="Art subcategories">
             <p>Images that remain after the gallery and the material traces of studio practice.</p>
-            
-                  <a class="" href="/magazine/en/archive/art/exhibitions/">
+                              <a class="" href="/magazine/en/archive/art/exhibitions/">
                     <span>Exhibitions</span>
                   </a>
                   <a class="" href="/magazine/en/archive/art/artists/">
@@ -146,8 +157,7 @@
           </a>
           <div class="nav-submenu" aria-label="Tech subcategories">
             <p>Less interested in smart performance than in structures that interrupt less.</p>
-            
-                  <a class="" href="/magazine/en/archive/tech/ai/">
+                              <a class="" href="/magazine/en/archive/tech/ai/">
                     <span>AI</span>
                   </a>
                   <a class="" href="/magazine/en/archive/tech/interface/">
@@ -167,8 +177,7 @@
           </a>
           <div class="nav-submenu" aria-label="Design subcategories">
             <p>Forms at work, from the shadow of a product to the margins of a brand system.</p>
-            
-                  <a class="" href="/magazine/en/archive/design/graphic/">
+                              <a class="" href="/magazine/en/archive/design/graphic/">
                     <span>Graphic</span>
                   </a>
                   <a class="" href="/magazine/en/archive/design/product/">
@@ -188,8 +197,7 @@
           </a>
           <div class="nav-submenu" aria-label="Philosophy subcategories">
             <p>Judgments hidden behind screens: speed, defaults, ethics, and time.</p>
-            
-                  <a class="" href="/magazine/en/archive/philosophy/thought/">
+                              <a class="" href="/magazine/en/archive/philosophy/thought/">
                     <span>Thought</span>
                   </a>
                   <a class="" href="/magazine/en/archive/philosophy/ethics/">
@@ -217,10 +225,10 @@
     <section class="cover section-pad" aria-labelledby="hero-title" data-scroll-section>
       <div class="cover-grid">
         <div class="cover-copy" data-reveal>
-          <div class="cover-edition" aria-label="Issue information">
-            <span>Issue 01</span>
+          <div class="cover-edition" aria-label="Publication context">
+            <span>May 02, 2026</span>
             <span>May 2026</span>
-            <span>Independent Web Magazine</span>
+            <span>Art / Tech / Design / Philosophy</span>
           </div>
           <p class="kicker">Objects, Screens, Systems</p>
           <h1 id="hero-title">When objects become screens, and screens return as thought.</h1>
@@ -236,8 +244,8 @@
         </a>
 
         <aside class="cover-sidebar" data-reveal>
-          <p>This issue begins at a sculptor&#39;s desk and moves through AI interfaces, data dashboards, brand systems, and the ethics of defaults. Different subjects are read in one slower rhythm.</p>
-          <div class="cover-links" aria-label="Issue opening articles">
+          <p>It begins at a sculptor&#39;s desk and moves through AI interfaces, data dashboards, brand systems, and the ethics of defaults. Different subjects are read in one slower rhythm.</p>
+          <div class="cover-links" aria-label="Opening articles">
             
                   <a href="/magazine/en/articles/artist-desk-as-studio-map" data-feature-link data-feature-class="image-field" data-feature-kicker="Art / Apr 26, 2026" data-feature-title="The Desk Is the Artist&#39;s Smallest Map">
                     <span>01</span>
@@ -259,20 +267,12 @@
       </div>
     </section>
 
-    
-  <section class="issue-strip" aria-label="Issue rhythm" data-scroll-section>
-    <p class="issue-strip-label">Issue vocabulary</p>
-    <div class="issue-strip-list">
-      <span><small>01</small>Surface</span><span><small>02</small>Interval</span><span><small>03</small>Repetition</span><span><small>04</small>Shadow</span><span><small>05</small>Defaults</span><span><small>06</small>Slow Judgment</span>
-    </div>
-  </section>
-
-    <section class="issue-brief section-pad" aria-label="Editorial position" data-scroll-section>
+    <section class="editorial-brief section-pad" aria-label="Editorial position" data-scroll-section>
       <div class="brief-copy" data-reveal>
         <p class="kicker">Editor’s Letter</p>
-        <h2>An issue where images speak first and sentences arrive slowly.</h2>
+        <h2>Images speak first, and sentences arrive slowly.</h2>
       </div>
-      <p class="brief-text" data-reveal>This issue places the sculptor&#39;s desk, quiet AI interfaces, readable data screens, and breathable brand systems side by side. The magazine rearranges fast subjects for slower attention.</p>
+      <p class="brief-text" data-reveal>The sculptor&#39;s desk, quiet AI interfaces, readable data screens, and breathable brand systems are placed side by side. Fast subjects are rearranged for slower attention.</p>
       <div class="brief-index" data-reveal>
         
               <a href="/magazine/en/articles/artist-desk-as-studio-map">
@@ -294,7 +294,7 @@
       <div class="section-head" data-reveal>
         <p class="kicker">Routes</p>
         <h2 id="departments-title">One editorial surface, divided into four routes.</h2>
-        <p>These cards are not a taxonomy table, but suggested reading routes. Hovering over each one quietly reveals its tone.</p>
+        <p>These cards are not a taxonomy table, but suggested reading routes. Hovering over each one reveals the core information of each field.</p>
       </div>
       <div class="department-list">
         
@@ -345,10 +345,10 @@
       </div>
     </section>
 
-    <section class="issue-river section-pad" id="features" aria-labelledby="features-title" data-scroll-section>
+    <section class="story-river issue-river section-pad" id="features" aria-labelledby="features-title" data-scroll-section>
       <div class="section-head" data-reveal>
         <p class="kicker">Selected Stories</p>
-        <h2 id="features-title">How different fields meet inside one issue.</h2>
+        <h2 id="features-title">How different fields meet inside one rhythm.</h2>
       </div>
 
       <div class="river-layout">
@@ -415,15 +415,15 @@
     <section class="notes section-pad" id="notes" aria-labelledby="notes-title" data-scroll-section>
       <div class="notes-intro" data-reveal>
         <p class="kicker">Editor&#39;s Notes</p>
-        <h2 id="notes-title">Three observations moving through this issue.</h2>
+        <h2 id="notes-title">Three observations moving through the edit.</h2>
       </div>
 
       <div class="note-list">
         
       <article class="note-item" data-reveal>
         <span>May 02</span>
-        <h3>An issue that begins on the studio surface</h3>
-        <p>This issue looks at surfaces before completion: desks, dashboards, chair shadows, and defaults before thought hardens.</p>
+        <h3>An edit that begins on the studio surface</h3>
+        <p>This edit looks at surfaces before completion: desks, dashboards, chair shadows, and defaults before thought hardens.</p>
       </article>
       <article class="note-item" data-reveal>
         <span>Apr 26</span>
@@ -433,7 +433,7 @@
       <article class="note-item" data-reveal>
         <span>Apr 18</span>
         <h3>A list is the quietest image</h3>
-        <p>An index is not only navigation. Title length, date spacing, and repeated rules create the speed of an issue.</p>
+        <p>An index is not only navigation. Title length, date spacing, and repeated rules create the speed of reading.</p>
       </article>
       </div>
     </section>
@@ -444,7 +444,7 @@
           <p class="kicker">Reading Index</p>
           <h2 id="archive-title">Latest Entries</h2>
         </div>
-        <p>Hover over a title and the preview updates immediately. The list is both table of contents and a way to read the issue&#39;s visual rhythm.</p>
+        <p>Each row follows the same rule for date, field, read time, and place. Hovering opens the summary, so the list works as its own table of contents.</p>
       </div>
 
       
@@ -464,6 +464,11 @@
         <span class="archive-date">May 02, 2026</span>
         <span class="archive-title">How Images Remain After the Opening</span>
         <span class="archive-category">Art / Exhibitions</span>
+        <span class="archive-info">
+          <span>6 min read</span>
+          <span>Seoul</span>
+        </span>
+        <span class="archive-summary">Seeing a show is closer to remembering the work afterward than standing in front of it.</span>
       </a>
       <a
         href="/magazine/en/articles/artist-desk-as-studio-map"
@@ -477,6 +482,11 @@
         <span class="archive-date">Apr 26, 2026</span>
         <span class="archive-title">The Desk Is the Artist&#39;s Smallest Map</span>
         <span class="archive-category">Art / Artists</span>
+        <span class="archive-info">
+          <span>5 min read</span>
+          <span>Seongsu</span>
+        </span>
+        <span class="archive-summary">The arrangement of a desk shows what an artist holds onto and what they postpone.</span>
       </a>
       <a
         href="/magazine/en/articles/ai-interface-without-performance"
@@ -490,6 +500,11 @@
         <span class="archive-date">Apr 18, 2026</span>
         <span class="archive-title">An AI Interface Without Performance</span>
         <span class="archive-category">Tech / AI</span>
+        <span class="archive-info">
+          <span>7 min read</span>
+          <span>Online</span>
+        </span>
+        <span class="archive-summary">A good AI interface shortens the time users spend noticing the technology.</span>
       </a>
       <a
         href="/magazine/en/articles/data-dashboard-as-reading-room"
@@ -503,6 +518,11 @@
         <span class="archive-date">Apr 08, 2026</span>
         <span class="archive-title">Making a Data Dashboard Feel Like a Reading Room</span>
         <span class="archive-category">Tech / Systems</span>
+        <span class="archive-info">
+          <span>6 min read</span>
+          <span>Berlin</span>
+        </span>
+        <span class="archive-summary">The point of a dashboard is not to show every metric at once, but to move the viewer toward the next question.</span>
       </a>
       <a
         href="/magazine/en/articles/brand-system-with-room-to-breathe"
@@ -516,6 +536,11 @@
         <span class="archive-date">Mar 30, 2026</span>
         <span class="archive-title">A Brand System With Room to Breathe</span>
         <span class="archive-category">Design / Brand</span>
+        <span class="archive-info">
+          <span>6 min read</span>
+          <span>Tokyo</span>
+        </span>
+        <span class="archive-summary">A brand system is less a set of rules than a repeatable attitude.</span>
       </a>
       <a
         href="/magazine/en/articles/chair-prototype-and-its-shadow"
@@ -529,6 +554,11 @@
         <span class="archive-date">Mar 21, 2026</span>
         <span class="archive-title">What a Chair&#39;s Shadow Says First</span>
         <span class="archive-category">Design / Product</span>
+        <span class="archive-info">
+          <span>5 min read</span>
+          <span>Milan</span>
+        </span>
+        <span class="archive-summary">A chair&#39;s silhouette reveals both the body it expects and the atmosphere it creates.</span>
       </a>
       <a
         href="/magazine/en/articles/slow-thinking-in-fast-tools"
@@ -542,6 +572,11 @@
         <span class="archive-date">Mar 12, 2026</span>
         <span class="archive-title">Thinking Slowly Inside Fast Tools</span>
         <span class="archive-category">Philosophy / Time</span>
+        <span class="archive-info">
+          <span>7 min read</span>
+          <span>Seoul</span>
+        </span>
+        <span class="archive-summary">Fast tools do not always create better thought. Sometimes pause matters more than features.</span>
       </a>
       <a
         href="/magazine/en/articles/ethics-of-default-settings"
@@ -555,22 +590,21 @@
         <span class="archive-date">Mar 04, 2026</span>
         <span class="archive-title">The Ethics of Default Settings</span>
         <span class="archive-category">Philosophy / Ethics</span>
+        <span class="archive-info">
+          <span>6 min read</span>
+          <span>Online</span>
+        </span>
+        <span class="archive-summary">Defaults look like small settings, yet they change behavior for the longest time.</span>
       </a>
       </div>
-
-      <aside class="archive-preview" aria-label="Article preview">
-            <span class="preview-kicker" data-preview-kicker>Art / Exhibitions</span>
-            <span class="image-block image-atelier" data-preview-image></span>
-            <h3 data-preview-title>How Images Remain After the Opening</h3>
-          </aside>
     </div>
     </section>
 
     <section class="about section-pad" id="about" aria-labelledby="about-title" data-scroll-section>
       <div class="about-card" data-reveal>
-        <p class="kicker">About the Magazine</p>
-        <h2 id="about-title">The Thing is an independent digital magazine that connects different fields through one editorial rhythm.</h2>
-        <p>It links images from art, systems from tech, structures from design, and questions from philosophy on one surface. It is shaped around the pace of an issue rather than the speed of a feed.</p>
+        <p class="kicker">About The Thing</p>
+        <h2 id="about-title">The Thing is a digital journal that connects different fields through one editorial rhythm.</h2>
+        <p>It links images from art, systems from tech, structures from design, and questions from philosophy on one surface. It is shaped around density, order, and slower reading rather than the speed of a feed.</p>
       </div>
 
       <form class="subscribe-form" aria-label="Newsletter subscribe form" data-reveal data-success-message="Subscription request noted.">
@@ -584,7 +618,7 @@
     </section></main>
 
     <footer class="site-footer">
-      <p>The Thing / Issue 01</p>
+      <p>The Thing</p>
       <p>An editorial surface for art, technology, design, and thought</p>
     </footer>
   </body>

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="A brand system does not exist to control everything. A good system keeps the same attitude across changing situations." />
     <title>A Brand System With Room to Breathe | The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-reading-pass" />
-    <script src="/magazine/client.js?v=20260503-reading-pass" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-issue-nav-pass" />
+    <script src="/magazine/client.js?v=20260503-issue-nav-pass" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -17,15 +17,22 @@
       </a>
 
       <nav class="nav" aria-label="Primary navigation">
-        
+        <div class="nav-item issue-nav-item ">
+          <a class="nav-link " href="/magazine/en/issues">
+            <span>Issue</span>
+          </a>
+          <div class="nav-submenu issue-submenu" aria-label="Issue guide">
+            <p>Read multiple fields gathered as one publication unit.</p>
+            <a href="/magazine/en/issues"><span>Issue 01</span></a>
+          </div>
+        </div>
         <div class="nav-item ">
           <a class="nav-link " href="/magazine/en/archive/art/">
             <span>Art</span>
           </a>
           <div class="nav-submenu" aria-label="Art subcategories">
             <p>Images that remain after the gallery and the material traces of studio practice.</p>
-            
-                  <a class="" href="/magazine/en/archive/art/exhibitions/">
+                              <a class="" href="/magazine/en/archive/art/exhibitions/">
                     <span>Exhibitions</span>
                   </a>
                   <a class="" href="/magazine/en/archive/art/artists/">
@@ -45,8 +52,7 @@
           </a>
           <div class="nav-submenu" aria-label="Tech subcategories">
             <p>Less interested in smart performance than in structures that interrupt less.</p>
-            
-                  <a class="" href="/magazine/en/archive/tech/ai/">
+                              <a class="" href="/magazine/en/archive/tech/ai/">
                     <span>AI</span>
                   </a>
                   <a class="" href="/magazine/en/archive/tech/interface/">
@@ -66,8 +72,7 @@
           </a>
           <div class="nav-submenu" aria-label="Design subcategories">
             <p>Forms at work, from the shadow of a product to the margins of a brand system.</p>
-            
-                  <a class="" href="/magazine/en/archive/design/graphic/">
+                              <a class="" href="/magazine/en/archive/design/graphic/">
                     <span>Graphic</span>
                   </a>
                   <a class="" href="/magazine/en/archive/design/product/">
@@ -87,8 +92,7 @@
           </a>
           <div class="nav-submenu" aria-label="Philosophy subcategories">
             <p>Judgments hidden behind screens: speed, defaults, ethics, and time.</p>
-            
-                  <a class="" href="/magazine/en/archive/philosophy/thought/">
+                              <a class="" href="/magazine/en/archive/philosophy/thought/">
                     <span>Thought</span>
                   </a>
                   <a class="" href="/magazine/en/archive/philosophy/ethics/">
@@ -118,15 +122,22 @@
     </header>
 
     <div class="mobile-menu" id="mobile-menu" data-mobile-menu>
-      
+        <div class="nav-item issue-nav-item ">
+          <a class="nav-link " href="/magazine/en/issues">
+            <span>Issue</span>
+          </a>
+          <div class="nav-submenu issue-submenu" aria-label="Issue guide">
+            <p>Read multiple fields gathered as one publication unit.</p>
+            <a href="/magazine/en/issues"><span>Issue 01</span></a>
+          </div>
+        </div>
         <div class="nav-item ">
           <a class="nav-link " href="/magazine/en/archive/art/">
             <span>Art</span>
           </a>
           <div class="nav-submenu" aria-label="Art subcategories">
             <p>Images that remain after the gallery and the material traces of studio practice.</p>
-            
-                  <a class="" href="/magazine/en/archive/art/exhibitions/">
+                              <a class="" href="/magazine/en/archive/art/exhibitions/">
                     <span>Exhibitions</span>
                   </a>
                   <a class="" href="/magazine/en/archive/art/artists/">
@@ -146,8 +157,7 @@
           </a>
           <div class="nav-submenu" aria-label="Tech subcategories">
             <p>Less interested in smart performance than in structures that interrupt less.</p>
-            
-                  <a class="" href="/magazine/en/archive/tech/ai/">
+                              <a class="" href="/magazine/en/archive/tech/ai/">
                     <span>AI</span>
                   </a>
                   <a class="" href="/magazine/en/archive/tech/interface/">
@@ -167,8 +177,7 @@
           </a>
           <div class="nav-submenu" aria-label="Design subcategories">
             <p>Forms at work, from the shadow of a product to the margins of a brand system.</p>
-            
-                  <a class="" href="/magazine/en/archive/design/graphic/">
+                              <a class="" href="/magazine/en/archive/design/graphic/">
                     <span>Graphic</span>
                   </a>
                   <a class="" href="/magazine/en/archive/design/product/">
@@ -188,8 +197,7 @@
           </a>
           <div class="nav-submenu" aria-label="Philosophy subcategories">
             <p>Judgments hidden behind screens: speed, defaults, ethics, and time.</p>
-            
-                  <a class="" href="/magazine/en/archive/philosophy/thought/">
+                              <a class="" href="/magazine/en/archive/philosophy/thought/">
                     <span>Thought</span>
                   </a>
                   <a class="" href="/magazine/en/archive/philosophy/ethics/">
@@ -219,7 +227,7 @@
 
       <header class="article-hero-grid" data-reveal>
         <div class="article-title-block">
-          <p class="kicker">Issue 01 / Design / Brand</p>
+          <p class="kicker">Design / Brand</p>
           <h1>A Brand System With Room to Breathe</h1>
           <p>A brand system does not exist to control everything. A good system keeps the same attitude across changing situations.</p>
         </div>
@@ -236,18 +244,21 @@
       </div>
 
       <div class="article-body-grid">
-        <aside class="article-side" data-reveal>
-          <p>A structure that allows variation lasts longer than perfect rules.</p>
+        <aside class="article-side" data-reveal data-article-rail>
+          <span class="article-rail-no" data-article-rail-no>01</span>
+          <span class="image-block image-atelier" data-article-rail-visual></span>
+          <strong data-article-rail-title>Rules and Margins</strong>
+          <p data-article-rail-text>A good brand guide provides criteria rather than a list of prohibitions. Not every poster or screen must look the same, but they should feel like the same voice.</p>
         </aside>
 
         <div class="article-body">
           <blockquote data-reveal>An overly perfect system is often the first thing to break when real use begins.</blockquote>
           
-                <section class="article-section" data-reveal>
+                <section class="article-section" data-reveal data-article-section data-rail-no="01" data-rail-title="Rules and Margins" data-rail-text="A good brand guide provides criteria rather than a list of prohibitions. Not every poster or screen must look the same, but they should feel like the same voice." data-rail-visual="image-atelier">
                   <h2>Rules and Margins</h2>
                   <p>A good brand guide provides criteria rather than a list of prohibitions. Not every poster or screen must look the same, but they should feel like the same voice.</p><p>Whitespace is not simply empty space. It is a buffer that lets the system accept new situations.</p>
                 </section>
-                <section class="article-section" data-reveal>
+                <section class="article-section" data-reveal data-article-section data-rail-no="02" data-rail-title="An Attitude That Can Vary" data-rail-text="For a brand to last, it must withstand exceptions. Real content is always more complex than guidelines." data-rail-visual="image-field">
                   <h2>An Attitude That Can Vary</h2>
                   <p>For a brand to last, it must withstand exceptions. Real content is always more complex than guidelines.</p><p>A good system does not treat exceptions as failure. It becomes the measure for what variations can still belong to the same world.</p>
                 </section>
@@ -290,7 +301,7 @@
     </section></main>
 
     <footer class="site-footer">
-      <p>The Thing / Issue 01</p>
+      <p>The Thing</p>
       <p>An editorial surface for art, technology, design, and thought</p>
     </footer>
   </body>

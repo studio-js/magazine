@@ -25,10 +25,10 @@ const animateTextSwap = (elements: HTMLElement[]): void => {
   elements.forEach((element, index) => {
     element.animate(
       [
-        { opacity: 0.36, transform: "translateY(0.32rem)" },
-        { opacity: 1, transform: "translateY(0)" }
+        { opacity: 0.54 },
+        { opacity: 1 }
       ],
-      { duration: 190, delay: index * 18, easing: "cubic-bezier(.2,.8,.2,1)" }
+      { duration: 130, delay: index * 12, easing: "linear" }
     );
   });
 };
@@ -151,10 +151,10 @@ if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
     if (!reduceMotion) {
       previewImage.animate(
         [
-          { filter: "blur(8px)", opacity: 0.58, transform: "scale(1.018)" },
-          { filter: "blur(0)", opacity: 1, transform: "scale(1)" }
+          { filter: "contrast(0.94)", opacity: 0.72 },
+          { filter: "contrast(1)", opacity: 1 }
         ],
-        { duration: 240, easing: "cubic-bezier(.2,.8,.2,1)" }
+        { duration: 160, easing: "linear" }
       );
     }
   };
@@ -195,10 +195,10 @@ if (featureCard && featureImage && featureKicker && featureTitle && featureLinks
     if (!reduceMotion) {
       featureImage.animate(
         [
-          { filter: "blur(10px)", opacity: 0.5, transform: "scale(1.025)" },
-          { filter: "blur(0)", opacity: 1, transform: "scale(1)" }
+          { filter: "contrast(0.92)", opacity: 0.7 },
+          { filter: "contrast(1)", opacity: 1 }
         ],
-        { duration: 220, easing: "cubic-bezier(.2,.8,.2,1)" }
+        { duration: 150, easing: "linear" }
       );
     }
   };
@@ -225,6 +225,54 @@ if (scrollSections.length > 0) {
     scrollSections.forEach((section) => sectionObserver.observe(section));
   } else {
     scrollSections.forEach((section) => section.classList.add("is-current-section"));
+  }
+}
+
+const articleRail = document.querySelector<HTMLElement>("[data-article-rail]");
+const articleRailNo = document.querySelector<HTMLElement>("[data-article-rail-no]");
+const articleRailTitle = document.querySelector<HTMLElement>("[data-article-rail-title]");
+const articleRailText = document.querySelector<HTMLElement>("[data-article-rail-text]");
+const articleRailVisual = document.querySelector<HTMLElement>("[data-article-rail-visual]");
+const articleSections = document.querySelectorAll<HTMLElement>("[data-article-section]");
+
+if (articleRail && articleRailNo && articleRailTitle && articleRailText && articleSections.length > 0) {
+  const setArticleRail = (section: HTMLElement): void => {
+    articleRailNo.textContent = section.dataset.railNo || "";
+    articleRailTitle.textContent = section.dataset.railTitle || "";
+    articleRailText.textContent = section.dataset.railText || "";
+
+    if (articleRailVisual) {
+      const visualClass = section.dataset.railVisual;
+      if (visualClass) {
+        articleRailVisual.classList.remove(...imageClasses);
+        articleRailVisual.classList.add(visualClass);
+      }
+    }
+
+    articleSections.forEach((articleSection) => articleSection.classList.toggle("is-active-section", articleSection === section));
+
+    if (!reduceMotion) {
+      animateTextSwap([articleRailNo, articleRailTitle, articleRailText]);
+    }
+  };
+
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    const articleObserver = new IntersectionObserver(
+      (entries) => {
+        const activeEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (activeEntry?.target instanceof HTMLElement) {
+          setArticleRail(activeEntry.target);
+        }
+      },
+      { rootMargin: "-28% 0px -44%", threshold: [0.18, 0.42, 0.66] }
+    );
+
+    articleSections.forEach((section) => articleObserver.observe(section));
+  } else {
+    setArticleRail(articleSections[0]);
   }
 }
 

@@ -529,17 +529,17 @@ export const articles: Article[] = [
 export const notes: Note[] = [
   {
     date: "May 02",
-    title: { ko: "작업실의 표면에서 시작한 호", en: "An issue that begins on the studio surface" },
+    title: { ko: "작업실의 표면에서 시작한 편집", en: "An edit that begins on the studio surface" },
     body: {
-      ko: "이번 호는 완성된 작품보다 그 앞의 표면을 본다. 책상, 대시보드, 의자의 그림자, 기본값처럼 생각이 아직 굳기 전의 장면들이다.",
-      en: "This issue looks at surfaces before completion: desks, dashboards, chair shadows, and defaults before thought hardens."
+      ko: "완성된 작품보다 그 앞의 표면을 봅니다. 책상, 대시보드, 의자의 그림자, 기본값처럼 생각이 아직 굳기 전의 장면들입니다.",
+      en: "This edit looks at surfaces before completion: desks, dashboards, chair shadows, and defaults before thought hardens."
     }
   },
   {
     date: "Apr 26",
     title: { ko: "좋은 인터페이스의 낮은 목소리", en: "The lower voice of a good interface" },
     body: {
-      ko: "강한 제스처보다 오래 남는 것은 정확한 간격이다. 이 호의 기술 글들은 능력보다 부담을 덜어내는 화면을 먼저 묻는다.",
+      ko: "강한 제스처보다 오래 남는 것은 정확한 간격입니다. 기술 글들은 능력보다 부담을 덜어내는 화면을 먼저 묻습니다.",
       en: "Precise intervals last longer than strong gestures. The technology essays ask for screens that reduce burden before proving capability."
     }
   },
@@ -547,8 +547,8 @@ export const notes: Note[] = [
     date: "Apr 18",
     title: { ko: "목록은 가장 조용한 이미지다", en: "A list is the quietest image" },
     body: {
-      ko: "잡지의 색인은 단순히 이동을 돕는 장치가 아니다. 제목의 길이, 날짜의 간격, 반복되는 선이 한 호의 속도를 만든다.",
-      en: "An index is not only navigation. Title length, date spacing, and repeated rules create the speed of an issue."
+      ko: "색인은 단순히 이동을 돕는 장치가 아닙니다. 제목의 길이, 날짜의 간격, 반복되는 선이 읽는 속도를 만듭니다.",
+      en: "An index is not only navigation. Title length, date spacing, and repeated rules create the speed of reading."
     }
   }
 ];
@@ -556,8 +556,8 @@ export const notes: Note[] = [
 export const site: SiteContent = {
   title: { ko: "The Thing", en: "The Thing" },
   description: {
-    ko: "예술, 테크, 디자인, 철학을 하나의 감각적 편집면으로 엮는 독립 디지털 매거진",
-    en: "An independent digital magazine connecting art, tech, design, and philosophy through a quiet editorial lens."
+    ko: "예술, 테크, 디자인, 철학을 하나의 감각적 편집면으로 엮는 디지털 저널",
+    en: "A digital journal connecting art, tech, design, and philosophy through a quiet editorial lens."
   },
   issue: "Issue 01",
   month: { ko: "2026년 5월", en: "May 2026" },
@@ -567,8 +567,8 @@ export const site: SiteContent = {
     en: "When objects become screens, and screens return as thought."
   },
   heroLead: {
-    ko: "이번 호는 조각가의 작업대에서 시작해 AI 인터페이스, 데이터 대시보드, 브랜드 시스템, 기본값의 윤리로 이동합니다. 서로 다른 주제를 하나의 느린 호흡으로 읽습니다.",
-    en: "This issue begins at a sculptor's desk and moves through AI interfaces, data dashboards, brand systems, and the ethics of defaults. Different subjects are read in one slower rhythm."
+    ko: "조각가의 작업대에서 시작해 AI 인터페이스, 데이터 대시보드, 브랜드 시스템, 기본값의 윤리로 이동합니다. 서로 다른 주제를 하나의 느린 호흡으로 읽습니다.",
+    en: "It begins at a sculptor's desk and moves through AI interfaces, data dashboards, brand systems, and the ethics of defaults. Different subjects are read in one slower rhythm."
   },
   keywords: {
     ko: ["표면", "간격", "반복", "그림자", "기본값", "느린 판단"],

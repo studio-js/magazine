@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="전시장 이후에도 남는 이미지와 작업실의 물성을 따라갑니다." />
-    <title>예술 / 작가 | The Thing</title>
+    <meta name="description" content="이슈는 단일 칼럼이 아니라 여러 분야의 글을 하나의 발행 단위로 묶은 판입니다. 예술, 테크, 디자인, 철학을 한 번에 읽는 흐름으로 정리했습니다." />
+    <title>Issue 01 | The Thing</title>
     <link rel="stylesheet" href="/magazine/styles.css?v=20260503-issue-nav-pass" />
     <script src="/magazine/client.js?v=20260503-issue-nav-pass" defer></script>
   </head>
@@ -17,8 +17,8 @@
       </a>
 
       <nav class="nav" aria-label="Primary navigation">
-        <div class="nav-item issue-nav-item ">
-          <a class="nav-link " href="/magazine/issues">
+        <div class="nav-item issue-nav-item is-active">
+          <a class="nav-link is-active" href="/magazine/issues" aria-current="page">
             <span>이슈</span>
           </a>
           <div class="nav-submenu issue-submenu" aria-label="이슈 안내">
@@ -26,8 +26,8 @@
             <a href="/magazine/issues"><span>Issue 01</span></a>
           </div>
         </div>
-        <div class="nav-item is-active">
-          <a class="nav-link is-active" href="/magazine/archive/art/">
+        <div class="nav-item ">
+          <a class="nav-link " href="/magazine/archive/art/">
             <span>예술</span>
           </a>
           <div class="nav-submenu" aria-label="예술 하위 카테고리">
@@ -35,7 +35,7 @@
                               <a class="" href="/magazine/archive/art/exhibitions/">
                     <span>전시</span>
                   </a>
-                  <a class="is-active" href="/magazine/archive/art/artists/" aria-current="page">
+                  <a class="" href="/magazine/archive/art/artists/">
                     <span>작가</span>
                   </a>
                   <a class="" href="/magazine/archive/art/images/">
@@ -112,8 +112,8 @@
         <a href="/magazine/archive">아카이브</a>
         
   <div class="language-switch" aria-label="Language switcher">
-    <a class="is-active" href="/magazine/archive/art/artists/">KR</a>
-    <a class="" href="/magazine/en/archive/art/artists/">EN</a>
+    <a class="is-active" href="/magazine/issues">KR</a>
+    <a class="" href="/magazine/en/issues">EN</a>
   </div>
         <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-button>
           메뉴
@@ -122,8 +122,8 @@
     </header>
 
     <div class="mobile-menu" id="mobile-menu" data-mobile-menu>
-        <div class="nav-item issue-nav-item ">
-          <a class="nav-link " href="/magazine/issues">
+        <div class="nav-item issue-nav-item is-active">
+          <a class="nav-link is-active" href="/magazine/issues" aria-current="page">
             <span>이슈</span>
           </a>
           <div class="nav-submenu issue-submenu" aria-label="이슈 안내">
@@ -131,8 +131,8 @@
             <a href="/magazine/issues"><span>Issue 01</span></a>
           </div>
         </div>
-        <div class="nav-item is-active">
-          <a class="nav-link is-active" href="/magazine/archive/art/">
+        <div class="nav-item ">
+          <a class="nav-link " href="/magazine/archive/art/">
             <span>예술</span>
           </a>
           <div class="nav-submenu" aria-label="예술 하위 카테고리">
@@ -140,7 +140,7 @@
                               <a class="" href="/magazine/archive/art/exhibitions/">
                     <span>전시</span>
                   </a>
-                  <a class="is-active" href="/magazine/archive/art/artists/" aria-current="page">
+                  <a class="" href="/magazine/archive/art/artists/">
                     <span>작가</span>
                   </a>
                   <a class="" href="/magazine/archive/art/images/">
@@ -216,56 +216,106 @@
       <a href="/magazine/#about">소개</a>
       
   <div class="language-switch" aria-label="Language switcher">
-    <a class="is-active" href="/magazine/archive/art/artists/">KR</a>
-    <a class="" href="/magazine/en/archive/art/artists/">EN</a>
+    <a class="is-active" href="/magazine/issues">KR</a>
+    <a class="" href="/magazine/en/issues">EN</a>
   </div>
     </div>
 
     <main id="top">
-    <section class="archive archive-page section-pad" aria-labelledby="archive-title">
-      <div class="archive-heading" data-reveal>
+    <section class="issue-page section-pad" aria-labelledby="issue-page-title">
+      <header class="issue-page-hero" data-reveal>
         <div>
-          <p class="kicker">Department Archive</p>
-          <h1 id="archive-title">예술 / 작가</h1>
+          <p class="kicker">Magazine Issue</p>
+          <h1 id="issue-page-title">Issue 01</h1>
         </div>
-        <p>전시장 이후에도 남는 이미지와 작업실의 물성을 따라갑니다.</p>
+        <p>이슈는 단일 칼럼이 아니라 여러 분야의 글을 하나의 발행 단위로 묶은 판입니다. 예술, 테크, 디자인, 철학을 한 번에 읽는 흐름으로 정리했습니다.</p>
+      </header>
+
+      <div class="issue-page-ledger" data-reveal>
+        <span><small>발행</small><strong>2026년 5월</strong></span>
+        <span><small>대표 글</small><strong>오프닝이 끝난 뒤 이미지가 남는 방식</strong></span>
+        <span><small>수록</small><strong>8편</strong></span>
       </div>
 
-      
-    <div class="filter-shell filter-shell-category" data-filter-shell>
-          <div class="filter-panel category-filter-panel is-active" aria-live="polite">
-            <strong>예술 / 작가</strong>
-            <p>전시장 이후에도 남는 이미지와 작업실의 물성을 따라갑니다.</p>
-            <span class="subcategory-filter" aria-label="하위 카테고리 필터">
-              <a class="" href="/magazine/archive/art/">전체</a>
-              <a class="" href="/magazine/archive/art/exhibitions/">전시<small>1</small></a><a class="is-active" href="/magazine/archive/art/artists/" aria-current="page">작가<small>1</small></a><a class="" href="/magazine/archive/art/images/">이미지<small>2</small></a><a class="" href="/magazine/archive/art/sound/">사운드<small>1</small></a>
-            </span>
-          </div>
-          <p class="filter-status" data-filter-status>예술 / 작가 · 1 개의 글 표시 중</p>
-        </div>
-    <div class="archive-board " data-archive-board data-reveal>
-      <div class="archive-list" data-archive-list>
+      <div class="issue-route-cards" aria-label="이슈 분야">
         
-      <a
-        href="/magazine/articles/artist-desk-as-studio-map"
-        class="archive-row"
-        data-preview-class="image-field"
-        data-preview-kicker="예술 / 작가"
-        data-preview-title="작업대는 작가의 가장 작은 지도다"
-        data-category="art"
-        data-action-card
-      >
-        <span class="archive-date">2026.04.26</span>
-        <span class="archive-title">작업대는 작가의 가장 작은 지도다</span>
-        <span class="archive-category">예술 / 작가</span>
-        <span class="archive-info">
-          <span>5분 읽기</span>
-          <span>성수</span>
-        </span>
-        <span class="archive-summary">작업대의 배치는 작가가 무엇을 붙잡고 무엇을 미루는지 보여준다.</span>
-      </a>
+        <a class="issue-route-card" href="/magazine/archive/art/" data-reveal>
+          <span>01</span>
+          <strong>예술</strong>
+          <small>2편</small>
+          <em>오프닝이 끝난 뒤 이미지가 남는 방식</em>
+        </a>
+        <a class="issue-route-card" href="/magazine/archive/tech/" data-reveal>
+          <span>02</span>
+          <strong>테크</strong>
+          <small>2편</small>
+          <em>과시하지 않는 AI 인터페이스</em>
+        </a>
+        <a class="issue-route-card" href="/magazine/archive/design/" data-reveal>
+          <span>03</span>
+          <strong>디자인</strong>
+          <small>2편</small>
+          <em>숨 쉴 공간이 있는 브랜드 시스템</em>
+        </a>
+        <a class="issue-route-card" href="/magazine/archive/philosophy/" data-reveal>
+          <span>04</span>
+          <strong>철학</strong>
+          <small>2편</small>
+          <em>빠른 도구 안에서 느리게 생각하기</em>
+        </a>
       </div>
-    </div>
+
+      <div class="issue-toc" aria-label="이슈 목차">
+        
+        <a class="issue-toc-row" href="/magazine/articles/quiet-images-after-the-opening" data-reveal>
+          <span class="issue-toc-no">01</span>
+          <span class="issue-toc-meta">2026.05.02 / 예술 / 전시</span>
+          <strong>오프닝이 끝난 뒤 이미지가 남는 방식</strong>
+          <em>전시를 보는 일은 작품 앞에 서는 것보다 작품을 떠난 뒤 다시 떠올리는 시간에 가깝다.</em>
+        </a>
+        <a class="issue-toc-row" href="/magazine/articles/artist-desk-as-studio-map" data-reveal>
+          <span class="issue-toc-no">02</span>
+          <span class="issue-toc-meta">2026.04.26 / 예술 / 작가</span>
+          <strong>작업대는 작가의 가장 작은 지도다</strong>
+          <em>작업대의 배치는 작가가 무엇을 붙잡고 무엇을 미루는지 보여준다.</em>
+        </a>
+        <a class="issue-toc-row" href="/magazine/articles/ai-interface-without-performance" data-reveal>
+          <span class="issue-toc-no">03</span>
+          <span class="issue-toc-meta">2026.04.18 / 테크 / AI</span>
+          <strong>과시하지 않는 AI 인터페이스</strong>
+          <em>좋은 AI 인터페이스는 사용자가 기술을 의식하는 시간을 줄인다.</em>
+        </a>
+        <a class="issue-toc-row" href="/magazine/articles/data-dashboard-as-reading-room" data-reveal>
+          <span class="issue-toc-no">04</span>
+          <span class="issue-toc-meta">2026.04.08 / 테크 / 시스템</span>
+          <strong>데이터 대시보드를 읽는 방처럼 만들기</strong>
+          <em>대시보드의 핵심은 모든 지표를 한 번에 보여주는 것이 아니라 다음 질문으로 이동시키는 것이다.</em>
+        </a>
+        <a class="issue-toc-row" href="/magazine/articles/brand-system-with-room-to-breathe" data-reveal>
+          <span class="issue-toc-no">05</span>
+          <span class="issue-toc-meta">2026.03.30 / 디자인 / 브랜드</span>
+          <strong>숨 쉴 공간이 있는 브랜드 시스템</strong>
+          <em>브랜드 시스템은 규칙의 집합이 아니라 반복 가능한 태도에 가깝다.</em>
+        </a>
+        <a class="issue-toc-row" href="/magazine/articles/chair-prototype-and-its-shadow" data-reveal>
+          <span class="issue-toc-no">06</span>
+          <span class="issue-toc-meta">2026.03.21 / 디자인 / 제품</span>
+          <strong>의자의 그림자가 먼저 말하는 것</strong>
+          <em>의자의 실루엣은 사용자의 몸과 공간의 분위기를 동시에 드러낸다.</em>
+        </a>
+        <a class="issue-toc-row" href="/magazine/articles/slow-thinking-in-fast-tools" data-reveal>
+          <span class="issue-toc-no">07</span>
+          <span class="issue-toc-meta">2026.03.12 / 철학 / 시간</span>
+          <strong>빠른 도구 안에서 느리게 생각하기</strong>
+          <em>빠른 도구가 늘 좋은 생각을 만들지는 않는다. 때로는 멈춤이 기능보다 중요하다.</em>
+        </a>
+        <a class="issue-toc-row" href="/magazine/articles/ethics-of-default-settings" data-reveal>
+          <span class="issue-toc-no">08</span>
+          <span class="issue-toc-meta">2026.03.04 / 철학 / 윤리</span>
+          <strong>기본값의 윤리</strong>
+          <em>기본값은 작은 설정처럼 보이지만 사용자의 행동을 가장 오래 바꾼다.</em>
+        </a>
+      </div>
     </section></main>
 
     <footer class="site-footer">

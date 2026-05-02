@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="좋은 대시보드는 정보의 양보다 시선의 순서를 먼저 설계한다. 데이터는 화면에서 문장처럼 읽힐 수 있어야 한다." />
     <title>데이터 대시보드를 읽는 방처럼 만들기 | The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-reading-pass" />
-    <script src="/magazine/client.js?v=20260503-reading-pass" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-issue-nav-pass" />
+    <script src="/magazine/client.js?v=20260503-issue-nav-pass" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -17,15 +17,22 @@
       </a>
 
       <nav class="nav" aria-label="Primary navigation">
-        
+        <div class="nav-item issue-nav-item ">
+          <a class="nav-link " href="/magazine/issues">
+            <span>이슈</span>
+          </a>
+          <div class="nav-submenu issue-submenu" aria-label="이슈 안내">
+            <p>여러 분야의 글을 하나의 발행 단위로 묶어 읽습니다.</p>
+            <a href="/magazine/issues"><span>Issue 01</span></a>
+          </div>
+        </div>
         <div class="nav-item ">
           <a class="nav-link " href="/magazine/archive/art/">
             <span>예술</span>
           </a>
           <div class="nav-submenu" aria-label="예술 하위 카테고리">
             <p>전시장 이후에도 남는 이미지와 작업실의 물성을 따라갑니다.</p>
-            
-                  <a class="" href="/magazine/archive/art/exhibitions/">
+                              <a class="" href="/magazine/archive/art/exhibitions/">
                     <span>전시</span>
                   </a>
                   <a class="" href="/magazine/archive/art/artists/">
@@ -45,8 +52,7 @@
           </a>
           <div class="nav-submenu" aria-label="테크 하위 카테고리">
             <p>기술이 똑똑해 보이는 순간보다 덜 방해하는 구조를 봅니다.</p>
-            
-                  <a class="" href="/magazine/archive/tech/ai/">
+                              <a class="" href="/magazine/archive/tech/ai/">
                     <span>AI</span>
                   </a>
                   <a class="" href="/magazine/archive/tech/interface/">
@@ -66,8 +72,7 @@
           </a>
           <div class="nav-submenu" aria-label="디자인 하위 카테고리">
             <p>제품의 그림자와 브랜드 시스템의 여백처럼 작동하는 형태를 읽습니다.</p>
-            
-                  <a class="" href="/magazine/archive/design/graphic/">
+                              <a class="" href="/magazine/archive/design/graphic/">
                     <span>그래픽</span>
                   </a>
                   <a class="" href="/magazine/archive/design/product/">
@@ -87,8 +92,7 @@
           </a>
           <div class="nav-submenu" aria-label="철학 하위 카테고리">
             <p>속도, 기본값, 윤리처럼 화면 뒤에 숨어 있는 판단을 묻습니다.</p>
-            
-                  <a class="" href="/magazine/archive/philosophy/thought/">
+                              <a class="" href="/magazine/archive/philosophy/thought/">
                     <span>사유</span>
                   </a>
                   <a class="" href="/magazine/archive/philosophy/ethics/">
@@ -118,15 +122,22 @@
     </header>
 
     <div class="mobile-menu" id="mobile-menu" data-mobile-menu>
-      
+        <div class="nav-item issue-nav-item ">
+          <a class="nav-link " href="/magazine/issues">
+            <span>이슈</span>
+          </a>
+          <div class="nav-submenu issue-submenu" aria-label="이슈 안내">
+            <p>여러 분야의 글을 하나의 발행 단위로 묶어 읽습니다.</p>
+            <a href="/magazine/issues"><span>Issue 01</span></a>
+          </div>
+        </div>
         <div class="nav-item ">
           <a class="nav-link " href="/magazine/archive/art/">
             <span>예술</span>
           </a>
           <div class="nav-submenu" aria-label="예술 하위 카테고리">
             <p>전시장 이후에도 남는 이미지와 작업실의 물성을 따라갑니다.</p>
-            
-                  <a class="" href="/magazine/archive/art/exhibitions/">
+                              <a class="" href="/magazine/archive/art/exhibitions/">
                     <span>전시</span>
                   </a>
                   <a class="" href="/magazine/archive/art/artists/">
@@ -146,8 +157,7 @@
           </a>
           <div class="nav-submenu" aria-label="테크 하위 카테고리">
             <p>기술이 똑똑해 보이는 순간보다 덜 방해하는 구조를 봅니다.</p>
-            
-                  <a class="" href="/magazine/archive/tech/ai/">
+                              <a class="" href="/magazine/archive/tech/ai/">
                     <span>AI</span>
                   </a>
                   <a class="" href="/magazine/archive/tech/interface/">
@@ -167,8 +177,7 @@
           </a>
           <div class="nav-submenu" aria-label="디자인 하위 카테고리">
             <p>제품의 그림자와 브랜드 시스템의 여백처럼 작동하는 형태를 읽습니다.</p>
-            
-                  <a class="" href="/magazine/archive/design/graphic/">
+                              <a class="" href="/magazine/archive/design/graphic/">
                     <span>그래픽</span>
                   </a>
                   <a class="" href="/magazine/archive/design/product/">
@@ -188,8 +197,7 @@
           </a>
           <div class="nav-submenu" aria-label="철학 하위 카테고리">
             <p>속도, 기본값, 윤리처럼 화면 뒤에 숨어 있는 판단을 묻습니다.</p>
-            
-                  <a class="" href="/magazine/archive/philosophy/thought/">
+                              <a class="" href="/magazine/archive/philosophy/thought/">
                     <span>사유</span>
                   </a>
                   <a class="" href="/magazine/archive/philosophy/ethics/">
@@ -219,7 +227,7 @@
 
       <header class="article-hero-grid" data-reveal>
         <div class="article-title-block">
-          <p class="kicker">Issue 01 / 테크 / 시스템</p>
+          <p class="kicker">테크 / 시스템</p>
           <h1>데이터 대시보드를 읽는 방처럼 만들기</h1>
           <p>좋은 대시보드는 정보의 양보다 시선의 순서를 먼저 설계한다. 데이터는 화면에서 문장처럼 읽힐 수 있어야 한다.</p>
         </div>
@@ -236,18 +244,21 @@
       </div>
 
       <div class="article-body-grid">
-        <aside class="article-side" data-reveal>
-          <p>숫자를 더 많이 보여주는 대신 오래 바라볼 수 있는 구조를 설계한다.</p>
+        <aside class="article-side" data-reveal data-article-rail>
+          <span class="article-rail-no" data-article-rail-no>01</span>
+          <span class="image-block image-atelier" data-article-rail-visual></span>
+          <strong data-article-rail-title>정보의 온도</strong>
+          <p data-article-rail-text>대시보드는 자주 업무의 긴장과 연결된다. 그래서 화면이 복잡할수록 사용자는 더 빨리 지친다. 숫자의 정확성만큼 중요한 것은 보는 사람이 길을 잃지 않는 구조다.</p>
         </aside>
 
         <div class="article-body">
           <blockquote data-reveal>숫자는 차갑지만 숫자를 읽는 순서는 충분히 따뜻하게 설계할 수 있다.</blockquote>
           
-                <section class="article-section" data-reveal>
+                <section class="article-section" data-reveal data-article-section data-rail-no="01" data-rail-title="정보의 온도" data-rail-text="대시보드는 자주 업무의 긴장과 연결된다. 그래서 화면이 복잡할수록 사용자는 더 빨리 지친다. 숫자의 정확성만큼 중요한 것은 보는 사람이 길을 잃지 않는 구조다." data-rail-visual="image-atelier">
                   <h2>정보의 온도</h2>
                   <p>대시보드는 자주 업무의 긴장과 연결된다. 그래서 화면이 복잡할수록 사용자는 더 빨리 지친다. 숫자의 정확성만큼 중요한 것은 보는 사람이 길을 잃지 않는 구조다.</p><p>읽는 방처럼 설계된 화면은 조용한 층위를 가진다. 가장 중요한 수치가 먼저 보이고, 세부 지표는 사용자가 필요할 때 자연스럽게 가까워진다.</p>
                 </section>
-                <section class="article-section" data-reveal>
+                <section class="article-section" data-reveal data-article-section data-rail-no="02" data-rail-title="질문의 순서" data-rail-text="데이터는 스스로 결론이 되지 않는다. 좋은 시각화는 사용자가 다음에 어떤 질문을 해야 하는지 알려준다." data-rail-visual="image-field">
                   <h2>질문의 순서</h2>
                   <p>데이터는 스스로 결론이 되지 않는다. 좋은 시각화는 사용자가 다음에 어떤 질문을 해야 하는지 알려준다.</p><p>그래서 대시보드의 디자인은 그래프 선택보다 편집에 가깝다. 무엇을 크게 두고, 무엇을 뒤로 미룰지 정하는 일이 핵심이다.</p>
                 </section>
@@ -290,7 +301,7 @@
     </section></main>
 
     <footer class="site-footer">
-      <p>The Thing / Issue 01</p>
+      <p>The Thing</p>
       <p>예술, 기술, 디자인, 사유를 위한 편집 표면</p>
     </footer>
   </body>

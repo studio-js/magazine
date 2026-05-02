@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="예술, 테크, 디자인, 철학을 하나의 감각적 편집면으로 엮는 독립 디지털 매거진" />
+    <meta name="description" content="예술, 테크, 디자인, 철학을 하나의 감각적 편집면으로 엮는 디지털 저널" />
     <title>The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-reading-pass" />
-    <script src="/magazine/client.js?v=20260503-reading-pass" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-issue-nav-pass" />
+    <script src="/magazine/client.js?v=20260503-issue-nav-pass" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -17,15 +17,22 @@
       </a>
 
       <nav class="nav" aria-label="Primary navigation">
-        
+        <div class="nav-item issue-nav-item ">
+          <a class="nav-link " href="/magazine/issues">
+            <span>이슈</span>
+          </a>
+          <div class="nav-submenu issue-submenu" aria-label="이슈 안내">
+            <p>여러 분야의 글을 하나의 발행 단위로 묶어 읽습니다.</p>
+            <a href="/magazine/issues"><span>Issue 01</span></a>
+          </div>
+        </div>
         <div class="nav-item ">
           <a class="nav-link " href="/magazine/archive/art/">
             <span>예술</span>
           </a>
           <div class="nav-submenu" aria-label="예술 하위 카테고리">
             <p>전시장 이후에도 남는 이미지와 작업실의 물성을 따라갑니다.</p>
-            
-                  <a class="" href="/magazine/archive/art/exhibitions/">
+                              <a class="" href="/magazine/archive/art/exhibitions/">
                     <span>전시</span>
                   </a>
                   <a class="" href="/magazine/archive/art/artists/">
@@ -45,8 +52,7 @@
           </a>
           <div class="nav-submenu" aria-label="테크 하위 카테고리">
             <p>기술이 똑똑해 보이는 순간보다 덜 방해하는 구조를 봅니다.</p>
-            
-                  <a class="" href="/magazine/archive/tech/ai/">
+                              <a class="" href="/magazine/archive/tech/ai/">
                     <span>AI</span>
                   </a>
                   <a class="" href="/magazine/archive/tech/interface/">
@@ -66,8 +72,7 @@
           </a>
           <div class="nav-submenu" aria-label="디자인 하위 카테고리">
             <p>제품의 그림자와 브랜드 시스템의 여백처럼 작동하는 형태를 읽습니다.</p>
-            
-                  <a class="" href="/magazine/archive/design/graphic/">
+                              <a class="" href="/magazine/archive/design/graphic/">
                     <span>그래픽</span>
                   </a>
                   <a class="" href="/magazine/archive/design/product/">
@@ -87,8 +92,7 @@
           </a>
           <div class="nav-submenu" aria-label="철학 하위 카테고리">
             <p>속도, 기본값, 윤리처럼 화면 뒤에 숨어 있는 판단을 묻습니다.</p>
-            
-                  <a class="" href="/magazine/archive/philosophy/thought/">
+                              <a class="" href="/magazine/archive/philosophy/thought/">
                     <span>사유</span>
                   </a>
                   <a class="" href="/magazine/archive/philosophy/ethics/">
@@ -118,15 +122,22 @@
     </header>
 
     <div class="mobile-menu" id="mobile-menu" data-mobile-menu>
-      
+        <div class="nav-item issue-nav-item ">
+          <a class="nav-link " href="/magazine/issues">
+            <span>이슈</span>
+          </a>
+          <div class="nav-submenu issue-submenu" aria-label="이슈 안내">
+            <p>여러 분야의 글을 하나의 발행 단위로 묶어 읽습니다.</p>
+            <a href="/magazine/issues"><span>Issue 01</span></a>
+          </div>
+        </div>
         <div class="nav-item ">
           <a class="nav-link " href="/magazine/archive/art/">
             <span>예술</span>
           </a>
           <div class="nav-submenu" aria-label="예술 하위 카테고리">
             <p>전시장 이후에도 남는 이미지와 작업실의 물성을 따라갑니다.</p>
-            
-                  <a class="" href="/magazine/archive/art/exhibitions/">
+                              <a class="" href="/magazine/archive/art/exhibitions/">
                     <span>전시</span>
                   </a>
                   <a class="" href="/magazine/archive/art/artists/">
@@ -146,8 +157,7 @@
           </a>
           <div class="nav-submenu" aria-label="테크 하위 카테고리">
             <p>기술이 똑똑해 보이는 순간보다 덜 방해하는 구조를 봅니다.</p>
-            
-                  <a class="" href="/magazine/archive/tech/ai/">
+                              <a class="" href="/magazine/archive/tech/ai/">
                     <span>AI</span>
                   </a>
                   <a class="" href="/magazine/archive/tech/interface/">
@@ -167,8 +177,7 @@
           </a>
           <div class="nav-submenu" aria-label="디자인 하위 카테고리">
             <p>제품의 그림자와 브랜드 시스템의 여백처럼 작동하는 형태를 읽습니다.</p>
-            
-                  <a class="" href="/magazine/archive/design/graphic/">
+                              <a class="" href="/magazine/archive/design/graphic/">
                     <span>그래픽</span>
                   </a>
                   <a class="" href="/magazine/archive/design/product/">
@@ -188,8 +197,7 @@
           </a>
           <div class="nav-submenu" aria-label="철학 하위 카테고리">
             <p>속도, 기본값, 윤리처럼 화면 뒤에 숨어 있는 판단을 묻습니다.</p>
-            
-                  <a class="" href="/magazine/archive/philosophy/thought/">
+                              <a class="" href="/magazine/archive/philosophy/thought/">
                     <span>사유</span>
                   </a>
                   <a class="" href="/magazine/archive/philosophy/ethics/">
@@ -217,14 +225,14 @@
     <section class="cover section-pad" aria-labelledby="hero-title" data-scroll-section>
       <div class="cover-grid">
         <div class="cover-copy" data-reveal>
-          <div class="cover-edition" aria-label="Issue information">
-            <span>Issue 01</span>
+          <div class="cover-edition" aria-label="Publication context">
+            <span>2026.05.02</span>
             <span>2026년 5월</span>
-            <span>독립 웹 매거진</span>
+            <span>예술 / 테크 / 디자인 / 철학</span>
           </div>
           <p class="kicker">Objects, Screens, Systems</p>
           <h1 id="hero-title">사물이 화면이 되고, 화면이 다시 사유가 되는 순간.</h1>
-          <p class="cover-deck">작업실의 사물, 화면의 질서, 브랜드의 숨, 느린 판단의 감각을 하나의 편집 표면 위에 놓았다.</p>
+          <p class="cover-deck">작업실의 사물, 화면의 질서, 브랜드의 숨, 느린 판단의 감각을 하나의 편집 표면 위에 놓았습니다.</p>
         </div>
 
         <a class="cover-art" href="/magazine/articles/quiet-images-after-the-opening" aria-label="대표 글 읽기" data-reveal data-action-card data-scroll-motion data-feature-card>
@@ -236,8 +244,8 @@
         </a>
 
         <aside class="cover-sidebar" data-reveal>
-          <p>이번 호는 조각가의 작업대에서 시작해 AI 인터페이스, 데이터 대시보드, 브랜드 시스템, 기본값의 윤리로 이동합니다. 서로 다른 주제를 하나의 느린 호흡으로 읽습니다.</p>
-          <div class="cover-links" aria-label="Issue opening articles">
+          <p>조각가의 작업대에서 시작해 AI 인터페이스, 데이터 대시보드, 브랜드 시스템, 기본값의 윤리로 이동합니다. 서로 다른 주제를 하나의 느린 호흡으로 읽습니다.</p>
+          <div class="cover-links" aria-label="Opening articles">
             
                   <a href="/magazine/articles/artist-desk-as-studio-map" data-feature-link data-feature-class="image-field" data-feature-kicker="예술 / 2026.04.26" data-feature-title="작업대는 작가의 가장 작은 지도다">
                     <span>01</span>
@@ -259,20 +267,12 @@
       </div>
     </section>
 
-    
-  <section class="issue-strip" aria-label="Issue rhythm" data-scroll-section>
-    <p class="issue-strip-label">Issue vocabulary</p>
-    <div class="issue-strip-list">
-      <span><small>01</small>표면</span><span><small>02</small>간격</span><span><small>03</small>반복</span><span><small>04</small>그림자</span><span><small>05</small>기본값</span><span><small>06</small>느린 판단</span>
-    </div>
-  </section>
-
-    <section class="issue-brief section-pad" aria-label="Editorial position" data-scroll-section>
+    <section class="editorial-brief section-pad" aria-label="Editorial position" data-scroll-section>
       <div class="brief-copy" data-reveal>
         <p class="kicker">Editor’s Letter</p>
-        <h2>이미지가 먼저 말하고, 문장은 늦게 도착하는 한 호.</h2>
+        <h2>이미지가 먼저 말하고, 문장은 늦게 도착한다.</h2>
       </div>
-      <p class="brief-text" data-reveal>이번 호는 조각가의 작업대, 조용한 AI 인터페이스, 데이터 화면의 독서성, 숨 쉴 공간이 있는 브랜드 시스템을 나란히 놓는다. 빠르게 소비되는 주제를 느린 시선으로 다시 배열하는 것이 이 매거진의 방식이다.</p>
+      <p class="brief-text" data-reveal>조각가의 작업대, 조용한 AI 인터페이스, 데이터 화면의 독서성, 숨 쉴 공간이 있는 브랜드 시스템을 나란히 놓습니다. 빠르게 소비되는 주제를 느린 시선으로 다시 배열하는 것이 이곳의 방식입니다.</p>
       <div class="brief-index" data-reveal>
         
               <a href="/magazine/articles/artist-desk-as-studio-map">
@@ -294,7 +294,7 @@
       <div class="section-head" data-reveal>
         <p class="kicker">Routes</p>
         <h2 id="departments-title">네 개의 경로로 나뉘는 하나의 편집면.</h2>
-        <p>아래 카드는 단순한 분류표가 아니라 이번 호를 어떤 순서로 읽을지 제안하는 경로다. 카드 위에 머무르면 각 경로의 톤이 조용히 드러난다.</p>
+        <p>아래 카드는 단순한 분류표가 아니라 어떤 순서로 읽을지 제안하는 경로입니다. 카드 위에 머무르면 각 분야의 중심 정보가 드러납니다.</p>
       </div>
       <div class="department-list">
         
@@ -345,10 +345,10 @@
       </div>
     </section>
 
-    <section class="issue-river section-pad" id="features" aria-labelledby="features-title" data-scroll-section>
+    <section class="story-river issue-river section-pad" id="features" aria-labelledby="features-title" data-scroll-section>
       <div class="section-head" data-reveal>
         <p class="kicker">선별한 글</p>
-        <h2 id="features-title">서로 다른 분야가 한 호 안에서 만나는 방식.</h2>
+        <h2 id="features-title">서로 다른 분야가 하나의 리듬으로 만나는 방식.</h2>
       </div>
 
       <div class="river-layout">
@@ -415,25 +415,25 @@
     <section class="notes section-pad" id="notes" aria-labelledby="notes-title" data-scroll-section>
       <div class="notes-intro" data-reveal>
         <p class="kicker">에디터 노트</p>
-        <h2 id="notes-title">이번 호를 지나가는 세 개의 관찰.</h2>
+        <h2 id="notes-title">편집면을 지나가는 세 개의 관찰.</h2>
       </div>
 
       <div class="note-list">
         
       <article class="note-item" data-reveal>
         <span>May 02</span>
-        <h3>작업실의 표면에서 시작한 호</h3>
-        <p>이번 호는 완성된 작품보다 그 앞의 표면을 본다. 책상, 대시보드, 의자의 그림자, 기본값처럼 생각이 아직 굳기 전의 장면들이다.</p>
+        <h3>작업실의 표면에서 시작한 편집</h3>
+        <p>완성된 작품보다 그 앞의 표면을 봅니다. 책상, 대시보드, 의자의 그림자, 기본값처럼 생각이 아직 굳기 전의 장면들입니다.</p>
       </article>
       <article class="note-item" data-reveal>
         <span>Apr 26</span>
         <h3>좋은 인터페이스의 낮은 목소리</h3>
-        <p>강한 제스처보다 오래 남는 것은 정확한 간격이다. 이 호의 기술 글들은 능력보다 부담을 덜어내는 화면을 먼저 묻는다.</p>
+        <p>강한 제스처보다 오래 남는 것은 정확한 간격입니다. 기술 글들은 능력보다 부담을 덜어내는 화면을 먼저 묻습니다.</p>
       </article>
       <article class="note-item" data-reveal>
         <span>Apr 18</span>
         <h3>목록은 가장 조용한 이미지다</h3>
-        <p>잡지의 색인은 단순히 이동을 돕는 장치가 아니다. 제목의 길이, 날짜의 간격, 반복되는 선이 한 호의 속도를 만든다.</p>
+        <p>색인은 단순히 이동을 돕는 장치가 아닙니다. 제목의 길이, 날짜의 간격, 반복되는 선이 읽는 속도를 만듭니다.</p>
       </article>
       </div>
     </section>
@@ -444,7 +444,7 @@
           <p class="kicker">Reading Index</p>
           <h2 id="archive-title">최근 발행</h2>
         </div>
-        <p>제목에 머무르면 오른쪽 프리뷰가 즉시 바뀐다. 목록은 목차이면서 동시에 이번 호의 시각적 리듬을 확인하는 장치다.</p>
+        <p>각 행은 날짜, 분야, 읽는 시간, 장소를 같은 규칙으로 보여줍니다. 제목에 머무르면 요약이 열리고 목록 자체가 목차처럼 작동합니다.</p>
       </div>
 
       
@@ -464,6 +464,11 @@
         <span class="archive-date">2026.05.02</span>
         <span class="archive-title">오프닝이 끝난 뒤 이미지가 남는 방식</span>
         <span class="archive-category">예술 / 전시</span>
+        <span class="archive-info">
+          <span>6분 읽기</span>
+          <span>서울</span>
+        </span>
+        <span class="archive-summary">전시를 보는 일은 작품 앞에 서는 것보다 작품을 떠난 뒤 다시 떠올리는 시간에 가깝다.</span>
       </a>
       <a
         href="/magazine/articles/artist-desk-as-studio-map"
@@ -477,6 +482,11 @@
         <span class="archive-date">2026.04.26</span>
         <span class="archive-title">작업대는 작가의 가장 작은 지도다</span>
         <span class="archive-category">예술 / 작가</span>
+        <span class="archive-info">
+          <span>5분 읽기</span>
+          <span>성수</span>
+        </span>
+        <span class="archive-summary">작업대의 배치는 작가가 무엇을 붙잡고 무엇을 미루는지 보여준다.</span>
       </a>
       <a
         href="/magazine/articles/ai-interface-without-performance"
@@ -490,6 +500,11 @@
         <span class="archive-date">2026.04.18</span>
         <span class="archive-title">과시하지 않는 AI 인터페이스</span>
         <span class="archive-category">테크 / AI</span>
+        <span class="archive-info">
+          <span>7분 읽기</span>
+          <span>온라인</span>
+        </span>
+        <span class="archive-summary">좋은 AI 인터페이스는 사용자가 기술을 의식하는 시간을 줄인다.</span>
       </a>
       <a
         href="/magazine/articles/data-dashboard-as-reading-room"
@@ -503,6 +518,11 @@
         <span class="archive-date">2026.04.08</span>
         <span class="archive-title">데이터 대시보드를 읽는 방처럼 만들기</span>
         <span class="archive-category">테크 / 시스템</span>
+        <span class="archive-info">
+          <span>6분 읽기</span>
+          <span>베를린</span>
+        </span>
+        <span class="archive-summary">대시보드의 핵심은 모든 지표를 한 번에 보여주는 것이 아니라 다음 질문으로 이동시키는 것이다.</span>
       </a>
       <a
         href="/magazine/articles/brand-system-with-room-to-breathe"
@@ -516,6 +536,11 @@
         <span class="archive-date">2026.03.30</span>
         <span class="archive-title">숨 쉴 공간이 있는 브랜드 시스템</span>
         <span class="archive-category">디자인 / 브랜드</span>
+        <span class="archive-info">
+          <span>6분 읽기</span>
+          <span>도쿄</span>
+        </span>
+        <span class="archive-summary">브랜드 시스템은 규칙의 집합이 아니라 반복 가능한 태도에 가깝다.</span>
       </a>
       <a
         href="/magazine/articles/chair-prototype-and-its-shadow"
@@ -529,6 +554,11 @@
         <span class="archive-date">2026.03.21</span>
         <span class="archive-title">의자의 그림자가 먼저 말하는 것</span>
         <span class="archive-category">디자인 / 제품</span>
+        <span class="archive-info">
+          <span>5분 읽기</span>
+          <span>밀라노</span>
+        </span>
+        <span class="archive-summary">의자의 실루엣은 사용자의 몸과 공간의 분위기를 동시에 드러낸다.</span>
       </a>
       <a
         href="/magazine/articles/slow-thinking-in-fast-tools"
@@ -542,6 +572,11 @@
         <span class="archive-date">2026.03.12</span>
         <span class="archive-title">빠른 도구 안에서 느리게 생각하기</span>
         <span class="archive-category">철학 / 시간</span>
+        <span class="archive-info">
+          <span>7분 읽기</span>
+          <span>서울</span>
+        </span>
+        <span class="archive-summary">빠른 도구가 늘 좋은 생각을 만들지는 않는다. 때로는 멈춤이 기능보다 중요하다.</span>
       </a>
       <a
         href="/magazine/articles/ethics-of-default-settings"
@@ -555,22 +590,21 @@
         <span class="archive-date">2026.03.04</span>
         <span class="archive-title">기본값의 윤리</span>
         <span class="archive-category">철학 / 윤리</span>
+        <span class="archive-info">
+          <span>6분 읽기</span>
+          <span>온라인</span>
+        </span>
+        <span class="archive-summary">기본값은 작은 설정처럼 보이지만 사용자의 행동을 가장 오래 바꾼다.</span>
       </a>
       </div>
-
-      <aside class="archive-preview" aria-label="Article preview">
-            <span class="preview-kicker" data-preview-kicker>예술 / 전시</span>
-            <span class="image-block image-atelier" data-preview-image></span>
-            <h3 data-preview-title>오프닝이 끝난 뒤 이미지가 남는 방식</h3>
-          </aside>
     </div>
     </section>
 
     <section class="about section-pad" id="about" aria-labelledby="about-title" data-scroll-section>
       <div class="about-card" data-reveal>
-        <p class="kicker">About the Magazine</p>
-        <h2 id="about-title">The Thing은 서로 다른 분야를 하나의 편집 리듬으로 묶는 독립 디지털 매거진입니다.</h2>
-        <p>예술의 이미지, 테크의 시스템, 디자인의 구조, 철학의 질문을 한 화면 안에서 연결합니다. 빠른 피드보다 한 호의 흐름과 디파트먼트의 밀도를 먼저 설계합니다.</p>
+        <p class="kicker">About The Thing</p>
+        <h2 id="about-title">The Thing은 서로 다른 분야를 하나의 편집 리듬으로 묶는 디지털 저널입니다.</h2>
+        <p>예술의 이미지, 테크의 시스템, 디자인의 구조, 철학의 질문을 한 화면 안에서 연결합니다. 빠른 피드보다 분류의 밀도와 읽는 순서를 먼저 설계합니다.</p>
       </div>
 
       <form class="subscribe-form" aria-label="Newsletter subscribe form" data-reveal data-success-message="구독 신청이 기록되었습니다.">
@@ -584,7 +618,7 @@
     </section></main>
 
     <footer class="site-footer">
-      <p>The Thing / Issue 01</p>
+      <p>The Thing</p>
       <p>예술, 기술, 디자인, 사유를 위한 편집 표면</p>
     </footer>
   </body>
