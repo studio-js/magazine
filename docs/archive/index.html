@@ -85,15 +85,72 @@
           <p class="kicker">Full Archive</p>
           <h1 id="archive-title">모든 글</h1>
         </div>
-        <p>카테고리를 선택하면 목록이 정리됩니다. 데스크톱에서는 목록에 마우스를 올렸을 때 오른쪽 미리보기가 바뀝니다.</p>
+        <p>카테고리를 선택하면 목록과 하위 카테고리가 함께 정리됩니다. 데스크톱과 모바일 모두 선택 상태가 즉시 반영됩니다.</p>
       </div>
 
       
-    <div class="filter-row" aria-label="Archive category filter">
-        <button type="button" class="filter-button is-active" data-filter="all">전체</button>
-        <button type="button" class="filter-button" data-filter="art">예술</button><button type="button" class="filter-button" data-filter="tech">테크</button><button type="button" class="filter-button" data-filter="design">디자인</button><button type="button" class="filter-button" data-filter="philosophy">철학</button>
+    <div class="filter-shell" data-filter-shell>
+      <div class="filter-row" aria-label="Archive category filter">
+        <button type="button" class="filter-button is-active" data-filter="all" data-filter-label="전체" aria-pressed="true">
+          <span>전체</span>
+          <small>8</small>
+        </button>
+        <button type="button" class="filter-button" data-filter="art" data-filter-label="예술" aria-pressed="false">
+              <span>예술</span>
+              <small>2</small>
+            </button><button type="button" class="filter-button" data-filter="tech" data-filter-label="테크" aria-pressed="false">
+              <span>테크</span>
+              <small>2</small>
+            </button><button type="button" class="filter-button" data-filter="design" data-filter-label="디자인" aria-pressed="false">
+              <span>디자인</span>
+              <small>2</small>
+            </button><button type="button" class="filter-button" data-filter="philosophy" data-filter-label="철학" aria-pressed="false">
+              <span>철학</span>
+              <small>2</small>
+            </button>
       </div>
-    <div class="archive-board" data-reveal>
+      <div class="filter-detail" aria-live="polite">
+        <div class="filter-panel is-active" data-filter-panel="all">
+          <strong>전체 디파트먼트</strong>
+          <p>네 개의 카테고리와 모든 글을 한 번에 봅니다.</p>
+        </div>
+        
+              <div class="filter-panel" data-filter-panel="art" hidden>
+                <strong>예술</strong>
+                <p>동시대 작가, 전시, 이미지, 사운드와 매체 실험을 다룹니다.</p>
+                
+  <span class="subcategory-chips" aria-label="하위 카테고리">
+    <span>전시</span><span>작가</span><span>이미지</span><span>사운드</span>
+  </span>
+              </div>
+              <div class="filter-panel" data-filter-panel="tech" hidden>
+                <strong>테크</strong>
+                <p>AI, 인터페이스, 데이터, 도구가 감각과 생활을 바꾸는 방식을 봅니다.</p>
+                
+  <span class="subcategory-chips" aria-label="하위 카테고리">
+    <span>AI</span><span>인터페이스</span><span>도구</span><span>시스템</span>
+  </span>
+              </div>
+              <div class="filter-panel" data-filter-panel="design" hidden>
+                <strong>디자인</strong>
+                <p>그래픽, 제품, 공간, 브랜드를 조용하지만 정확한 관점으로 읽습니다.</p>
+                
+  <span class="subcategory-chips" aria-label="하위 카테고리">
+    <span>그래픽</span><span>제품</span><span>공간</span><span>브랜드</span>
+  </span>
+              </div>
+              <div class="filter-panel" data-filter-panel="philosophy" hidden>
+                <strong>철학</strong>
+                <p>기술과 미감 뒤에 놓인 생각, 윤리, 시간, 몸의 문제를 기록합니다.</p>
+                
+  <span class="subcategory-chips" aria-label="하위 카테고리">
+    <span>사유</span><span>윤리</span><span>시간</span><span>몸</span>
+  </span>
+              </div>
+      </div>
+      <p class="filter-status" data-filter-status>8 개의 글 표시 중</p>
+    </div>
+    <div class="archive-board" data-archive-board data-reveal>
       <div class="archive-list" data-archive-list>
         
       <a

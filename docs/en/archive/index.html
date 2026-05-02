@@ -85,15 +85,72 @@
           <p class="kicker">Full Archive</p>
           <h1 id="archive-title">All Articles</h1>
         </div>
-        <p>Choose a category to refine the list. On desktop, hovering an item changes the preview on the right.</p>
+        <p>Choose a category to refine the list and reveal its subcategories. The selected state updates immediately on desktop and mobile.</p>
       </div>
 
       
-    <div class="filter-row" aria-label="Archive category filter">
-        <button type="button" class="filter-button is-active" data-filter="all">All</button>
-        <button type="button" class="filter-button" data-filter="art">Art</button><button type="button" class="filter-button" data-filter="tech">Tech</button><button type="button" class="filter-button" data-filter="design">Design</button><button type="button" class="filter-button" data-filter="philosophy">Philosophy</button>
+    <div class="filter-shell" data-filter-shell>
+      <div class="filter-row" aria-label="Archive category filter">
+        <button type="button" class="filter-button is-active" data-filter="all" data-filter-label="All" aria-pressed="true">
+          <span>All</span>
+          <small>8</small>
+        </button>
+        <button type="button" class="filter-button" data-filter="art" data-filter-label="Art" aria-pressed="false">
+              <span>Art</span>
+              <small>2</small>
+            </button><button type="button" class="filter-button" data-filter="tech" data-filter-label="Tech" aria-pressed="false">
+              <span>Tech</span>
+              <small>2</small>
+            </button><button type="button" class="filter-button" data-filter="design" data-filter-label="Design" aria-pressed="false">
+              <span>Design</span>
+              <small>2</small>
+            </button><button type="button" class="filter-button" data-filter="philosophy" data-filter-label="Philosophy" aria-pressed="false">
+              <span>Philosophy</span>
+              <small>2</small>
+            </button>
       </div>
-    <div class="archive-board" data-reveal>
+      <div class="filter-detail" aria-live="polite">
+        <div class="filter-panel is-active" data-filter-panel="all">
+          <strong>All Departments</strong>
+          <p>Scan every article across the four departments.</p>
+        </div>
+        
+              <div class="filter-panel" data-filter-panel="art" hidden>
+                <strong>Art</strong>
+                <p>Contemporary artists, exhibitions, images, sound, and experiments in media.</p>
+                
+  <span class="subcategory-chips" aria-label="Subcategories">
+    <span>Exhibitions</span><span>Artists</span><span>Images</span><span>Sound</span>
+  </span>
+              </div>
+              <div class="filter-panel" data-filter-panel="tech" hidden>
+                <strong>Tech</strong>
+                <p>How AI, interfaces, data, and tools reshape perception and everyday life.</p>
+                
+  <span class="subcategory-chips" aria-label="Subcategories">
+    <span>AI</span><span>Interface</span><span>Tools</span><span>Systems</span>
+  </span>
+              </div>
+              <div class="filter-panel" data-filter-panel="design" hidden>
+                <strong>Design</strong>
+                <p>A quiet but precise reading of graphics, products, spaces, and brands.</p>
+                
+  <span class="subcategory-chips" aria-label="Subcategories">
+    <span>Graphic</span><span>Product</span><span>Space</span><span>Brand</span>
+  </span>
+              </div>
+              <div class="filter-panel" data-filter-panel="philosophy" hidden>
+                <strong>Philosophy</strong>
+                <p>Thoughts on ethics, time, the body, and meaning behind technology and aesthetics.</p>
+                
+  <span class="subcategory-chips" aria-label="Subcategories">
+    <span>Thought</span><span>Ethics</span><span>Time</span><span>Body</span>
+  </span>
+              </div>
+      </div>
+      <p class="filter-status" data-filter-status>8 articles showing</p>
+    </div>
+    <div class="archive-board" data-archive-board data-reveal>
       <div class="archive-list" data-archive-list>
         
       <a

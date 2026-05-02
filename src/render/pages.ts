@@ -29,7 +29,7 @@ const ui = {
     subscribe: "새 글 알림 받기",
     subscribeSuccess: "구독 신청이 기록되었습니다.",
     fullArchive: "모든 글",
-    archiveLead: "카테고리를 선택하면 목록이 정리됩니다. 데스크톱에서는 목록에 마우스를 올렸을 때 오른쪽 미리보기가 바뀝니다.",
+    archiveLead: "카테고리를 선택하면 목록과 하위 카테고리가 함께 정리됩니다. 데스크톱과 모바일 모두 선택 상태가 즉시 반영됩니다.",
     related: "이어 읽기",
     back: "아카이브로 돌아가기",
     notFound: "요청한 페이지를 찾을 수 없습니다.",
@@ -54,7 +54,7 @@ const ui = {
     subscribe: "Get New Notes",
     subscribeSuccess: "Prototype subscription recorded.",
     fullArchive: "All Articles",
-    archiveLead: "Choose a category to refine the list. On desktop, hovering an item changes the preview on the right.",
+    archiveLead: "Choose a category to refine the list and reveal its subcategories. The selected state updates immediately on desktop and mobile.",
     related: "Related Reading",
     back: "Back to Archive",
     notFound: "The requested page could not be found.",
@@ -98,6 +98,11 @@ const articleHref = (article: Article, locale: Locale): string => withLocale(`/a
 
 const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, locale: Locale): string =>
   text(categories.find((category) => category.key === key)?.label ?? { ko: key, en: key }, locale);
+
+const renderSubcategoryChips = (category: CategoryDefinition, locale: Locale): string => `
+  <span class="subcategory-chips" aria-label="${escapeHtml(locale === "ko" ? "하위 카테고리" : "Subcategories")}">
+    ${category.subcategories.map((item) => `<span>${escapeHtml(text(item, locale))}</span>`).join("")}
+  </span>`;
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -183,11 +188,14 @@ const renderCategoryIndex = (categories: CategoryDefinition[], articles: Article
         .map((category, index) => {
           const count = articles.filter((article) => article.category === category.key).length;
           return `
-            <a class="department-row" href="${withLocale(`/archive?category=${category.key}`, locale)}" data-reveal>
-              <span class="department-no">${String(index + 1).padStart(2, "0")}</span>
+            <a class="department-card" href="${withLocale(`/archive?category=${category.key}`, locale)}" data-reveal>
+              <span class="department-top">
+                <span class="department-no">${String(index + 1).padStart(2, "0")}</span>
+                <span class="department-meta">${count} ${locale === "ko" ? "편" : "articles"}</span>
+              </span>
               <span class="department-name">${escapeHtml(text(category.label, locale))}</span>
               <span class="department-desc">${escapeHtml(text(category.description, locale))}</span>
-              <span class="department-meta">${count} ${locale === "ko" ? "편" : "articles"} / ${escapeHtml(category.subcategories.map((item) => text(item, locale)).join(" · "))}</span>
+              ${renderSubcategoryChips(category, locale)}
             </a>`;
         })
         .join("")}
@@ -229,20 +237,46 @@ const renderArchiveBoard = (site: SiteContent, articleList: Article[], locale: L
   const firstArticle = articleList[0];
   const firstLabel = `${categoryLabel(site.categories, firstArticle.category, locale)} / ${text(firstArticle.subcategory, locale)}`;
   const filters = includeFilters
-    ? `<div class="filter-row" aria-label="Archive category filter">
-        <button type="button" class="filter-button is-active" data-filter="all">${escapeHtml(ui[locale].all)}</button>
+    ? `<div class="filter-shell" data-filter-shell>
+      <div class="filter-row" aria-label="Archive category filter">
+        <button type="button" class="filter-button is-active" data-filter="all" data-filter-label="${escapeHtml(ui[locale].all)}" aria-pressed="true">
+          <span>${escapeHtml(ui[locale].all)}</span>
+          <small>${articleList.length}</small>
+        </button>
+        ${site.categories
+          .map((category) => {
+            const count = articleList.filter((article) => article.category === category.key).length;
+            const label = text(category.label, locale);
+            return `<button type="button" class="filter-button" data-filter="${category.key}" data-filter-label="${escapeHtml(label)}" aria-pressed="false">
+              <span>${escapeHtml(label)}</span>
+              <small>${count}</small>
+            </button>`;
+          })
+          .join("")}
+      </div>
+      <div class="filter-detail" aria-live="polite">
+        <div class="filter-panel is-active" data-filter-panel="all">
+          <strong>${escapeHtml(locale === "ko" ? "전체 디파트먼트" : "All Departments")}</strong>
+          <p>${escapeHtml(locale === "ko" ? "네 개의 카테고리와 모든 글을 한 번에 봅니다." : "Scan every article across the four departments.")}</p>
+        </div>
         ${site.categories
           .map(
-            (category) =>
-              `<button type="button" class="filter-button" data-filter="${category.key}">${escapeHtml(text(category.label, locale))}</button>`
+            (category) => `
+              <div class="filter-panel" data-filter-panel="${category.key}" hidden>
+                <strong>${escapeHtml(text(category.label, locale))}</strong>
+                <p>${escapeHtml(text(category.description, locale))}</p>
+                ${renderSubcategoryChips(category, locale)}
+              </div>`
           )
           .join("")}
-      </div>`
+      </div>
+      <p class="filter-status" data-filter-status>${articleList.length} ${escapeHtml(locale === "ko" ? "개의 글 표시 중" : "articles showing")}</p>
+    </div>`
     : "";
 
   return `
     ${filters}
-    <div class="archive-board" data-reveal>
+    <div class="archive-board" data-archive-board data-reveal>
       <div class="archive-list" data-archive-list>
         ${renderArchiveRows(articleList, site, locale)}
       </div>

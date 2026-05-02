@@ -92,6 +92,7 @@ const previewRows = document.querySelectorAll<HTMLElement>("[data-preview-class]
 const previewImage = document.querySelector<HTMLElement>("[data-preview-image]");
 const previewKicker = document.querySelector<HTMLElement>("[data-preview-kicker]");
 const previewTitle = document.querySelector<HTMLElement>("[data-preview-title]");
+let setArchivePreview: ((row: HTMLElement) => void) | null = null;
 
 if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
   const imageClasses = [
@@ -105,7 +106,7 @@ if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
     "image-field"
   ];
 
-  const setPreview = (row: HTMLElement): void => {
+  setArchivePreview = (row: HTMLElement): void => {
     const imageClass = row.dataset.previewClass;
 
     if (!imageClass) {
@@ -132,31 +133,82 @@ if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
   };
 
   previewRows.forEach((row) => {
-    row.addEventListener("mouseenter", () => setPreview(row));
-    row.addEventListener("focus", () => setPreview(row));
+    row.addEventListener("mouseenter", () => setArchivePreview?.(row));
+    row.addEventListener("focus", () => setArchivePreview?.(row));
   });
 
-  setPreview(previewRows[0]);
+  setArchivePreview(previewRows[0]);
 }
 
 const filterButtons = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+const filterPanels = document.querySelectorAll<HTMLElement>("[data-filter-panel]");
+const filterStatus = document.querySelector<HTMLElement>("[data-filter-status]");
+const archiveBoard = document.querySelector<HTMLElement>("[data-archive-board]");
 
-if (filterButtons.length > 0 && previewRows.length > 0) {
-  const applyFilter = (button: HTMLButtonElement): void => {
+if (filterButtons.length > 0) {
+  const isKorean = document.documentElement.lang === "ko";
+
+  const applyFilter = (button: HTMLButtonElement, updateUrl = true): void => {
     const selectedCategory = button.dataset.filter || "all";
+    const selectedLabel = button.dataset.filterLabel || button.textContent?.trim() || selectedCategory;
 
-    filterButtons.forEach((filterButton) => filterButton.classList.remove("is-active"));
-    button.classList.add("is-active");
+    filterButtons.forEach((filterButton) => {
+      const isActive = filterButton === button;
+      filterButton.classList.toggle("is-active", isActive);
+      filterButton.setAttribute("aria-pressed", String(isActive));
+    });
 
+    const visibleRows: HTMLElement[] = [];
     previewRows.forEach((row) => {
       const shouldShow = selectedCategory === "all" || row.dataset.category === selectedCategory;
       row.toggleAttribute("hidden", !shouldShow);
+
+      if (shouldShow) {
+        visibleRows.push(row);
+      }
     });
 
-    const firstVisibleRow = Array.from(previewRows).find((row) => !row.hidden);
+    filterPanels.forEach((panel) => {
+      const isActive = panel.dataset.filterPanel === selectedCategory;
+      panel.classList.toggle("is-active", isActive);
+      panel.toggleAttribute("hidden", !isActive);
+    });
 
-    if (firstVisibleRow) {
-      firstVisibleRow.focus({ preventScroll: true });
+    if (filterStatus) {
+      filterStatus.textContent = `${selectedLabel} · ${visibleRows.length} ${isKorean ? "개의 글 표시 중" : "articles showing"}`;
+    }
+
+    if (archiveBoard) {
+      archiveBoard.classList.toggle("is-filtered", selectedCategory !== "all");
+      archiveBoard.dataset.activeCategory = selectedCategory;
+    }
+
+    if (visibleRows[0]) {
+      setArchivePreview?.(visibleRows[0]);
+
+      if (!reduceMotion) {
+        visibleRows.forEach((row, index) => {
+          row.animate(
+            [
+              { opacity: 0.28, transform: "translateY(0.35rem)" },
+              { opacity: 1, transform: "translateY(0)" }
+            ],
+            { duration: 260, delay: Math.min(index, 5) * 28, easing: "cubic-bezier(.2,.8,.2,1)" }
+          );
+        });
+      }
+    }
+
+    if (updateUrl && window.location.pathname.includes("/archive")) {
+      const url = new URL(window.location.href);
+
+      if (selectedCategory === "all") {
+        url.searchParams.delete("category");
+      } else {
+        url.searchParams.set("category", selectedCategory);
+      }
+
+      window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
     }
   };
 
@@ -166,9 +218,11 @@ if (filterButtons.length > 0 && previewRows.length > 0) {
 
   const initialCategory = new URLSearchParams(window.location.search).get("category");
   const initialButton = Array.from(filterButtons).find((button) => button.dataset.filter === initialCategory);
+  const allButton = Array.from(filterButtons).find((button) => button.dataset.filter === "all");
+  const fallbackButton = initialButton || allButton || filterButtons.item(0);
 
-  if (initialButton) {
-    applyFilter(initialButton);
+  if (fallbackButton) {
+    applyFilter(fallbackButton, false);
   }
 }
 
