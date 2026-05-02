@@ -39,6 +39,8 @@ export type VisualClass =
   | "image-library"
   | "image-field";
 
+export type ArticleRailMode = "default" | "image" | "text";
+
 export interface SubcategoryDefinition {
   key: SubcategoryKey;
   label: LocalizedText;
@@ -70,9 +72,14 @@ export interface Article {
   readTime: LocalizedText;
   location: LocalizedText;
   heroClass: VisualClass;
+  heroImage?: string;
+  hideHeroImage?: boolean;
   tags: LocalizedList;
   excerpt: LocalizedText;
   quote: LocalizedText;
+  railMode?: ArticleRailMode;
+  railTitle?: LocalizedText;
+  railText?: LocalizedText;
   sections: ArticleSection[];
 }
 

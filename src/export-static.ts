@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { articles, site } from "./content/magazine";
-import { renderArchivePage, renderArticlePage, renderHomePage, renderIssuePage, renderNotFoundPage } from "./render/pages";
+import { renderArchivePage, renderArticlePage, renderHomePage, renderIssuePage, renderNotFoundPage, renderWritePage } from "./render/pages";
 import type { Locale } from "./types";
 
 const projectRoot = path.resolve(__dirname, "..");
@@ -33,6 +33,7 @@ const writeLocalizedPages = async (locale: Locale): Promise<void> => {
 
   await writeHtml(`${prefix}index.html`, renderHomePage(site, articles, locale, "/"));
   await writeHtml(`${prefix}issues/index.html`, renderIssuePage(site, articles, locale, "/issues"));
+  await writeHtml(`${prefix}write/index.html`, renderWritePage(site, articles, locale, "/write"));
   await writeHtml(`${prefix}archive/index.html`, renderArchivePage(site, articles, locale, "/archive"));
 
   await Promise.all(

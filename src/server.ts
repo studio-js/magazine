@@ -1,7 +1,7 @@
 import express from "express";
 import path from "node:path";
 import { articles, site } from "./content/magazine";
-import { renderArchivePage, renderArticlePage, renderHomePage, renderIssuePage, renderNotFoundPage } from "./render/pages";
+import { renderArchivePage, renderArticlePage, renderHomePage, renderIssuePage, renderNotFoundPage, renderWritePage } from "./render/pages";
 import type { Locale, PrimaryCategory, SubcategoryKey } from "./types";
 
 const app = express();
@@ -36,6 +36,11 @@ app.get(["/", "/en", "/en/"], (request, response) => {
 app.get(["/issues", "/issues/", "/en/issues", "/en/issues/"], (request, response) => {
   const locale = getLocale(request.path, request.query.lang);
   response.send(renderIssuePage(site, articles, locale, getCurrentPath(request.originalUrl)));
+});
+
+app.get(["/write", "/write/", "/en/write", "/en/write/"], (request, response) => {
+  const locale = getLocale(request.path, request.query.lang);
+  response.send(renderWritePage(site, articles, locale, getCurrentPath(request.originalUrl)));
 });
 
 app.get(["/archive", "/archive/:category", "/archive/:category/:subcategory", "/en/archive", "/en/archive/:category", "/en/archive/:category/:subcategory"], (request, response) => {

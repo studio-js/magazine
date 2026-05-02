@@ -109,7 +109,14 @@ const archiveHref = (locale: Locale, category?: PrimaryCategory, subcategory?: S
 const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, locale: Locale): string =>
   text(categories.find((category) => category.key === key)?.label ?? { ko: key, en: key }, locale);
 
-const assetVersion = "20260503-kicker-weight-pass";
+const imageStyle = (imageUrl?: string): string => imageUrl
+  ? ` style="background-image: url(${escapeHtml(JSON.stringify(imageUrl))})"`
+  : "";
+
+const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
+  `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
+
+const assetVersion = "20260503-admin-cms-pass";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -237,6 +244,7 @@ const renderArchiveRows = (
         href="${articleHref(article, locale)}"
         class="archive-row"
         data-preview-class="${article.heroClass}"
+        data-preview-image="${escapeHtml(article.heroImage ?? "")}"
         data-preview-kicker="${escapeHtml(fullLabel)}"
         data-preview-title="${escapeHtml(text(article.title, locale))}"
         data-category="${article.category}"
@@ -336,6 +344,214 @@ const renderDepartmentCards = (site: SiteContent, articleList: Article[], locale
   })
   .join("");
 
+export const renderWritePage = (site: SiteContent, articleList: Article[], locale: Locale, currentPath: string): string => {
+  const initialCategory = site.categories[0];
+  const initialSubcategory = initialCategory.subcategories[0];
+  const articleJson = JSON.stringify(articleList).replace(/</g, "\\u003c");
+  const categoryOptions = site.categories
+    .map((category) => `<option value="${category.key}"${category.key === initialCategory.key ? " selected" : ""}>${escapeHtml(text(category.label, locale))}</option>`)
+    .join("");
+  const categoryFilters = [
+    `<button type="button" class="is-active" data-admin-filter="all" aria-pressed="true"><span>${escapeHtml(locale === "ko" ? "전체" : "All")}</span><small>${articleList.length}</small></button>`,
+    ...site.categories.map((category) => {
+      const count = articleList.filter((article) => article.category === category.key).length;
+      return `<button type="button" data-admin-filter="${category.key}" aria-pressed="false"><span>${escapeHtml(text(category.label, locale))}</span><small>${count}</small></button>`;
+    })
+  ].join("");
+  const subcategoryOptions = site.categories
+    .flatMap((category) => category.subcategories.map((subcategory) => `            <option
+              value="${subcategory.key}"
+              data-category="${category.key}"
+              data-label-ko="${escapeHtml(subcategory.label.ko)}"
+              data-label-en="${escapeHtml(subcategory.label.en)}"
+              ${category.key === initialCategory.key && subcategory.key === initialSubcategory.key ? "selected" : ""}
+            >${escapeHtml(text(subcategory.label, locale))}</option>`))
+    .join("\n");
+  const heroOptions = [
+    "image-atelier",
+    "image-signal",
+    "image-interface",
+    "image-thought",
+    "image-material",
+    "image-system",
+    "image-library",
+    "image-field"
+  ]
+    .map((heroClass) => `<option value="${heroClass}"${heroClass === "image-material" ? " selected" : ""}>${heroClass}</option>`)
+    .join("");
+  const body = `
+    <section class="admin-page section-pad" data-write-editor data-write-storage-key="the-thing-admin-articles" data-admin-password="promise">
+      <div class="admin-lock" data-admin-lock>
+        <form class="admin-lock-card" data-admin-login>
+          <p class="kicker">Admin</p>
+          <h1>${escapeHtml(locale === "ko" ? "관리자 접근" : "Admin Access")}</h1>
+          <p>${escapeHtml(locale === "ko" ? "비밀번호를 입력하면 기사 작성과 편집 화면이 열립니다." : "Enter the password to open the writing and editing desk.")}</p>
+          <label>
+            <span>Password</span>
+            <input type="password" autocomplete="current-password" data-admin-password-input />
+          </label>
+          <button type="submit">${escapeHtml(locale === "ko" ? "들어가기" : "Enter")}</button>
+          <small data-admin-login-error></small>
+        </form>
+      </div>
+
+      <header class="admin-header">
+        <div>
+          <p class="kicker">Editorial Admin</p>
+          <h1>${escapeHtml(locale === "ko" ? "기사 데스크" : "Article Desk")}</h1>
+        </div>
+        <p>${escapeHtml(locale === "ko" ? "기존 기사를 불러와 같은 기사 포맷에서 편집하고, 새 글을 만들고, 순서를 바꾸거나 삭제할 수 있습니다. 정적 사이트라 저장은 이 브라우저에 임시 보관되며, 최종 반영은 내보낸 articles 배열을 코드에 적용하는 방식입니다." : "Edit existing articles inside the live article format, create new drafts, reorder or delete entries. Because this is a static site, edits are stored in this browser until you export the articles array back into code.")}</p>
+      </header>
+
+      <div class="admin-shell">
+        <aside class="admin-sidebar" aria-label="Article manager">
+          <div class="admin-sidebar-head">
+            <span>${escapeHtml(locale === "ko" ? "기사 목록" : "Articles")}</span>
+            <strong data-admin-count>${articleList.length}</strong>
+          </div>
+          <div class="admin-filter-row" data-admin-filters>
+            ${categoryFilters}
+          </div>
+          <div class="admin-list" data-admin-list></div>
+          <div class="admin-sidebar-actions">
+            <button type="button" data-admin-new>${escapeHtml(locale === "ko" ? "새 기사" : "New Article")}</button>
+            <button type="button" data-admin-move-up>${escapeHtml(locale === "ko" ? "위로" : "Move Up")}</button>
+            <button type="button" data-admin-move-down>${escapeHtml(locale === "ko" ? "아래로" : "Move Down")}</button>
+            <button type="button" data-admin-delete>${escapeHtml(locale === "ko" ? "삭제" : "Delete")}</button>
+          </div>
+          <div class="admin-sidebar-actions is-export">
+            <button type="button" data-admin-copy-all>${escapeHtml(locale === "ko" ? "전체 배열 복사" : "Copy All")}</button>
+            <button type="button" data-admin-download-all>${escapeHtml(locale === "ko" ? "전체 파일 내려받기" : "Download All")}</button>
+          </div>
+        </aside>
+
+        <section class="admin-editor" aria-label="Article editor">
+          <div class="admin-editor-bar">
+            <div>
+              <span>${escapeHtml(locale === "ko" ? "편집 중" : "Editing")}</span>
+              <strong data-admin-current-title></strong>
+            </div>
+            <p data-write-status>${escapeHtml(locale === "ko" ? "브라우저에 자동 저장됩니다." : "Autosaves in this browser.")}</p>
+          </div>
+
+          <div class="writer-toolbar" aria-label="${escapeHtml(locale === "ko" ? "글 설정" : "Writing settings")}">
+            <label>
+              <span>Slug</span>
+              <input type="text" value="new-article" data-write-meta="slug" />
+            </label>
+            <label>
+              <span>${escapeHtml(locale === "ko" ? "날짜" : "Date")}</span>
+              <input type="date" value="${new Date().toISOString().slice(0, 10)}" data-write-meta="date" />
+            </label>
+            <label>
+              <span>${escapeHtml(locale === "ko" ? "카테고리" : "Category")}</span>
+              <select data-write-meta="category">${categoryOptions}</select>
+            </label>
+            <label>
+              <span>${escapeHtml(locale === "ko" ? "세부 카테고리" : "Subcategory")}</span>
+              <select data-write-meta="subcategory">
+${subcategoryOptions}
+              </select>
+            </label>
+            <label>
+              <span>${escapeHtml(locale === "ko" ? "비주얼" : "Visual")}</span>
+              <select data-write-meta="heroClass">${heroOptions}</select>
+            </label>
+            <label>
+              <span>${escapeHtml(locale === "ko" ? "이미지 모드" : "Image Mode")}</span>
+              <select data-write-meta="imageMode">
+                <option value="visual">${escapeHtml(locale === "ko" ? "자동 비주얼" : "Generated Visual")}</option>
+                <option value="custom">${escapeHtml(locale === "ko" ? "이미지 URL" : "Image URL")}</option>
+                <option value="none">${escapeHtml(locale === "ko" ? "이미지 없음" : "No Image")}</option>
+              </select>
+            </label>
+            <label class="writer-image-url-field">
+              <span>${escapeHtml(locale === "ko" ? "이미지 URL" : "Image URL")}</span>
+              <input type="url" placeholder="https://..." data-write-meta="heroImage" />
+            </label>
+            <label>
+              <span>${escapeHtml(locale === "ko" ? "Rail" : "Rail")}</span>
+              <select data-write-meta="railMode">
+                <option value="default">${escapeHtml(locale === "ko" ? "기본" : "Default")}</option>
+                <option value="image">${escapeHtml(locale === "ko" ? "이미지만" : "Image Only")}</option>
+                <option value="text">${escapeHtml(locale === "ko" ? "텍스트만" : "Text Only")}</option>
+              </select>
+            </label>
+            <label>
+              <span>${escapeHtml(locale === "ko" ? "읽기 시간" : "Read Time")}</span>
+              <input type="text" value="6분 읽기" data-write-meta="readTime" />
+            </label>
+            <label>
+              <span>${escapeHtml(locale === "ko" ? "장소" : "Location")}</span>
+              <input type="text" value="서울" data-write-meta="location" />
+            </label>
+            <label>
+              <span>${escapeHtml(locale === "ko" ? "태그" : "Tags")}</span>
+              <input type="text" value="제품, 비례, 그림자" data-write-meta="tags" />
+            </label>
+            <div class="writer-actions">
+              <button type="button" data-write-add-section>${escapeHtml(locale === "ko" ? "섹션 추가" : "Add Section")}</button>
+              <button type="button" data-write-copy>${escapeHtml(locale === "ko" ? "현재 기사 복사" : "Copy Article")}</button>
+              <button type="button" data-write-download>${escapeHtml(locale === "ko" ? "현재 파일 내려받기" : "Download Article")}</button>
+              <button type="button" data-write-reset>${escapeHtml(locale === "ko" ? "로컬 변경 초기화" : "Reset Local Edits")}</button>
+            </div>
+          </div>
+
+          <article class="article-detail writer-article">
+            <header class="article-hero-grid">
+              <div class="article-title-block">
+                <p class="kicker" data-write-kicker>${escapeHtml(`${text(initialCategory.label, locale)} / ${text(initialSubcategory.label, locale)}`)}</p>
+                <h1 contenteditable="true" spellcheck="true" data-write-text="title">${escapeHtml(locale === "ko" ? "실루엣의 무게" : "The Weight of a Silhouette")}</h1>
+                <p contenteditable="true" spellcheck="true" data-write-text="deck">${escapeHtml(locale === "ko" ? "의자의 비례는 가까이서보다 한 발 물러섰을 때 더 분명해진다. 이 글은 형태가 공간 안에서 무게를 얻는 순간을 따라간다." : "A chair's proportion becomes clearer from one step away than up close. This draft follows the moment form gains weight inside a room.")}</p>
+              </div>
+              <div class="article-meta-card" aria-label="${escapeHtml(locale === "ko" ? "기사 정보" : "Article details")}">
+                <span><small>${escapeHtml(locale === "ko" ? "발행" : "Published")}</small><strong data-write-preview="date"></strong></span>
+                <span><small>${escapeHtml(locale === "ko" ? "장소" : "Location")}</small><strong data-write-preview="location"></strong></span>
+                <span><small>${escapeHtml(locale === "ko" ? "읽기" : "Reading")}</small><strong data-write-preview="readTime"></strong></span>
+                <span><small>${escapeHtml(locale === "ko" ? "태그" : "Tags")}</small><strong data-write-preview="tags"></strong></span>
+              </div>
+            </header>
+
+            <div class="article-visual" data-write-hero-shell>
+              <span class="image-block image-material" data-write-hero-preview></span>
+            </div>
+
+            <div class="article-body-grid">
+              <aside class="article-side writer-side" data-write-rail>
+                <span class="article-rail-no">01</span>
+                <span class="image-block image-material" data-write-rail-visual></span>
+                <strong contenteditable="true" spellcheck="true" data-write-text="railTitle" data-write-rail-title>실루엣의 무게</strong>
+                <p contenteditable="true" spellcheck="true" data-write-text="railText" data-write-rail-text>의자의 비례는 가까이서보다 한 발 물러섰을 때 더 분명해진다.</p>
+              </aside>
+
+              <div class="article-body" data-write-body>
+                <blockquote contenteditable="true" spellcheck="true" data-write-text="quote">좋은 제품 디자인은 사용자의 몸을 생각하지만, 동시에 공간 안에서 어떤 그림자를 남길지도 생각한다.</blockquote>
+                <section class="article-section writer-section" data-write-section>
+                  <h2 contenteditable="true" spellcheck="true" data-write-section-heading>실루엣의 무게</h2>
+                  <p contenteditable="true" spellcheck="true" data-write-paragraph>의자의 비례는 가까이서보다 한 발 물러섰을 때 더 분명해진다. 등받이의 높이, 좌판의 깊이, 다리 사이의 간격이 하나의 실루엣으로 묶이기 때문이다.</p>
+                  <p contenteditable="true" spellcheck="true" data-write-paragraph>잘 만든 의자는 장식을 앞세우지 않는다. 대신 방 안에서 어느 정도의 존재감을 가져야 하는지 정확히 알고 있는 물건처럼 보인다.</p>
+                  <div class="writer-section-tools" contenteditable="false">
+                    <button type="button" data-write-add-paragraph>${escapeHtml(locale === "ko" ? "문단 추가" : "Add Paragraph")}</button>
+                    <button type="button" data-write-remove-section>${escapeHtml(locale === "ko" ? "섹션 삭제" : "Remove Section")}</button>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </article>
+
+          <details class="writer-output">
+            <summary>${escapeHtml(locale === "ko" ? "생성된 코드 보기" : "View Generated Code")}</summary>
+            <textarea readonly data-write-output aria-label="Generated Article code"></textarea>
+          </details>
+        </section>
+      </div>
+
+      <script type="application/json" data-write-articles>${articleJson}</script>
+    </section>`;
+
+  return renderLayout({ title: `Write | ${text(site.title, locale)}`, description: text(site.description, locale), body, locale, currentPath, site });
+};
+
 export const renderHomePage = (site: SiteContent, articleList: Article[], locale: Locale, currentPath: string): string => {
   const labels = ui[locale];
   const [featuredArticle, secondaryArticle] = articleList;
@@ -355,7 +571,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
         </div>
 
         <a class="cover-art" href="${articleHref(featuredArticle, locale)}" aria-label="${escapeHtml(labels.readFeature)}" data-reveal data-action-card data-scroll-motion data-feature-card>
-          <span class="image-block ${featuredArticle.heroClass}" data-feature-image></span>
+          ${renderImageBlock(featuredArticle.heroClass, featuredArticle.heroImage, "data-feature-image")}
           <span class="cover-caption">
             <small data-feature-kicker>${escapeHtml(categoryLabel(site.categories, featuredArticle.category, locale))} / ${escapeHtml(formatDate(featuredArticle.date, locale))}</small>
             <strong data-feature-title>${escapeHtml(text(featuredArticle.title, locale))}</strong>
@@ -368,7 +584,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
             ${digestArticles
               .map(
                 (article, index) => `
-                  <a href="${articleHref(article, locale)}" data-feature-link data-feature-class="${article.heroClass}" data-feature-kicker="${escapeHtml(`${categoryLabel(site.categories, article.category, locale)} / ${formatDate(article.date, locale)}`)}" data-feature-title="${escapeHtml(text(article.title, locale))}">
+                  <a href="${articleHref(article, locale)}" data-feature-link data-feature-class="${article.heroClass}" data-feature-image="${escapeHtml(article.heroImage ?? "")}" data-feature-kicker="${escapeHtml(`${categoryLabel(site.categories, article.category, locale)} / ${formatDate(article.date, locale)}`)}" data-feature-title="${escapeHtml(text(article.title, locale))}">
                     <span>${String(index + 1).padStart(2, "0")}</span>
                     <small>${escapeHtml(categoryLabel(site.categories, article.category, locale))}</small>
                     <strong>${escapeHtml(text(article.title, locale))}</strong>
@@ -421,7 +637,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
 
       <div class="river-layout">
         <a class="river-lead" href="${articleHref(secondaryArticle, locale)}" data-reveal data-action-card data-scroll-motion>
-          <span class="image-block ${secondaryArticle.heroClass}"></span>
+          ${renderImageBlock(secondaryArticle.heroClass, secondaryArticle.heroImage)}
           <span class="river-lead-copy">
             <small>${escapeHtml(categoryLabel(site.categories, secondaryArticle.category, locale))} / ${escapeHtml(text(secondaryArticle.subcategory, locale))}</small>
             <strong>${escapeHtml(text(secondaryArticle.title, locale))}</strong>
@@ -435,7 +651,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
               (article, index) => `
                 <a class="river-card" href="${articleHref(article, locale)}" data-reveal data-action-card>
                   <span class="river-no">${String(index + 1).padStart(2, "0")}</span>
-                  <span class="image-block ${article.heroClass}"></span>
+                  ${renderImageBlock(article.heroClass, article.heroImage)}
                   <span class="river-card-copy">
                     <small>${escapeHtml(categoryLabel(site.categories, article.category, locale))} / ${escapeHtml(formatDate(article.date, locale))}</small>
                     <strong>${escapeHtml(text(article.title, locale))}</strong>
@@ -591,7 +807,17 @@ export const renderArticlePage = (
   const category = categoryLabel(site.categories, article.category, locale);
   const firstSection = article.sections[0];
   const railVisuals = article.sections.map((_, index) => relatedArticles[index]?.heroClass ?? article.heroClass);
-  const firstRailText = firstSection?.paragraphs[locale][0] ?? text(article.subtitle, locale);
+  const railImages = article.sections.map((_, index) => relatedArticles[index]?.heroImage ?? article.heroImage ?? "");
+  const railMode = article.railMode ?? "default";
+  const firstRailTitle = article.railTitle ? text(article.railTitle, locale) : firstSection ? text(firstSection.heading, locale) : text(article.subtitle, locale);
+  const firstRailText = article.railText ? text(article.railText, locale) : firstSection?.paragraphs[locale][0] ?? text(article.subtitle, locale);
+  const articleVisual = article.hideHeroImage
+    ? ""
+    : `      <div class="article-visual" data-reveal data-action-card data-scroll-motion>
+        ${renderImageBlock(article.heroClass, article.heroImage)}
+      </div>
+
+`;
   const metaLabels = locale === "ko"
     ? { date: "발행", location: "장소", readTime: "읽기", tags: "태그" }
     : { date: "Published", location: "Location", readTime: "Reading", tags: "Tags" };
@@ -613,15 +839,11 @@ export const renderArticlePage = (
         </div>
       </header>
 
-      <div class="article-visual" data-reveal data-action-card data-scroll-motion>
-        <span class="image-block ${article.heroClass}"></span>
-      </div>
-
-      <div class="article-body-grid">
-        <aside class="article-side" data-reveal data-article-rail>
+${articleVisual}      <div class="article-body-grid">
+        <aside class="article-side article-side-${railMode}" data-reveal data-article-rail>
           <span class="article-rail-no" data-article-rail-no>01</span>
-          <span class="image-block ${railVisuals[0] ?? article.heroClass}" data-article-rail-visual></span>
-          <strong data-article-rail-title>${escapeHtml(firstSection ? text(firstSection.heading, locale) : text(article.subtitle, locale))}</strong>
+          ${renderImageBlock(railVisuals[0] ?? article.heroClass, railImages[0], "data-article-rail-visual")}
+          <strong data-article-rail-title>${escapeHtml(firstRailTitle)}</strong>
           <p data-article-rail-text>${escapeHtml(firstRailText)}</p>
         </aside>
 
@@ -630,7 +852,7 @@ export const renderArticlePage = (
           ${article.sections
             .map(
               (section, index) => `
-                <section class="article-section" data-reveal data-article-section data-rail-no="${String(index + 1).padStart(2, "0")}" data-rail-title="${escapeHtml(text(section.heading, locale))}" data-rail-text="${escapeHtml(section.paragraphs[locale][0] ?? "")}" data-rail-visual="${railVisuals[index] ?? article.heroClass}">
+                <section class="article-section" data-reveal data-article-section data-rail-no="${String(index + 1).padStart(2, "0")}" data-rail-title="${escapeHtml(text(section.heading, locale))}" data-rail-text="${escapeHtml(section.paragraphs[locale][0] ?? "")}" data-rail-visual="${railVisuals[index] ?? article.heroClass}" data-rail-image="${escapeHtml(railImages[index] ?? "")}">
                   <h2>${escapeHtml(text(section.heading, locale))}</h2>
                   ${section.paragraphs[locale].map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
                 </section>`
@@ -650,7 +872,7 @@ export const renderArticlePage = (
           .map(
             (related) => `
               <a class="story-card" href="${articleHref(related, locale)}" data-reveal data-action-card>
-                <span class="image-block ${related.heroClass}"></span>
+                ${renderImageBlock(related.heroClass, related.heroImage)}
                 <div>
                   <p class="kicker">${escapeHtml(categoryLabel(site.categories, related.category, locale))} / ${escapeHtml(text(related.subcategory, locale))}</p>
                   <h3>${escapeHtml(text(related.title, locale))}</h3>
