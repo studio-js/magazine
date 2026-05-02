@@ -17,6 +17,22 @@ const imageClasses = [
   "image-field"
 ];
 
+const animateTextSwap = (elements: HTMLElement[]): void => {
+  if (reduceMotion) {
+    return;
+  }
+
+  elements.forEach((element, index) => {
+    element.animate(
+      [
+        { opacity: 0.36, transform: "translateY(0.32rem)" },
+        { opacity: 1, transform: "translateY(0)" }
+      ],
+      { duration: 190, delay: index * 18, easing: "cubic-bezier(.2,.8,.2,1)" }
+    );
+  });
+};
+
 const setMenuOpen = (isOpen: boolean): void => {
   if (!menuButton || !mobileMenu) {
     return;
@@ -130,6 +146,7 @@ if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
     previewImage.classList.add(imageClass);
     previewKicker.textContent = row.dataset.previewKicker || "";
     previewTitle.textContent = row.dataset.previewTitle || "";
+    animateTextSwap([previewKicker, previewTitle]);
 
     if (!reduceMotion) {
       previewImage.animate(
@@ -143,7 +160,7 @@ if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
   };
 
   previewRows.forEach((row) => {
-    row.addEventListener("mouseenter", () => setArchivePreview?.(row));
+    row.addEventListener("pointerenter", () => setArchivePreview?.(row));
     row.addEventListener("focus", () => setArchivePreview?.(row));
   });
 
@@ -171,6 +188,7 @@ if (featureCard && featureImage && featureKicker && featureTitle && featureLinks
     featureImage.classList.add(imageClass);
     featureKicker.textContent = kicker;
     featureTitle.textContent = title;
+    animateTextSwap([featureKicker, featureTitle]);
 
     featureLinks.forEach((featureLink) => featureLink.classList.toggle("is-active", featureLink === link));
 
@@ -186,7 +204,7 @@ if (featureCard && featureImage && featureKicker && featureTitle && featureLinks
   };
 
   featureLinks.forEach((link) => {
-    link.addEventListener("mouseenter", () => setFeaturePreview(link));
+    link.addEventListener("pointerenter", () => setFeaturePreview(link));
     link.addEventListener("focus", () => setFeaturePreview(link));
   });
 }

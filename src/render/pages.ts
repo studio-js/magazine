@@ -107,6 +107,8 @@ const archiveHref = (locale: Locale, category?: PrimaryCategory, subcategory?: S
 const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, locale: Locale): string =>
   text(categories.find((category) => category.key === key)?.label ?? { ko: key, en: key }, locale);
 
+const assetVersion = "20260503-reference-pass";
+
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
     <a class="${locale === "ko" ? "is-active" : ""}" href="${withLocale(currentPath, "ko")}">KR</a>
@@ -152,15 +154,14 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="${escapeHtml(description)}" />
     <title>${escapeHtml(title)}</title>
-    <link rel="stylesheet" href="/styles.css" />
-    <script src="/client.js" defer></script>
+    <link rel="stylesheet" href="/styles.css?v=${assetVersion}" />
+    <script src="/client.js?v=${assetVersion}" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
 
     <header class="site-header" data-header>
       <a class="brand" href="${withLocale("/", locale)}" aria-label="The Thing home">
-        <span class="brand-mark">T</span>
         <span class="brand-text">The Thing</span>
       </a>
 
@@ -197,9 +198,11 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
 
 const renderKeywords = (keywords: string[]): string => `
   <section class="issue-strip" aria-label="Issue rhythm" data-scroll-section>
-    <p>Issue vocabulary</p>
-    <div>
-      ${keywords.map((keyword) => `<span>${escapeHtml(keyword)}</span>`).join("")}
+    <p class="issue-strip-label">Issue vocabulary</p>
+    <div class="issue-strip-list">
+      ${keywords
+        .map((keyword, index) => `<span><small>${String(index + 1).padStart(2, "0")}</small>${escapeHtml(keyword)}</span>`)
+        .join("")}
     </div>
   </section>`;
 
@@ -231,6 +234,7 @@ const renderArchiveRows = (articleList: Article[], site: SiteContent, locale: Lo
         <span class="archive-date">${formatDate(article.date, locale)}</span>
         <span class="archive-title">${escapeHtml(text(article.title, locale))}</span>
         <span class="archive-category">${escapeHtml(label)}</span>
+        <span class="archive-action">${escapeHtml(locale === "ko" ? "읽기" : "Read")}</span>
       </a>`;
   })
   .join("");

@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 document.documentElement.classList.add("js");
 const menuButton = document.querySelector("[data-menu-button]");
 const mobileMenu = document.querySelector("[data-mobile-menu]");
@@ -17,6 +16,17 @@ const imageClasses = [
     "image-library",
     "image-field"
 ];
+const animateTextSwap = (elements) => {
+    if (reduceMotion) {
+        return;
+    }
+    elements.forEach((element, index) => {
+        element.animate([
+            { opacity: 0.36, transform: "translateY(0.32rem)" },
+            { opacity: 1, transform: "translateY(0)" }
+        ], { duration: 190, delay: index * 18, easing: "cubic-bezier(.2,.8,.2,1)" });
+    });
+};
 const setMenuOpen = (isOpen) => {
     if (!menuButton || !mobileMenu) {
         return;
@@ -108,6 +118,7 @@ if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
         previewImage.classList.add(imageClass);
         previewKicker.textContent = row.dataset.previewKicker || "";
         previewTitle.textContent = row.dataset.previewTitle || "";
+        animateTextSwap([previewKicker, previewTitle]);
         if (!reduceMotion) {
             previewImage.animate([
                 { filter: "blur(8px)", opacity: 0.58, transform: "scale(1.018)" },
@@ -116,7 +127,7 @@ if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
         }
     };
     previewRows.forEach((row) => {
-        row.addEventListener("mouseenter", () => setArchivePreview?.(row));
+        row.addEventListener("pointerenter", () => setArchivePreview?.(row));
         row.addEventListener("focus", () => setArchivePreview?.(row));
     });
     setArchivePreview(previewRows[0]);
@@ -139,6 +150,7 @@ if (featureCard && featureImage && featureKicker && featureTitle && featureLinks
         featureImage.classList.add(imageClass);
         featureKicker.textContent = kicker;
         featureTitle.textContent = title;
+        animateTextSwap([featureKicker, featureTitle]);
         featureLinks.forEach((featureLink) => featureLink.classList.toggle("is-active", featureLink === link));
         if (!reduceMotion) {
             featureImage.animate([
@@ -148,7 +160,7 @@ if (featureCard && featureImage && featureKicker && featureTitle && featureLinks
         }
     };
     featureLinks.forEach((link) => {
-        link.addEventListener("mouseenter", () => setFeaturePreview(link));
+        link.addEventListener("pointerenter", () => setFeaturePreview(link));
         link.addEventListener("focus", () => setFeaturePreview(link));
     });
 }
