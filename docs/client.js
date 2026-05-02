@@ -110,9 +110,9 @@ if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
         previewTitle.textContent = row.dataset.previewTitle || "";
         if (!reduceMotion) {
             previewImage.animate([
-                { opacity: 0.62, transform: "translateY(0.45rem) scale(0.985)" },
-                { opacity: 1, transform: "translateY(0) scale(1)" }
-            ], { duration: 360, easing: "cubic-bezier(.2,.8,.2,1)" });
+                { filter: "blur(8px)", opacity: 0.58, transform: "scale(1.018)" },
+                { filter: "blur(0)", opacity: 1, transform: "scale(1)" }
+            ], { duration: 240, easing: "cubic-bezier(.2,.8,.2,1)" });
         }
     };
     previewRows.forEach((row) => {
@@ -142,9 +142,9 @@ if (featureCard && featureImage && featureKicker && featureTitle && featureLinks
         featureLinks.forEach((featureLink) => featureLink.classList.toggle("is-active", featureLink === link));
         if (!reduceMotion) {
             featureImage.animate([
-                { clipPath: "inset(0 100% 0 0)" },
-                { clipPath: "inset(0 0 0 0)" }
-            ], { duration: 210, easing: "cubic-bezier(.2,.8,.2,1)" });
+                { filter: "blur(10px)", opacity: 0.5, transform: "scale(1.025)" },
+                { filter: "blur(0)", opacity: 1, transform: "scale(1)" }
+            ], { duration: 220, easing: "cubic-bezier(.2,.8,.2,1)" });
         }
     };
     featureLinks.forEach((link) => {

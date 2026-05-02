@@ -126,9 +126,9 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
         <div class="nav-item ${isCategoryActive ? "is-active" : ""}">
           <a class="nav-link ${isCategoryActive ? "is-active" : ""}" href="${archiveHref(locale, category.key)}"${isCategoryExact ? " aria-current=\"page\"" : ""}>
             <span>${escapeHtml(text(category.label, locale))}</span>
-            <small>${escapeHtml(category.subcategories.map((item) => text(item.label, locale)).join(" / "))}</small>
           </a>
           <div class="nav-submenu" aria-label="${escapeHtml(`${text(category.label, locale)} ${locale === "ko" ? "하위 카테고리" : "subcategories"}`)}">
+            <p>${escapeHtml(text(category.description, locale))}</p>
             ${category.subcategories
               .map((subcategory) => {
                 const subcategoryPath = `/archive/${category.key}/${subcategory.key}`;
@@ -196,9 +196,12 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
 };
 
 const renderKeywords = (keywords: string[]): string => `
-  <div class="issue-strip" aria-label="Magazine keywords">
-    ${keywords.map((keyword) => `<span>${escapeHtml(keyword)}</span>`).join("")}
-  </div>`;
+  <section class="issue-strip" aria-label="Issue rhythm" data-scroll-section>
+    <p>Issue vocabulary</p>
+    <div>
+      ${keywords.map((keyword) => `<span>${escapeHtml(keyword)}</span>`).join("")}
+    </div>
+  </section>`;
 
 const renderNotes = (notes: Note[], locale: Locale): string => notes
   .map(
@@ -335,6 +338,7 @@ const renderDepartmentCards = (site: SiteContent, articleList: Article[], locale
         </span>
         <span class="department-name">${escapeHtml(label)}</span>
         <span class="department-desc">${escapeHtml(text(category.description, locale))}</span>
+        <span class="department-action">${escapeHtml(locale === "ko" ? "이 경로로 읽기" : "Read this route")}</span>
         <span class="subcategory-chips" aria-label="${escapeHtml(`${label} ${locale === "ko" ? "하위 카테고리" : "subcategories"}`)}">
           ${category.subcategories
             .map((subcategory) => `<span>${escapeHtml(text(subcategory.label, locale))}</span>`)
@@ -361,6 +365,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
           </div>
           <p class="kicker">${escapeHtml(text(site.heroKicker, locale))}</p>
           <h1 id="hero-title">${escapeHtml(text(site.heroTitle, locale))}</h1>
+          <p class="cover-deck">${escapeHtml(locale === "ko" ? "작업실의 사물, 화면의 질서, 브랜드의 숨, 느린 판단의 감각을 하나의 편집 표면 위에 놓았다." : "Objects in studios, order on screens, the breath of brands, and the texture of slower judgment gathered on one editorial surface.")}</p>
         </div>
 
         <a class="cover-art" href="${articleHref(featuredArticle, locale)}" aria-label="${escapeHtml(labels.readFeature)}" data-reveal data-action-card data-scroll-motion data-feature-card>
@@ -393,10 +398,10 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
 
     <section class="issue-brief section-pad" aria-label="Editorial position" data-scroll-section>
       <div class="brief-copy" data-reveal>
-        <p class="kicker">${escapeHtml(locale === "ko" ? "Editorial Position" : "Editorial Position")}</p>
-        <h2>${escapeHtml(locale === "ko" ? "스크롤되는 피드가 아니라, 한 호의 밀도로 읽히는 디지털 매거진." : "Not a scrolling feed, but a digital issue with editorial density.")}</h2>
+        <p class="kicker">${escapeHtml(locale === "ko" ? "Editor’s Letter" : "Editor’s Letter")}</p>
+        <h2>${escapeHtml(locale === "ko" ? "이미지가 먼저 말하고, 문장은 늦게 도착하는 한 호." : "An issue where images speak first and sentences arrive slowly.")}</h2>
       </div>
-      <p class="brief-text" data-reveal>${escapeHtml(locale === "ko" ? "커버에서 시작해 글, 노트, 색인으로 이어지는 흐름을 만들었습니다. 각 카테고리는 단순한 분류가 아니라 이번 호를 읽는 관점이며, 하위 카테고리는 독자가 더 좁은 결로 이동하는 장치입니다." : "The page moves from cover to essays, notes, and index. Each category is not just taxonomy but a way of reading the issue; subcategories let the reader move into a narrower grain.")}</p>
+      <p class="brief-text" data-reveal>${escapeHtml(locale === "ko" ? "이번 호는 조각가의 작업대, 조용한 AI 인터페이스, 데이터 화면의 독서성, 숨 쉴 공간이 있는 브랜드 시스템을 나란히 놓는다. 빠르게 소비되는 주제를 느린 시선으로 다시 배열하는 것이 이 매거진의 방식이다." : "This issue places the sculptor's desk, quiet AI interfaces, readable data screens, and breathable brand systems side by side. The magazine rearranges fast subjects for slower attention.")}</p>
       <div class="brief-index" data-reveal>
         ${digestArticles
           .map(
@@ -412,9 +417,9 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
 
     <section class="departments section-pad" aria-labelledby="departments-title" data-scroll-section>
       <div class="section-head" data-reveal>
-        <p class="kicker">Departments</p>
-        <h2 id="departments-title">${escapeHtml(locale === "ko" ? "분류가 아니라, 이번 호를 읽는 네 개의 입구." : "Not categories, but four entrances into the issue.")}</h2>
-        <p>${escapeHtml(locale === "ko" ? "각 디파트먼트는 독립된 색을 갖되 같은 편집 표면 위에 놓입니다. 하위 카테고리는 작은 칩처럼 남겨 빠르게 좁혀 읽을 수 있게 했습니다." : "Each department keeps its own tone while staying on the same editorial surface. Subcategory chips make it easy to narrow the issue quickly.")}</p>
+        <p class="kicker">Routes</p>
+        <h2 id="departments-title">${escapeHtml(locale === "ko" ? "네 개의 경로로 나뉘는 하나의 편집면." : "One editorial surface, divided into four routes.")}</h2>
+        <p>${escapeHtml(locale === "ko" ? "아래 카드는 단순한 분류표가 아니라 이번 호를 어떤 순서로 읽을지 제안하는 경로다. 카드 위에 머무르면 각 경로의 톤이 조용히 드러난다." : "These cards are not a taxonomy table, but suggested reading routes. Hovering over each one quietly reveals its tone.")}</p>
       </div>
       <div class="department-list">
         ${renderDepartmentCards(site, articleList, locale)}
@@ -459,7 +464,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
     <section class="notes section-pad" id="notes" aria-labelledby="notes-title" data-scroll-section>
       <div class="notes-intro" data-reveal>
         <p class="kicker">${escapeHtml(labels.editorNotes)}</p>
-        <h2 id="notes-title">${locale === "ko" ? "짧게 남긴 편집실의 메모." : "Short notes from the desk."}</h2>
+        <h2 id="notes-title">${locale === "ko" ? "이번 호를 지나가는 세 개의 관찰." : "Three observations moving through this issue."}</h2>
       </div>
 
       <div class="note-list">
@@ -473,7 +478,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
           <p class="kicker">Reading Index</p>
           <h2 id="archive-title">${escapeHtml(labels.latest)}</h2>
         </div>
-        <p>${escapeHtml(locale === "ko" ? "이번 호의 글을 한눈에 훑는 색인입니다. 카테고리와 하위 카테고리 페이지에서는 같은 목록이 더 좁은 결로 정리됩니다." : "An index for scanning the issue at a glance. Category and subcategory pages refine the same issue into a narrower reading path.")}</p>
+        <p>${escapeHtml(locale === "ko" ? "제목에 머무르면 오른쪽 프리뷰가 즉시 바뀐다. 목록은 목차이면서 동시에 이번 호의 시각적 리듬을 확인하는 장치다." : "Hover over a title and the preview updates immediately. The list is both table of contents and a way to read the issue's visual rhythm.")}</p>
       </div>
 
       ${renderArchiveBoard(site, articleList, locale, false)}

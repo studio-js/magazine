@@ -5,8 +5,8 @@ export const categories: CategoryDefinition[] = [
     key: "art",
     label: { ko: "예술", en: "Art" },
     description: {
-      ko: "동시대 작가, 전시, 이미지, 사운드와 매체 실험을 다룹니다.",
-      en: "Contemporary artists, exhibitions, images, sound, and experiments in media."
+      ko: "전시장 이후에도 남는 이미지와 작업실의 물성을 따라갑니다.",
+      en: "Images that remain after the gallery and the material traces of studio practice."
     },
     subcategories: [
       { key: "exhibitions", label: { ko: "전시", en: "Exhibitions" } },
@@ -19,8 +19,8 @@ export const categories: CategoryDefinition[] = [
     key: "tech",
     label: { ko: "테크", en: "Tech" },
     description: {
-      ko: "AI, 인터페이스, 데이터, 도구가 감각과 생활을 바꾸는 방식을 봅니다.",
-      en: "How AI, interfaces, data, and tools reshape perception and everyday life."
+      ko: "기술이 똑똑해 보이는 순간보다 덜 방해하는 구조를 봅니다.",
+      en: "Less interested in smart performance than in structures that interrupt less."
     },
     subcategories: [
       { key: "ai", label: { ko: "AI", en: "AI" } },
@@ -33,8 +33,8 @@ export const categories: CategoryDefinition[] = [
     key: "design",
     label: { ko: "디자인", en: "Design" },
     description: {
-      ko: "그래픽, 제품, 공간, 브랜드를 조용하지만 정확한 관점으로 읽습니다.",
-      en: "A quiet but precise reading of graphics, products, spaces, and brands."
+      ko: "제품의 그림자와 브랜드 시스템의 여백처럼 작동하는 형태를 읽습니다.",
+      en: "Forms at work, from the shadow of a product to the margins of a brand system."
     },
     subcategories: [
       { key: "graphic", label: { ko: "그래픽", en: "Graphic" } },
@@ -47,8 +47,8 @@ export const categories: CategoryDefinition[] = [
     key: "philosophy",
     label: { ko: "철학", en: "Philosophy" },
     description: {
-      ko: "기술과 미감 뒤에 놓인 생각, 윤리, 시간, 몸의 문제를 기록합니다.",
-      en: "Thoughts on ethics, time, the body, and meaning behind technology and aesthetics."
+      ko: "속도, 기본값, 윤리처럼 화면 뒤에 숨어 있는 판단을 묻습니다.",
+      en: "Judgments hidden behind screens: speed, defaults, ethics, and time."
     },
     subcategories: [
       { key: "thought", label: { ko: "사유", en: "Thought" } },
@@ -529,26 +529,26 @@ export const articles: Article[] = [
 export const notes: Note[] = [
   {
     date: "May 02",
-    title: { ko: "큰 카테고리는 편집 방향이다", en: "Large Categories Are Editorial Direction" },
+    title: { ko: "작업실의 표면에서 시작한 호", en: "An issue that begins on the studio surface" },
     body: {
-      ko: "예술, 테크, 디자인, 철학은 주제 분류이면서 동시에 이 매거진이 세상을 읽는 네 개의 창이다.",
-      en: "Art, tech, design, and philosophy are categories, but also four windows through which this magazine reads the world."
+      ko: "이번 호는 완성된 작품보다 그 앞의 표면을 본다. 책상, 대시보드, 의자의 그림자, 기본값처럼 생각이 아직 굳기 전의 장면들이다.",
+      en: "This issue looks at surfaces before completion: desks, dashboards, chair shadows, and defaults before thought hardens."
     }
   },
   {
     date: "Apr 26",
-    title: { ko: "이미지가 부족한 날의 레이아웃", en: "Layout for Days Without Enough Images" },
+    title: { ko: "좋은 인터페이스의 낮은 목소리", en: "The lower voice of a good interface" },
     body: {
-      ko: "큰 이미지가 없어도 숫자, 선, 제목의 길이, 목록의 간격만으로 충분히 감각적인 화면을 만들 수 있다.",
-      en: "Even without large images, numbers, rules, title length, and list spacing can create a sensitive page."
+      ko: "강한 제스처보다 오래 남는 것은 정확한 간격이다. 이 호의 기술 글들은 능력보다 부담을 덜어내는 화면을 먼저 묻는다.",
+      en: "Precise intervals last longer than strong gestures. The technology essays ask for screens that reduce burden before proving capability."
     }
   },
   {
     date: "Apr 18",
-    title: { ko: "언어를 바꿔도 유지되어야 하는 것", en: "What Should Stay When Language Changes" },
+    title: { ko: "목록은 가장 조용한 이미지다", en: "A list is the quietest image" },
     body: {
-      ko: "한국어와 영어의 길이는 다르지만 같은 리듬, 같은 태도, 같은 여백은 유지되어야 한다.",
-      en: "Korean and English have different lengths, but the same rhythm, attitude, and margin should remain."
+      ko: "잡지의 색인은 단순히 이동을 돕는 장치가 아니다. 제목의 길이, 날짜의 간격, 반복되는 선이 한 호의 속도를 만든다.",
+      en: "An index is not only navigation. Title length, date spacing, and repeated rules create the speed of an issue."
     }
   }
 ];
@@ -561,18 +561,18 @@ export const site: SiteContent = {
   },
   issue: "Issue 01",
   month: { ko: "2026년 5월", en: "May 2026" },
-  heroKicker: { ko: "The Thing / Issue 01", en: "The Thing / Issue 01" },
+  heroKicker: { ko: "Objects, Screens, Systems", en: "Objects, Screens, Systems" },
   heroTitle: {
-    ko: "사물과 화면 사이에서 발견한 감각의 질서.",
-    en: "A sensory order found between objects and screens."
+    ko: "사물이 화면이 되고, 화면이 다시 사유가 되는 순간.",
+    en: "When objects become screens, and screens return as thought."
   },
   heroLead: {
-    ko: "The Thing은 전시장의 이미지, 제품의 비례, 화면의 구조, 사유의 문장을 한 호 안에서 함께 읽는 디지털 매거진입니다. 빠른 정보보다 오래 남는 관점과 정확한 호흡을 고릅니다.",
-    en: "The Thing is a digital magazine that reads gallery images, product proportions, interface structures, and reflective essays within one issue. It chooses lasting perspective over fast information."
+    ko: "이번 호는 조각가의 작업대에서 시작해 AI 인터페이스, 데이터 대시보드, 브랜드 시스템, 기본값의 윤리로 이동합니다. 서로 다른 주제를 하나의 느린 호흡으로 읽습니다.",
+    en: "This issue begins at a sculptor's desk and moves through AI interfaces, data dashboards, brand systems, and the ethics of defaults. Different subjects are read in one slower rhythm."
   },
   keywords: {
-    ko: ["예술", "테크", "디자인", "철학", "인터페이스", "전시", "사유", "브랜드"],
-    en: ["Art", "Tech", "Design", "Philosophy", "Interface", "Exhibition", "Thought", "Brand"]
+    ko: ["표면", "간격", "반복", "그림자", "기본값", "느린 판단"],
+    en: ["Surface", "Interval", "Repetition", "Shadow", "Defaults", "Slow Judgment"]
   },
   categories,
   notes
