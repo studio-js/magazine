@@ -78,6 +78,9 @@ export interface Article {
   excerpt: LocalizedText;
   quote: LocalizedText;
   railMode?: ArticleRailMode;
+  railClass?: VisualClass;
+  railImage?: string;
+  hideRailImage?: boolean;
   railTitle?: LocalizedText;
   railText?: LocalizedText;
   sections: ArticleSection[];

@@ -1537,6 +1537,10 @@ html[lang="ko"] .article-title-block h1 {
   display: none;
 }
 
+.article-side.is-rail-image-hidden .image-block {
+  display: none;
+}
+
 .article-side-text [data-article-rail-title],
 .article-side-text [data-write-rail-title] {
   display: block;

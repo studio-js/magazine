@@ -116,7 +116,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-admin-cms-pass";
+const assetVersion = "20260503-rail-image-admin-pass";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -478,6 +478,22 @@ ${subcategoryOptions}
               </select>
             </label>
             <label>
+              <span>${escapeHtml(locale === "ko" ? "레일 비주얼" : "Rail Visual")}</span>
+              <select data-write-meta="railClass">${heroOptions}</select>
+            </label>
+            <label>
+              <span>${escapeHtml(locale === "ko" ? "레일 이미지" : "Rail Image")}</span>
+              <select data-write-meta="railImageMode">
+                <option value="visual">${escapeHtml(locale === "ko" ? "자동 비주얼" : "Generated Visual")}</option>
+                <option value="custom">${escapeHtml(locale === "ko" ? "이미지 URL" : "Image URL")}</option>
+                <option value="none">${escapeHtml(locale === "ko" ? "이미지 없음" : "No Image")}</option>
+              </select>
+            </label>
+            <label class="writer-image-url-field writer-rail-image-url-field">
+              <span>${escapeHtml(locale === "ko" ? "레일 이미지 URL" : "Rail Image URL")}</span>
+              <input type="url" placeholder="https://..." data-write-meta="railImage" />
+            </label>
+            <label>
               <span>${escapeHtml(locale === "ko" ? "읽기 시간" : "Read Time")}</span>
               <input type="text" value="6분 읽기" data-write-meta="readTime" />
             </label>
@@ -806,9 +822,23 @@ export const renderArticlePage = (
   const labels = ui[locale];
   const category = categoryLabel(site.categories, article.category, locale);
   const firstSection = article.sections[0];
-  const railVisuals = article.sections.map((_, index) => relatedArticles[index]?.heroClass ?? article.heroClass);
-  const railImages = article.sections.map((_, index) => relatedArticles[index]?.heroImage ?? article.heroImage ?? "");
+  const hasRailImageOverride = Boolean(article.railClass || article.railImage || article.hideRailImage);
+  const railVisuals = article.sections.map((_, index) => hasRailImageOverride
+    ? article.railClass ?? article.heroClass
+    : relatedArticles[index]?.heroClass ?? article.heroClass);
+  const railImages = article.sections.map((_, index) => {
+    if (article.hideRailImage) {
+      return "";
+    }
+
+    if (article.railImage) {
+      return article.railImage;
+    }
+
+    return article.railClass ? "" : relatedArticles[index]?.heroImage ?? article.heroImage ?? "";
+  });
   const railMode = article.railMode ?? "default";
+  const railImageStateClass = article.hideRailImage ? " is-rail-image-hidden" : "";
   const firstRailTitle = article.railTitle ? text(article.railTitle, locale) : firstSection ? text(firstSection.heading, locale) : text(article.subtitle, locale);
   const firstRailText = article.railText ? text(article.railText, locale) : firstSection?.paragraphs[locale][0] ?? text(article.subtitle, locale);
   const articleVisual = article.hideHeroImage
@@ -840,7 +870,7 @@ export const renderArticlePage = (
       </header>
 
 ${articleVisual}      <div class="article-body-grid">
-        <aside class="article-side article-side-${railMode}" data-reveal data-article-rail>
+        <aside class="article-side article-side-${railMode}${railImageStateClass}" data-reveal data-article-rail>
           <span class="article-rail-no" data-article-rail-no>01</span>
           ${renderImageBlock(railVisuals[0] ?? article.heroClass, railImages[0], "data-article-rail-visual")}
           <strong data-article-rail-title>${escapeHtml(firstRailTitle)}</strong>

@@ -165,6 +165,9 @@ if (writer) {
     excerpt: AdminLocalizedText;
     quote: AdminLocalizedText;
     railMode?: RailMode;
+    railClass?: string;
+    railImage?: string;
+    hideRailImage?: boolean;
     railTitle?: AdminLocalizedText;
     railText?: AdminLocalizedText;
     sections: AdminSection[];
@@ -188,6 +191,7 @@ if (writer) {
   const subcategorySelect = writer.querySelector<HTMLSelectElement>('[data-write-meta="subcategory"]');
   const railModeSelect = writer.querySelector<HTMLSelectElement>('[data-write-meta="railMode"]');
   const imageUrlField = writer.querySelector<HTMLElement>(".writer-image-url-field");
+  const railImageUrlField = writer.querySelector<HTMLElement>(".writer-rail-image-url-field");
   const heroShell = writer.querySelector<HTMLElement>("[data-write-hero-shell]");
   const heroPreview = writer.querySelector<HTMLElement>("[data-write-hero-preview]");
   const railVisual = writer.querySelector<HTMLElement>("[data-write-rail-visual]");
@@ -239,6 +243,9 @@ if (writer) {
     excerpt: { ko: "목록에 표시될 요약 문장입니다.", en: "Summary sentence for archive lists." },
     quote: { ko: "기사 상단 인용문을 이곳에 작성합니다.", en: "Write the pull quote here." },
     railMode: "default",
+    railClass: "image-material",
+    railImage: "",
+    hideRailImage: false,
     railTitle: { ko: "좌측 레일 제목", en: "Rail title" },
     railText: { ko: "좌측 레일 설명을 이곳에서 직접 수정합니다.", en: "Edit the rail text here." },
     sections: [
@@ -293,6 +300,9 @@ if (writer) {
       excerpt: { ...fallback.excerpt, ...article.excerpt },
       quote: { ...fallback.quote, ...article.quote },
       railMode: article.railMode || "default",
+      railClass: article.railClass || article.heroClass || fallback.railClass,
+      railImage: article.railImage || "",
+      hideRailImage: Boolean(article.hideRailImage),
       railTitle: article.railTitle || firstSection?.heading || fallback.railTitle,
       railText: article.railText || {
         ko: firstSection?.paragraphs.ko[0] || fallback.railText?.ko || "",
@@ -450,17 +460,23 @@ if (writer) {
     const heroImage = metaValue("heroImage");
     const useCustomImage = imageMode === "custom" && heroImage.length > 0;
     const isHidden = imageMode === "none";
+    const railClass = metaValue("railClass") || heroClass;
+    const railImageMode = metaValue("railImageMode") || "visual";
+    const railImage = metaValue("railImage");
+    const useCustomRailImage = railImageMode === "custom" && railImage.length > 0;
 
     heroShell?.classList.toggle("is-hidden", isHidden);
     imageUrlField?.classList.toggle("is-visible", imageMode === "custom");
+    rail?.classList.toggle("is-rail-image-hidden", railImageMode === "none");
+    railImageUrlField?.classList.toggle("is-visible", railImageMode === "custom");
 
-    [heroPreview, railVisual].forEach((element) => {
-      if (!element) {
-        return;
-      }
+    if (heroPreview) {
+      setImageBlockVisual(heroPreview, heroClass, useCustomImage ? heroImage : "");
+    }
 
-      setImageBlockVisual(element, heroClass, useCustomImage ? heroImage : "");
-    });
+    if (railVisual) {
+      setImageBlockVisual(railVisual, railClass, useCustomRailImage ? railImage : "");
+    }
   };
 
   const updateRailMode = (): void => {
@@ -513,6 +529,9 @@ if (writer) {
       excerpt: { ko: textValue("deck") || base.excerpt.ko, en: base.excerpt.en },
       quote: { ko: textValue("quote") || base.quote.ko, en: base.quote.en },
       railMode: (metaValue("railMode") || "default") as RailMode,
+      railClass: metaValue("railClass") || base.railClass || base.heroClass,
+      railImage: metaValue("railImageMode") === "custom" ? metaValue("railImage") : "",
+      hideRailImage: metaValue("railImageMode") === "none",
       railTitle: { ko: textValue("railTitle") || base.railTitle?.ko || "", en: base.railTitle?.en || base.title.en },
       railText: { ko: textValue("railText") || base.railText?.ko || "", en: base.railText?.en || base.deck.en },
       sections: nextSections.length > 0 ? nextSections : base.sections
@@ -587,6 +606,9 @@ if (writer) {
     writeMeta("imageMode", article.hideHeroImage ? "none" : article.heroImage ? "custom" : "visual");
     writeMeta("heroImage", article.heroImage || "");
     writeMeta("railMode", article.railMode || "default");
+    writeMeta("railClass", article.railClass || article.heroClass);
+    writeMeta("railImageMode", article.hideRailImage ? "none" : article.railImage ? "custom" : "visual");
+    writeMeta("railImage", article.railImage || "");
     writeMeta("readTime", article.readTime.ko);
     writeMeta("location", article.location.ko);
     writeMeta("tags", article.tags.ko.join(", "));
