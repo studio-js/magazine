@@ -109,7 +109,7 @@ const archiveHref = (locale: Locale, category?: PrimaryCategory, subcategory?: S
 const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, locale: Locale): string =>
   text(categories.find((category) => category.key === key)?.label ?? { ko: key, en: key }, locale);
 
-const assetVersion = "20260503-issue-publication-pass";
+const assetVersion = "20260503-typography-balance-pass";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
