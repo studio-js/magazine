@@ -185,7 +185,13 @@ const articleRailText = document.querySelector("[data-article-rail-text]");
 const articleRailVisual = document.querySelector("[data-article-rail-visual]");
 const articleSections = document.querySelectorAll("[data-article-section]");
 if (articleRail && articleRailNo && articleRailTitle && articleRailText && articleSections.length > 0) {
+    let activeArticleSection = null;
+    let articleRailFrame = 0;
     const setArticleRail = (section) => {
+        if (activeArticleSection === section) {
+            return;
+        }
+        activeArticleSection = section;
         articleRailNo.textContent = section.dataset.railNo || "";
         articleRailTitle.textContent = section.dataset.railTitle || "";
         articleRailText.textContent = section.dataset.railText || "";
@@ -201,20 +207,29 @@ if (articleRail && articleRailNo && articleRailTitle && articleRailText && artic
             animateTextSwap([articleRailNo, articleRailTitle, articleRailText]);
         }
     };
-    if ("IntersectionObserver" in window && !reduceMotion) {
-        const articleObserver = new IntersectionObserver((entries) => {
-            const activeEntry = entries
-                .filter((entry) => entry.isIntersecting)
-                .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-            if (activeEntry?.target instanceof HTMLElement) {
-                setArticleRail(activeEntry.target);
+    const getArticleRailActivationPoint = () => {
+        const activationRatio = window.innerWidth <= 960 ? 0.52 : 0.38;
+        return Math.max(170, window.innerHeight * activationRatio);
+    };
+    const updateArticleRailFromScroll = () => {
+        articleRailFrame = 0;
+        const activationPoint = getArticleRailActivationPoint();
+        let activeSection = articleSections[0];
+        articleSections.forEach((section) => {
+            if (section.getBoundingClientRect().top <= activationPoint) {
+                activeSection = section;
             }
-        }, { rootMargin: "-28% 0px -44%", threshold: [0.18, 0.42, 0.66] });
-        articleSections.forEach((section) => articleObserver.observe(section));
-    }
-    else {
-        setArticleRail(articleSections[0]);
-    }
+        });
+        setArticleRail(activeSection);
+    };
+    const requestArticleRailUpdate = () => {
+        if (articleRailFrame === 0) {
+            articleRailFrame = window.requestAnimationFrame(updateArticleRailFromScroll);
+        }
+    };
+    updateArticleRailFromScroll();
+    window.addEventListener("scroll", requestArticleRailUpdate, { passive: true });
+    window.addEventListener("resize", requestArticleRailUpdate);
 }
 const filterButtons = document.querySelectorAll("[data-filter]");
 const filterPanels = document.querySelectorAll("[data-filter-panel]");
