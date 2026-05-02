@@ -6393,9 +6393,15 @@ html[lang="ko"] .issue-editorial-note h2 {
 }
 
 html[lang="ko"] .issue-river .section-head .kicker {
-  font-size: clamp(0.98rem, 1.08vw, 1.16rem);
-  letter-spacing: 0.01em;
-  text-transform: none;
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+}
+
+.issue-river .section-head .kicker {
+  font-size: 0.74rem;
+  font-weight: 500;
 }
 
 html[lang="ko"] .issue-river .section-head h2 {
