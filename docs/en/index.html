@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="An independent web magazine for art, tech, design, and philosophy through a quiet editorial lens." />
-    <title>Still Room Magazine</title>
+    <meta name="description" content="An independent web magazine connecting art, tech, design, and philosophy through a quiet editorial lens." />
+    <title>The Thing</title>
     <link rel="stylesheet" href="/magazine/styles.css" />
     <script src="/magazine/client.js" defer></script>
   </head>
@@ -12,9 +12,9 @@
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
 
     <header class="site-header" data-header>
-      <a class="brand" href="/magazine/en/" aria-label="Still Room Magazine home">
-        <span class="brand-mark">SR</span>
-        <span class="brand-text">Still Room</span>
+      <a class="brand" href="/magazine/en/" aria-label="The Thing home">
+        <span class="brand-mark">T</span>
+        <span class="brand-text">The Thing</span>
       </a>
 
       <nav class="nav" aria-label="Primary navigation">
@@ -87,55 +87,78 @@
 
       <div class="hero-grid redesigned-hero">
         <div class="hero-copy" data-reveal>
-          <p class="kicker">Independent Web Magazine</p>
-          <h1 id="hero-title">Quiet links between art, tech, design, and philosophy.</h1>
-          <p class="hero-lede">Still Room is a web magazine that slowly reads images, systems, objects, and thoughts on the same editorial surface. It favors lasting perspective over fast information.</p>
+          <p class="kicker">The Thing / Issue 01</p>
+          <h1 id="hero-title">Quiet links between objects, screens, and thought.</h1>
+          <p class="hero-lede">The Thing slowly reads images, systems, objects, and ideas on one editorial surface. It favors lasting perspective and rhythm over fast information.</p>
         </div>
 
-        <a class="hero-feature" href="/magazine/en/articles/quiet-images-after-the-opening" aria-label="Read Feature" data-reveal>
+        <a class="hero-feature" href="/magazine/en/articles/quiet-images-after-the-opening" aria-label="Read Feature" data-reveal data-tilt>
           <span class="image-block image-atelier"></span>
-          <span class="feature-meta">Art / Exhibitions</span>
+          <span class="feature-meta">May 02, 2026 / Art / Exhibitions</span>
           <strong>How Images Remain After the Opening</strong>
+          <em>Seeing a show is closer to remembering the work afterward than standing in front of it.</em>
         </a>
+      </div>
+
+      <div class="hero-bottom" data-reveal>
+        <span>Issue opening notes</span>
+        
+              <a href="/magazine/en/articles/artist-desk-as-studio-map">
+                <small>Art</small>
+                <strong>The Desk Is the Artist&#39;s Smallest Map</strong>
+              </a>
+              <a href="/magazine/en/articles/ai-interface-without-performance">
+                <small>Tech</small>
+                <strong>An AI Interface Without Performance</strong>
+              </a>
       </div>
     </section>
 
     
   <section class="marquee" aria-label="Magazine keywords">
     <div>
-      <span>Art</span><span>Tech</span><span>Design</span><span>Philosophy</span><span>Interface</span><span>Exhibition</span><span>Thought</span><span>Brand</span>
+      <span>Art</span><span>Tech</span><span>Design</span><span>Philosophy</span><span>Interface</span><span>Exhibition</span><span>Thought</span><span>Brand</span><span>Art</span><span>Tech</span><span>Design</span><span>Philosophy</span><span>Interface</span><span>Exhibition</span><span>Thought</span><span>Brand</span>
     </div>
   </section>
+
+    <section class="editorial-statement section-pad" aria-label="Editorial statement">
+      <p class="kicker" data-reveal>Editorial Position</p>
+      <div class="statement-grid">
+        <h2 data-reveal>Closer to the breath of an issue than the speed of a feed.</h2>
+        <p data-reveal>The surface borrows the idea of a strong cover, restrained curation, departmental editing, and responsive motion, then rebuilds them into a quieter language of its own.</p>
+      </div>
+    </section>
+
     
   <section class="category-index section-pad" aria-labelledby="category-index-title">
     <div class="section-eyebrow" data-reveal>
       <p class="kicker">Category Index</p>
-      <h2 id="category-index-title">A magazine read through four axes.</h2>
+      <h2 id="category-index-title">Four departments, not just tags.</h2>
     </div>
     <div class="category-grid">
       
-            <a class="category-card" href="/magazine/en/archive?category=art" data-reveal>
+            <a class="category-card" href="/magazine/en/archive?category=art" data-reveal data-tilt>
               <span>01</span>
               <h3>Art</h3>
               <p>Contemporary artists, exhibitions, images, sound, and experiments in media.</p>
               <small>Exhibitions / Artists / Images / Sound</small>
               <em>2 articles</em>
             </a>
-            <a class="category-card" href="/magazine/en/archive?category=tech" data-reveal>
+            <a class="category-card" href="/magazine/en/archive?category=tech" data-reveal data-tilt>
               <span>02</span>
               <h3>Tech</h3>
               <p>How AI, interfaces, data, and tools reshape perception and everyday life.</p>
               <small>AI / Interface / Tools / Systems</small>
               <em>2 articles</em>
             </a>
-            <a class="category-card" href="/magazine/en/archive?category=design" data-reveal>
+            <a class="category-card" href="/magazine/en/archive?category=design" data-reveal data-tilt>
               <span>03</span>
               <h3>Design</h3>
               <p>A quiet but precise reading of graphics, products, spaces, and brands.</p>
               <small>Graphic / Product / Space / Brand</small>
               <em>2 articles</em>
             </a>
-            <a class="category-card" href="/magazine/en/archive?category=philosophy" data-reveal>
+            <a class="category-card" href="/magazine/en/archive?category=philosophy" data-reveal data-tilt>
               <span>04</span>
               <h3>Philosophy</h3>
               <p>Thoughts on ethics, time, the body, and meaning behind technology and aesthetics.</p>
@@ -148,7 +171,7 @@
     <section class="featured section-pad" id="features" aria-labelledby="features-title">
       <div class="section-heading" data-reveal>
         <p class="kicker">Selected Stories</p>
-        <h2 id="features-title">Different fields, selected with the same sensibility.</h2>
+        <h2 id="features-title">A reading sequence after the cover story.</h2>
       </div>
 
       <article class="lead-article" data-reveal>
@@ -166,36 +189,44 @@
 
       <div class="story-grid redesigned-grid">
         
-              <a class="story-card large-card" href="/magazine/en/articles/ai-interface-without-performance" data-reveal>
+              <a class="story-card large-card" href="/magazine/en/articles/ai-interface-without-performance" data-reveal data-tilt>
                 <span class="image-block image-signal"></span>
                 <div>
-                  <p class="kicker">Tech / AI</p>
+                  <p class="kicker">Apr 18, 2026 / Tech</p>
                   <h3>An AI Interface Without Performance</h3>
                   <p>A good AI interface shortens the time users spend noticing the technology.</p>
                 </div>
               </a>
-              <a class="story-card " href="/magazine/en/articles/data-dashboard-as-reading-room" data-reveal>
+              <a class="story-card " href="/magazine/en/articles/data-dashboard-as-reading-room" data-reveal data-tilt>
                 <span class="image-block image-system"></span>
                 <div>
-                  <p class="kicker">Tech / Systems</p>
+                  <p class="kicker">Apr 08, 2026 / Tech</p>
                   <h3>Making a Data Dashboard Feel Like a Reading Room</h3>
                   <p>The point of a dashboard is not to show every metric at once, but to move the viewer toward the next question.</p>
                 </div>
               </a>
-              <a class="story-card " href="/magazine/en/articles/brand-system-with-room-to-breathe" data-reveal>
+              <a class="story-card " href="/magazine/en/articles/brand-system-with-room-to-breathe" data-reveal data-tilt>
                 <span class="image-block image-interface"></span>
                 <div>
-                  <p class="kicker">Design / Brand</p>
+                  <p class="kicker">Mar 30, 2026 / Design</p>
                   <h3>A Brand System With Room to Breathe</h3>
                   <p>A brand system is less a set of rules than a repeatable attitude.</p>
                 </div>
               </a>
-              <a class="story-card " href="/magazine/en/articles/chair-prototype-and-its-shadow" data-reveal>
+              <a class="story-card " href="/magazine/en/articles/chair-prototype-and-its-shadow" data-reveal data-tilt>
                 <span class="image-block image-material"></span>
                 <div>
-                  <p class="kicker">Design / Product</p>
+                  <p class="kicker">Mar 21, 2026 / Design</p>
                   <h3>A Chair Prototype and Its Shadow</h3>
                   <p>An unfinished object shows design intent most directly.</p>
+                </div>
+              </a>
+              <a class="story-card " href="/magazine/en/articles/slow-thinking-in-fast-tools" data-reveal data-tilt>
+                <span class="image-block image-thought"></span>
+                <div>
+                  <p class="kicker">Mar 12, 2026 / Philosophy</p>
+                  <h3>Thinking Slowly Inside Fast Tools</h3>
+                  <p>Fast tools do not always create better thought. Sometimes pause matters more than features.</p>
                 </div>
               </a>
       </div>
@@ -230,10 +261,10 @@
     <section class="archive section-pad" id="archive" aria-labelledby="archive-title">
       <div class="archive-heading" data-reveal>
         <div>
-          <p class="kicker">Archive</p>
+          <p class="kicker">Reading Index</p>
           <h2 id="archive-title">Latest Entries</h2>
         </div>
-        <p>Art, tech, design, and philosophy are arranged to be read across one surface.</p>
+        <p>Not a chronological feed, but a compact index where categories, dates, and preview imagery move together.</p>
       </div>
 
       
@@ -350,8 +381,8 @@
     <section class="about section-pad" id="about" aria-labelledby="about-title">
       <div class="about-card" data-reveal>
         <p class="kicker">About the Magazine</p>
-        <h2 id="about-title">Still Room is a personal web magazine that connects different fields through one editorial rhythm.</h2>
-        <p>It links images from art, systems from tech, structures from design, and questions from philosophy on a shared surface. Articles are currently managed as TypeScript data and can later move into a CMS or Markdown workflow.</p>
+        <h2 id="about-title">The Thing is an independent web magazine that connects different fields through one editorial rhythm.</h2>
+        <p>It links images from art, systems from tech, structures from design, and questions from philosophy on one surface. It is shaped as an issue-led editorial magazine rather than a chronological blog feed.</p>
       </div>
 
       <form class="subscribe-form" aria-label="Newsletter subscribe form" data-reveal data-success-message="Prototype subscription recorded.">
@@ -365,8 +396,8 @@
     </section></main>
 
     <footer class="site-footer">
-      <p>Still Room Magazine</p>
-      <p>Node.js / TypeScript / Editorial Prototype</p>
+      <p>The Thing / Issue 01</p>
+      <p>An editorial surface for art, technology, design, and thought</p>
     </footer>
   </body>
 </html>

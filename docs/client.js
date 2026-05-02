@@ -4,31 +4,59 @@ document.documentElement.classList.add("js");
 const menuButton = document.querySelector("[data-menu-button]");
 const mobileMenu = document.querySelector("[data-mobile-menu]");
 const progressBar = document.querySelector("[data-scroll-progress]");
+const header = document.querySelector("[data-header]");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const setMenuOpen = (isOpen) => {
+    if (!menuButton || !mobileMenu) {
+        return;
+    }
+    mobileMenu.classList.toggle("is-open", isOpen);
+    document.body.classList.toggle("menu-open", isOpen);
+    menuButton.setAttribute("aria-expanded", String(isOpen));
+};
 if (menuButton && mobileMenu) {
     menuButton.addEventListener("click", () => {
-        const isOpen = mobileMenu.classList.toggle("is-open");
-        menuButton.setAttribute("aria-expanded", String(isOpen));
+        setMenuOpen(!mobileMenu.classList.contains("is-open"));
     });
     mobileMenu.addEventListener("click", (event) => {
-        if (event.target instanceof HTMLAnchorElement) {
-            mobileMenu.classList.remove("is-open");
-            menuButton.setAttribute("aria-expanded", "false");
+        if (event.target instanceof Element && event.target.closest("a")) {
+            setMenuOpen(false);
+        }
+    });
+    window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            setMenuOpen(false);
+        }
+    });
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 960) {
+            setMenuOpen(false);
         }
     });
 }
-if (progressBar) {
-    const updateScrollProgress = () => {
+let scrollFrame = 0;
+const updateScrollState = () => {
+    scrollFrame = 0;
+    if (header) {
+        header.classList.toggle("is-scrolled", window.scrollY > 24);
+    }
+    if (progressBar) {
         const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
         const progress = Math.min(window.scrollY / maxScroll, 1);
         progressBar.style.transform = `scaleX(${progress})`;
-    };
-    updateScrollProgress();
-    window.addEventListener("scroll", updateScrollProgress, { passive: true });
-    window.addEventListener("resize", updateScrollProgress);
-}
+    }
+};
+const requestScrollState = () => {
+    if (scrollFrame === 0) {
+        scrollFrame = window.requestAnimationFrame(updateScrollState);
+    }
+};
+updateScrollState();
+window.addEventListener("scroll", requestScrollState, { passive: true });
+window.addEventListener("resize", requestScrollState);
 const revealItems = document.querySelectorAll("[data-reveal]");
 if (revealItems.length > 0) {
-    if ("IntersectionObserver" in window) {
+    if ("IntersectionObserver" in window && !reduceMotion) {
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
@@ -36,7 +64,7 @@ if (revealItems.length > 0) {
                     revealObserver.unobserve(entry.target);
                 }
             });
-        }, { rootMargin: "0px 0px -10%" });
+        }, { rootMargin: "0px 0px -12%" });
         revealItems.forEach((item) => revealObserver.observe(item));
     }
     else {
@@ -69,6 +97,12 @@ if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
         previewImage.classList.add(imageClass);
         previewKicker.textContent = row.dataset.previewKicker || "";
         previewTitle.textContent = row.dataset.previewTitle || "";
+        if (!reduceMotion) {
+            previewImage.animate([
+                { opacity: 0.62, transform: "translateY(0.45rem) scale(0.985)" },
+                { opacity: 1, transform: "translateY(0) scale(1)" }
+            ], { duration: 360, easing: "cubic-bezier(.2,.8,.2,1)" });
+        }
     };
     previewRows.forEach((row) => {
         row.addEventListener("mouseenter", () => setPreview(row));
@@ -79,7 +113,7 @@ if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
 const filterButtons = document.querySelectorAll("[data-filter]");
 if (filterButtons.length > 0 && previewRows.length > 0) {
     const applyFilter = (button) => {
-        const selectedCategory = button.dataset.filter || "All";
+        const selectedCategory = button.dataset.filter || "all";
         filterButtons.forEach((filterButton) => filterButton.classList.remove("is-active"));
         button.classList.add("is-active");
         previewRows.forEach((row) => {
@@ -101,19 +135,22 @@ if (filterButtons.length > 0 && previewRows.length > 0) {
     }
 }
 const tiltCards = document.querySelectorAll("[data-tilt]");
-tiltCards.forEach((card) => {
-    card.addEventListener("pointermove", (event) => {
-        const rect = card.getBoundingClientRect();
-        const x = ((event.clientX - rect.left) / rect.width - 0.5) * 10;
-        const y = ((event.clientY - rect.top) / rect.height - 0.5) * -10;
-        card.style.setProperty("--tilt-x", `${y}deg`);
-        card.style.setProperty("--tilt-y", `${x}deg`);
+const canTilt = window.matchMedia("(hover: hover) and (pointer: fine)").matches && !reduceMotion;
+if (canTilt) {
+    tiltCards.forEach((card) => {
+        card.addEventListener("pointermove", (event) => {
+            const rect = card.getBoundingClientRect();
+            const x = ((event.clientX - rect.left) / rect.width - 0.5) * 5;
+            const y = ((event.clientY - rect.top) / rect.height - 0.5) * -5;
+            card.style.setProperty("--tilt-x", `${y}deg`);
+            card.style.setProperty("--tilt-y", `${x}deg`);
+        });
+        card.addEventListener("pointerleave", () => {
+            card.style.removeProperty("--tilt-x");
+            card.style.removeProperty("--tilt-y");
+        });
     });
-    card.addEventListener("pointerleave", () => {
-        card.style.removeProperty("--tilt-x");
-        card.style.removeProperty("--tilt-y");
-    });
-});
+}
 const subscribeForm = document.querySelector(".subscribe-form");
 const formMessage = document.querySelector("[data-form-message]");
 if (subscribeForm) {

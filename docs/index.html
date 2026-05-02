@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="예술, 테크, 디자인, 철학을 조용하고 감각적인 시선으로 기록하는 독립 웹매거진" />
-    <title>Still Room Magazine</title>
+    <meta name="description" content="예술, 테크, 디자인, 철학을 조용하고 감각적인 시선으로 엮는 독립 웹매거진" />
+    <title>The Thing</title>
     <link rel="stylesheet" href="/magazine/styles.css" />
     <script src="/magazine/client.js" defer></script>
   </head>
@@ -12,9 +12,9 @@
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
 
     <header class="site-header" data-header>
-      <a class="brand" href="/magazine/" aria-label="Still Room Magazine home">
-        <span class="brand-mark">SR</span>
-        <span class="brand-text">Still Room</span>
+      <a class="brand" href="/magazine/" aria-label="The Thing home">
+        <span class="brand-mark">T</span>
+        <span class="brand-text">The Thing</span>
       </a>
 
       <nav class="nav" aria-label="Primary navigation">
@@ -87,55 +87,78 @@
 
       <div class="hero-grid redesigned-hero">
         <div class="hero-copy" data-reveal>
-          <p class="kicker">독립 웹 매거진</p>
-          <h1 id="hero-title">예술, 테크, 디자인, 철학 사이의 조용한 연결.</h1>
-          <p class="hero-lede">Still Room은 이미지와 시스템, 물건과 생각을 같은 편집면 위에 놓고 천천히 읽는 웹매거진입니다. 빠르게 소비되는 정보보다 오래 남는 관점과 리듬을 만듭니다.</p>
+          <p class="kicker">The Thing / Issue 01</p>
+          <h1 id="hero-title">물건과 화면과 생각 사이의 조용한 연결.</h1>
+          <p class="hero-lede">The Thing은 이미지와 시스템, 물건과 사유를 같은 편집면 위에 놓고 천천히 읽는 웹매거진입니다. 빠르게 소비되는 정보보다 오래 남는 관점과 호흡을 만듭니다.</p>
         </div>
 
-        <a class="hero-feature" href="/magazine/articles/quiet-images-after-the-opening" aria-label="대표 글 읽기" data-reveal>
+        <a class="hero-feature" href="/magazine/articles/quiet-images-after-the-opening" aria-label="대표 글 읽기" data-reveal data-tilt>
           <span class="image-block image-atelier"></span>
-          <span class="feature-meta">예술 / 전시</span>
+          <span class="feature-meta">2026.05.02 / 예술 / 전시</span>
           <strong>오프닝이 끝난 뒤 이미지가 남는 방식</strong>
+          <em>전시를 보는 일은 작품 앞에 서는 것보다 작품을 떠난 뒤 다시 떠올리는 시간에 가깝다.</em>
         </a>
+      </div>
+
+      <div class="hero-bottom" data-reveal>
+        <span>이번 이슈의 시작점</span>
+        
+              <a href="/magazine/articles/artist-desk-as-studio-map">
+                <small>예술</small>
+                <strong>작업대는 작가의 가장 작은 지도다</strong>
+              </a>
+              <a href="/magazine/articles/ai-interface-without-performance">
+                <small>테크</small>
+                <strong>과시하지 않는 AI 인터페이스</strong>
+              </a>
       </div>
     </section>
 
     
   <section class="marquee" aria-label="Magazine keywords">
     <div>
-      <span>예술</span><span>테크</span><span>디자인</span><span>철학</span><span>인터페이스</span><span>전시</span><span>사유</span><span>브랜드</span>
+      <span>예술</span><span>테크</span><span>디자인</span><span>철학</span><span>인터페이스</span><span>전시</span><span>사유</span><span>브랜드</span><span>예술</span><span>테크</span><span>디자인</span><span>철학</span><span>인터페이스</span><span>전시</span><span>사유</span><span>브랜드</span>
     </div>
   </section>
+
+    <section class="editorial-statement section-pad" aria-label="Editorial statement">
+      <p class="kicker" data-reveal>Editorial Position</p>
+      <div class="statement-grid">
+        <h2 data-reveal>뉴스 피드의 속도보다 한 권의 매거진이 가진 호흡에 가깝게.</h2>
+        <p data-reveal>Blau의 커버 감각, Minimalissimo의 절제된 큐레이션, Ignant의 분야별 편집 구조, Studio Lenzing의 반응형 움직임에서 출발하되 The Thing의 화면은 더 조용하고 느슨한 표면으로 재구성했습니다.</p>
+      </div>
+    </section>
+
     
   <section class="category-index section-pad" aria-labelledby="category-index-title">
     <div class="section-eyebrow" data-reveal>
       <p class="kicker">카테고리 인덱스</p>
-      <h2 id="category-index-title">네 개의 큰 축으로 읽는 매거진.</h2>
+      <h2 id="category-index-title">태그가 아니라 편집실의 네 개 디파트먼트.</h2>
     </div>
     <div class="category-grid">
       
-            <a class="category-card" href="/magazine/archive?category=art" data-reveal>
+            <a class="category-card" href="/magazine/archive?category=art" data-reveal data-tilt>
               <span>01</span>
               <h3>예술</h3>
               <p>동시대 작가, 전시, 이미지, 사운드와 매체 실험을 다룹니다.</p>
               <small>전시 / 작가 / 이미지 / 사운드</small>
               <em>2 편</em>
             </a>
-            <a class="category-card" href="/magazine/archive?category=tech" data-reveal>
+            <a class="category-card" href="/magazine/archive?category=tech" data-reveal data-tilt>
               <span>02</span>
               <h3>테크</h3>
               <p>AI, 인터페이스, 데이터, 도구가 감각과 생활을 바꾸는 방식을 봅니다.</p>
               <small>AI / 인터페이스 / 도구 / 시스템</small>
               <em>2 편</em>
             </a>
-            <a class="category-card" href="/magazine/archive?category=design" data-reveal>
+            <a class="category-card" href="/magazine/archive?category=design" data-reveal data-tilt>
               <span>03</span>
               <h3>디자인</h3>
               <p>그래픽, 제품, 공간, 브랜드를 조용하지만 정확한 관점으로 읽습니다.</p>
               <small>그래픽 / 제품 / 공간 / 브랜드</small>
               <em>2 편</em>
             </a>
-            <a class="category-card" href="/magazine/archive?category=philosophy" data-reveal>
+            <a class="category-card" href="/magazine/archive?category=philosophy" data-reveal data-tilt>
               <span>04</span>
               <h3>철학</h3>
               <p>기술과 미감 뒤에 놓인 생각, 윤리, 시간, 몸의 문제를 기록합니다.</p>
@@ -148,7 +171,7 @@
     <section class="featured section-pad" id="features" aria-labelledby="features-title">
       <div class="section-heading" data-reveal>
         <p class="kicker">선별한 글</p>
-        <h2 id="features-title">분야는 다르지만 같은 감각으로 고른 글.</h2>
+        <h2 id="features-title">커버 스토리 뒤에 놓인 읽기의 순서.</h2>
       </div>
 
       <article class="lead-article" data-reveal>
@@ -166,36 +189,44 @@
 
       <div class="story-grid redesigned-grid">
         
-              <a class="story-card large-card" href="/magazine/articles/ai-interface-without-performance" data-reveal>
+              <a class="story-card large-card" href="/magazine/articles/ai-interface-without-performance" data-reveal data-tilt>
                 <span class="image-block image-signal"></span>
                 <div>
-                  <p class="kicker">테크 / AI</p>
+                  <p class="kicker">2026.04.18 / 테크</p>
                   <h3>과시하지 않는 AI 인터페이스</h3>
                   <p>좋은 AI 인터페이스는 사용자가 기술을 의식하는 시간을 줄인다.</p>
                 </div>
               </a>
-              <a class="story-card " href="/magazine/articles/data-dashboard-as-reading-room" data-reveal>
+              <a class="story-card " href="/magazine/articles/data-dashboard-as-reading-room" data-reveal data-tilt>
                 <span class="image-block image-system"></span>
                 <div>
-                  <p class="kicker">테크 / 시스템</p>
+                  <p class="kicker">2026.04.08 / 테크</p>
                   <h3>데이터 대시보드를 읽는 방처럼 만들기</h3>
                   <p>대시보드의 핵심은 모든 지표를 한 번에 보여주는 것이 아니라 다음 질문으로 이동시키는 것이다.</p>
                 </div>
               </a>
-              <a class="story-card " href="/magazine/articles/brand-system-with-room-to-breathe" data-reveal>
+              <a class="story-card " href="/magazine/articles/brand-system-with-room-to-breathe" data-reveal data-tilt>
                 <span class="image-block image-interface"></span>
                 <div>
-                  <p class="kicker">디자인 / 브랜드</p>
+                  <p class="kicker">2026.03.30 / 디자인</p>
                   <h3>숨 쉴 공간이 있는 브랜드 시스템</h3>
                   <p>브랜드 시스템은 규칙의 집합이 아니라 반복 가능한 태도에 가깝다.</p>
                 </div>
               </a>
-              <a class="story-card " href="/magazine/articles/chair-prototype-and-its-shadow" data-reveal>
+              <a class="story-card " href="/magazine/articles/chair-prototype-and-its-shadow" data-reveal data-tilt>
                 <span class="image-block image-material"></span>
                 <div>
-                  <p class="kicker">디자인 / 제품</p>
+                  <p class="kicker">2026.03.21 / 디자인</p>
                   <h3>의자 프로토타입과 그 그림자</h3>
                   <p>아직 완성되지 않은 물건은 디자인의 의도를 가장 직접적으로 보여준다.</p>
+                </div>
+              </a>
+              <a class="story-card " href="/magazine/articles/slow-thinking-in-fast-tools" data-reveal data-tilt>
+                <span class="image-block image-thought"></span>
+                <div>
+                  <p class="kicker">2026.03.12 / 철학</p>
+                  <h3>빠른 도구 안에서 느리게 생각하기</h3>
+                  <p>빠른 도구가 늘 좋은 생각을 만들지는 않는다. 때로는 멈춤이 기능보다 중요하다.</p>
                 </div>
               </a>
       </div>
@@ -230,10 +261,10 @@
     <section class="archive section-pad" id="archive" aria-labelledby="archive-title">
       <div class="archive-heading" data-reveal>
         <div>
-          <p class="kicker">Archive</p>
+          <p class="kicker">Reading Index</p>
           <h2 id="archive-title">최근 발행</h2>
         </div>
-        <p>예술, 테크, 디자인, 철학의 글을 한 화면에서 교차해 읽을 수 있게 구성했습니다.</p>
+        <p>시간순 피드가 아니라 카테고리, 날짜, 미리보기가 함께 움직이는 작은 인덱스로 구성했습니다.</p>
       </div>
 
       
@@ -350,8 +381,8 @@
     <section class="about section-pad" id="about" aria-labelledby="about-title">
       <div class="about-card" data-reveal>
         <p class="kicker">About the Magazine</p>
-        <h2 id="about-title">Still Room은 서로 다른 분야를 하나의 편집 리듬으로 묶는 개인 웹매거진입니다.</h2>
-        <p>예술의 이미지, 테크의 시스템, 디자인의 구조, 철학의 질문을 한 화면 안에서 연결합니다. 현재는 TypeScript 데이터로 글을 관리하고, 이후 CMS나 마크다운으로 확장할 수 있습니다.</p>
+        <h2 id="about-title">The Thing은 서로 다른 분야를 하나의 편집 리듬으로 묶는 독립 웹매거진입니다.</h2>
+        <p>예술의 이미지, 테크의 시스템, 디자인의 구조, 철학의 질문을 한 화면 안에서 연결합니다. 블로그 피드보다 이슈와 디파트먼트가 먼저 보이는 편집형 웹 매거진을 지향합니다.</p>
       </div>
 
       <form class="subscribe-form" aria-label="Newsletter subscribe form" data-reveal data-success-message="구독 신청이 기록되었습니다.">
@@ -365,8 +396,8 @@
     </section></main>
 
     <footer class="site-footer">
-      <p>Still Room Magazine</p>
-      <p>Node.js / TypeScript / Editorial Prototype</p>
+      <p>The Thing / Issue 01</p>
+      <p>예술, 기술, 디자인, 사유를 위한 편집 표면</p>
     </footer>
   </body>
 </html>

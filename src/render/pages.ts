@@ -23,9 +23,9 @@ const ui = {
     categoryIndex: "카테고리 인덱스",
     latest: "최근 발행",
     editorNotes: "에디터 노트",
-    aboutTitle: "Still Room은 서로 다른 분야를 하나의 편집 리듬으로 묶는 개인 웹매거진입니다.",
+    aboutTitle: "The Thing은 서로 다른 분야를 하나의 편집 리듬으로 묶는 독립 웹매거진입니다.",
     aboutBody:
-      "예술의 이미지, 테크의 시스템, 디자인의 구조, 철학의 질문을 한 화면 안에서 연결합니다. 현재는 TypeScript 데이터로 글을 관리하고, 이후 CMS나 마크다운으로 확장할 수 있습니다.",
+      "예술의 이미지, 테크의 시스템, 디자인의 구조, 철학의 질문을 한 화면 안에서 연결합니다. 블로그 피드보다 이슈와 디파트먼트가 먼저 보이는 편집형 웹 매거진을 지향합니다.",
     subscribe: "새 글 알림 받기",
     subscribeSuccess: "구독 신청이 기록되었습니다.",
     fullArchive: "모든 글",
@@ -48,9 +48,9 @@ const ui = {
     categoryIndex: "Category Index",
     latest: "Latest Entries",
     editorNotes: "Editor's Notes",
-    aboutTitle: "Still Room is a personal web magazine that connects different fields through one editorial rhythm.",
+    aboutTitle: "The Thing is an independent web magazine that connects different fields through one editorial rhythm.",
     aboutBody:
-      "It links images from art, systems from tech, structures from design, and questions from philosophy on a shared surface. Articles are currently managed as TypeScript data and can later move into a CMS or Markdown workflow.",
+      "It links images from art, systems from tech, structures from design, and questions from philosophy on one surface. It is shaped as an issue-led editorial magazine rather than a chronological blog feed.",
     subscribe: "Get New Notes",
     subscribeSuccess: "Prototype subscription recorded.",
     fullArchive: "All Articles",
@@ -131,9 +131,9 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
 
     <header class="site-header" data-header>
-      <a class="brand" href="${withLocale("/", locale)}" aria-label="Still Room Magazine home">
-        <span class="brand-mark">SR</span>
-        <span class="brand-text">Still Room</span>
+      <a class="brand" href="${withLocale("/", locale)}" aria-label="The Thing home">
+        <span class="brand-mark">T</span>
+        <span class="brand-text">The Thing</span>
       </a>
 
       <nav class="nav" aria-label="Primary navigation">
@@ -160,8 +160,8 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
     <main id="top">${body}</main>
 
     <footer class="site-footer">
-      <p>${escapeHtml(text(site.title, locale))}</p>
-      <p>Node.js / TypeScript / Editorial Prototype</p>
+      <p>${escapeHtml(text(site.title, locale))} / ${escapeHtml(site.issue)}</p>
+      <p>${escapeHtml(locale === "ko" ? "예술, 기술, 디자인, 사유를 위한 편집 표면" : "An editorial surface for art, technology, design, and thought")}</p>
     </footer>
   </body>
 </html>`;
@@ -170,7 +170,7 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
 const renderKeywords = (keywords: string[]): string => `
   <section class="marquee" aria-label="Magazine keywords">
     <div>
-      ${keywords.map((keyword) => `<span>${escapeHtml(keyword)}</span>`).join("")}
+      ${[...keywords, ...keywords].map((keyword) => `<span>${escapeHtml(keyword)}</span>`).join("")}
     </div>
   </section>`;
 
@@ -178,14 +178,14 @@ const renderCategoryIndex = (categories: CategoryDefinition[], articles: Article
   <section class="category-index section-pad" aria-labelledby="category-index-title">
     <div class="section-eyebrow" data-reveal>
       <p class="kicker">${escapeHtml(ui[locale].categoryIndex)}</p>
-      <h2 id="category-index-title">${locale === "ko" ? "네 개의 큰 축으로 읽는 매거진." : "A magazine read through four axes."}</h2>
+      <h2 id="category-index-title">${locale === "ko" ? "태그가 아니라 편집실의 네 개 디파트먼트." : "Four departments, not just tags."}</h2>
     </div>
     <div class="category-grid">
       ${categories
         .map((category, index) => {
           const count = articles.filter((article) => article.category === category.key).length;
           return `
-            <a class="category-card" href="${withLocale(`/archive?category=${category.key}`, locale)}" data-reveal>
+            <a class="category-card" href="${withLocale(`/archive?category=${category.key}`, locale)}" data-reveal data-tilt>
               <span>${String(index + 1).padStart(2, "0")}</span>
               <h3>${escapeHtml(text(category.label, locale))}</h3>
               <p>${escapeHtml(text(category.description, locale))}</p>
@@ -260,8 +260,9 @@ const renderArchiveBoard = (site: SiteContent, articleList: Article[], locale: L
 
 export const renderHomePage = (site: SiteContent, articleList: Article[], locale: Locale, currentPath: string): string => {
   const labels = ui[locale];
-  const [featuredArticle, secondaryArticle, ...restArticles] = articleList;
-  const storyCards = restArticles.slice(0, 4);
+  const [featuredArticle, secondaryArticle] = articleList;
+  const heroTeasers = articleList.slice(1, 3);
+  const storyCards = articleList.slice(2, 7);
 
   const body = `
     <section class="hero section-pad" aria-labelledby="hero-title">
@@ -277,21 +278,44 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
           <p class="hero-lede">${escapeHtml(text(site.heroLead, locale))}</p>
         </div>
 
-        <a class="hero-feature" href="${articleHref(featuredArticle, locale)}" aria-label="${escapeHtml(labels.readFeature)}" data-reveal>
+        <a class="hero-feature" href="${articleHref(featuredArticle, locale)}" aria-label="${escapeHtml(labels.readFeature)}" data-reveal data-tilt>
           <span class="image-block ${featuredArticle.heroClass}"></span>
-          <span class="feature-meta">${escapeHtml(categoryLabel(site.categories, featuredArticle.category, locale))} / ${escapeHtml(text(featuredArticle.subcategory, locale))}</span>
+          <span class="feature-meta">${escapeHtml(formatDate(featuredArticle.date, locale))} / ${escapeHtml(categoryLabel(site.categories, featuredArticle.category, locale))} / ${escapeHtml(text(featuredArticle.subcategory, locale))}</span>
           <strong>${escapeHtml(text(featuredArticle.title, locale))}</strong>
+          <em>${escapeHtml(text(featuredArticle.excerpt, locale))}</em>
         </a>
+      </div>
+
+      <div class="hero-bottom" data-reveal>
+        <span>${escapeHtml(locale === "ko" ? "이번 이슈의 시작점" : "Issue opening notes")}</span>
+        ${heroTeasers
+          .map(
+            (article) => `
+              <a href="${articleHref(article, locale)}">
+                <small>${escapeHtml(categoryLabel(site.categories, article.category, locale))}</small>
+                <strong>${escapeHtml(text(article.title, locale))}</strong>
+              </a>`
+          )
+          .join("")}
       </div>
     </section>
 
     ${renderKeywords(site.keywords[locale])}
+
+    <section class="editorial-statement section-pad" aria-label="Editorial statement">
+      <p class="kicker" data-reveal>${escapeHtml(locale === "ko" ? "Editorial Position" : "Editorial Position")}</p>
+      <div class="statement-grid">
+        <h2 data-reveal>${escapeHtml(locale === "ko" ? "뉴스 피드의 속도보다 한 권의 매거진이 가진 호흡에 가깝게." : "Closer to the breath of an issue than the speed of a feed.")}</h2>
+        <p data-reveal>${escapeHtml(locale === "ko" ? "Blau의 커버 감각, Minimalissimo의 절제된 큐레이션, Ignant의 분야별 편집 구조, Studio Lenzing의 반응형 움직임에서 출발하되 The Thing의 화면은 더 조용하고 느슨한 표면으로 재구성했습니다." : "The surface borrows the idea of a strong cover, restrained curation, departmental editing, and responsive motion, then rebuilds them into a quieter language of its own.")}</p>
+      </div>
+    </section>
+
     ${renderCategoryIndex(site.categories, articleList, locale)}
 
     <section class="featured section-pad" id="features" aria-labelledby="features-title">
       <div class="section-heading" data-reveal>
         <p class="kicker">${escapeHtml(labels.selectedStories)}</p>
-        <h2 id="features-title">${locale === "ko" ? "분야는 다르지만 같은 감각으로 고른 글." : "Different fields, selected with the same sensibility."}</h2>
+        <h2 id="features-title">${locale === "ko" ? "커버 스토리 뒤에 놓인 읽기의 순서." : "A reading sequence after the cover story."}</h2>
       </div>
 
       <article class="lead-article" data-reveal>
@@ -311,10 +335,10 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
         ${storyCards
           .map(
             (article, index) => `
-              <a class="story-card ${index === 0 ? "large-card" : ""}" href="${articleHref(article, locale)}" data-reveal>
+              <a class="story-card ${index === 0 ? "large-card" : ""}" href="${articleHref(article, locale)}" data-reveal data-tilt>
                 <span class="image-block ${article.heroClass}"></span>
                 <div>
-                  <p class="kicker">${escapeHtml(categoryLabel(site.categories, article.category, locale))} / ${escapeHtml(text(article.subcategory, locale))}</p>
+                  <p class="kicker">${escapeHtml(formatDate(article.date, locale))} / ${escapeHtml(categoryLabel(site.categories, article.category, locale))}</p>
                   <h3>${escapeHtml(text(article.title, locale))}</h3>
                   <p>${escapeHtml(text(article.excerpt, locale))}</p>
                 </div>
@@ -338,10 +362,10 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
     <section class="archive section-pad" id="archive" aria-labelledby="archive-title">
       <div class="archive-heading" data-reveal>
         <div>
-          <p class="kicker">Archive</p>
+          <p class="kicker">Reading Index</p>
           <h2 id="archive-title">${escapeHtml(labels.latest)}</h2>
         </div>
-        <p>${escapeHtml(locale === "ko" ? "예술, 테크, 디자인, 철학의 글을 한 화면에서 교차해 읽을 수 있게 구성했습니다." : "Art, tech, design, and philosophy are arranged to be read across one surface.")}</p>
+        <p>${escapeHtml(locale === "ko" ? "시간순 피드가 아니라 카테고리, 날짜, 미리보기가 함께 움직이는 작은 인덱스로 구성했습니다." : "Not a chronological feed, but a compact index where categories, dates, and preview imagery move together.")}</p>
       </div>
 
       ${renderArchiveBoard(site, articleList, locale, false)}
@@ -395,7 +419,7 @@ export const renderArticlePage = (
         </div>
       </header>
 
-      <div class="article-visual" data-reveal>
+      <div class="article-visual" data-reveal data-tilt>
         <span class="image-block ${article.heroClass}"></span>
       </div>
 
@@ -428,7 +452,7 @@ export const renderArticlePage = (
         ${relatedArticles
           .map(
             (related) => `
-              <a class="story-card" href="${articleHref(related, locale)}" data-reveal>
+              <a class="story-card" href="${articleHref(related, locale)}" data-reveal data-tilt>
                 <span class="image-block ${related.heroClass}"></span>
                 <div>
                   <p class="kicker">${escapeHtml(categoryLabel(site.categories, related.category, locale))} / ${escapeHtml(text(related.subcategory, locale))}</p>

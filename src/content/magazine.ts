@@ -538,21 +538,21 @@ export const notes: Note[] = [
 ];
 
 export const site: SiteContent = {
-  title: { ko: "Still Room Magazine", en: "Still Room Magazine" },
+  title: { ko: "The Thing", en: "The Thing" },
   description: {
-    ko: "예술, 테크, 디자인, 철학을 조용하고 감각적인 시선으로 기록하는 독립 웹매거진",
-    en: "An independent web magazine for art, tech, design, and philosophy through a quiet editorial lens."
+    ko: "예술, 테크, 디자인, 철학을 조용하고 감각적인 시선으로 엮는 독립 웹매거진",
+    en: "An independent web magazine connecting art, tech, design, and philosophy through a quiet editorial lens."
   },
   issue: "Issue 01",
   month: { ko: "2026년 5월", en: "May 2026" },
-  heroKicker: { ko: "독립 웹 매거진", en: "Independent Web Magazine" },
+  heroKicker: { ko: "The Thing / Issue 01", en: "The Thing / Issue 01" },
   heroTitle: {
-    ko: "예술, 테크, 디자인, 철학 사이의 조용한 연결.",
-    en: "Quiet links between art, tech, design, and philosophy."
+    ko: "물건과 화면과 생각 사이의 조용한 연결.",
+    en: "Quiet links between objects, screens, and thought."
   },
   heroLead: {
-    ko: "Still Room은 이미지와 시스템, 물건과 생각을 같은 편집면 위에 놓고 천천히 읽는 웹매거진입니다. 빠르게 소비되는 정보보다 오래 남는 관점과 리듬을 만듭니다.",
-    en: "Still Room is a web magazine that slowly reads images, systems, objects, and thoughts on the same editorial surface. It favors lasting perspective over fast information."
+    ko: "The Thing은 이미지와 시스템, 물건과 사유를 같은 편집면 위에 놓고 천천히 읽는 웹매거진입니다. 빠르게 소비되는 정보보다 오래 남는 관점과 호흡을 만듭니다.",
+    en: "The Thing slowly reads images, systems, objects, and ideas on one editorial surface. It favors lasting perspective and rhythm over fast information."
   },
   keywords: {
     ko: ["예술", "테크", "디자인", "철학", "인터페이스", "전시", "사유", "브랜드"],

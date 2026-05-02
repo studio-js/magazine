@@ -56,5 +56,5 @@ app.use((request, response) => {
 });
 
 app.listen(port, () => {
-  console.log(`Still Room Magazine running at http://localhost:${port}`);
+  console.log(`The Thing running at http://localhost:${port}`);
 });
