@@ -1,4 +1,4 @@
-import type { Article, CategoryDefinition, Locale, LocalizedText, Note, PrimaryCategory, SiteContent } from "../types";
+import type { Article, CategoryDefinition, Locale, LocalizedText, Note, PrimaryCategory, SiteContent, SubcategoryKey } from "../types";
 
 interface LayoutOptions {
   title: string;
@@ -23,9 +23,9 @@ const ui = {
     categoryIndex: "카테고리 인덱스",
     latest: "최근 발행",
     editorNotes: "에디터 노트",
-    aboutTitle: "The Thing은 서로 다른 분야를 하나의 편집 리듬으로 묶는 독립 웹매거진입니다.",
+    aboutTitle: "The Thing은 서로 다른 분야를 하나의 편집 리듬으로 묶는 독립 디지털 매거진입니다.",
     aboutBody:
-      "예술의 이미지, 테크의 시스템, 디자인의 구조, 철학의 질문을 한 화면 안에서 연결합니다. 블로그 피드보다 이슈와 디파트먼트가 먼저 보이는 편집형 웹 매거진을 지향합니다.",
+      "예술의 이미지, 테크의 시스템, 디자인의 구조, 철학의 질문을 한 화면 안에서 연결합니다. 빠른 피드보다 한 호의 흐름과 디파트먼트의 밀도를 먼저 설계합니다.",
     subscribe: "새 글 알림 받기",
     subscribeSuccess: "구독 신청이 기록되었습니다.",
     fullArchive: "모든 글",
@@ -48,11 +48,11 @@ const ui = {
     categoryIndex: "Category Index",
     latest: "Latest Entries",
     editorNotes: "Editor's Notes",
-    aboutTitle: "The Thing is an independent web magazine that connects different fields through one editorial rhythm.",
+    aboutTitle: "The Thing is an independent digital magazine that connects different fields through one editorial rhythm.",
     aboutBody:
-      "It links images from art, systems from tech, structures from design, and questions from philosophy on one surface. It is shaped as an issue-led editorial magazine rather than a chronological blog feed.",
+      "It links images from art, systems from tech, structures from design, and questions from philosophy on one surface. It is shaped around the pace of an issue rather than the speed of a feed.",
     subscribe: "Get New Notes",
-    subscribeSuccess: "Prototype subscription recorded.",
+    subscribeSuccess: "Subscription request noted.",
     fullArchive: "All Articles",
     archiveLead: "Choose a category to refine the list and reveal its subcategories. The selected state updates immediately on desktop and mobile.",
     related: "Related Reading",
@@ -96,16 +96,16 @@ const withLocale = (path: string, locale: Locale): string => {
 
 const articleHref = (article: Article, locale: Locale): string => withLocale(`/articles/${article.slug}`, locale);
 
-const archiveHref = (locale: Locale, category?: PrimaryCategory): string =>
-  withLocale(category ? `/archive/${category}/` : "/archive", locale);
+const archiveHref = (locale: Locale, category?: PrimaryCategory, subcategory?: SubcategoryKey): string => {
+  if (category && subcategory) {
+    return withLocale(`/archive/${category}/${subcategory}/`, locale);
+  }
+
+  return withLocale(category ? `/archive/${category}/` : "/archive", locale);
+};
 
 const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, locale: Locale): string =>
   text(categories.find((category) => category.key === key)?.label ?? { ko: key, en: key }, locale);
-
-const renderSubcategoryChips = (category: CategoryDefinition, locale: Locale): string => `
-  <span class="subcategory-chips" aria-label="${escapeHtml(locale === "ko" ? "하위 카테고리" : "Subcategories")}">
-    ${category.subcategories.map((item) => `<span>${escapeHtml(text(item, locale))}</span>`).join("")}
-  </span>`;
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -118,10 +118,22 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
   const categoryLinks = site.categories
     .map(
       (category) => `
-        <a href="${archiveHref(locale, category.key)}">
-          <span>${escapeHtml(text(category.label, locale))}</span>
-          <small>${escapeHtml(category.subcategories.map((item) => text(item, locale)).join(" / "))}</small>
-        </a>`
+        <div class="nav-item">
+          <a class="nav-link" href="${archiveHref(locale, category.key)}">
+            <span>${escapeHtml(text(category.label, locale))}</span>
+            <small>${escapeHtml(category.subcategories.map((item) => text(item.label, locale)).join(" / "))}</small>
+          </a>
+          <div class="nav-submenu" aria-label="${escapeHtml(`${text(category.label, locale)} ${locale === "ko" ? "하위 카테고리" : "subcategories"}`)}">
+            ${category.subcategories
+              .map(
+                (subcategory) => `
+                  <a href="${archiveHref(locale, category.key, subcategory.key)}">
+                    <span>${escapeHtml(text(subcategory.label, locale))}</span>
+                  </a>`
+              )
+              .join("")}
+          </div>
+        </div>`
     )
     .join("");
 
@@ -211,18 +223,33 @@ const renderArchiveRows = (articleList: Article[], site: SiteContent, locale: Lo
   })
   .join("");
 
+const articleHasSubcategory = (article: Article, subcategory: SubcategoryKey): boolean =>
+  article.subcategoryKeys.includes(subcategory);
+
 const renderArchiveBoard = (
   site: SiteContent,
   articleList: Article[],
   locale: Locale,
   includeFilters: boolean,
-  selectedCategory?: PrimaryCategory
+  selectedCategory?: PrimaryCategory,
+  selectedSubcategory?: SubcategoryKey
 ): string => {
   const selectedCategoryDefinition = selectedCategory ? site.categories.find((category) => category.key === selectedCategory) : undefined;
-  const visibleArticles = selectedCategoryDefinition ? articleList.filter((article) => article.category === selectedCategoryDefinition.key) : articleList;
-  const firstArticle = visibleArticles[0] ?? articleList[0];
-  const firstLabel = `${categoryLabel(site.categories, firstArticle.category, locale)} / ${text(firstArticle.subcategory, locale)}`;
-  const activeLabel = selectedCategoryDefinition ? text(selectedCategoryDefinition.label, locale) : ui[locale].all;
+  const selectedSubcategoryDefinition = selectedCategoryDefinition?.subcategories.find((subcategory) => subcategory.key === selectedSubcategory);
+  const visibleArticles = articleList.filter((article) => {
+    if (selectedCategoryDefinition && article.category !== selectedCategoryDefinition.key) {
+      return false;
+    }
+
+    return !selectedSubcategoryDefinition || articleHasSubcategory(article, selectedSubcategoryDefinition.key);
+  });
+  const firstArticle = visibleArticles[0];
+  const firstLabel = firstArticle ? `${categoryLabel(site.categories, firstArticle.category, locale)} / ${text(firstArticle.subcategory, locale)}` : "";
+  const activeLabel = selectedCategoryDefinition && selectedSubcategoryDefinition
+    ? `${text(selectedCategoryDefinition.label, locale)} / ${text(selectedSubcategoryDefinition.label, locale)}`
+    : selectedCategoryDefinition
+      ? text(selectedCategoryDefinition.label, locale)
+      : ui[locale].all;
   const filters = includeFilters
     ? `<div class="filter-shell" data-filter-shell>
       <div class="filter-row" aria-label="Archive category filter">
@@ -245,13 +272,22 @@ const renderArchiveBoard = (
       <div class="filter-detail" aria-live="polite">
         ${selectedCategoryDefinition
           ? `<div class="filter-panel is-active">
-              <strong>${escapeHtml(text(selectedCategoryDefinition.label, locale))}</strong>
+              <strong>${escapeHtml(activeLabel)}</strong>
               <p>${escapeHtml(text(selectedCategoryDefinition.description, locale))}</p>
-              ${renderSubcategoryChips(selectedCategoryDefinition, locale)}
+              <span class="subcategory-filter" aria-label="${escapeHtml(locale === "ko" ? "하위 카테고리 필터" : "Subcategory filter")}">
+                <a class="${selectedSubcategoryDefinition ? "" : "is-active"}" href="${archiveHref(locale, selectedCategoryDefinition.key)}"${selectedSubcategoryDefinition ? "" : " aria-current=\"page\""}>${escapeHtml(locale === "ko" ? "전체" : "All")}</a>
+                ${selectedCategoryDefinition.subcategories
+                  .map((subcategory) => {
+                    const count = articleList.filter((article) => article.category === selectedCategoryDefinition.key && articleHasSubcategory(article, subcategory.key)).length;
+                    const isActive = selectedSubcategoryDefinition?.key === subcategory.key;
+                    return `<a class="${isActive ? "is-active" : ""}" href="${archiveHref(locale, selectedCategoryDefinition.key, subcategory.key)}"${isActive ? " aria-current=\"page\"" : ""}>${escapeHtml(text(subcategory.label, locale))}<small>${count}</small></a>`;
+                  })
+                  .join("")}
+              </span>
             </div>`
           : `<div class="filter-panel is-active">
               <strong>${escapeHtml(locale === "ko" ? "전체 디파트먼트" : "All Departments")}</strong>
-              <p>${escapeHtml(locale === "ko" ? "네 개의 카테고리와 모든 글을 한 번에 봅니다. 위 카테고리를 누르면 해당 목록과 하위 카테고리만 남습니다." : "Scan every article across the four departments. Choose a category above to show its list and subcategories.")}</p>
+              <p>${escapeHtml(locale === "ko" ? "카테고리와 하위 카테고리를 선택해 한 호의 글을 좁혀 읽습니다." : "Choose a category and subcategory to narrow the issue with intent.")}</p>
             </div>`}
       </div>
       <p class="filter-status">${escapeHtml(activeLabel)} · ${visibleArticles.length} ${escapeHtml(locale === "ko" ? "개의 글 표시 중" : "articles showing")}</p>
@@ -260,16 +296,20 @@ const renderArchiveBoard = (
 
   return `
     ${filters}
-    <div class="archive-board" data-archive-board data-reveal>
+    <div class="archive-board ${visibleArticles.length === 0 ? "is-empty" : ""}" data-archive-board data-reveal>
       <div class="archive-list" data-archive-list>
-        ${renderArchiveRows(visibleArticles, site, locale)}
+        ${visibleArticles.length > 0
+          ? renderArchiveRows(visibleArticles, site, locale)
+          : `<p class="archive-empty">${escapeHtml(locale === "ko" ? "아직 이 하위 카테고리로 묶인 글이 없습니다. 다른 하위 카테고리를 선택해 주세요." : "No articles are filed under this subcategory yet. Choose another subcategory to continue reading.")}</p>`}
       </div>
 
-      <aside class="archive-preview" aria-label="Article preview">
-        <span class="preview-kicker" data-preview-kicker>${escapeHtml(firstLabel)}</span>
-        <span class="image-block ${firstArticle.heroClass}" data-preview-image></span>
-        <h3 data-preview-title>${escapeHtml(text(firstArticle.title, locale))}</h3>
-      </aside>
+      ${firstArticle
+        ? `<aside class="archive-preview" aria-label="Article preview">
+            <span class="preview-kicker" data-preview-kicker>${escapeHtml(firstLabel)}</span>
+            <span class="image-block ${firstArticle.heroClass}" data-preview-image></span>
+            <h3 data-preview-title>${escapeHtml(text(firstArticle.title, locale))}</h3>
+          </aside>`
+        : ""}
     </div>`;
 };
 
@@ -324,9 +364,9 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
     <section class="issue-brief section-pad" aria-label="Editorial position">
       <div class="brief-copy" data-reveal>
         <p class="kicker">${escapeHtml(locale === "ko" ? "Editorial Position" : "Editorial Position")}</p>
-        <h2>${escapeHtml(locale === "ko" ? "하나의 피드가 아니라, 한 권의 얇은 매거진처럼 읽히는 화면." : "Not a feed, but a thin issue you can read as a magazine.")}</h2>
+        <h2>${escapeHtml(locale === "ko" ? "스크롤되는 피드가 아니라, 한 호의 밀도로 읽히는 디지털 매거진." : "Not a scrolling feed, but a digital issue with editorial density.")}</h2>
       </div>
-      <p class="brief-text" data-reveal>${escapeHtml(locale === "ko" ? "커버에서 시작해 디파트먼트로 내려가고, 목록은 빠르게 소비하는 대신 선택의 여지를 남깁니다. 색은 따뜻한 종이 톤에 머물고, 인터랙션은 시선을 방해하지 않는 작은 움직임만 남겼습니다." : "The page begins as a cover, descends into departments, and leaves room to choose rather than consume quickly. The palette stays close to warm paper, while motion remains quiet and functional.")}</p>
+      <p class="brief-text" data-reveal>${escapeHtml(locale === "ko" ? "커버에서 시작해 글, 노트, 색인으로 이어지는 흐름을 만들었습니다. 각 카테고리는 단순한 분류가 아니라 이번 호를 읽는 관점이며, 하위 카테고리는 독자가 더 좁은 결로 이동하는 장치입니다." : "The page moves from cover to essays, notes, and index. Each category is not just taxonomy but a way of reading the issue; subcategories let the reader move into a narrower grain.")}</p>
       <div class="brief-index" data-reveal>
         ${digestArticles
           .map(
@@ -392,7 +432,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
           <p class="kicker">Reading Index</p>
           <h2 id="archive-title">${escapeHtml(labels.latest)}</h2>
         </div>
-        <p>${escapeHtml(locale === "ko" ? "글 전체를 빠르게 훑는 마지막 색인입니다. 데스크톱에서는 항목을 올리면 오른쪽 이미지가 조용히 바뀝니다." : "A final index for scanning the full issue. On desktop, the image changes quietly as the reader moves through the list.")}</p>
+        <p>${escapeHtml(locale === "ko" ? "이번 호의 글을 한눈에 훑는 색인입니다. 카테고리와 하위 카테고리 페이지에서는 같은 목록이 더 좁은 결로 정리됩니다." : "An index for scanning the issue at a glance. Category and subcategory pages refine the same issue into a narrower reading path.")}</p>
       </div>
 
       ${renderArchiveBoard(site, articleList, locale, false)}
@@ -507,11 +547,17 @@ export const renderArchivePage = (
   articleList: Article[],
   locale: Locale,
   currentPath: string,
-  selectedCategory?: PrimaryCategory
+  selectedCategory?: PrimaryCategory,
+  selectedSubcategory?: SubcategoryKey
 ): string => {
   const labels = ui[locale];
   const selectedCategoryDefinition = selectedCategory ? site.categories.find((category) => category.key === selectedCategory) : undefined;
-  const archiveTitle = selectedCategoryDefinition ? text(selectedCategoryDefinition.label, locale) : labels.fullArchive;
+  const selectedSubcategoryDefinition = selectedCategoryDefinition?.subcategories.find((subcategory) => subcategory.key === selectedSubcategory);
+  const archiveTitle = selectedCategoryDefinition && selectedSubcategoryDefinition
+    ? `${text(selectedCategoryDefinition.label, locale)} / ${text(selectedSubcategoryDefinition.label, locale)}`
+    : selectedCategoryDefinition
+      ? text(selectedCategoryDefinition.label, locale)
+      : labels.fullArchive;
   const archiveLead = selectedCategoryDefinition ? text(selectedCategoryDefinition.description, locale) : labels.archiveLead;
   const body = `
     <section class="archive archive-page section-pad" aria-labelledby="archive-title">
@@ -523,7 +569,7 @@ export const renderArchivePage = (
         <p>${escapeHtml(archiveLead)}</p>
       </div>
 
-      ${renderArchiveBoard(site, articleList, locale, true, selectedCategory)}
+      ${renderArchiveBoard(site, articleList, locale, true, selectedCategory, selectedSubcategory)}
     </section>`;
 
   return renderLayout({ title: `${archiveTitle} | ${text(site.title, locale)}`, description: archiveLead, body, locale, currentPath, site });

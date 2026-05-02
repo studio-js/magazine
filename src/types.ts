@@ -6,6 +6,24 @@ export type LocalizedList = Record<Locale, string[]>;
 
 export type PrimaryCategory = "art" | "tech" | "design" | "philosophy";
 
+export type SubcategoryKey =
+  | "exhibitions"
+  | "artists"
+  | "images"
+  | "sound"
+  | "ai"
+  | "interface"
+  | "tools"
+  | "systems"
+  | "graphic"
+  | "product"
+  | "space"
+  | "brand"
+  | "thought"
+  | "ethics"
+  | "time"
+  | "body";
+
 export type VisualClass =
   | "image-atelier"
   | "image-signal"
@@ -16,11 +34,16 @@ export type VisualClass =
   | "image-library"
   | "image-field";
 
+export interface SubcategoryDefinition {
+  key: SubcategoryKey;
+  label: LocalizedText;
+}
+
 export interface CategoryDefinition {
   key: PrimaryCategory;
   label: LocalizedText;
   description: LocalizedText;
-  subcategories: LocalizedText[];
+  subcategories: SubcategoryDefinition[];
 }
 
 export interface ArticleSection {
@@ -34,6 +57,8 @@ export interface Article {
   subtitle: LocalizedText;
   deck: LocalizedText;
   category: PrimaryCategory;
+  subcategoryKey: SubcategoryKey;
+  subcategoryKeys: SubcategoryKey[];
   subcategory: LocalizedText;
   date: string;
   issue: string;

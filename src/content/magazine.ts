@@ -9,10 +9,10 @@ export const categories: CategoryDefinition[] = [
       en: "Contemporary artists, exhibitions, images, sound, and experiments in media."
     },
     subcategories: [
-      { ko: "전시", en: "Exhibitions" },
-      { ko: "작가", en: "Artists" },
-      { ko: "이미지", en: "Images" },
-      { ko: "사운드", en: "Sound" }
+      { key: "exhibitions", label: { ko: "전시", en: "Exhibitions" } },
+      { key: "artists", label: { ko: "작가", en: "Artists" } },
+      { key: "images", label: { ko: "이미지", en: "Images" } },
+      { key: "sound", label: { ko: "사운드", en: "Sound" } }
     ]
   },
   {
@@ -23,10 +23,10 @@ export const categories: CategoryDefinition[] = [
       en: "How AI, interfaces, data, and tools reshape perception and everyday life."
     },
     subcategories: [
-      { ko: "AI", en: "AI" },
-      { ko: "인터페이스", en: "Interface" },
-      { ko: "도구", en: "Tools" },
-      { ko: "시스템", en: "Systems" }
+      { key: "ai", label: { ko: "AI", en: "AI" } },
+      { key: "interface", label: { ko: "인터페이스", en: "Interface" } },
+      { key: "tools", label: { ko: "도구", en: "Tools" } },
+      { key: "systems", label: { ko: "시스템", en: "Systems" } }
     ]
   },
   {
@@ -37,10 +37,10 @@ export const categories: CategoryDefinition[] = [
       en: "A quiet but precise reading of graphics, products, spaces, and brands."
     },
     subcategories: [
-      { ko: "그래픽", en: "Graphic" },
-      { ko: "제품", en: "Product" },
-      { ko: "공간", en: "Space" },
-      { ko: "브랜드", en: "Brand" }
+      { key: "graphic", label: { ko: "그래픽", en: "Graphic" } },
+      { key: "product", label: { ko: "제품", en: "Product" } },
+      { key: "space", label: { ko: "공간", en: "Space" } },
+      { key: "brand", label: { ko: "브랜드", en: "Brand" } }
     ]
   },
   {
@@ -51,10 +51,10 @@ export const categories: CategoryDefinition[] = [
       en: "Thoughts on ethics, time, the body, and meaning behind technology and aesthetics."
     },
     subcategories: [
-      { ko: "사유", en: "Thought" },
-      { ko: "윤리", en: "Ethics" },
-      { ko: "시간", en: "Time" },
-      { ko: "몸", en: "Body" }
+      { key: "thought", label: { ko: "사유", en: "Thought" } },
+      { key: "ethics", label: { ko: "윤리", en: "Ethics" } },
+      { key: "time", label: { ko: "시간", en: "Time" } },
+      { key: "body", label: { ko: "몸", en: "Body" } }
     ]
   }
 ];
@@ -72,6 +72,8 @@ export const articles: Article[] = [
       en: "After the crowd leaves, the work appears in a lower voice. This essay follows the moment an exhibition shifts from event to experience."
     },
     category: "art",
+    subcategoryKey: "exhibitions",
+    subcategoryKeys: ["exhibitions", "images"],
     subcategory: { ko: "전시", en: "Exhibitions" },
     date: "2026-05-02",
     issue: "Issue 01",
@@ -128,6 +130,8 @@ export const articles: Article[] = [
       en: "The center of a studio is often not the finished work but the desk touched every day. Its surface stores the trace of thought in motion."
     },
     category: "art",
+    subcategoryKey: "artists",
+    subcategoryKeys: ["artists", "images", "sound"],
     subcategory: { ko: "작가", en: "Artists" },
     date: "2026-04-26",
     issue: "Issue 01",
@@ -184,6 +188,8 @@ export const articles: Article[] = [
       en: "AI products often make too many gestures to prove capability. The interface people return to reduces the burden of the process rather than showing off results."
     },
     category: "tech",
+    subcategoryKey: "ai",
+    subcategoryKeys: ["ai", "interface", "tools"],
     subcategory: { ko: "AI", en: "AI" },
     date: "2026-04-18",
     issue: "Issue 01",
@@ -240,6 +246,8 @@ export const articles: Article[] = [
       en: "A good dashboard designs the order of attention before the amount of information. Data should be readable on screen like sentences."
     },
     category: "tech",
+    subcategoryKey: "systems",
+    subcategoryKeys: ["systems", "interface", "tools"],
     subcategory: { ko: "시스템", en: "Systems" },
     date: "2026-04-08",
     issue: "Issue 01",
@@ -296,6 +304,8 @@ export const articles: Article[] = [
       en: "A brand system does not exist to control everything. A good system keeps the same attitude across changing situations."
     },
     category: "design",
+    subcategoryKey: "brand",
+    subcategoryKeys: ["brand", "graphic", "space"],
     subcategory: { ko: "브랜드", en: "Brand" },
     date: "2026-03-30",
     issue: "Issue 01",
@@ -342,42 +352,44 @@ export const articles: Article[] = [
   },
   {
     slug: "chair-prototype-and-its-shadow",
-    title: { ko: "의자 프로토타입과 그 그림자", en: "A Chair Prototype and Its Shadow" },
+    title: { ko: "의자의 그림자가 먼저 말하는 것", en: "What a Chair's Shadow Says First" },
     subtitle: {
-      ko: "제품의 형태는 정면보다 그림자에서 더 먼저 드러날 때가 있다.",
-      en: "A product's form can appear first in its shadow rather than its front view."
+      ko: "형태의 인상은 종종 정면보다 바닥에 남은 어둠에서 먼저 드러난다.",
+      en: "A form can be read first in the darkness it leaves on the floor."
     },
     deck: {
-      ko: "프로토타입은 완성품보다 솔직하다. 재료와 비례, 실패한 선이 아직 숨지 않았기 때문이다.",
-      en: "A prototype is more honest than the final product because material, proportion, and failed lines have not yet disappeared."
+      ko: "의자를 보는 일은 앉는 기능만 확인하는 일이 아니다. 등받이의 기울기, 다리의 간격, 좌판의 두께가 방 안에 어떤 무게를 남기는지 읽는 일이다.",
+      en: "Reading a chair is not only checking how it supports the body. It is reading the weight its back, legs, and seat leave in a room."
     },
     category: "design",
+    subcategoryKey: "product",
+    subcategoryKeys: ["product", "space", "graphic"],
     subcategory: { ko: "제품", en: "Product" },
     date: "2026-03-21",
     issue: "Issue 01",
     readTime: { ko: "5분 읽기", en: "5 min read" },
     location: { ko: "밀라노", en: "Milan" },
     heroClass: "image-material",
-    tags: { ko: ["제품", "프로토타입", "재료"], en: ["Product", "Prototype", "Material"] },
+    tags: { ko: ["제품", "비례", "재료"], en: ["Product", "Proportion", "Material"] },
     excerpt: {
-      ko: "아직 완성되지 않은 물건은 디자인의 의도를 가장 직접적으로 보여준다.",
-      en: "An unfinished object shows design intent most directly."
+      ko: "의자의 실루엣은 사용자의 몸과 공간의 분위기를 동시에 드러낸다.",
+      en: "A chair's silhouette reveals both the body it expects and the atmosphere it creates."
     },
     quote: {
-      ko: "프로토타입의 어색함은 실패가 아니라 판단이 남아 있다는 증거다.",
-      en: "The awkwardness of a prototype is not failure, but evidence that judgment remains."
+      ko: "좋은 의자는 스스로를 크게 말하지 않고, 주변의 공기를 조금 다르게 만든다.",
+      en: "A good chair does not speak loudly; it slightly changes the air around it."
     },
     sections: [
       {
-        heading: { ko: "완성 전의 형태", en: "Form Before Completion" },
+        heading: { ko: "실루엣의 무게", en: "The Weight of a Silhouette" },
         paragraphs: {
           ko: [
-            "완성품은 많은 흔적을 숨긴다. 표면은 매끈해지고, 연결부는 정리되고, 의도하지 않은 각도는 사라진다. 프로토타입에는 그 이전의 선택이 아직 남아 있다.",
-            "그래서 프로토타입을 보는 일은 디자이너의 생각을 가까이서 보는 일과 닮았다. 물건은 아직 답이 아니라 질문의 형태로 서 있다."
+            "의자의 비례는 가까이서보다 한 발 물러섰을 때 더 분명해진다. 등받이의 높이, 좌판의 깊이, 다리 사이의 간격이 하나의 실루엣으로 묶이기 때문이다.",
+            "잘 만든 의자는 장식을 앞세우지 않는다. 대신 방 안에서 어느 정도의 존재감을 가져야 하는지 정확히 알고 있는 물건처럼 보인다."
           ],
           en: [
-            "A final object hides many traces. Surfaces become smooth, joints are resolved, unintended angles disappear. In a prototype, earlier choices remain.",
-            "Looking at a prototype is close to seeing a designer's thought up close. The object stands not as an answer but as a question."
+            "A chair's proportion becomes clearer from a step away. Back height, seat depth, and leg spacing gather into one silhouette.",
+            "A well-made chair does not lead with ornament. It appears to know exactly how much presence it should hold in a room."
           ]
         }
       },
@@ -408,6 +420,8 @@ export const articles: Article[] = [
       en: "Tools become faster, but good judgment still requires slow time. This essay asks how slow thought can survive inside fast interfaces."
     },
     category: "philosophy",
+    subcategoryKey: "time",
+    subcategoryKeys: ["time", "thought", "body"],
     subcategory: { ko: "시간", en: "Time" },
     date: "2026-03-12",
     issue: "Issue 01",
@@ -464,6 +478,8 @@ export const articles: Article[] = [
       en: "Defaults are not neutral. Notifications, visibility, and recommendation modes pre-decide the direction of a user's time."
     },
     category: "philosophy",
+    subcategoryKey: "ethics",
+    subcategoryKeys: ["ethics", "thought", "body"],
     subcategory: { ko: "윤리", en: "Ethics" },
     date: "2026-03-04",
     issue: "Issue 01",
@@ -540,19 +556,19 @@ export const notes: Note[] = [
 export const site: SiteContent = {
   title: { ko: "The Thing", en: "The Thing" },
   description: {
-    ko: "예술, 테크, 디자인, 철학을 조용하고 감각적인 시선으로 엮는 독립 웹매거진",
-    en: "An independent web magazine connecting art, tech, design, and philosophy through a quiet editorial lens."
+    ko: "예술, 테크, 디자인, 철학을 하나의 감각적 편집면으로 엮는 독립 디지털 매거진",
+    en: "An independent digital magazine connecting art, tech, design, and philosophy through a quiet editorial lens."
   },
   issue: "Issue 01",
   month: { ko: "2026년 5월", en: "May 2026" },
   heroKicker: { ko: "The Thing / Issue 01", en: "The Thing / Issue 01" },
   heroTitle: {
-    ko: "물건과 화면과 생각 사이의 조용한 연결.",
-    en: "Quiet links between objects, screens, and thought."
+    ko: "사물과 화면 사이에서 발견한 감각의 질서.",
+    en: "A sensory order found between objects and screens."
   },
   heroLead: {
-    ko: "The Thing은 이미지와 시스템, 물건과 사유를 같은 편집면 위에 놓고 천천히 읽는 웹매거진입니다. 빠르게 소비되는 정보보다 오래 남는 관점과 호흡을 만듭니다.",
-    en: "The Thing slowly reads images, systems, objects, and ideas on one editorial surface. It favors lasting perspective and rhythm over fast information."
+    ko: "The Thing은 전시장의 이미지, 제품의 비례, 화면의 구조, 사유의 문장을 한 호 안에서 함께 읽는 디지털 매거진입니다. 빠른 정보보다 오래 남는 관점과 정확한 호흡을 고릅니다.",
+    en: "The Thing is a digital magazine that reads gallery images, product proportions, interface structures, and reflective essays within one issue. It chooses lasting perspective over fast information."
   },
   keywords: {
     ko: ["예술", "테크", "디자인", "철학", "인터페이스", "전시", "사유", "브랜드"],

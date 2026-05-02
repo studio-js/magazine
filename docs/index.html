@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="예술, 테크, 디자인, 철학을 조용하고 감각적인 시선으로 엮는 독립 웹매거진" />
+    <meta name="description" content="예술, 테크, 디자인, 철학을 하나의 감각적 편집면으로 엮는 독립 디지털 매거진" />
     <title>The Thing</title>
     <link rel="stylesheet" href="/magazine/styles.css" />
     <script src="/magazine/client.js" defer></script>
@@ -19,22 +19,90 @@
 
       <nav class="nav" aria-label="Primary navigation">
         
-        <a href="/magazine/archive/art/">
-          <span>예술</span>
-          <small>전시 / 작가 / 이미지 / 사운드</small>
-        </a>
-        <a href="/magazine/archive/tech/">
-          <span>테크</span>
-          <small>AI / 인터페이스 / 도구 / 시스템</small>
-        </a>
-        <a href="/magazine/archive/design/">
-          <span>디자인</span>
-          <small>그래픽 / 제품 / 공간 / 브랜드</small>
-        </a>
-        <a href="/magazine/archive/philosophy/">
-          <span>철학</span>
-          <small>사유 / 윤리 / 시간 / 몸</small>
-        </a>
+        <div class="nav-item">
+          <a class="nav-link" href="/magazine/archive/art/">
+            <span>예술</span>
+            <small>전시 / 작가 / 이미지 / 사운드</small>
+          </a>
+          <div class="nav-submenu" aria-label="예술 하위 카테고리">
+            
+                  <a href="/magazine/archive/art/exhibitions/">
+                    <span>전시</span>
+                  </a>
+                  <a href="/magazine/archive/art/artists/">
+                    <span>작가</span>
+                  </a>
+                  <a href="/magazine/archive/art/images/">
+                    <span>이미지</span>
+                  </a>
+                  <a href="/magazine/archive/art/sound/">
+                    <span>사운드</span>
+                  </a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a class="nav-link" href="/magazine/archive/tech/">
+            <span>테크</span>
+            <small>AI / 인터페이스 / 도구 / 시스템</small>
+          </a>
+          <div class="nav-submenu" aria-label="테크 하위 카테고리">
+            
+                  <a href="/magazine/archive/tech/ai/">
+                    <span>AI</span>
+                  </a>
+                  <a href="/magazine/archive/tech/interface/">
+                    <span>인터페이스</span>
+                  </a>
+                  <a href="/magazine/archive/tech/tools/">
+                    <span>도구</span>
+                  </a>
+                  <a href="/magazine/archive/tech/systems/">
+                    <span>시스템</span>
+                  </a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a class="nav-link" href="/magazine/archive/design/">
+            <span>디자인</span>
+            <small>그래픽 / 제품 / 공간 / 브랜드</small>
+          </a>
+          <div class="nav-submenu" aria-label="디자인 하위 카테고리">
+            
+                  <a href="/magazine/archive/design/graphic/">
+                    <span>그래픽</span>
+                  </a>
+                  <a href="/magazine/archive/design/product/">
+                    <span>제품</span>
+                  </a>
+                  <a href="/magazine/archive/design/space/">
+                    <span>공간</span>
+                  </a>
+                  <a href="/magazine/archive/design/brand/">
+                    <span>브랜드</span>
+                  </a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a class="nav-link" href="/magazine/archive/philosophy/">
+            <span>철학</span>
+            <small>사유 / 윤리 / 시간 / 몸</small>
+          </a>
+          <div class="nav-submenu" aria-label="철학 하위 카테고리">
+            
+                  <a href="/magazine/archive/philosophy/thought/">
+                    <span>사유</span>
+                  </a>
+                  <a href="/magazine/archive/philosophy/ethics/">
+                    <span>윤리</span>
+                  </a>
+                  <a href="/magazine/archive/philosophy/time/">
+                    <span>시간</span>
+                  </a>
+                  <a href="/magazine/archive/philosophy/body/">
+                    <span>몸</span>
+                  </a>
+          </div>
+        </div>
       </nav>
 
       <div class="header-tools">
@@ -52,22 +120,90 @@
 
     <div class="mobile-menu" id="mobile-menu" data-mobile-menu>
       
-        <a href="/magazine/archive/art/">
-          <span>예술</span>
-          <small>전시 / 작가 / 이미지 / 사운드</small>
-        </a>
-        <a href="/magazine/archive/tech/">
-          <span>테크</span>
-          <small>AI / 인터페이스 / 도구 / 시스템</small>
-        </a>
-        <a href="/magazine/archive/design/">
-          <span>디자인</span>
-          <small>그래픽 / 제품 / 공간 / 브랜드</small>
-        </a>
-        <a href="/magazine/archive/philosophy/">
-          <span>철학</span>
-          <small>사유 / 윤리 / 시간 / 몸</small>
-        </a>
+        <div class="nav-item">
+          <a class="nav-link" href="/magazine/archive/art/">
+            <span>예술</span>
+            <small>전시 / 작가 / 이미지 / 사운드</small>
+          </a>
+          <div class="nav-submenu" aria-label="예술 하위 카테고리">
+            
+                  <a href="/magazine/archive/art/exhibitions/">
+                    <span>전시</span>
+                  </a>
+                  <a href="/magazine/archive/art/artists/">
+                    <span>작가</span>
+                  </a>
+                  <a href="/magazine/archive/art/images/">
+                    <span>이미지</span>
+                  </a>
+                  <a href="/magazine/archive/art/sound/">
+                    <span>사운드</span>
+                  </a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a class="nav-link" href="/magazine/archive/tech/">
+            <span>테크</span>
+            <small>AI / 인터페이스 / 도구 / 시스템</small>
+          </a>
+          <div class="nav-submenu" aria-label="테크 하위 카테고리">
+            
+                  <a href="/magazine/archive/tech/ai/">
+                    <span>AI</span>
+                  </a>
+                  <a href="/magazine/archive/tech/interface/">
+                    <span>인터페이스</span>
+                  </a>
+                  <a href="/magazine/archive/tech/tools/">
+                    <span>도구</span>
+                  </a>
+                  <a href="/magazine/archive/tech/systems/">
+                    <span>시스템</span>
+                  </a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a class="nav-link" href="/magazine/archive/design/">
+            <span>디자인</span>
+            <small>그래픽 / 제품 / 공간 / 브랜드</small>
+          </a>
+          <div class="nav-submenu" aria-label="디자인 하위 카테고리">
+            
+                  <a href="/magazine/archive/design/graphic/">
+                    <span>그래픽</span>
+                  </a>
+                  <a href="/magazine/archive/design/product/">
+                    <span>제품</span>
+                  </a>
+                  <a href="/magazine/archive/design/space/">
+                    <span>공간</span>
+                  </a>
+                  <a href="/magazine/archive/design/brand/">
+                    <span>브랜드</span>
+                  </a>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a class="nav-link" href="/magazine/archive/philosophy/">
+            <span>철학</span>
+            <small>사유 / 윤리 / 시간 / 몸</small>
+          </a>
+          <div class="nav-submenu" aria-label="철학 하위 카테고리">
+            
+                  <a href="/magazine/archive/philosophy/thought/">
+                    <span>사유</span>
+                  </a>
+                  <a href="/magazine/archive/philosophy/ethics/">
+                    <span>윤리</span>
+                  </a>
+                  <a href="/magazine/archive/philosophy/time/">
+                    <span>시간</span>
+                  </a>
+                  <a href="/magazine/archive/philosophy/body/">
+                    <span>몸</span>
+                  </a>
+          </div>
+        </div>
       <a href="/magazine/archive">아카이브</a>
       <a href="/magazine/#notes">노트</a>
       <a href="/magazine/#about">소개</a>
@@ -89,7 +225,7 @@
       <div class="cover-grid">
         <div class="cover-copy" data-reveal>
           <p class="kicker">The Thing / Issue 01</p>
-          <h1 id="hero-title">물건과 화면과 생각 사이의 조용한 연결.</h1>
+          <h1 id="hero-title">사물과 화면 사이에서 발견한 감각의 질서.</h1>
         </div>
 
         <a class="cover-art" href="/magazine/articles/quiet-images-after-the-opening" aria-label="대표 글 읽기" data-reveal data-tilt>
@@ -101,7 +237,7 @@
         </a>
 
         <aside class="cover-sidebar" data-reveal>
-          <p>The Thing은 이미지와 시스템, 물건과 사유를 같은 편집면 위에 놓고 천천히 읽는 웹매거진입니다. 빠르게 소비되는 정보보다 오래 남는 관점과 호흡을 만듭니다.</p>
+          <p>The Thing은 전시장의 이미지, 제품의 비례, 화면의 구조, 사유의 문장을 한 호 안에서 함께 읽는 디지털 매거진입니다. 빠른 정보보다 오래 남는 관점과 정확한 호흡을 고릅니다.</p>
           <div class="cover-links" aria-label="Issue opening articles">
             
                   <a href="/magazine/articles/artist-desk-as-studio-map">
@@ -132,9 +268,9 @@
     <section class="issue-brief section-pad" aria-label="Editorial position">
       <div class="brief-copy" data-reveal>
         <p class="kicker">Editorial Position</p>
-        <h2>하나의 피드가 아니라, 한 권의 얇은 매거진처럼 읽히는 화면.</h2>
+        <h2>스크롤되는 피드가 아니라, 한 호의 밀도로 읽히는 디지털 매거진.</h2>
       </div>
-      <p class="brief-text" data-reveal>커버에서 시작해 디파트먼트로 내려가고, 목록은 빠르게 소비하는 대신 선택의 여지를 남깁니다. 색은 따뜻한 종이 톤에 머물고, 인터랙션은 시선을 방해하지 않는 작은 움직임만 남겼습니다.</p>
+      <p class="brief-text" data-reveal>커버에서 시작해 글, 노트, 색인으로 이어지는 흐름을 만들었습니다. 각 카테고리는 단순한 분류가 아니라 이번 호를 읽는 관점이며, 하위 카테고리는 독자가 더 좁은 결로 이동하는 장치입니다.</p>
       <div class="brief-index" data-reveal>
         
               <a href="/magazine/articles/artist-desk-as-studio-map">
@@ -193,8 +329,8 @@
                   <span class="image-block image-material"></span>
                   <span class="river-card-copy">
                     <small>디자인 / 2026.03.21</small>
-                    <strong>의자 프로토타입과 그 그림자</strong>
-                    <em>아직 완성되지 않은 물건은 디자인의 의도를 가장 직접적으로 보여준다.</em>
+                    <strong>의자의 그림자가 먼저 말하는 것</strong>
+                    <em>의자의 실루엣은 사용자의 몸과 공간의 분위기를 동시에 드러낸다.</em>
                   </span>
                 </a>
                 <a class="river-card" href="/magazine/articles/slow-thinking-in-fast-tools" data-reveal>
@@ -251,12 +387,12 @@
           <p class="kicker">Reading Index</p>
           <h2 id="archive-title">최근 발행</h2>
         </div>
-        <p>글 전체를 빠르게 훑는 마지막 색인입니다. 데스크톱에서는 항목을 올리면 오른쪽 이미지가 조용히 바뀝니다.</p>
+        <p>이번 호의 글을 한눈에 훑는 색인입니다. 카테고리와 하위 카테고리 페이지에서는 같은 목록이 더 좁은 결로 정리됩니다.</p>
       </div>
 
       
     
-    <div class="archive-board" data-archive-board data-reveal>
+    <div class="archive-board " data-archive-board data-reveal>
       <div class="archive-list" data-archive-list>
         
       <a
@@ -324,11 +460,11 @@
         class="archive-row"
         data-preview-class="image-material"
         data-preview-kicker="디자인 / 제품"
-        data-preview-title="의자 프로토타입과 그 그림자"
+        data-preview-title="의자의 그림자가 먼저 말하는 것"
         data-category="design"
       >
         <span class="archive-date">2026.03.21</span>
-        <span class="archive-title">의자 프로토타입과 그 그림자</span>
+        <span class="archive-title">의자의 그림자가 먼저 말하는 것</span>
         <span class="archive-category">디자인 / 제품</span>
       </a>
       <a
@@ -358,18 +494,18 @@
       </div>
 
       <aside class="archive-preview" aria-label="Article preview">
-        <span class="preview-kicker" data-preview-kicker>예술 / 전시</span>
-        <span class="image-block image-atelier" data-preview-image></span>
-        <h3 data-preview-title>오프닝이 끝난 뒤 이미지가 남는 방식</h3>
-      </aside>
+            <span class="preview-kicker" data-preview-kicker>예술 / 전시</span>
+            <span class="image-block image-atelier" data-preview-image></span>
+            <h3 data-preview-title>오프닝이 끝난 뒤 이미지가 남는 방식</h3>
+          </aside>
     </div>
     </section>
 
     <section class="about section-pad" id="about" aria-labelledby="about-title">
       <div class="about-card" data-reveal>
         <p class="kicker">About the Magazine</p>
-        <h2 id="about-title">The Thing은 서로 다른 분야를 하나의 편집 리듬으로 묶는 독립 웹매거진입니다.</h2>
-        <p>예술의 이미지, 테크의 시스템, 디자인의 구조, 철학의 질문을 한 화면 안에서 연결합니다. 블로그 피드보다 이슈와 디파트먼트가 먼저 보이는 편집형 웹 매거진을 지향합니다.</p>
+        <h2 id="about-title">The Thing은 서로 다른 분야를 하나의 편집 리듬으로 묶는 독립 디지털 매거진입니다.</h2>
+        <p>예술의 이미지, 테크의 시스템, 디자인의 구조, 철학의 질문을 한 화면 안에서 연결합니다. 빠른 피드보다 한 호의 흐름과 디파트먼트의 밀도를 먼저 설계합니다.</p>
       </div>
 
       <form class="subscribe-form" aria-label="Newsletter subscribe form" data-reveal data-success-message="구독 신청이 기록되었습니다.">
