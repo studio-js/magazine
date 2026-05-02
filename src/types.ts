@@ -56,6 +56,9 @@ export interface CategoryDefinition {
 export interface ArticleSection {
   heading: LocalizedText;
   paragraphs: LocalizedList;
+  railClass?: VisualClass;
+  railImage?: string;
+  hideRailImage?: boolean;
 }
 
 export interface Article {

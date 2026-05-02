@@ -116,7 +116,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-rail-image-admin-pass";
+const assetVersion = "20260503-section-rail-save-pass";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -233,11 +233,7 @@ const renderArchiveRows = (
 ): string => articleList
   .map((article) => {
     const fullLabel = `${categoryLabel(site.categories, article.category, locale)} / ${text(article.subcategory, locale)}`;
-    const rowLabel = selectedSubcategory
-      ? article.tags[locale].slice(0, 2).join(" / ")
-      : selectedCategory
-        ? text(article.subcategory, locale)
-        : fullLabel;
+    const rowLabel = selectedCategory || selectedSubcategory ? text(article.subcategory, locale) : fullLabel;
 
     return `
       <a
@@ -252,10 +248,9 @@ const renderArchiveRows = (
       >
         <span class="archive-date">${formatDate(article.date, locale)}</span>
         <span class="archive-title">${escapeHtml(text(article.title, locale))}</span>
-        <span class="archive-category">${escapeHtml(rowLabel)}</span>
+        <span class="archive-category"><span>${escapeHtml(rowLabel)}</span><small>${escapeHtml(text(article.location, locale))}</small></span>
         <span class="archive-info">
           <span>${escapeHtml(text(article.readTime, locale))}</span>
-          <span>${escapeHtml(text(article.location, locale))}</span>
         </span>
         <span class="archive-summary">${escapeHtml(text(article.excerpt, locale))}</span>
       </a>`;
@@ -420,6 +415,7 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
             <button type="button" data-admin-delete>${escapeHtml(locale === "ko" ? "삭제" : "Delete")}</button>
           </div>
           <div class="admin-sidebar-actions is-export">
+            <button type="button" data-admin-save-file>${escapeHtml(locale === "ko" ? "파일 저장" : "Save File")}</button>
             <button type="button" data-admin-copy-all>${escapeHtml(locale === "ko" ? "전체 배열 복사" : "Copy All")}</button>
             <button type="button" data-admin-download-all>${escapeHtml(locale === "ko" ? "전체 파일 내려받기" : "Download All")}</button>
           </div>
@@ -822,23 +818,25 @@ export const renderArticlePage = (
   const labels = ui[locale];
   const category = categoryLabel(site.categories, article.category, locale);
   const firstSection = article.sections[0];
-  const hasRailImageOverride = Boolean(article.railClass || article.railImage || article.hideRailImage);
-  const railVisuals = article.sections.map((_, index) => hasRailImageOverride
-    ? article.railClass ?? article.heroClass
-    : relatedArticles[index]?.heroClass ?? article.heroClass);
-  const railImages = article.sections.map((_, index) => {
-    if (article.hideRailImage) {
+  const railVisuals = article.sections.map((section, index) => section.railClass ?? article.railClass ?? relatedArticles[index]?.heroClass ?? article.heroClass);
+  const railImageHidden = article.sections.map((section) => Boolean(section.hideRailImage || article.hideRailImage));
+  const railImages = article.sections.map((section, index) => {
+    if (railImageHidden[index]) {
       return "";
+    }
+
+    if (section.railImage) {
+      return section.railImage;
     }
 
     if (article.railImage) {
       return article.railImage;
     }
 
-    return article.railClass ? "" : relatedArticles[index]?.heroImage ?? article.heroImage ?? "";
+    return section.railClass || article.railClass ? "" : relatedArticles[index]?.heroImage ?? article.heroImage ?? "";
   });
   const railMode = article.railMode ?? "default";
-  const railImageStateClass = article.hideRailImage ? " is-rail-image-hidden" : "";
+  const railImageStateClass = railImageHidden[0] ? " is-rail-image-hidden" : "";
   const firstRailTitle = article.railTitle ? text(article.railTitle, locale) : firstSection ? text(firstSection.heading, locale) : text(article.subtitle, locale);
   const firstRailText = article.railText ? text(article.railText, locale) : firstSection?.paragraphs[locale][0] ?? text(article.subtitle, locale);
   const articleVisual = article.hideHeroImage
@@ -882,7 +880,7 @@ ${articleVisual}      <div class="article-body-grid">
           ${article.sections
             .map(
               (section, index) => `
-                <section class="article-section" data-reveal data-article-section data-rail-no="${String(index + 1).padStart(2, "0")}" data-rail-title="${escapeHtml(text(section.heading, locale))}" data-rail-text="${escapeHtml(section.paragraphs[locale][0] ?? "")}" data-rail-visual="${railVisuals[index] ?? article.heroClass}" data-rail-image="${escapeHtml(railImages[index] ?? "")}">
+                <section class="article-section" data-reveal data-article-section data-rail-no="${String(index + 1).padStart(2, "0")}" data-rail-title="${escapeHtml(text(section.heading, locale))}" data-rail-text="${escapeHtml(section.paragraphs[locale][0] ?? "")}" data-rail-visual="${railVisuals[index] ?? article.heroClass}" data-rail-image="${escapeHtml(railImages[index] ?? "")}" data-rail-image-hidden="${railImageHidden[index] ? "true" : "false"}">
                   <h2>${escapeHtml(text(section.heading, locale))}</h2>
                   ${section.paragraphs[locale].map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
                 </section>`

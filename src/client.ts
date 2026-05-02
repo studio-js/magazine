@@ -144,7 +144,13 @@ if (writer) {
   type RailMode = "default" | "image" | "text";
   type AdminLocalizedText = { ko: string; en: string };
   type AdminLocalizedList = { ko: string[]; en: string[] };
-  type AdminSection = { heading: AdminLocalizedText; paragraphs: AdminLocalizedList };
+  type AdminSection = {
+    heading: AdminLocalizedText;
+    paragraphs: AdminLocalizedList;
+    railClass?: string;
+    railImage?: string;
+    hideRailImage?: boolean;
+  };
   type AdminArticle = {
     slug: string;
     title: AdminLocalizedText;
@@ -284,6 +290,7 @@ if (writer) {
   const normalizeArticle = (article: Partial<AdminArticle>): AdminArticle => {
     const fallback = fallbackArticle();
     const firstSection = article.sections?.[0];
+    const articleSections = article.sections && article.sections.length > 0 ? article.sections : fallback.sections;
 
     return {
       ...fallback,
@@ -308,7 +315,18 @@ if (writer) {
         ko: firstSection?.paragraphs.ko[0] || fallback.railText?.ko || "",
         en: firstSection?.paragraphs.en[0] || fallback.railText?.en || ""
       },
-      sections: article.sections && article.sections.length > 0 ? article.sections : fallback.sections
+      sections: articleSections.map((section, index) => {
+        const fallbackSection = fallback.sections[index] || fallback.sections[0];
+        return {
+          ...fallbackSection,
+          ...section,
+          heading: { ...fallbackSection.heading, ...section.heading },
+          paragraphs: { ...fallbackSection.paragraphs, ...section.paragraphs },
+          railClass: section.railClass || article.railClass || article.heroClass || fallback.railClass,
+          railImage: section.railImage || "",
+          hideRailImage: Boolean(section.hideRailImage)
+        };
+      })
     };
   };
 
@@ -379,6 +397,27 @@ if (writer) {
     }
   };
 
+  const createSelect = (options: Array<{ value: string; label: string }>, value: string): HTMLSelectElement => {
+    const select = document.createElement("select");
+
+    options.forEach((optionValue) => {
+      const option = document.createElement("option");
+      option.value = optionValue.value;
+      option.textContent = optionValue.label;
+      option.selected = optionValue.value === value;
+      select.append(option);
+    });
+
+    return select;
+  };
+
+  const imageClassOptions = imageClasses.map((imageClass) => ({ value: imageClass, label: imageClass }));
+  const imageModeOptions = [
+    { value: "visual", label: "자동 비주얼" },
+    { value: "custom", label: "이미지 URL" },
+    { value: "none", label: "이미지 없음" }
+  ];
+
   const createParagraph = (text: string): HTMLParagraphElement => {
     const paragraph = document.createElement("p");
     paragraph.contentEditable = "true";
@@ -388,7 +427,7 @@ if (writer) {
     return paragraph;
   };
 
-  const createSection = (heading = "새 섹션 제목", paragraphs = ["새 문단을 입력하세요."]): HTMLElement => {
+  const createSection = (heading = "새 섹션 제목", paragraphs = ["새 문단을 입력하세요."], railClass = "image-material", railImage = "", hideRailImage = false): HTMLElement => {
     const section = document.createElement("section");
     section.className = "article-section writer-section";
     section.dataset.writeSection = "";
@@ -401,6 +440,39 @@ if (writer) {
     section.append(title);
 
     paragraphs.forEach((paragraph) => section.append(createParagraph(paragraph)));
+
+    const railTools = document.createElement("div");
+    railTools.className = "writer-section-rail-tools";
+    railTools.contentEditable = "false";
+
+    const railClassLabel = document.createElement("label");
+    const railClassText = document.createElement("span");
+    railClassText.textContent = "레일 비주얼";
+    const railClassSelect = createSelect(imageClassOptions, railClass);
+    railClassSelect.dataset.writeSectionRailClass = "";
+    railClassLabel.append(railClassText, railClassSelect);
+
+    const railImageMode = hideRailImage ? "none" : railImage ? "custom" : "visual";
+    const railModeLabel = document.createElement("label");
+    const railModeText = document.createElement("span");
+    railModeText.textContent = "레일 이미지";
+    const railModeSelect = createSelect(imageModeOptions, railImageMode);
+    railModeSelect.dataset.writeSectionRailMode = "";
+    railModeLabel.append(railModeText, railModeSelect);
+
+    const railImageLabel = document.createElement("label");
+    railImageLabel.className = `writer-section-rail-url-field${railImageMode === "custom" ? " is-visible" : ""}`;
+    const railImageText = document.createElement("span");
+    railImageText.textContent = "레일 이미지 URL";
+    const railImageInput = document.createElement("input");
+    railImageInput.type = "url";
+    railImageInput.placeholder = "https://...";
+    railImageInput.value = railImage;
+    railImageInput.dataset.writeSectionRailImage = "";
+    railImageLabel.append(railImageText, railImageInput);
+
+    railTools.append(railClassLabel, railModeLabel, railImageLabel);
+    section.append(railTools);
 
     const tools = document.createElement("div");
     tools.className = "writer-section-tools";
@@ -424,9 +496,21 @@ if (writer) {
   const sectionsContainer = (): HTMLElement | null => writer.querySelector<HTMLElement>("[data-write-body]");
   const sections = (): HTMLElement[] => Array.from(writer.querySelectorAll<HTMLElement>("[data-write-section]"));
 
-  const sectionData = (): Array<{ heading: string; paragraphs: string[] }> => sections().map((section) => ({
+  const updateSectionRailControlState = (): void => {
+    sections().forEach((section) => {
+      const mode = section.querySelector<HTMLSelectElement>("[data-write-section-rail-mode]")?.value || "visual";
+      section.querySelector<HTMLElement>(".writer-section-rail-url-field")?.classList.toggle("is-visible", mode === "custom");
+    });
+  };
+
+  const sectionData = (): Array<{ heading: string; paragraphs: string[]; railClass: string; railImage: string; hideRailImage: boolean }> => sections().map((section) => ({
     heading: section.querySelector<HTMLElement>("[data-write-section-heading]")?.innerText.trim() || "",
-    paragraphs: Array.from(section.querySelectorAll<HTMLElement>("[data-write-paragraph]")).map((paragraph) => paragraph.innerText.trim()).filter(Boolean)
+    paragraphs: Array.from(section.querySelectorAll<HTMLElement>("[data-write-paragraph]")).map((paragraph) => paragraph.innerText.trim()).filter(Boolean),
+    railClass: section.querySelector<HTMLSelectElement>("[data-write-section-rail-class]")?.value || "",
+    railImage: section.querySelector<HTMLSelectElement>("[data-write-section-rail-mode]")?.value === "custom"
+      ? section.querySelector<HTMLInputElement>("[data-write-section-rail-image]")?.value.trim() || ""
+      : "",
+    hideRailImage: section.querySelector<HTMLSelectElement>("[data-write-section-rail-mode]")?.value === "none"
   }));
 
   const selectedSubcategory = (): HTMLOptionElement | null =>
@@ -460,15 +544,17 @@ if (writer) {
     const heroImage = metaValue("heroImage");
     const useCustomImage = imageMode === "custom" && heroImage.length > 0;
     const isHidden = imageMode === "none";
-    const railClass = metaValue("railClass") || heroClass;
-    const railImageMode = metaValue("railImageMode") || "visual";
-    const railImage = metaValue("railImage");
+    const firstSection = sections()[0];
+    const railClass = firstSection?.querySelector<HTMLSelectElement>("[data-write-section-rail-class]")?.value || metaValue("railClass") || heroClass;
+    const railImageMode = firstSection?.querySelector<HTMLSelectElement>("[data-write-section-rail-mode]")?.value || metaValue("railImageMode") || "visual";
+    const railImage = firstSection?.querySelector<HTMLInputElement>("[data-write-section-rail-image]")?.value.trim() || metaValue("railImage");
     const useCustomRailImage = railImageMode === "custom" && railImage.length > 0;
 
     heroShell?.classList.toggle("is-hidden", isHidden);
     imageUrlField?.classList.toggle("is-visible", imageMode === "custom");
     rail?.classList.toggle("is-rail-image-hidden", railImageMode === "none");
     railImageUrlField?.classList.toggle("is-visible", railImageMode === "custom");
+    updateSectionRailControlState();
 
     if (heroPreview) {
       setImageBlockVisual(heroPreview, heroClass, useCustomImage ? heroImage : "");
@@ -502,7 +588,10 @@ if (writer) {
         paragraphs: {
           ko: section.paragraphs.length > 0 ? section.paragraphs : previous?.paragraphs.ko || [""],
           en: previous?.paragraphs.en || section.paragraphs.map(() => "TODO: English paragraph")
-        }
+        },
+        railClass: section.railClass || previous?.railClass || metaValue("railClass") || base.railClass || base.heroClass,
+        railImage: section.railImage,
+        hideRailImage: section.hideRailImage
       };
     });
 
@@ -544,6 +633,38 @@ if (writer) {
 
   const generateArticleObject = (): string => {
     return articleCode(formArticle());
+  };
+
+  const downloadArticlesFile = (): void => {
+    const blob = new Blob([articlesArrayCode()], { type: "text/typescript" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "articles.ts";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const saveArticlesToProject = async (): Promise<void> => {
+    adminArticles[currentIndex] = formArticle();
+    saveCollection("저장 중...");
+
+    try {
+      const response = await fetch("/api/admin/articles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ articles: adminArticles })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Save failed: ${response.status}`);
+      }
+
+      setStatus("src/content/magazine.ts에 저장했습니다. export 후 push하면 반영됩니다.");
+    } catch {
+      downloadArticlesFile();
+      setStatus("정적 페이지에서는 폴더 저장이 불가해 articles.ts를 내려받았습니다. 로컬 서버에서 열면 폴더에 저장됩니다.");
+    }
   };
 
   const saveCollection = (message = "자동 저장됨"): void => {
@@ -623,7 +744,13 @@ if (writer) {
 
     if (container) {
       container.querySelectorAll("[data-write-section]").forEach((section) => section.remove());
-      article.sections.forEach((section) => container.append(createSection(section.heading.ko, section.paragraphs.ko)));
+      article.sections.forEach((section) => container.append(createSection(
+        section.heading.ko,
+        section.paragraphs.ko,
+        section.railClass || article.railClass || article.heroClass,
+        section.railImage || "",
+        Boolean(section.hideRailImage)
+      )));
     }
 
     renderAdminList();
@@ -814,15 +941,14 @@ if (writer) {
       return;
     }
 
+    if (target.closest("[data-admin-save-file]")) {
+      await saveArticlesToProject();
+      return;
+    }
+
     if (target.closest("[data-admin-download-all]")) {
       adminArticles[currentIndex] = formArticle();
-      const blob = new Blob([articlesArrayCode()], { type: "text/typescript" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "articles.ts";
-      link.click();
-      URL.revokeObjectURL(url);
+      downloadArticlesFile();
       saveCollection("전체 파일을 내려받았습니다.");
     }
   });
@@ -1008,6 +1134,7 @@ if (articleRail && articleRailNo && articleRailTitle && articleRailText && artic
     articleRailNo.textContent = section.dataset.railNo || "";
     articleRailTitle.textContent = section.dataset.railTitle || "";
     articleRailText.textContent = section.dataset.railText || "";
+    articleRail.classList.toggle("is-rail-image-hidden", section.dataset.railImageHidden === "true");
 
     if (articleRailVisual) {
       const visualClass = section.dataset.railVisual;
