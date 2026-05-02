@@ -35,6 +35,15 @@ const writeLocalizedPages = async (locale: Locale): Promise<void> => {
   await writeHtml(`${prefix}archive/index.html`, renderArchivePage(site, articles, locale, "/archive"));
 
   await Promise.all(
+    site.categories.map((category) =>
+      writeHtml(
+        `${prefix}archive/${category.key}/index.html`,
+        renderArchivePage(site, articles, locale, `/archive/${category.key}/`, category.key)
+      )
+    )
+  );
+
+  await Promise.all(
     articles.map((article) =>
       writeHtml(
         `${prefix}articles/${article.slug}/index.html`,

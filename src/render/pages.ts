@@ -96,6 +96,9 @@ const withLocale = (path: string, locale: Locale): string => {
 
 const articleHref = (article: Article, locale: Locale): string => withLocale(`/articles/${article.slug}`, locale);
 
+const archiveHref = (locale: Locale, category?: PrimaryCategory): string =>
+  withLocale(category ? `/archive/${category}/` : "/archive", locale);
+
 const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, locale: Locale): string =>
   text(categories.find((category) => category.key === key)?.label ?? { ko: key, en: key }, locale);
 
@@ -115,7 +118,7 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
   const categoryLinks = site.categories
     .map(
       (category) => `
-        <a href="${withLocale(`/archive?category=${category.key}`, locale)}">
+        <a href="${archiveHref(locale, category.key)}">
           <span>${escapeHtml(text(category.label, locale))}</span>
           <small>${escapeHtml(category.subcategories.map((item) => text(item, locale)).join(" / "))}</small>
         </a>`
@@ -146,7 +149,7 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
       </nav>
 
       <div class="header-tools">
-        <a href="${withLocale("/archive", locale)}">${escapeHtml(labels.archive)}</a>
+        <a href="${archiveHref(locale)}">${escapeHtml(labels.archive)}</a>
         ${renderLanguageSwitch(currentPath, locale)}
         <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-button>
           ${escapeHtml(labels.menu)}
@@ -156,7 +159,7 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
 
     <div class="mobile-menu" id="mobile-menu" data-mobile-menu>
       ${categoryLinks}
-      <a href="${withLocale("/archive", locale)}">${escapeHtml(labels.archive)}</a>
+      <a href="${archiveHref(locale)}">${escapeHtml(labels.archive)}</a>
       <a href="${withLocale("/#notes", locale)}">${escapeHtml(labels.notes)}</a>
       <a href="${withLocale("/#about", locale)}">${escapeHtml(labels.about)}</a>
       ${renderLanguageSwitch(currentPath, locale)}
@@ -176,31 +179,6 @@ const renderKeywords = (keywords: string[]): string => `
   <div class="issue-strip" aria-label="Magazine keywords">
     ${keywords.map((keyword) => `<span>${escapeHtml(keyword)}</span>`).join("")}
   </div>`;
-
-const renderCategoryIndex = (categories: CategoryDefinition[], articles: Article[], locale: Locale): string => `
-  <section class="departments section-pad" aria-labelledby="category-index-title">
-    <div class="section-head" data-reveal>
-      <p class="kicker">${escapeHtml(ui[locale].categoryIndex)}</p>
-      <h2 id="category-index-title">${locale === "ko" ? "이슈를 읽는 네 개의 입구." : "Four entries into the issue."}</h2>
-    </div>
-    <div class="department-list">
-      ${categories
-        .map((category, index) => {
-          const count = articles.filter((article) => article.category === category.key).length;
-          return `
-            <a class="department-card" href="${withLocale(`/archive?category=${category.key}`, locale)}" data-reveal>
-              <span class="department-top">
-                <span class="department-no">${String(index + 1).padStart(2, "0")}</span>
-                <span class="department-meta">${count} ${locale === "ko" ? "편" : "articles"}</span>
-              </span>
-              <span class="department-name">${escapeHtml(text(category.label, locale))}</span>
-              <span class="department-desc">${escapeHtml(text(category.description, locale))}</span>
-              ${renderSubcategoryChips(category, locale)}
-            </a>`;
-        })
-        .join("")}
-    </div>
-  </section>`;
 
 const renderNotes = (notes: Note[], locale: Locale): string => notes
   .map(
@@ -233,44 +211,50 @@ const renderArchiveRows = (articleList: Article[], site: SiteContent, locale: Lo
   })
   .join("");
 
-const renderArchiveBoard = (site: SiteContent, articleList: Article[], locale: Locale, includeFilters: boolean): string => {
-  const firstArticle = articleList[0];
+const renderArchiveBoard = (
+  site: SiteContent,
+  articleList: Article[],
+  locale: Locale,
+  includeFilters: boolean,
+  selectedCategory?: PrimaryCategory
+): string => {
+  const selectedCategoryDefinition = selectedCategory ? site.categories.find((category) => category.key === selectedCategory) : undefined;
+  const visibleArticles = selectedCategoryDefinition ? articleList.filter((article) => article.category === selectedCategoryDefinition.key) : articleList;
+  const firstArticle = visibleArticles[0] ?? articleList[0];
   const firstLabel = `${categoryLabel(site.categories, firstArticle.category, locale)} / ${text(firstArticle.subcategory, locale)}`;
+  const activeLabel = selectedCategoryDefinition ? text(selectedCategoryDefinition.label, locale) : ui[locale].all;
   const filters = includeFilters
     ? `<div class="filter-shell" data-filter-shell>
       <div class="filter-row" aria-label="Archive category filter">
-        <button type="button" class="filter-button is-active" data-filter="all" data-filter-label="${escapeHtml(ui[locale].all)}" aria-pressed="true">
+        <a class="filter-button ${selectedCategoryDefinition ? "" : "is-active"}" href="${archiveHref(locale)}"${selectedCategoryDefinition ? "" : " aria-current=\"page\""}>
           <span>${escapeHtml(ui[locale].all)}</span>
           <small>${articleList.length}</small>
-        </button>
+        </a>
         ${site.categories
           .map((category) => {
             const count = articleList.filter((article) => article.category === category.key).length;
             const label = text(category.label, locale);
-            return `<button type="button" class="filter-button" data-filter="${category.key}" data-filter-label="${escapeHtml(label)}" aria-pressed="false">
+            const isActive = selectedCategoryDefinition?.key === category.key;
+            return `<a class="filter-button ${isActive ? "is-active" : ""}" href="${archiveHref(locale, category.key)}"${isActive ? " aria-current=\"page\"" : ""}>
               <span>${escapeHtml(label)}</span>
               <small>${count}</small>
-            </button>`;
+            </a>`;
           })
           .join("")}
       </div>
       <div class="filter-detail" aria-live="polite">
-        <div class="filter-panel is-active" data-filter-panel="all">
-          <strong>${escapeHtml(locale === "ko" ? "전체 디파트먼트" : "All Departments")}</strong>
-          <p>${escapeHtml(locale === "ko" ? "네 개의 카테고리와 모든 글을 한 번에 봅니다." : "Scan every article across the four departments.")}</p>
-        </div>
-        ${site.categories
-          .map(
-            (category) => `
-              <div class="filter-panel" data-filter-panel="${category.key}" hidden>
-                <strong>${escapeHtml(text(category.label, locale))}</strong>
-                <p>${escapeHtml(text(category.description, locale))}</p>
-                ${renderSubcategoryChips(category, locale)}
-              </div>`
-          )
-          .join("")}
+        ${selectedCategoryDefinition
+          ? `<div class="filter-panel is-active">
+              <strong>${escapeHtml(text(selectedCategoryDefinition.label, locale))}</strong>
+              <p>${escapeHtml(text(selectedCategoryDefinition.description, locale))}</p>
+              ${renderSubcategoryChips(selectedCategoryDefinition, locale)}
+            </div>`
+          : `<div class="filter-panel is-active">
+              <strong>${escapeHtml(locale === "ko" ? "전체 디파트먼트" : "All Departments")}</strong>
+              <p>${escapeHtml(locale === "ko" ? "네 개의 카테고리와 모든 글을 한 번에 봅니다. 위 카테고리를 누르면 해당 목록과 하위 카테고리만 남습니다." : "Scan every article across the four departments. Choose a category above to show its list and subcategories.")}</p>
+            </div>`}
       </div>
-      <p class="filter-status" data-filter-status>${articleList.length} ${escapeHtml(locale === "ko" ? "개의 글 표시 중" : "articles showing")}</p>
+      <p class="filter-status">${escapeHtml(activeLabel)} · ${visibleArticles.length} ${escapeHtml(locale === "ko" ? "개의 글 표시 중" : "articles showing")}</p>
     </div>`
     : "";
 
@@ -278,7 +262,7 @@ const renderArchiveBoard = (site: SiteContent, articleList: Article[], locale: L
     ${filters}
     <div class="archive-board" data-archive-board data-reveal>
       <div class="archive-list" data-archive-list>
-        ${renderArchiveRows(articleList, site, locale)}
+        ${renderArchiveRows(visibleArticles, site, locale)}
       </div>
 
       <aside class="archive-preview" aria-label="Article preview">
@@ -356,8 +340,6 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
       </div>
     </section>
 
-    ${renderCategoryIndex(site.categories, articleList, locale)}
-
     <section class="issue-river section-pad" id="features" aria-labelledby="features-title">
       <div class="section-head" data-reveal>
         <p class="kicker">${escapeHtml(labels.selectedStories)}</p>
@@ -390,22 +372,6 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
             )
             .join("")}
         </div>
-      </div>
-    </section>
-
-    <section class="visual-edit section-pad" aria-label="Visual edit">
-      <div class="visual-edit-grid">
-        ${articleList
-          .slice(0, 6)
-          .map(
-            (article) => `
-              <a href="${articleHref(article, locale)}" data-reveal>
-                <span class="image-block ${article.heroClass}"></span>
-                <small>${escapeHtml(categoryLabel(site.categories, article.category, locale))}</small>
-                <strong>${escapeHtml(text(article.title, locale))}</strong>
-              </a>`
-          )
-          .join("")}
       </div>
     </section>
 
@@ -536,22 +502,31 @@ export const renderArticlePage = (
   });
 };
 
-export const renderArchivePage = (site: SiteContent, articleList: Article[], locale: Locale, currentPath: string): string => {
+export const renderArchivePage = (
+  site: SiteContent,
+  articleList: Article[],
+  locale: Locale,
+  currentPath: string,
+  selectedCategory?: PrimaryCategory
+): string => {
   const labels = ui[locale];
+  const selectedCategoryDefinition = selectedCategory ? site.categories.find((category) => category.key === selectedCategory) : undefined;
+  const archiveTitle = selectedCategoryDefinition ? text(selectedCategoryDefinition.label, locale) : labels.fullArchive;
+  const archiveLead = selectedCategoryDefinition ? text(selectedCategoryDefinition.description, locale) : labels.archiveLead;
   const body = `
     <section class="archive archive-page section-pad" aria-labelledby="archive-title">
       <div class="archive-heading" data-reveal>
         <div>
-          <p class="kicker">Full Archive</p>
-          <h1 id="archive-title">${escapeHtml(labels.fullArchive)}</h1>
+          <p class="kicker">${escapeHtml(selectedCategoryDefinition ? "Department Archive" : "Full Archive")}</p>
+          <h1 id="archive-title">${escapeHtml(archiveTitle)}</h1>
         </div>
-        <p>${escapeHtml(labels.archiveLead)}</p>
+        <p>${escapeHtml(archiveLead)}</p>
       </div>
 
-      ${renderArchiveBoard(site, articleList, locale, true)}
+      ${renderArchiveBoard(site, articleList, locale, true, selectedCategory)}
     </section>`;
 
-  return renderLayout({ title: `Archive | ${text(site.title, locale)}`, description: text(site.description, locale), body, locale, currentPath, site });
+  return renderLayout({ title: `${archiveTitle} | ${text(site.title, locale)}`, description: archiveLead, body, locale, currentPath, site });
 };
 
 export const renderNotFoundPage = (site: SiteContent, locale: Locale, currentPath: string): string => {

@@ -2,7 +2,7 @@ import express from "express";
 import path from "node:path";
 import { articles, site } from "./content/magazine";
 import { renderArchivePage, renderArticlePage, renderHomePage, renderNotFoundPage } from "./render/pages";
-import type { Locale } from "./types";
+import type { Locale, PrimaryCategory } from "./types";
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
@@ -19,6 +19,9 @@ const getCurrentPath = (originalUrl: string): string => {
   return `${pathname}${query ? `?${query}` : ""}${url.hash}`;
 };
 
+const isPrimaryCategory = (value: unknown): value is PrimaryCategory =>
+  typeof value === "string" && site.categories.some((category) => category.key === value);
+
 app.use(express.static(path.join(projectRoot, "public")));
 app.use("/client.js", express.static(path.join(projectRoot, "dist", "client.js")));
 
@@ -27,9 +30,18 @@ app.get(["/", "/en", "/en/"], (request, response) => {
   response.send(renderHomePage(site, articles, locale, getCurrentPath(request.originalUrl)));
 });
 
-app.get(["/archive", "/en/archive"], (request, response) => {
+app.get(["/archive", "/archive/:category", "/en/archive", "/en/archive/:category"], (request, response) => {
   const locale = getLocale(request.path, request.query.lang);
-  response.send(renderArchivePage(site, articles, locale, getCurrentPath(request.originalUrl)));
+  const pathCategory = request.params.category;
+  const queryCategory = request.query.category;
+  const selectedCategory = isPrimaryCategory(pathCategory) ? pathCategory : isPrimaryCategory(queryCategory) ? queryCategory : undefined;
+
+  if (pathCategory && !selectedCategory) {
+    response.status(404).send(renderNotFoundPage(site, locale, getCurrentPath(request.originalUrl)));
+    return;
+  }
+
+  response.send(renderArchivePage(site, articles, locale, getCurrentPath(request.originalUrl), selectedCategory));
 });
 
 app.get(["/articles/:slug", "/en/articles/:slug"], (request, response) => {

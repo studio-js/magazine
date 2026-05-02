@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Choose a category to refine the list and reveal its subcategories. The selected state updates immediately on desktop and mobile." />
-    <title>All Articles | The Thing</title>
+    <meta name="description" content="Contemporary artists, exhibitions, images, sound, and experiments in media." />
+    <title>Art | The Thing</title>
     <link rel="stylesheet" href="/magazine/styles.css" />
     <script src="/magazine/client.js" defer></script>
   </head>
@@ -41,8 +41,8 @@
         <a href="/magazine/en/archive">Archive</a>
         
   <div class="language-switch" aria-label="Language switcher">
-    <a class="" href="/magazine/archive">KR</a>
-    <a class="is-active" href="/magazine/en/archive">EN</a>
+    <a class="" href="/magazine/archive/art/">KR</a>
+    <a class="is-active" href="/magazine/en/archive/art/">EN</a>
   </div>
         <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-button>
           Menu
@@ -73,8 +73,8 @@
       <a href="/magazine/en/#about">About</a>
       
   <div class="language-switch" aria-label="Language switcher">
-    <a class="" href="/magazine/archive">KR</a>
-    <a class="is-active" href="/magazine/en/archive">EN</a>
+    <a class="" href="/magazine/archive/art/">KR</a>
+    <a class="is-active" href="/magazine/en/archive/art/">EN</a>
   </div>
     </div>
 
@@ -82,20 +82,20 @@
     <section class="archive archive-page section-pad" aria-labelledby="archive-title">
       <div class="archive-heading" data-reveal>
         <div>
-          <p class="kicker">Full Archive</p>
-          <h1 id="archive-title">All Articles</h1>
+          <p class="kicker">Department Archive</p>
+          <h1 id="archive-title">Art</h1>
         </div>
-        <p>Choose a category to refine the list and reveal its subcategories. The selected state updates immediately on desktop and mobile.</p>
+        <p>Contemporary artists, exhibitions, images, sound, and experiments in media.</p>
       </div>
 
       
     <div class="filter-shell" data-filter-shell>
       <div class="filter-row" aria-label="Archive category filter">
-        <a class="filter-button is-active" href="/magazine/en/archive" aria-current="page">
+        <a class="filter-button " href="/magazine/en/archive">
           <span>All</span>
           <small>8</small>
         </a>
-        <a class="filter-button " href="/magazine/en/archive/art/">
+        <a class="filter-button is-active" href="/magazine/en/archive/art/" aria-current="page">
               <span>Art</span>
               <small>2</small>
             </a><a class="filter-button " href="/magazine/en/archive/tech/">
@@ -111,11 +111,15 @@
       </div>
       <div class="filter-detail" aria-live="polite">
         <div class="filter-panel is-active">
-              <strong>All Departments</strong>
-              <p>Scan every article across the four departments. Choose a category above to show its list and subcategories.</p>
+              <strong>Art</strong>
+              <p>Contemporary artists, exhibitions, images, sound, and experiments in media.</p>
+              
+  <span class="subcategory-chips" aria-label="Subcategories">
+    <span>Exhibitions</span><span>Artists</span><span>Images</span><span>Sound</span>
+  </span>
             </div>
       </div>
-      <p class="filter-status">All · 8 articles showing</p>
+      <p class="filter-status">Art · 2 articles showing</p>
     </div>
     <div class="archive-board" data-archive-board data-reveal>
       <div class="archive-list" data-archive-list>
@@ -143,78 +147,6 @@
         <span class="archive-date">Apr 26, 2026</span>
         <span class="archive-title">The Desk Is the Artist&#39;s Smallest Map</span>
         <span class="archive-category">Art / Artists</span>
-      </a>
-      <a
-        href="/magazine/en/articles/ai-interface-without-performance"
-        class="archive-row"
-        data-preview-class="image-signal"
-        data-preview-kicker="Tech / AI"
-        data-preview-title="An AI Interface Without Performance"
-        data-category="tech"
-      >
-        <span class="archive-date">Apr 18, 2026</span>
-        <span class="archive-title">An AI Interface Without Performance</span>
-        <span class="archive-category">Tech / AI</span>
-      </a>
-      <a
-        href="/magazine/en/articles/data-dashboard-as-reading-room"
-        class="archive-row"
-        data-preview-class="image-system"
-        data-preview-kicker="Tech / Systems"
-        data-preview-title="Making a Data Dashboard Feel Like a Reading Room"
-        data-category="tech"
-      >
-        <span class="archive-date">Apr 08, 2026</span>
-        <span class="archive-title">Making a Data Dashboard Feel Like a Reading Room</span>
-        <span class="archive-category">Tech / Systems</span>
-      </a>
-      <a
-        href="/magazine/en/articles/brand-system-with-room-to-breathe"
-        class="archive-row"
-        data-preview-class="image-interface"
-        data-preview-kicker="Design / Brand"
-        data-preview-title="A Brand System With Room to Breathe"
-        data-category="design"
-      >
-        <span class="archive-date">Mar 30, 2026</span>
-        <span class="archive-title">A Brand System With Room to Breathe</span>
-        <span class="archive-category">Design / Brand</span>
-      </a>
-      <a
-        href="/magazine/en/articles/chair-prototype-and-its-shadow"
-        class="archive-row"
-        data-preview-class="image-material"
-        data-preview-kicker="Design / Product"
-        data-preview-title="A Chair Prototype and Its Shadow"
-        data-category="design"
-      >
-        <span class="archive-date">Mar 21, 2026</span>
-        <span class="archive-title">A Chair Prototype and Its Shadow</span>
-        <span class="archive-category">Design / Product</span>
-      </a>
-      <a
-        href="/magazine/en/articles/slow-thinking-in-fast-tools"
-        class="archive-row"
-        data-preview-class="image-thought"
-        data-preview-kicker="Philosophy / Time"
-        data-preview-title="Thinking Slowly Inside Fast Tools"
-        data-category="philosophy"
-      >
-        <span class="archive-date">Mar 12, 2026</span>
-        <span class="archive-title">Thinking Slowly Inside Fast Tools</span>
-        <span class="archive-category">Philosophy / Time</span>
-      </a>
-      <a
-        href="/magazine/en/articles/ethics-of-default-settings"
-        class="archive-row"
-        data-preview-class="image-library"
-        data-preview-kicker="Philosophy / Ethics"
-        data-preview-title="The Ethics of Default Settings"
-        data-category="philosophy"
-      >
-        <span class="archive-date">Mar 04, 2026</span>
-        <span class="archive-title">The Ethics of Default Settings</span>
-        <span class="archive-category">Philosophy / Ethics</span>
       </a>
       </div>
 
