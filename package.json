@@ -1,0 +1,32 @@
+{
+  "name": "magazine",
+  "version": "1.0.0",
+  "description": "Modern minimal web magazine built with Node.js and TypeScript.",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "dev": "npm run build && tsx watch src/server.ts",
+    "export:static": "npm run build && tsx src/export-static.ts",
+    "start": "node dist/server.js"
+  },
+  "keywords": [
+    "web-magazine",
+    "typescript",
+    "node",
+    "editorial"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@fontsource/jost": "^5.2.8",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.6.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}
