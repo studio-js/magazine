@@ -20,10 +20,10 @@ const ui = {
     all: "전체",
     read: "읽기",
     readFeature: "대표 글 읽기",
-    selectedStories: "선별한 글",
+    selectedStories: "SELECTED STORIES",
     categoryIndex: "카테고리 인덱스",
     latest: "최근 발행",
-    editorNotes: "에디터 노트",
+    editorNotes: "EDITOR'S NOTES",
     aboutTitle: "The Thing은 서로 다른 분야를 하나의 편집 리듬으로 묶는 디지털 저널입니다.",
     aboutBody:
       "예술의 이미지, 테크의 시스템, 디자인의 구조, 철학의 질문을 한 화면 안에서 연결합니다. 빠른 피드보다 분류의 밀도와 읽는 순서를 먼저 설계합니다.",
@@ -109,7 +109,7 @@ const archiveHref = (locale: Locale, category?: PrimaryCategory, subcategory?: S
 const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, locale: Locale): string =>
   text(categories.find((category) => category.key === key)?.label ?? { ko: key, en: key }, locale);
 
-const assetVersion = "20260503-nav-taxonomy-pass";
+const assetVersion = "20260503-nav-rail-hold-pass";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -347,13 +347,11 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
       <div class="cover-grid">
         <div class="cover-copy" data-reveal>
           <div class="cover-edition" aria-label="Publication context">
-            <span>${escapeHtml(formatDate(featuredArticle.date, locale))}</span>
-            <span>${escapeHtml(text(site.month, locale))}</span>
-            <span>${escapeHtml(locale === "ko" ? "예술 / 테크 / 디자인 / 뷰티 / 철학" : "Art / Tech / Design / Beauty / Philosophy")}</span>
+            <span>${escapeHtml(locale === "ko" ? `${text(site.month, locale)}호` : `${text(site.month, locale)} Issue`)}</span>
           </div>
           <p class="kicker">${escapeHtml(text(site.heroKicker, locale))}</p>
           <h1 id="hero-title">${escapeHtml(text(site.heroTitle, locale))}</h1>
-          <p class="cover-deck">${escapeHtml(locale === "ko" ? "작업실의 사물, 화면의 질서, 브랜드의 숨, 느린 판단의 감각을 하나의 편집 표면 위에 놓았습니다." : "Objects in studios, order on screens, the breath of brands, and the texture of slower judgment gathered on one editorial surface.")}</p>
+          <p class="cover-deck">${escapeHtml(locale === "ko" ? "이미지, 인터페이스, 브랜드, 루틴, 판단의 감각을 하나의 편집 표면 위에 놓았습니다." : "Images, interfaces, brands, routines, and judgment gathered on one editorial surface.")}</p>
         </div>
 
         <a class="cover-art" href="${articleHref(featuredArticle, locale)}" aria-label="${escapeHtml(labels.readFeature)}" data-reveal data-action-card data-scroll-motion data-feature-card>
@@ -387,18 +385,18 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
         <p class="kicker">${escapeHtml(locale === "ko" ? "Editor’s Letter" : "Editor’s Letter")}</p>
         <h2>${escapeHtml(locale === "ko" ? "이미지가 먼저 말하고, 문장은 늦게 도착한다." : "Images speak first, and sentences arrive slowly.")}</h2>
       </div>
-      <p class="brief-text" data-reveal>${escapeHtml(locale === "ko" ? "조각가의 작업대, 조용한 AI 인터페이스, 데이터 화면의 독서성, 숨 쉴 공간이 있는 브랜드 시스템을 나란히 놓습니다. 빠르게 소비되는 주제를 느린 시선으로 다시 배열하는 것이 이곳의 방식입니다." : "The sculptor's desk, quiet AI interfaces, readable data screens, and breathable brand systems are placed side by side. Fast subjects are rearranged for slower attention.")}</p>
+      <p class="brief-text" data-reveal>${escapeHtml(locale === "ko" ? "작업실의 이미지, 조용한 AI 인터페이스, 읽히는 데이터 화면, 숨 쉴 공간이 있는 브랜드 시스템, 피부와 향의 루틴을 나란히 놓습니다. 빠르게 소비되는 주제를 느린 시선으로 다시 배열하는 것이 이곳의 방식입니다." : "Studio images, quiet AI interfaces, readable data screens, breathable brand systems, and routines of skin and scent are placed side by side. Fast subjects are rearranged for slower attention.")}</p>
       <div class="brief-index" data-reveal>
         <a href="${withLocale("/issues", locale)}">
-          <span>${escapeHtml(locale === "ko" ? "이슈" : "Issue")}</span>
+          <span>Issue</span>
           <strong>${escapeHtml(`${site.issueProject.number} · ${text(site.issueProject.title, locale)}`)}</strong>
         </a>
         <a href="${archiveHref(locale)}">
-          <span>${escapeHtml(labels.archive)}</span>
+          <span>Archive</span>
           <strong>${escapeHtml(locale === "ko" ? "분야별 글을 중복 없이 좁혀 읽기" : "Browse departments without repeated labels")}</strong>
         </a>
         <a href="${withLocale("/#notes", locale)}">
-          <span>${escapeHtml(labels.notes)}</span>
+          <span>Notes</span>
           <strong>${escapeHtml(locale === "ko" ? "편집면을 지나는 짧은 관찰" : "Short notes through the editorial surface")}</strong>
         </a>
       </div>
@@ -407,8 +405,8 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
     <section class="departments section-pad" aria-labelledby="departments-title" data-scroll-section>
       <div class="section-head" data-reveal>
         <p class="kicker">Routes</p>
-        <h2 id="departments-title">${escapeHtml(locale === "ko" ? "네 개의 경로로 나뉘는 하나의 편집면." : "One editorial surface, divided into four routes.")}</h2>
-        <p>${escapeHtml(locale === "ko" ? "아래 카드는 단순한 분류표가 아니라 어떤 순서로 읽을지 제안하는 경로입니다. 카드 위에 머무르면 각 분야의 중심 정보가 드러납니다." : "These cards are not a taxonomy table, but suggested reading routes. Hovering over each one reveals the core information of each field.")}</p>
+        <h2 id="departments-title">${escapeHtml(locale === "ko" ? "다섯 개의 경로가 하나의 편집면으로 모입니다." : "Five routes gather into one editorial surface.")}</h2>
+        <p>${escapeHtml(locale === "ko" ? "예술, 테크, 디자인, 뷰티, 철학은 고정된 분류표보다 읽는 순서를 제안하는 입구에 가깝습니다. 각 카드에 머무르면 해당 분야의 하위 경로와 현재 글의 밀도가 드러납니다." : "Art, tech, design, beauty, and philosophy work less like fixed bins than entry points for reading. Hovering over each card reveals its subroutes and current editorial density.")}</p>
       </div>
       <div class="department-list">
         ${renderDepartmentCards(site, articleList, locale)}
@@ -692,7 +690,7 @@ export const renderArchivePage = (
       : labels.fullArchive;
   const archiveLead = selectedCategoryDefinition ? text(selectedCategoryDefinition.description, locale) : labels.archiveLead;
   const archiveKicker = selectedCategoryDefinition && selectedSubcategoryDefinition
-    ? `${text(selectedCategoryDefinition.label, locale)} ${locale === "ko" ? "아카이브" : "Archive"}`
+    ? "Subcategory Archive"
     : selectedCategoryDefinition
       ? "Department Archive"
       : "Full Archive";

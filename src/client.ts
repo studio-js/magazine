@@ -67,6 +67,64 @@ if (menuButton && mobileMenu) {
   });
 }
 
+const desktopNav = document.querySelector<HTMLElement>(".site-header .nav");
+const desktopNavItems = desktopNav
+  ? Array.from(desktopNav.querySelectorAll<HTMLElement>(":scope > .nav-item"))
+  : [];
+
+if (desktopNav && desktopNavItems.length > 0) {
+  let navCloseTimer = 0;
+
+  const clearNavCloseTimer = (): void => {
+    if (navCloseTimer !== 0) {
+      window.clearTimeout(navCloseTimer);
+      navCloseTimer = 0;
+    }
+  };
+
+  const closeSubnav = (): void => {
+    clearNavCloseTimer();
+    desktopNav.classList.remove("is-submenu-active");
+    desktopNavItems.forEach((item) => item.classList.remove("is-submenu-open"));
+  };
+
+  const openSubnav = (item: HTMLElement): void => {
+    clearNavCloseTimer();
+    desktopNav.classList.add("is-submenu-active");
+    desktopNavItems.forEach((navItem) => navItem.classList.toggle("is-submenu-open", navItem === item));
+  };
+
+  const scheduleSubnavClose = (): void => {
+    clearNavCloseTimer();
+    navCloseTimer = window.setTimeout(closeSubnav, 220);
+  };
+
+  desktopNavItems.forEach((item) => {
+    const submenu = item.querySelector<HTMLElement>(".nav-submenu");
+
+    item.addEventListener("pointerenter", () => openSubnav(item));
+    item.addEventListener("pointerleave", scheduleSubnavClose);
+    item.addEventListener("focusin", () => openSubnav(item));
+    item.addEventListener("focusout", (event) => {
+      const nextTarget = event.relatedTarget;
+
+      if (!(nextTarget instanceof Node) || !item.contains(nextTarget)) {
+        scheduleSubnavClose();
+      }
+    });
+
+    submenu?.addEventListener("pointerenter", () => openSubnav(item));
+    submenu?.addEventListener("pointerleave", scheduleSubnavClose);
+  });
+
+  desktopNav.addEventListener("pointerleave", scheduleSubnavClose);
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeSubnav();
+    }
+  });
+}
+
 let scrollFrame = 0;
 
 const updateScrollState = (): void => {

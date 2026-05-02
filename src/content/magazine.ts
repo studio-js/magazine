@@ -749,8 +749,8 @@ export const site: SiteContent = {
     en: "When objects become screens, and screens return as thought."
   },
   heroLead: {
-    ko: "조각가의 작업대에서 시작해 AI 인터페이스, 데이터 대시보드, 브랜드 시스템, 기본값의 윤리로 이동합니다. 서로 다른 주제를 하나의 느린 호흡으로 읽습니다.",
-    en: "It begins at a sculptor's desk and moves through AI interfaces, data dashboards, brand systems, and the ethics of defaults. Different subjects are read in one slower rhythm."
+    ko: "작업실의 표면에서 시작해 인터페이스, 데이터 화면, 브랜드 시스템, 뷰티 루틴, 기본값의 윤리로 이동합니다. 서로 다른 주제를 하나의 느린 호흡으로 읽습니다.",
+    en: "It begins on the studio surface and moves through interfaces, data screens, brand systems, beauty routines, and the ethics of defaults. Different subjects are read in one slower rhythm."
   },
   keywords: {
     ko: ["표면", "간격", "반복", "그림자", "기본값", "느린 판단"],
