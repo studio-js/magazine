@@ -46,8 +46,8 @@
   --accent: #9b3f24;
   --moss: #dfe7dc;
   --sky: #dce6ea;
-  --line: rgba(17, 16, 13, 0.12);
-  --shadow: 0 1.5rem 4.5rem rgba(17, 16, 13, 0.1);
+  --line: rgba(17, 16, 13, 0.09);
+  --shadow: 0 1rem 3rem rgba(17, 16, 13, 0.07);
   --max: 1560px;
   --side: clamp(1.15rem, 4vw, 5rem);
   --font-latin: "Jost Local", "Futura", "Avenir Next", sans-serif;
@@ -125,18 +125,18 @@ button {
   top: 0;
   z-index: 60;
   display: grid;
-  grid-template-columns: minmax(12rem, 0.25fr) minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: clamp(0.75rem, 1.6vw, 1.5rem);
-  min-height: 5.1rem;
-  padding: 0.75rem var(--side);
+  gap: clamp(1rem, 2vw, 2rem);
+  min-height: 4.4rem;
+  padding: 0.65rem var(--side);
   background: rgba(244, 240, 231, 0.78);
   backdrop-filter: blur(22px);
   transition: background 220ms ease, box-shadow 220ms ease, min-height 220ms ease;
 }
 
 .site-header.is-scrolled {
-  min-height: 4.35rem;
+  min-height: 3.85rem;
   background: rgba(244, 240, 231, 0.94);
   box-shadow: 0 1px 0 var(--line), 0 1.25rem 2.5rem rgba(17, 16, 13, 0.06);
 }
@@ -144,75 +144,66 @@ button {
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.72rem;
+  gap: 0.62rem;
   width: fit-content;
 }
 
 .brand-mark {
   display: grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  background: var(--night);
-  color: var(--bone);
-  font-size: 1.18rem;
+  width: 1.85rem;
+  height: 1.85rem;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: var(--ink);
+  font-size: 0.84rem;
   font-weight: 500;
   line-height: 1;
 }
 
 .brand-text {
-  font-size: clamp(1.4rem, 2vw, 2.2rem);
+  font-size: clamp(1.08rem, 1.45vw, 1.55rem);
   font-weight: 500;
-  letter-spacing: -0.07em;
-  line-height: 0.95;
+  letter-spacing: -0.045em;
+  line-height: 1;
   white-space: nowrap;
 }
 
 .nav {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.35rem;
+  display: flex;
+  justify-content: center;
+  gap: clamp(1.25rem, 4.2vw, 5.5rem);
+  min-width: 0;
 }
 
 .nav a {
-  display: grid;
-  align-content: center;
+  display: inline-flex;
+  align-items: center;
   min-width: 0;
-  min-height: 3.15rem;
-  padding: 0.62rem 0.82rem;
-  border-radius: 999px;
-  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+  min-height: auto;
+  padding: 0.45rem 0;
+  border-radius: 0;
+  transition: color 180ms ease, transform 180ms ease;
 }
 
 .nav span {
   overflow: hidden;
-  font-size: clamp(0.95rem, 1.15vw, 1.18rem);
+  font-size: 0.72rem;
   font-weight: 500;
-  letter-spacing: -0.04em;
+  letter-spacing: 0.14em;
   line-height: 1;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.nav small {
-  overflow: hidden;
-  color: var(--soft);
-  font-size: 0.61rem;
-  letter-spacing: 0.12em;
-  line-height: 1.5;
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
-.nav a:hover {
-  background: var(--night);
-  color: var(--bone);
-  transform: translateY(-1px);
+.nav small {
+  display: none;
 }
 
-.nav a:hover small {
-  color: rgba(251, 248, 241, 0.62);
+.nav a:hover {
+  color: var(--accent);
+  transform: translateY(-1px);
 }
 
 .header-tools {
@@ -275,7 +266,7 @@ button {
   display: grid;
   align-content: start;
   gap: 0.35rem;
-  padding: 6.2rem var(--side) 2rem;
+  padding: 5.6rem var(--side) 2rem;
   background: rgba(244, 240, 231, 0.98);
   opacity: 0;
   pointer-events: none;
@@ -292,14 +283,15 @@ button {
 .mobile-menu > a {
   display: grid;
   gap: 0.18rem;
-  padding: 1rem 0;
+  padding: 0.95rem 0;
+  box-shadow: inset 0 -1px 0 var(--line);
 }
 
 .mobile-menu span {
-  font-size: clamp(2rem, 9vw, 4rem);
+  font-size: clamp(1.65rem, 8vw, 3.1rem);
   font-weight: 500;
-  letter-spacing: -0.07em;
-  line-height: 0.95;
+  letter-spacing: -0.055em;
+  line-height: 1;
 }
 
 .mobile-menu small {
@@ -322,7 +314,7 @@ button {
 .section-pad {
   max-width: var(--max);
   margin: 0 auto;
-  padding: clamp(4.5rem, 8vw, 9.5rem) var(--side);
+  padding: clamp(4rem, 7vw, 8rem) var(--side);
 }
 
 .kicker {
@@ -345,42 +337,42 @@ button {
 }
 
 .hero {
-  min-height: calc(100svh - 5.1rem);
+  min-height: calc(100svh - 4.4rem);
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: clamp(2rem, 5vw, 5.5rem);
+  gap: clamp(2rem, 4.5vw, 5rem);
 }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.37fr);
-  gap: clamp(2rem, 7vw, 7.5rem);
+  grid-template-columns: minmax(0, 0.62fr) minmax(18rem, 0.38fr);
+  gap: clamp(2rem, 6vw, 6.5rem);
   align-items: end;
 }
 
 .hero-copy h1 {
-  max-width: 11.4ch;
+  max-width: 12.2ch;
   margin: 0;
-  font-size: clamp(4.4rem, 10vw, 10.8rem);
+  font-size: clamp(3.6rem, 7.6vw, 8.2rem);
   font-weight: 500;
-  letter-spacing: -0.085em;
-  line-height: 0.86;
+  letter-spacing: -0.075em;
+  line-height: 0.92;
   word-break: keep-all;
 }
 
 html[lang="ko"] .hero-copy h1 {
-  max-width: 10.5ch;
-  font-size: clamp(3.3rem, 8vw, 7.7rem);
+  max-width: 11.5ch;
+  font-size: clamp(3rem, 6.3vw, 6.5rem);
   font-weight: 560;
-  letter-spacing: -0.055em;
-  line-height: 1.03;
+  letter-spacing: -0.045em;
+  line-height: 1.08;
 }
 
 .hero-lede {
   max-width: 38rem;
-  margin: clamp(1.5rem, 3vw, 2.7rem) 0 0 clamp(0rem, 17vw, 18rem);
+  margin: clamp(1.3rem, 2.5vw, 2.2rem) 0 0 clamp(0rem, 11vw, 12rem);
   color: var(--muted);
-  font-size: clamp(1.02rem, 1.28vw, 1.28rem);
+  font-size: clamp(1rem, 1.16vw, 1.16rem);
   line-height: 1.86;
   word-break: keep-all;
 }
@@ -398,17 +390,17 @@ html[lang="ko"] .hero-copy h1 {
   gap: 1rem;
   align-self: stretch;
   padding: clamp(0.85rem, 1.7vw, 1.2rem);
-  background: rgba(251, 248, 241, 0.72);
-  box-shadow: var(--shadow);
+  background: rgba(251, 248, 241, 0.48);
+  box-shadow: none;
   transition: transform 260ms ease, background 260ms ease;
 }
 
 .hero-feature:hover {
-  background: var(--bone);
+  background: rgba(251, 248, 241, 0.82);
 }
 
 .hero-feature .image-block {
-  min-height: clamp(20rem, 42vw, 42rem);
+  min-height: clamp(19rem, 37vw, 36rem);
 }
 
 .feature-meta {
@@ -420,11 +412,11 @@ html[lang="ko"] .hero-copy h1 {
 }
 
 .hero-feature strong {
-  max-width: 13ch;
-  font-size: clamp(1.75rem, 2.6vw, 3.25rem);
+  max-width: 14ch;
+  font-size: clamp(1.55rem, 2.1vw, 2.65rem);
   font-weight: 500;
-  letter-spacing: -0.06em;
-  line-height: 1.02;
+  letter-spacing: -0.052em;
+  line-height: 1.06;
   word-break: keep-all;
 }
 
@@ -436,7 +428,9 @@ html[lang="ko"] .hero-feature strong {
 .hero-feature em {
   max-width: 24rem;
   color: var(--muted);
+  font-size: 0.95rem;
   font-style: normal;
+  line-height: 1.72;
   word-break: keep-all;
 }
 
@@ -683,14 +677,13 @@ html[lang="ko"] .hero-feature strong {
 .section-heading h2,
 .archive-heading h1,
 .archive-heading h2,
-.notes-intro h2,
 .about-card h2,
 .not-found h1 {
   margin: 0;
-  font-size: clamp(2.35rem, 5vw, 6.1rem);
+  font-size: clamp(2.05rem, 4vw, 4.85rem);
   font-weight: 500;
-  letter-spacing: -0.07em;
-  line-height: 0.98;
+  letter-spacing: -0.06em;
+  line-height: 1.02;
   word-break: keep-all;
 }
 
@@ -699,12 +692,27 @@ html[lang="ko"] .section-eyebrow h2,
 html[lang="ko"] .section-heading h2,
 html[lang="ko"] .archive-heading h1,
 html[lang="ko"] .archive-heading h2,
-html[lang="ko"] .notes-intro h2,
 html[lang="ko"] .about-card h2,
 html[lang="ko"] .not-found h1 {
   font-weight: 560;
-  letter-spacing: -0.045em;
-  line-height: 1.12;
+  letter-spacing: -0.035em;
+  line-height: 1.16;
+}
+
+.notes-intro h2 {
+  max-width: 13ch;
+  margin: 0;
+  font-size: clamp(2rem, 3.25vw, 3.85rem);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 1.04;
+  word-break: keep-all;
+}
+
+html[lang="ko"] .notes-intro h2 {
+  font-weight: 560;
+  letter-spacing: -0.035em;
+  line-height: 1.17;
 }
 
 .statement-grid p,
@@ -717,7 +725,7 @@ html[lang="ko"] .not-found h1 {
 }
 
 .category-index {
-  padding-top: clamp(3.8rem, 7vw, 7.5rem);
+  padding-top: clamp(3.4rem, 6vw, 6.5rem);
 }
 
 .section-eyebrow,
@@ -733,23 +741,23 @@ html[lang="ko"] .not-found h1 {
 }
 
 .category-card {
-  min-height: clamp(21rem, 31vw, 34rem);
+  min-height: clamp(17rem, 24vw, 26rem);
   display: grid;
   align-content: space-between;
   gap: 2rem;
-  padding: clamp(1.1rem, 2.3vw, 2rem);
-  background: rgba(251, 248, 241, 0.54);
+  padding: clamp(1.05rem, 2vw, 1.65rem);
+  background: rgba(251, 248, 241, 0.42);
   transition: background 220ms ease, color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
 }
 
 .category-card:nth-child(even) {
-  background: rgba(235, 229, 217, 0.66);
+  background: rgba(235, 229, 217, 0.46);
 }
 
 .category-card:hover {
-  background: var(--night);
-  color: var(--bone);
-  box-shadow: var(--shadow);
+  background: rgba(251, 248, 241, 0.88);
+  color: var(--ink);
+  box-shadow: 0 0.8rem 2rem rgba(17, 16, 13, 0.045);
 }
 
 .category-card span,
@@ -766,15 +774,15 @@ html[lang="ko"] .not-found h1 {
 .category-card:hover span,
 .category-card:hover small,
 .category-card:hover em {
-  color: rgba(251, 248, 241, 0.62);
+  color: var(--accent);
 }
 
 .category-card h3 {
   margin: auto 0 0;
-  font-size: clamp(2.4rem, 5vw, 5.8rem);
+  font-size: clamp(1.95rem, 3.7vw, 4.25rem);
   font-weight: 500;
-  letter-spacing: -0.08em;
-  line-height: 0.9;
+  letter-spacing: -0.065em;
+  line-height: 0.96;
 }
 
 html[lang="ko"] .category-card h3 {
@@ -791,19 +799,19 @@ html[lang="ko"] .category-card h3 {
 }
 
 .category-card:hover p {
-  color: rgba(251, 248, 241, 0.76);
+  color: var(--muted);
 }
 
 .lead-article {
   display: grid;
   grid-template-columns: minmax(0, 0.66fr) minmax(18rem, 0.34fr);
-  gap: clamp(1.5rem, 5vw, 5rem);
+  gap: clamp(1.5rem, 4.2vw, 4.4rem);
   align-items: stretch;
   margin-bottom: clamp(2rem, 4vw, 4rem);
 }
 
 .lead-visual .image-block {
-  min-height: clamp(24rem, 53vw, 50rem);
+  min-height: clamp(22rem, 45vw, 43rem);
 }
 
 .lead-content {
@@ -816,7 +824,7 @@ html[lang="ko"] .category-card h3 {
 .article-number {
   margin: 0 auto auto 0;
   color: rgba(17, 16, 13, 0.18);
-  font-size: clamp(5rem, 10vw, 12rem);
+  font-size: clamp(3.5rem, 7.4vw, 8.4rem);
   font-weight: 500;
   letter-spacing: -0.11em;
   line-height: 0.78;
@@ -835,7 +843,7 @@ html[lang="ko"] .category-card h3 {
 
 .lead-content h3 {
   max-width: 12ch;
-  font-size: clamp(2.2rem, 4.5vw, 5.1rem);
+  font-size: clamp(1.85rem, 3.4vw, 3.95rem);
 }
 
 html[lang="ko"] .lead-content h3,
@@ -902,21 +910,21 @@ html[lang="ko"] .archive-preview h3 {
   gap: 1rem;
   min-height: 100%;
   padding: clamp(0.85rem, 1.8vw, 1.35rem);
-  background: rgba(251, 248, 241, 0.56);
+  background: rgba(251, 248, 241, 0.42);
   transition: background 220ms ease, box-shadow 220ms ease, transform 220ms ease;
 }
 
 .story-card:hover {
-  background: var(--bone);
-  box-shadow: var(--shadow);
+  background: rgba(251, 248, 241, 0.86);
+  box-shadow: 0 0.8rem 2rem rgba(17, 16, 13, 0.045);
 }
 
 .story-card .image-block {
-  min-height: clamp(16rem, 25vw, 28rem);
+  min-height: clamp(15rem, 22vw, 24rem);
 }
 
 .story-card h3 {
-  font-size: clamp(1.55rem, 2.35vw, 2.8rem);
+  font-size: clamp(1.35rem, 1.9vw, 2.22rem);
 }
 
 .story-card p:not(.kicker) {
@@ -932,13 +940,13 @@ html[lang="ko"] .archive-preview h3 {
 }
 
 .large-card .image-block {
-  min-height: clamp(24rem, 45vw, 45rem);
+  min-height: clamp(22rem, 38vw, 38rem);
 }
 
 .notes {
   display: grid;
-  grid-template-columns: minmax(18rem, 0.58fr) minmax(0, 1fr);
-  gap: clamp(2rem, 7vw, 7rem);
+  grid-template-columns: minmax(17rem, 0.46fr) minmax(0, 1fr);
+  gap: clamp(2rem, 6vw, 6rem);
 }
 
 .notes-intro {
@@ -956,13 +964,13 @@ html[lang="ko"] .archive-preview h3 {
   display: grid;
   grid-template-columns: 7rem minmax(0, 1fr);
   gap: clamp(1rem, 3vw, 2rem);
-  padding: clamp(1.1rem, 2.4vw, 1.8rem);
-  background: rgba(251, 248, 241, 0.5);
+  padding: clamp(1rem, 2vw, 1.45rem);
+  background: rgba(251, 248, 241, 0.36);
   transition: background 180ms ease, color 180ms ease, transform 180ms ease;
 }
 
 .note-item:hover {
-  background: var(--bone);
+  background: rgba(251, 248, 241, 0.78);
   color: var(--accent);
   transform: translateX(0.35rem);
 }
@@ -975,7 +983,7 @@ html[lang="ko"] .archive-preview h3 {
 }
 
 .note-item h3 {
-  font-size: clamp(1.45rem, 2.35vw, 2.9rem);
+  font-size: clamp(1.25rem, 1.85vw, 2.18rem);
 }
 
 .note-item p {
@@ -1037,8 +1045,8 @@ html[lang="ko"] .archive-preview h3 {
   grid-template-columns: 8.5rem minmax(0, 1fr) minmax(9rem, 0.34fr);
   gap: 1rem;
   align-items: center;
-  padding: clamp(1rem, 2.2vw, 1.45rem);
-  background: rgba(244, 240, 231, 0.68);
+  padding: clamp(0.95rem, 1.8vw, 1.25rem);
+  background: rgba(244, 240, 231, 0.5);
   transition: background 180ms ease, color 180ms ease, transform 180ms ease;
 }
 
@@ -1060,7 +1068,7 @@ html[lang="ko"] .archive-preview h3 {
 }
 
 .archive-title {
-  font-size: clamp(1.28rem, 2vw, 2.35rem);
+  font-size: clamp(1.14rem, 1.65vw, 1.92rem);
   font-weight: 500;
   letter-spacing: -0.055em;
   line-height: 1.08;
@@ -1085,7 +1093,7 @@ html[lang="ko"] .archive-title {
   gap: 1rem;
   padding: clamp(0.85rem, 1.7vw, 1.25rem);
   background: var(--paper);
-  box-shadow: var(--shadow);
+  box-shadow: 0 0.8rem 2rem rgba(17, 16, 13, 0.045);
 }
 
 .archive-preview .image-block {
@@ -1101,7 +1109,7 @@ html[lang="ko"] .archive-title {
 }
 
 .archive-preview h3 {
-  font-size: clamp(1.65rem, 2.8vw, 3.25rem);
+  font-size: clamp(1.45rem, 2.25vw, 2.65rem);
 }
 
 .about {
@@ -1127,8 +1135,8 @@ html[lang="ko"] .archive-title {
   display: grid;
   gap: 1.2rem;
   padding: clamp(1.2rem, 2.8vw, 2.1rem);
-  background: var(--night);
-  color: var(--bone);
+  background: rgba(251, 248, 241, 0.62);
+  color: var(--ink);
 }
 
 .subscribe-form label {
@@ -1147,22 +1155,22 @@ html[lang="ko"] .archive-title {
   min-width: 0;
   flex: 1;
   border: 0;
-  border-bottom: 1px solid rgba(251, 248, 241, 0.72);
+  border-bottom: 1px solid rgba(17, 16, 13, 0.32);
   border-radius: 0;
   background: transparent;
   padding: 0.86rem 0;
-  color: var(--bone);
+  color: var(--ink);
 }
 
 .subscribe-form input::placeholder {
-  color: rgba(251, 248, 241, 0.5);
+  color: var(--soft);
 }
 
 .subscribe-form button {
   border: 0;
-  background: var(--bone);
+  background: var(--night);
   padding: 0.86rem 1.1rem;
-  color: var(--night);
+  color: var(--bone);
   transition: background 180ms ease, color 180ms ease;
 }
 
@@ -1174,7 +1182,7 @@ html[lang="ko"] .archive-title {
 .form-message {
   min-height: 1.4rem;
   margin: 0;
-  color: rgba(251, 248, 241, 0.72);
+  color: var(--muted);
   font-size: 0.86rem;
 }
 
@@ -1193,10 +1201,10 @@ html[lang="ko"] .archive-title {
 .article-title-block h1 {
   max-width: 13.8ch;
   margin: 0;
-  font-size: clamp(3.25rem, 7vw, 8rem);
+  font-size: clamp(2.85rem, 5.8vw, 6.7rem);
   font-weight: 500;
   letter-spacing: -0.08em;
-  line-height: 0.94;
+  line-height: 0.98;
   word-break: keep-all;
 }
 
@@ -1231,7 +1239,7 @@ html[lang="ko"] .article-title-block h1 {
 }
 
 .article-visual .image-block {
-  min-height: clamp(27rem, 56vw, 53rem);
+  min-height: clamp(24rem, 48vw, 46rem);
 }
 
 .article-body-grid {
@@ -1263,7 +1271,7 @@ html[lang="ko"] .article-title-block h1 {
   margin: 0;
   padding: clamp(1.4rem, 3vw, 2.4rem);
   background: rgba(251, 248, 241, 0.58);
-  font-size: clamp(1.75rem, 3.4vw, 3.75rem);
+  font-size: clamp(1.55rem, 2.8vw, 3.05rem);
   font-weight: 500;
   letter-spacing: -0.065em;
   line-height: 1.05;
@@ -1278,7 +1286,7 @@ html[lang="ko"] .article-body blockquote {
 
 .article-section h2 {
   margin: 0 0 1rem;
-  font-size: clamp(1.65rem, 2.45vw, 2.9rem);
+  font-size: clamp(1.45rem, 2.05vw, 2.42rem);
   font-weight: 500;
   letter-spacing: -0.055em;
   line-height: 1.08;
@@ -1346,11 +1354,15 @@ html[lang="ko"] .article-body blockquote {
 
 @media (max-width: 1180px) {
   .site-header {
-    grid-template-columns: minmax(10rem, 0.22fr) minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
   }
 
-  .nav small {
-    display: none;
+  .nav {
+    gap: clamp(1rem, 2.8vw, 3rem);
+  }
+
+  .nav span {
+    font-size: 0.66rem;
   }
 
   .category-grid {
@@ -1403,8 +1415,8 @@ html[lang="ko"] .article-body blockquote {
 
   .hero-copy h1,
   html[lang="ko"] .hero-copy h1 {
-    max-width: 11.5ch;
-    font-size: clamp(3.1rem, 13vw, 6.8rem);
+    max-width: 12ch;
+    font-size: clamp(2.85rem, 11vw, 5.4rem);
   }
 
   .hero-lede {
@@ -1412,7 +1424,7 @@ html[lang="ko"] .article-body blockquote {
   }
 
   .hero-feature .image-block {
-    min-height: clamp(22rem, 78vw, 40rem);
+    min-height: clamp(20rem, 68vw, 34rem);
   }
 
   .notes-intro,
@@ -1432,16 +1444,16 @@ html[lang="ko"] .article-body blockquote {
 
 @media (max-width: 680px) {
   .section-pad {
-    padding-block: 3.8rem;
+    padding-block: 3.35rem;
   }
 
   .brand-mark {
-    width: 2rem;
-    height: 2rem;
+    width: 1.85rem;
+    height: 1.85rem;
   }
 
   .brand-text {
-    font-size: 1.3rem;
+    font-size: 1.18rem;
   }
 
   .issue-label,
@@ -1452,7 +1464,7 @@ html[lang="ko"] .article-body blockquote {
 
   .hero-copy h1,
   html[lang="ko"] .hero-copy h1 {
-    font-size: clamp(2.7rem, 14.2vw, 4.55rem);
+    font-size: clamp(2.45rem, 11.6vw, 3.95rem);
     line-height: 1;
   }
 
@@ -1465,10 +1477,13 @@ html[lang="ko"] .article-body blockquote {
   .section-heading h2,
   .archive-heading h1,
   .archive-heading h2,
-  .notes-intro h2,
   .about-card h2,
   .not-found h1 {
-    font-size: clamp(2rem, 10vw, 3.65rem);
+    font-size: clamp(1.85rem, 8.8vw, 3.05rem);
+  }
+
+  .notes-intro h2 {
+    font-size: clamp(1.75rem, 8vw, 2.8rem);
   }
 
   .category-grid,
@@ -1478,7 +1493,12 @@ html[lang="ko"] .article-body blockquote {
   }
 
   .category-card {
-    min-height: 18rem;
+    min-height: 15.5rem;
+  }
+
+  .large-card .image-block,
+  .lead-visual .image-block {
+    min-height: clamp(18rem, 76vw, 27rem);
   }
 
   .story-card,
@@ -1511,11 +1531,43 @@ html[lang="ko"] .article-body blockquote {
 
   .article-title-block h1,
   html[lang="ko"] .article-title-block h1 {
-    font-size: clamp(2.4rem, 11vw, 4.1rem);
+    font-size: clamp(2.15rem, 9.6vw, 3.45rem);
   }
 
   .article-body blockquote {
     padding-inline: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --side: clamp(1rem, 5vw, 1.35rem);
+  }
+
+  .site-header {
+    min-height: 3.95rem;
+  }
+
+  .hero-bottom a,
+  .note-item,
+  .archive-row {
+    padding-inline: 0;
+    background: transparent;
+  }
+
+  .hero-feature,
+  .story-card,
+  .category-card,
+  .subscribe-form,
+  .article-meta-card,
+  .article-body blockquote {
+    padding: 1rem;
+  }
+
+  .hero-feature .image-block,
+  .story-card .image-block,
+  .article-visual .image-block {
+    min-height: clamp(16rem, 82vw, 23rem);
   }
 }
 

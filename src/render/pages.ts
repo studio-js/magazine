@@ -306,7 +306,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
       <p class="kicker" data-reveal>${escapeHtml(locale === "ko" ? "Editorial Position" : "Editorial Position")}</p>
       <div class="statement-grid">
         <h2 data-reveal>${escapeHtml(locale === "ko" ? "뉴스 피드의 속도보다 한 권의 매거진이 가진 호흡에 가깝게." : "Closer to the breath of an issue than the speed of a feed.")}</h2>
-        <p data-reveal>${escapeHtml(locale === "ko" ? "Blau의 커버 감각, Minimalissimo의 절제된 큐레이션, Ignant의 분야별 편집 구조, Studio Lenzing의 반응형 움직임에서 출발하되 The Thing의 화면은 더 조용하고 느슨한 표면으로 재구성했습니다." : "The surface borrows the idea of a strong cover, restrained curation, departmental editing, and responsive motion, then rebuilds them into a quieter language of its own.")}</p>
+        <p data-reveal>${escapeHtml(locale === "ko" ? "커버처럼 시작하고, 분야별로 정리되며, 목록은 빠르게 훑기보다 천천히 선택할 수 있게 설계했습니다. 과한 장식 대신 여백과 이미지의 비율, 작은 움직임으로 매거진의 리듬을 만듭니다." : "The issue opens like a cover, organizes itself by department, and lets the reader choose slowly instead of skimming a feed. Space, image ratio, and small movements carry the rhythm rather than decoration.")}</p>
       </div>
     </section>
 
