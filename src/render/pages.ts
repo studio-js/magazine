@@ -159,50 +159,33 @@ const issueCoverImage = (issue: IssueProject): string =>
   issue.coverImage || issue.features.find((feature) => feature.heroImage)?.heroImage || "";
 
 const renderIssuePrototype = (issue: IssueProject, locale: Locale, variant: "home" | "collection" | "detail" = "detail"): string => {
-  const leadFeature = issue.features[0];
-  const previewFeatures = issue.features.filter((feature) => feature.heroImage).slice(0, 4);
-  const previewImages = (previewFeatures.length > 0 ? previewFeatures : issue.features.slice(0, 4))
-    .map((feature) => `            ${renderImageBlock(feature.heroClass, feature.heroImage)}`)
-    .join("\n");
   const coverLines = issue.features.slice(0, 3)
     .map((feature, index) => `            <span>${String(index + 1).padStart(2, "0")} ${escapeHtml(text(feature.title, locale))}</span>`)
     .join("\n");
 
   return `<figure class="magazine-prototype magazine-prototype-${variant}" aria-label="${escapeHtml(locale === "ko" ? `${issue.number} 잡지 프로토타입` : `${issue.number} magazine prototype`)}">
           <div class="magazine-prototype-stage">
-            <div class="magazine-cover-sheet">
-              ${renderImageBlock(issueCoverVisual(issue), issueCoverImage(issue))}
-              <div class="magazine-cover-type">
-                <span>Habitus</span>
-                <small>${escapeHtml(issue.number)}</small>
-                <strong>${escapeHtml(text(issue.title, locale))}</strong>
-                <em>${escapeHtml(text(issue.subtitle, locale))}</em>
-              </div>
-              <div class="magazine-cover-lines" aria-hidden="true">
+            <div class="magazine-cover-stack">
+              <div class="magazine-cover-sheet">
+                ${renderImageBlock(issueCoverVisual(issue), issueCoverImage(issue))}
+                <div class="magazine-cover-type">
+                  <div class="magazine-cover-topline">
+                    <span>Habitus</span>
+                    <small>${escapeHtml(issue.number)}</small>
+                  </div>
+                  <strong>${escapeHtml(text(issue.title, locale))}</strong>
+                  <em>${escapeHtml(text(issue.subtitle, locale))}</em>
+                </div>
+                <div class="magazine-cover-lines" aria-hidden="true">
 ${coverLines}
-              </div>
-            </div>
-            <div class="magazine-spread-sheet" aria-hidden="true">
-              <div class="magazine-spread-page is-copy">
-                <small>Prototype Spread</small>
-                <strong>${escapeHtml(leadFeature ? text(leadFeature.title, locale) : text(issue.title, locale))}</strong>
-                <em>${escapeHtml(text(issue.date, locale))}</em>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div class="magazine-spread-page is-images">
-                <div class="magazine-spread-grid">
-${previewImages}
                 </div>
               </div>
             </div>
           </div>
-          <figcaption>${escapeHtml(locale === "ko" ? "실제 이미지 기반 잡지형 프로토타입" : "Magazine-form prototype with sourced imagery")}</figcaption>
         </figure>`;
 };
 
-const assetVersion = "20260504-issue-prototypes";
+const assetVersion = "20260504-issue-cover-mockup";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">

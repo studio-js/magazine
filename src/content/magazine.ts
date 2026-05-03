@@ -1697,10 +1697,10 @@ export const issueProjects: IssueProject[] = [
     format: { ko: "온라인 에디션 / 5개 장면", en: "Online edition / 5 scenes" },
     availability: { ko: "오픈 액세스", en: "Open access" },
     coverCredit: {
-      ko: "커버 이미지: 조용한 도구와 방의 표면을 위한 편집부 스터디",
-      en: "Cover image: an editorial study for quiet instruments and room surfaces."
+      ko: "커버 이미지: Diptyque 클래식 캔들 설치 이미지 기반 표지 목업",
+      en: "Cover image: a cover mockup based on Diptyque Classic Candle installation imagery."
     },
-    coverImage: imageUrls.appleVisionHero,
+    coverImage: imageUrls.diptyqueBleecker,
     editorNote: {
       ko: "취향은 강한 주장보다 반복되는 사용에서 더 정확히 생깁니다. 이번 호는 제품 리뷰가 아니라 실제 브랜드와 제품이 몸의 리듬을 어떻게 바꾸는지 읽는 발행본입니다.",
       en: "Taste forms more precisely through repeated use than through strong claims. This issue is not product review but a reading of how real brands and products change bodily rhythm."
