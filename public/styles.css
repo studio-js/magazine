@@ -13433,7 +13433,7 @@ html[lang="ko"] .method-item h3 {
 
 .home-index-order {
   position: relative;
-  top: clamp(0.34rem, 0.5vw, 0.64rem);
+  top: clamp(0.34rem, 0.56vw, 0.9rem);
 }
 
 .home-index-row strong {
@@ -13673,7 +13673,7 @@ html[lang="ko"] .home-recent-copy strong {
 
 .home-story-line span {
   position: relative;
-  top: 0.23rem;
+  top: clamp(0.23rem, 0.3vw, 0.48rem);
   padding-left: 0.85rem;
 }
 
@@ -14787,29 +14787,2775 @@ html[lang="ko"] .habitus-card strong {
   }
 }
 
+/* Habitus ledger redesign: a readable field note instead of a coordinate board. */
+.home-habitus {
+  grid-template-columns: minmax(21rem, 0.36fr) minmax(0, 0.64fr);
+  gap: clamp(2.2rem, 4.4vw, 5.8rem);
+}
+
+.habitus-copy {
+  max-width: 31rem;
+}
+
+.habitus-copy h2 {
+  max-width: 11.2ch;
+  font-size: clamp(2.55rem, 4.85vw, 6.1rem);
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+}
+
+html[lang="ko"] .habitus-copy h2 {
+  max-width: 10ch;
+  letter-spacing: -0.022em;
+  line-height: 1.08;
+}
+
+.habitus-copy p:not(.kicker) {
+  max-width: 29rem;
+}
+
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: clamp(1.45rem, 2.8vw, 2.8rem);
+  min-height: 0;
+  overflow: hidden;
+  padding: clamp(1.1rem, 2.4vw, 2.15rem);
+  background:
+    linear-gradient(135deg, rgba(123, 91, 66, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(250, 248, 241, 0.86), rgba(250, 248, 241, 0.48));
+  box-shadow:
+    inset 0 0 0 1px rgba(24, 23, 19, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42);
+  opacity: 1;
+  transform: none;
+}
+
+.habitus-board::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(90deg, rgba(24, 23, 19, 0.055) 1px, transparent 1px) 0 0 / 33.333% 100%,
+    linear-gradient(180deg, rgba(24, 23, 19, 0.035) 1px, transparent 1px) 0 0 / 100% 7.2rem;
+  opacity: 0.68;
+}
+
+.habitus-board::after {
+  content: "taste";
+  position: absolute;
+  right: clamp(1rem, 3vw, 2.4rem);
+  top: clamp(5.6rem, 9vw, 8rem);
+  z-index: -1;
+  color: rgba(24, 23, 19, 0.045);
+  font-size: clamp(5.8rem, 12vw, 12.5rem);
+  font-weight: 560;
+  letter-spacing: -0.08em;
+  line-height: 0.82;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+html[lang="ko"] .habitus-board::after {
+  content: "취향";
+  font-size: clamp(5.3rem, 11vw, 11rem);
+  font-weight: 520;
+  letter-spacing: -0.12em;
+}
+
+.habitus-geometry {
+  display: none;
+}
+
+.habitus-plate {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(9rem, auto);
+  gap: clamp(0.75rem, 1.8vw, 1.6rem) clamp(1.4rem, 3vw, 3rem);
+  align-items: start;
+  min-width: 0;
+  padding: 0 0 clamp(1rem, 2vw, 1.6rem);
+  border-bottom: 1px solid rgba(24, 23, 19, 0.2);
+}
+
+.habitus-plate span,
+html[lang="ko"] .habitus-plate span {
+  color: rgba(24, 23, 19, 0.94);
+  font-size: clamp(2.2rem, 4.35vw, 5rem);
+  font-weight: 560;
+  letter-spacing: 0.08em;
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+
+.habitus-plate strong {
+  justify-self: end;
+  max-width: 8.8ch;
+  color: var(--ink);
+  font-size: clamp(1.22rem, 2.2vw, 2.65rem);
+  font-weight: 430;
+  letter-spacing: -0.026em;
+  line-height: 1.08;
+  text-align: right;
+  word-break: keep-all;
+}
+
+.habitus-plate em {
+  grid-column: 1 / -1;
+  width: min(100%, 32rem);
+  margin-top: clamp(0.15rem, 0.6vw, 0.45rem);
+  padding-top: clamp(0.55rem, 0.95vw, 0.85rem);
+  border-top: 1px solid rgba(24, 23, 19, 0.14);
+}
+
+.habitus-cards {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  align-self: start;
+  min-height: 0;
+  padding: 0;
+}
+
+.habitus-card,
+.habitus-card[data-scroll-motion] {
+  position: relative;
+  display: grid;
+  grid-template-columns: clamp(3.1rem, 5.6vw, 5.1rem) minmax(0, 1fr);
+  gap: clamp(1rem, 2vw, 2rem);
+  align-content: start;
+  align-items: start;
+  justify-self: stretch;
+  width: 100%;
+  min-height: 0;
+  padding: clamp(1rem, 2.1vw, 1.7rem) 0;
+  border-top: 1px solid rgba(24, 23, 19, 0.14);
+  color: var(--ink);
+  opacity: 1;
+  transform: none;
+}
+
+.habitus-card:first-child,
+.habitus-card[data-scroll-motion]:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.habitus-card:nth-child(odd),
+.habitus-card:nth-child(even),
+.habitus-card:nth-child(n + 3) {
+  justify-self: stretch;
+  align-self: start;
+}
+
+.habitus-card:nth-child(even) {
+  padding-left: clamp(1.5rem, 4.8vw, 5.4rem);
+}
+
+.habitus-card::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: clamp(1rem, 2.1vw, 1.7rem);
+  width: clamp(1.4rem, 2.6vw, 2.7rem);
+  height: 1px;
+  background: rgba(24, 23, 19, 0.22);
+}
+
+.habitus-card:first-child::after {
+  top: 0;
+}
+
+.habitus-card span {
+  color: rgba(123, 91, 66, 0.72);
+  font-size: clamp(1.35rem, 3.15vw, 3.5rem);
+  font-style: normal;
+  font-weight: 430;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.055em;
+  line-height: 0.88;
+  text-transform: none;
+}
+
+.habitus-card strong {
+  max-width: min(100%, 22rem);
+  color: currentColor;
+  font-size: clamp(1.32rem, 2vw, 2.35rem);
+  font-weight: 430;
+  letter-spacing: -0.018em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+html[lang="ko"] .habitus-card strong {
+  max-width: min(100%, 18rem);
+  line-height: 1.16;
+  word-break: keep-all;
+}
+
+.habitus-card p {
+  grid-column: 2;
+  max-width: 33rem;
+  margin: clamp(0.28rem, 0.7vw, 0.5rem) 0 0;
+  color: var(--muted);
+  font-size: clamp(0.92rem, 0.98vw, 1.08rem);
+  line-height: 1.62;
+  word-break: keep-all;
+}
+
+@media (max-width: 1180px) {
+  .home-habitus {
+    grid-template-columns: 1fr;
+  }
+
+  .habitus-copy {
+    max-width: 42rem;
+  }
+
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    width: 100%;
+  }
+}
+
+@media (max-width: 680px) {
+  .habitus-copy h2,
+  html[lang="ko"] .habitus-copy h2 {
+    font-size: clamp(2.25rem, 12.2vw, 4rem);
+  }
+
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    padding: 1rem;
+  }
+
+  .habitus-board::after {
+    top: 6.4rem;
+    right: 0.45rem;
+    font-size: clamp(4.4rem, 23vw, 6rem);
+  }
+
+  html[lang="ko"] .habitus-board::after {
+    font-size: clamp(4.1rem, 22vw, 5.8rem);
+  }
+
+  .habitus-plate {
+    grid-template-columns: 1fr;
+  }
+
+  .habitus-plate span,
+  html[lang="ko"] .habitus-plate span {
+    font-size: clamp(2.25rem, 13vw, 4.4rem);
+  }
+
+  .habitus-plate strong {
+    justify-self: start;
+    max-width: 12ch;
+    text-align: left;
+  }
+
+  .habitus-card,
+  .habitus-card[data-scroll-motion] {
+    grid-template-columns: 2.7rem minmax(0, 1fr);
+    gap: 0.8rem;
+  }
+
+  .habitus-card:nth-child(even) {
+    padding-left: 0;
+  }
+
+  .habitus-card::after {
+    width: 1.4rem;
+  }
+
+  .habitus-card span {
+    font-size: 1.28rem;
+    letter-spacing: -0.035em;
+  }
+
+  .habitus-card strong {
+    font-size: clamp(1.18rem, 6.2vw, 1.55rem);
+  }
+
+  .habitus-card p {
+    font-size: 0.92rem;
+  }
+}
+
+/* Habitus intersection diagram: four conditions forming taste. */
+.home-habitus {
+  grid-template-columns: minmax(21rem, 0.34fr) minmax(0, 0.66fr);
+  gap: clamp(2.1rem, 4.2vw, 5.5rem);
+}
+
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  display: grid;
+  grid-template-rows: auto minmax(23rem, 1fr) auto;
+  gap: clamp(1.25rem, 2.4vw, 2.35rem);
+  min-height: clamp(34rem, 43vw, 42rem);
+  padding: clamp(1.05rem, 2.2vw, 1.85rem);
+  background:
+    radial-gradient(circle at 50% 48%, rgba(123, 91, 66, 0.12), transparent 24%),
+    linear-gradient(180deg, rgba(250, 248, 241, 0.78), rgba(250, 248, 241, 0.42));
+  box-shadow:
+    inset 0 0 0 1px rgba(24, 23, 19, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.36);
+}
+
+.habitus-board::before {
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(90deg, rgba(24, 23, 19, 0.045) 1px, transparent 1px) 0 0 / 25% 100%,
+    linear-gradient(180deg, rgba(24, 23, 19, 0.035) 1px, transparent 1px) 0 0 / 100% 25%;
+  opacity: 0.72;
+}
+
+.habitus-board::after {
+  content: none;
+}
+
+.habitus-plate {
+  grid-template-columns: minmax(0, 1fr) minmax(10rem, auto);
+  gap: 0.55rem clamp(1rem, 2.8vw, 2.4rem);
+  align-items: start;
+  padding-bottom: clamp(0.85rem, 1.8vw, 1.35rem);
+  border-bottom: 1px solid rgba(24, 23, 19, 0.18);
+}
+
+.habitus-plate span,
+html[lang="ko"] .habitus-plate span {
+  font-size: clamp(1.05rem, 1.8vw, 1.85rem);
+  font-weight: 560;
+  letter-spacing: 0.16em;
+  line-height: 1;
+}
+
+.habitus-plate strong {
+  justify-self: end;
+  max-width: 12ch;
+  font-size: clamp(1rem, 1.55vw, 1.7rem);
+  font-weight: 430;
+  letter-spacing: -0.018em;
+  line-height: 1.15;
+  text-align: right;
+  word-break: keep-all;
+}
+
+.habitus-plate em {
+  grid-column: 1 / -1;
+  width: auto;
+  margin-top: 0.15rem;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.habitus-diagram {
+  position: relative;
+  z-index: 2;
+  min-height: clamp(22rem, 31vw, 30rem);
+  overflow: hidden;
+  border-bottom: 1px solid rgba(24, 23, 19, 0.14);
+}
+
+.habitus-diagram::before {
+  content: "";
+  position: absolute;
+  inset: 8% 8% 11%;
+  border: 1px solid rgba(24, 23, 19, 0.1);
+}
+
+.habitus-diagram .habitus-axis {
+  position: absolute;
+  display: block;
+  background: rgba(24, 23, 19, 0.16);
+}
+
+.habitus-diagram .habitus-axis.is-x {
+  left: 10%;
+  right: 10%;
+  top: 50%;
+  height: 1px;
+}
+
+.habitus-diagram .habitus-axis.is-y {
+  top: 10%;
+  bottom: 12%;
+  left: 50%;
+  width: 1px;
+}
+
+.habitus-set {
+  position: absolute;
+  width: clamp(12rem, 18vw, 18.5rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(24, 23, 19, 0.24);
+  border-radius: 50%;
+  background: rgba(123, 91, 66, 0.09);
+  mix-blend-mode: multiply;
+}
+
+.habitus-set.is-body {
+  left: 18%;
+  top: 8%;
+}
+
+.habitus-set.is-field {
+  right: 18%;
+  top: 8%;
+  background: rgba(24, 23, 19, 0.06);
+}
+
+.habitus-set.is-choice {
+  left: 18%;
+  bottom: 10%;
+  background: rgba(190, 151, 116, 0.12);
+}
+
+.habitus-set.is-repeat {
+  right: 18%;
+  bottom: 10%;
+  background: rgba(24, 23, 19, 0.045);
+}
+
+.habitus-set b {
+  position: absolute;
+  color: rgba(24, 23, 19, 0.78);
+  font-size: clamp(0.8rem, 1.1vw, 1rem);
+  font-weight: 540;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.habitus-set.is-body b,
+.habitus-set.is-choice b {
+  left: clamp(1rem, 2vw, 1.55rem);
+}
+
+.habitus-set.is-field b,
+.habitus-set.is-repeat b {
+  right: clamp(1rem, 2vw, 1.55rem);
+}
+
+.habitus-set.is-body b,
+.habitus-set.is-field b {
+  top: clamp(1rem, 2vw, 1.55rem);
+}
+
+.habitus-set.is-choice b,
+.habitus-set.is-repeat b {
+  bottom: clamp(1rem, 2vw, 1.55rem);
+}
+
+.habitus-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: clamp(5.8rem, 9vw, 8.3rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(24, 23, 19, 0.34);
+  border-radius: 50%;
+  background: rgba(250, 248, 241, 0.88);
+  box-shadow: 0 0 0 clamp(0.55rem, 1.3vw, 1.2rem) rgba(250, 248, 241, 0.36);
+  transform: translate(-50%, -50%);
+}
+
+.habitus-core b {
+  color: var(--ink);
+  font-size: clamp(1.1rem, 1.8vw, 1.75rem);
+  font-weight: 470;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.habitus-core small {
+  color: var(--muted);
+  font-size: 0.58rem;
+  font-weight: 520;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.habitus-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  min-height: 0;
+  padding: 0;
+  border-top: 0;
+}
+
+.habitus-card,
+.habitus-card[data-scroll-motion] {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.42rem;
+  width: 100%;
+  padding: clamp(0.8rem, 1.25vw, 1rem) clamp(0.75rem, 1.4vw, 1.05rem);
+  border-top: 0;
+  border-left: 1px solid rgba(24, 23, 19, 0.13);
+}
+
+.habitus-card:first-child,
+.habitus-card[data-scroll-motion]:first-child {
+  border-left: 0;
+}
+
+.habitus-card:nth-child(even) {
+  padding-left: clamp(0.75rem, 1.4vw, 1.05rem);
+}
+
+.habitus-card::after {
+  top: auto;
+  right: clamp(0.75rem, 1.4vw, 1.05rem);
+  bottom: 0;
+  width: 1.4rem;
+  background: rgba(123, 91, 66, 0.28);
+}
+
+.habitus-card span {
+  color: rgba(123, 91, 66, 0.84);
+  font-size: 0.68rem;
+  font-weight: 580;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.habitus-card strong,
+html[lang="ko"] .habitus-card strong {
+  max-width: 14ch;
+  font-size: clamp(0.95rem, 1.1vw, 1.16rem);
+  font-weight: 450;
+  letter-spacing: -0.012em;
+  line-height: 1.18;
+}
+
+.habitus-card p {
+  grid-column: auto;
+  max-width: 17ch;
+  margin: 0;
+  font-size: clamp(0.76rem, 0.82vw, 0.86rem);
+  line-height: 1.48;
+}
+
+.js .habitus-board .habitus-diagram::before,
+.js .habitus-board .habitus-diagram .habitus-axis,
+.js .habitus-board .habitus-set,
+.js .habitus-board .habitus-core {
+  opacity: 0;
+  transition: opacity 620ms cubic-bezier(0.16, 1, 0.3, 1), transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js .habitus-board .habitus-set {
+  transform: scale(0.94);
+}
+
+.js .habitus-board .habitus-core {
+  transform: translate(-50%, -50%) scale(0.86);
+}
+
+.js .habitus-board.is-visible .habitus-diagram::before,
+.js .habitus-board.is-visible .habitus-diagram .habitus-axis,
+.js .habitus-board.is-visible .habitus-set,
+.js .habitus-board.is-visible .habitus-core {
+  opacity: 1;
+}
+
+.js .habitus-board.is-visible .habitus-set {
+  transform: scale(1);
+}
+
+.js .habitus-board.is-visible .habitus-core {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.js .habitus-board .habitus-set.is-body { transition-delay: 160ms; }
+.js .habitus-board .habitus-set.is-field { transition-delay: 220ms; }
+.js .habitus-board .habitus-set.is-choice { transition-delay: 280ms; }
+.js .habitus-board .habitus-set.is-repeat { transition-delay: 340ms; }
+.js .habitus-board .habitus-core { transition-delay: 430ms; }
+
+@media (max-width: 1180px) {
+  .home-habitus {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    grid-template-rows: auto minmax(17rem, auto) auto;
+    gap: 1rem;
+    min-height: 0;
+  }
+
+  .habitus-plate {
+    grid-template-columns: 1fr;
+  }
+
+  .habitus-plate strong {
+    justify-self: start;
+    max-width: 15ch;
+    text-align: left;
+  }
+
+  .habitus-diagram {
+    min-height: clamp(17rem, 76vw, 21rem);
+  }
+
+  .habitus-diagram::before {
+    inset: 7% 4% 9%;
+  }
+
+  .habitus-set {
+    width: clamp(9.4rem, 48vw, 11.5rem);
+  }
+
+  .habitus-set.is-body,
+  .habitus-set.is-choice {
+    left: 1%;
+  }
+
+  .habitus-set.is-field,
+  .habitus-set.is-repeat {
+    right: 1%;
+  }
+
+  .habitus-set.is-body,
+  .habitus-set.is-field {
+    top: 8%;
+  }
+
+  .habitus-set.is-choice,
+  .habitus-set.is-repeat {
+    bottom: 8%;
+  }
+
+  .habitus-core {
+    width: clamp(4.9rem, 24vw, 6rem);
+  }
+
+  .habitus-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid rgba(24, 23, 19, 0.13);
+  }
+
+  .habitus-card,
+  .habitus-card[data-scroll-motion],
+  .habitus-card:first-child,
+  .habitus-card[data-scroll-motion]:first-child {
+    border-left: 0;
+    border-top: 1px solid rgba(24, 23, 19, 0.13);
+  }
+
+  .habitus-card:nth-child(-n + 2),
+  .habitus-card[data-scroll-motion]:nth-child(-n + 2) {
+    border-top: 0;
+  }
+
+  .habitus-card:nth-child(even) {
+    border-left: 1px solid rgba(24, 23, 19, 0.13);
+  }
+}
+
+@media (max-width: 480px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    padding: 0.95rem;
+  }
+
+  .habitus-plate span,
+  html[lang="ko"] .habitus-plate span {
+    font-size: clamp(1rem, 6.6vw, 1.42rem);
+  }
+
+  .habitus-diagram {
+    min-height: 16.6rem;
+  }
+
+  .habitus-set {
+    width: 9.6rem;
+  }
+
+  .habitus-set b {
+    font-size: 0.7rem;
+  }
+
+  .habitus-core {
+    width: 4.75rem;
+  }
+
+  .habitus-core b {
+    font-size: 1rem;
+  }
+
+  .habitus-core small {
+    font-size: 0.5rem;
+  }
+
+  .habitus-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .habitus-card,
+  .habitus-card[data-scroll-motion],
+  .habitus-card:nth-child(even) {
+    border-left: 0;
+  }
+
+  .habitus-card:nth-child(2),
+  .habitus-card[data-scroll-motion]:nth-child(2) {
+    border-top: 1px solid rgba(24, 23, 19, 0.13);
+  }
+
+  .habitus-card strong,
+  html[lang="ko"] .habitus-card strong,
+  .habitus-card p {
+    max-width: 100%;
+  }
+}
+
+/* Habitus simple overlap: a quieter four-condition diagram. */
+.home-habitus {
+  grid-template-columns: minmax(20rem, 0.36fr) minmax(0, 0.64fr);
+  gap: clamp(2rem, 4vw, 5.2rem);
+}
+
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  display: grid;
+  grid-template-rows: auto minmax(20rem, auto) auto;
+  gap: clamp(1rem, 2vw, 1.8rem);
+  min-height: 0;
+  padding: clamp(1rem, 2vw, 1.55rem);
+  background: rgba(250, 248, 241, 0.36);
+  box-shadow: inset 0 0 0 1px rgba(24, 23, 19, 0.13);
+}
+
+.habitus-board::before,
+.habitus-board::after {
+  content: none;
+}
+
+.habitus-plate {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem clamp(1rem, 2vw, 1.8rem);
+  align-items: start;
+  padding-bottom: clamp(0.75rem, 1.3vw, 1rem);
+  border-bottom: 1px solid rgba(24, 23, 19, 0.15);
+}
+
+.habitus-plate span,
+html[lang="ko"] .habitus-plate span {
+  font-size: clamp(0.98rem, 1.45vw, 1.45rem);
+  font-weight: 560;
+  letter-spacing: 0.14em;
+  line-height: 1;
+}
+
+.habitus-plate strong {
+  justify-self: end;
+  max-width: 9.5ch;
+  color: var(--ink);
+  font-size: clamp(0.95rem, 1.25vw, 1.28rem);
+  font-weight: 430;
+  letter-spacing: -0.014em;
+  line-height: 1.18;
+  text-align: right;
+  word-break: keep-all;
+}
+
+.habitus-plate em {
+  grid-column: 1 / -1;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.habitus-diagram {
+  position: relative;
+  z-index: 2;
+  min-height: clamp(19rem, 28vw, 27rem);
+  overflow: hidden;
+  border-bottom: 1px solid rgba(24, 23, 19, 0.12);
+}
+
+.habitus-diagram::before {
+  content: none;
+}
+
+.habitus-diagram .habitus-axis {
+  position: absolute;
+  display: block;
+  background: rgba(24, 23, 19, 0.11);
+}
+
+.habitus-diagram .habitus-axis.is-x {
+  left: 16%;
+  right: 16%;
+  top: 50%;
+  height: 1px;
+}
+
+.habitus-diagram .habitus-axis.is-y {
+  top: 17%;
+  bottom: 17%;
+  left: 50%;
+  width: 1px;
+}
+
+.habitus-set {
+  position: absolute;
+  width: clamp(10.8rem, 16.5vw, 16.4rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(24, 23, 19, 0.22);
+  border-radius: 50%;
+  background: rgba(123, 91, 66, 0.035);
+  mix-blend-mode: multiply;
+}
+
+.habitus-set.is-body {
+  left: 20%;
+  top: 12%;
+}
+
+.habitus-set.is-field {
+  right: 20%;
+  top: 12%;
+  background: rgba(24, 23, 19, 0.028);
+}
+
+.habitus-set.is-choice {
+  left: 20%;
+  bottom: 12%;
+  background: rgba(190, 151, 116, 0.05);
+}
+
+.habitus-set.is-repeat {
+  right: 20%;
+  bottom: 12%;
+  background: rgba(24, 23, 19, 0.024);
+}
+
+.habitus-set b {
+  position: absolute;
+  color: rgba(24, 23, 19, 0.66);
+  font-size: clamp(0.72rem, 0.95vw, 0.86rem);
+  font-weight: 520;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.habitus-set.is-body b,
+.habitus-set.is-choice b {
+  left: 1.05rem;
+}
+
+.habitus-set.is-field b,
+.habitus-set.is-repeat b {
+  right: 1.05rem;
+}
+
+.habitus-set.is-body b,
+.habitus-set.is-field b {
+  top: 1.05rem;
+}
+
+.habitus-set.is-choice b,
+.habitus-set.is-repeat b {
+  bottom: 1.05rem;
+}
+
+.habitus-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: clamp(4.7rem, 7vw, 6.1rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(24, 23, 19, 0.28);
+  border-radius: 50%;
+  background: rgba(250, 248, 241, 0.9);
+  transform: translate(-50%, -50%);
+}
+
+.habitus-core b {
+  color: var(--ink);
+  font-size: clamp(0.95rem, 1.3vw, 1.18rem);
+  font-weight: 470;
+  letter-spacing: -0.012em;
+  line-height: 1;
+}
+
+.habitus-core small {
+  color: var(--muted);
+  font-size: 0.5rem;
+  font-weight: 520;
+  letter-spacing: 0.07em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.habitus-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  min-height: 0;
+  padding: 0;
+}
+
+.habitus-card,
+.habitus-card[data-scroll-motion] {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 0.15rem clamp(0.6rem, 1.2vw, 0.9rem) 0;
+  border-top: 0;
+  border-left: 1px solid rgba(24, 23, 19, 0.11);
+}
+
+.habitus-card:first-child,
+.habitus-card[data-scroll-motion]:first-child {
+  border-left: 0;
+}
+
+.habitus-card:nth-child(even) {
+  padding-left: clamp(0.6rem, 1.2vw, 0.9rem);
+}
+
+.habitus-card::after {
+  content: none;
+}
+
+.habitus-card span {
+  color: rgba(123, 91, 66, 0.72);
+  font-size: 0.62rem;
+  font-weight: 580;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.habitus-card strong,
+html[lang="ko"] .habitus-card strong {
+  max-width: 12ch;
+  font-size: clamp(0.86rem, 0.98vw, 0.98rem);
+  font-weight: 430;
+  letter-spacing: -0.008em;
+  line-height: 1.22;
+}
+
+.habitus-card p {
+  display: none;
+}
+
+.js .habitus-board .habitus-diagram .habitus-axis,
+.js .habitus-board .habitus-set,
+.js .habitus-board .habitus-core {
+  opacity: 0;
+  transition: opacity 520ms cubic-bezier(0.16, 1, 0.3, 1), transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js .habitus-board .habitus-set {
+  transform: scale(0.97);
+}
+
+.js .habitus-board .habitus-core {
+  transform: translate(-50%, -50%) scale(0.92);
+}
+
+.js .habitus-board.is-visible .habitus-diagram .habitus-axis,
+.js .habitus-board.is-visible .habitus-set,
+.js .habitus-board.is-visible .habitus-core {
+  opacity: 1;
+}
+
+.js .habitus-board.is-visible .habitus-set {
+  transform: scale(1);
+}
+
+.js .habitus-board.is-visible .habitus-core {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+@media (max-width: 1180px) {
+  .home-habitus {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    grid-template-rows: auto minmax(15.5rem, auto) auto;
+    gap: 0.9rem;
+  }
+
+  .habitus-plate {
+    grid-template-columns: 1fr;
+  }
+
+  .habitus-plate strong {
+    justify-self: start;
+    max-width: 13ch;
+    text-align: left;
+  }
+
+  .habitus-diagram {
+    min-height: clamp(15.8rem, 70vw, 19rem);
+  }
+
+  .habitus-diagram .habitus-axis.is-x {
+    left: 10%;
+    right: 10%;
+  }
+
+  .habitus-diagram .habitus-axis.is-y {
+    top: 13%;
+    bottom: 13%;
+  }
+
+  .habitus-set {
+    width: clamp(8.8rem, 44vw, 10.6rem);
+  }
+
+  .habitus-set.is-body,
+  .habitus-set.is-choice {
+    left: 3%;
+  }
+
+  .habitus-set.is-field,
+  .habitus-set.is-repeat {
+    right: 3%;
+  }
+
+  .habitus-set.is-body,
+  .habitus-set.is-field {
+    top: 9%;
+  }
+
+  .habitus-set.is-choice,
+  .habitus-set.is-repeat {
+    bottom: 9%;
+  }
+
+  .habitus-core {
+    width: clamp(4.3rem, 21vw, 5.2rem);
+  }
+
+  .habitus-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid rgba(24, 23, 19, 0.11);
+  }
+
+  .habitus-card,
+  .habitus-card[data-scroll-motion] {
+    padding-top: 0.72rem;
+    padding-bottom: 0.72rem;
+    border-left: 0;
+    border-top: 1px solid rgba(24, 23, 19, 0.11);
+  }
+
+  .habitus-card:nth-child(-n + 2),
+  .habitus-card[data-scroll-motion]:nth-child(-n + 2) {
+    border-top: 0;
+  }
+
+  .habitus-card:nth-child(even) {
+    border-left: 1px solid rgba(24, 23, 19, 0.11);
+  }
+}
+
+@media (max-width: 480px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    padding: 0.9rem;
+  }
+
+  .habitus-diagram {
+    min-height: 15.7rem;
+  }
+
+  .habitus-set {
+    width: 8.9rem;
+  }
+
+  .habitus-set b {
+    font-size: 0.66rem;
+  }
+
+  .habitus-core {
+    width: 4.25rem;
+  }
+
+  .habitus-core b {
+    font-size: 0.95rem;
+  }
+
+  .habitus-core small {
+    display: none;
+  }
+}
+
+/* Habitus structure diagram: field becomes embodied disposition, then practice. */
+.home-habitus {
+  grid-template-columns: minmax(20rem, 0.38fr) minmax(0, 0.62fr);
+  gap: clamp(2rem, 4vw, 5rem);
+}
+
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  display: grid;
+  grid-template: none;
+  gap: 0;
+  align-content: center;
+  justify-content: center;
+  place-items: center;
+  min-height: clamp(25rem, 36vw, 34rem);
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+  opacity: 1;
+  transform: none;
+}
+
+.habitus-board::before,
+.habitus-board::after {
+  content: none;
+}
+
+.habitus-system {
+  display: block;
+  width: min(100%, 48rem);
+  height: auto;
+  overflow: visible;
+}
+
+.habitus-system ellipse,
+.habitus-system circle,
+.habitus-system line,
+.habitus-system path {
+  vector-effect: non-scaling-stroke;
+}
+
+.habitus-field-plane ellipse,
+.habitus-field-plane line {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.16);
+  stroke-width: 1;
+}
+
+.habitus-field-plane ellipse {
+  fill: rgba(24, 23, 19, 0.018);
+}
+
+.habitus-body-form {
+  fill: rgba(123, 91, 66, 0.055);
+  stroke: rgba(24, 23, 19, 0.22);
+  stroke-width: 1.15;
+}
+
+.habitus-history-loop {
+  fill: none;
+  stroke: rgba(123, 91, 66, 0.38);
+  stroke-dasharray: 4 8;
+  stroke-linecap: round;
+  stroke-width: 1.2;
+}
+
+.habitus-disposition {
+  fill: rgba(250, 248, 241, 0.9);
+  stroke: rgba(24, 23, 19, 0.34);
+  stroke-width: 1.25;
+}
+
+.habitus-repeat-dots circle {
+  fill: rgba(123, 91, 66, 0.72);
+  stroke: none;
+}
+
+.habitus-practices path {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.32);
+  stroke-linecap: round;
+  stroke-width: 1.2;
+}
+
+.habitus-practices path:nth-child(2) {
+  stroke-width: 1.55;
+}
+
+.habitus-labels text {
+  fill: rgba(24, 23, 19, 0.62);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 520;
+  letter-spacing: 0.04em;
+}
+
+.habitus-labels .is-center {
+  fill: var(--ink);
+  font-size: 20px;
+  font-weight: 470;
+  letter-spacing: -0.01em;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.js .habitus-board .habitus-field-plane,
+.js .habitus-board .habitus-body-form,
+.js .habitus-board .habitus-history-loop,
+.js .habitus-board .habitus-disposition,
+.js .habitus-board .habitus-repeat-dots,
+.js .habitus-board .habitus-practices,
+.js .habitus-board .habitus-labels {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (max-width: 1180px) {
+  .home-habitus {
+    grid-template-columns: 1fr;
+  }
+
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    justify-items: start;
+    min-height: 0;
+  }
+}
+
+@media (max-width: 680px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    padding: 0;
+  }
+
+  .habitus-system {
+    width: 100%;
+  }
+
+  .habitus-labels text {
+    font-size: 18px;
+  }
+
+  .habitus-labels .is-center {
+    font-size: 21px;
+  }
+}
+
+/* Habitus habit-flow diagram: intuitive structure without poster framing. */
+.home-habitus {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 0;
+  align-items: center;
+  min-height: clamp(32rem, 46vw, 43rem);
+  overflow: visible;
+}
+
+.habitus-copy {
+  position: relative;
+  top: auto;
+  z-index: 3;
+  grid-column: 1 / 5;
+  grid-row: 1;
+  max-width: 30rem;
+  align-self: start;
+  margin-top: clamp(0.8rem, 4.6vw, 4.4rem);
+}
+
+.habitus-copy h2,
+html[lang="ko"] .habitus-copy h2 {
+  max-width: 9.5ch;
+  font-size: clamp(2.4rem, 4.7vw, 5.9rem);
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+
+html[lang="ko"] .habitus-copy h2 {
+  max-width: 8.8ch;
+  letter-spacing: -0.02em;
+  line-height: 1.09;
+}
+
+.habitus-copy p:not(.kicker) {
+  max-width: 25rem;
+}
+
+.habitus-link {
+  width: min(100%, 21rem);
+}
+
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  position: relative;
+  z-index: 1;
+  grid-column: 5 / -1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  min-height: clamp(24rem, 36vw, 34rem);
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+  opacity: 1;
+  transform: none;
+}
+
+.habitus-board::before,
+.habitus-board::after,
+html[lang="ko"] .habitus-board::before,
+html[lang="ko"] .habitus-board::after {
+  content: none !important;
+}
+
+.habitus-system {
+  display: block;
+  flex: 0 1 62rem;
+  width: 100%;
+  max-width: 62rem;
+  height: auto;
+  overflow: visible;
+}
+
+.habitus-system ellipse,
+.habitus-system circle,
+.habitus-system line,
+.habitus-system path {
+  vector-effect: non-scaling-stroke;
+}
+
+.habitus-environment path {
+  fill: rgba(24, 23, 19, 0.018);
+  stroke: rgba(24, 23, 19, 0.18);
+  stroke-width: 1.1;
+}
+
+.habitus-environment line {
+  stroke: rgba(24, 23, 19, 0.14);
+  stroke-width: 1;
+}
+
+.habitus-imprint {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.25);
+  stroke-linecap: round;
+  stroke-width: 1.35;
+}
+
+.habitus-loop {
+  fill: none;
+  stroke: rgba(123, 91, 66, 0.4);
+  stroke-dasharray: 4 8;
+  stroke-linecap: round;
+  stroke-width: 1.25;
+}
+
+.habitus-habit {
+  fill: rgba(250, 248, 241, 0.94);
+  stroke: rgba(24, 23, 19, 0.34);
+  stroke-width: 1.25;
+}
+
+.habitus-choice-lines path {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.28);
+  stroke-linecap: round;
+  stroke-width: 1.2;
+}
+
+.habitus-choice-lines path:nth-child(2) {
+  stroke-width: 1.7;
+}
+
+.habitus-choice-dots circle {
+  fill: rgba(123, 91, 66, 0.72);
+}
+
+.habitus-labels text {
+  fill: rgba(24, 23, 19, 0.66);
+  font-family: inherit;
+  font-size: 21px;
+  font-weight: 520;
+  letter-spacing: 0.01em;
+}
+
+.habitus-labels .is-center {
+  fill: var(--ink);
+  font-size: 27px;
+  font-weight: 470;
+  letter-spacing: -0.02em;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.habitus-labels .is-small {
+  fill: rgba(24, 23, 19, 0.5);
+  font-size: 17px;
+}
+
+.js .habitus-board .habitus-environment,
+.js .habitus-board .habitus-imprint,
+.js .habitus-board .habitus-loop,
+.js .habitus-board .habitus-habit,
+.js .habitus-board .habitus-choice-lines,
+.js .habitus-board .habitus-choice-dots,
+.js .habitus-board .habitus-labels {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (max-width: 1180px) {
+  .home-habitus {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    gap: clamp(1.6rem, 4vw, 3rem);
+  }
+
+  .habitus-copy,
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .habitus-copy {
+    max-width: 40rem;
+    margin-top: 0;
+  }
+
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    justify-content: center;
+    min-height: 0;
+  }
+}
+
+@media (max-width: 680px) {
+  .habitus-copy h2,
+  html[lang="ko"] .habitus-copy h2 {
+    font-size: clamp(2.25rem, 12vw, 4rem);
+  }
+
+  .habitus-system {
+    flex-basis: 100%;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .habitus-labels text {
+    font-size: 20px;
+  }
+
+  .habitus-labels .is-center {
+    font-size: 21px;
+  }
+
+  .habitus-labels .is-small {
+    font-size: 15px;
+  }
+}
+
+/* Habitus final flow: environment is repeated into habit, then choices. */
+.habitus-system {
+  flex-basis: 62rem;
+  max-width: 62rem;
+}
+
+.habitus-system #habitus-arrow path {
+  fill: rgba(24, 23, 19, 0.4);
+}
+
+.habitus-input-step rect,
+.habitus-repeat-step > circle {
+  fill: rgba(24, 23, 19, 0.024);
+  stroke: rgba(24, 23, 19, 0.18);
+  stroke-width: 1.15;
+}
+
+.habitus-input-step circle,
+.habitus-repeat-step circle,
+.habitus-choice-dots circle {
+  fill: rgba(123, 91, 66, 0.72);
+  stroke: none;
+}
+
+.habitus-input-step path {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.2);
+  stroke-linecap: round;
+  stroke-width: 1.05;
+}
+
+.habitus-flow path {
+  fill: none;
+  marker-end: url(#habitus-arrow);
+  stroke: rgba(24, 23, 19, 0.34);
+  stroke-linecap: round;
+  stroke-width: 1.25;
+}
+
+.habitus-flow path:nth-child(2),
+.habitus-flow path:nth-child(4) {
+  stroke-width: 1.65;
+}
+
+.habitus-repeat-step path {
+  fill: none;
+  marker-end: url(#habitus-arrow);
+  stroke: rgba(123, 91, 66, 0.42);
+  stroke-dasharray: 5 9;
+  stroke-linecap: round;
+  stroke-width: 1.35;
+}
+
+.habitus-habit-group line {
+  stroke: rgba(24, 23, 19, 0.13);
+  stroke-width: 1;
+}
+
+.habitus-habit {
+  fill: rgba(250, 248, 241, 0.94);
+  stroke: rgba(24, 23, 19, 0.36);
+  stroke-width: 1.25;
+}
+
+.habitus-choice-dots circle {
+  fill: rgba(24, 23, 19, 0.58);
+}
+
+.habitus-labels text {
+  fill: rgba(24, 23, 19, 0.64);
+  font-size: 22px;
+  font-weight: 520;
+  letter-spacing: 0.01em;
+}
+
+.habitus-labels .is-block,
+.habitus-labels .is-loop {
+  text-anchor: middle;
+}
+
+.habitus-labels .is-center {
+  fill: var(--ink);
+  font-size: 25px;
+  font-weight: 470;
+  letter-spacing: -0.018em;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.habitus-labels .is-small {
+  fill: rgba(24, 23, 19, 0.56);
+  font-size: 19px;
+}
+
+.js .habitus-board .habitus-environment,
+.js .habitus-board .habitus-input-step,
+.js .habitus-board .habitus-flow,
+.js .habitus-board .habitus-repeat,
+.js .habitus-board .habitus-repeat-step,
+.js .habitus-board .habitus-habit-group,
+.js .habitus-board .habitus-choice-dots,
+.js .habitus-board .habitus-labels {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (max-width: 680px) {
+  .habitus-system {
+    flex-basis: 100%;
+    max-width: none;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .habitus-labels text {
+    font-size: 24px;
+  }
+
+  .habitus-labels .is-center {
+    font-size: 25px;
+  }
+
+  .habitus-labels .is-small {
+    font-size: 21px;
+  }
+}
+
+/* Habitus groove flow: simplest readable pass. */
+.habitus-system {
+  flex-basis: 60rem;
+  max-width: 60rem;
+}
+
+.habitus-exposure path {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.24);
+  stroke-linecap: round;
+  stroke-width: 1.15;
+}
+
+.habitus-exposure text {
+  fill: rgba(24, 23, 19, 0.58);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.habitus-flow path,
+.habitus-choice-lines path {
+  fill: none;
+  marker-end: url(#habitus-arrow);
+  stroke: rgba(24, 23, 19, 0.32);
+  stroke-linecap: round;
+  stroke-width: 1.25;
+}
+
+.habitus-repeat-step path {
+  fill: none;
+  marker-end: url(#habitus-arrow);
+  stroke: rgba(123, 91, 66, 0.38);
+  stroke-dasharray: 5 9;
+  stroke-linecap: round;
+  stroke-width: 1.25;
+}
+
+.habitus-repeat-step text,
+.habitus-labels .is-choice {
+  fill: rgba(24, 23, 19, 0.58);
+  font-size: 18px;
+  font-weight: 520;
+  letter-spacing: -0.006em;
+  text-anchor: middle;
+}
+
+.habitus-habit {
+  fill: rgba(250, 248, 241, 0.94);
+  stroke: rgba(24, 23, 19, 0.34);
+  stroke-width: 1.2;
+}
+
+.habitus-habit-group path {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.13);
+  stroke-linecap: round;
+  stroke-width: 1;
+}
+
+.habitus-choice-dots circle {
+  fill: rgba(24, 23, 19, 0.56);
+  stroke: none;
+}
+
+.habitus-labels .is-center {
+  fill: var(--ink);
+  font-size: 22px;
+  font-weight: 470;
+  letter-spacing: -0.018em;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.js .habitus-board .habitus-exposure,
+.js .habitus-board .habitus-choice-lines {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (max-width: 680px) {
+  .habitus-system {
+    flex-basis: 100%;
+    max-width: none;
+    width: 100%;
+  }
+
+  .habitus-exposure text {
+    font-size: 20px;
+  }
+
+  .habitus-repeat-step text,
+  .habitus-labels .is-choice {
+    font-size: 21px;
+  }
+
+  .habitus-labels .is-center {
+    font-size: 24px;
+  }
+}
+
+/* Habitus word flow: keep only the essential terms. */
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  min-height: clamp(14rem, 22vw, 22rem);
+}
+
+.habitus-system {
+  flex-basis: 58rem;
+  max-width: 58rem;
+}
+
+.habitus-word-flow text {
+  fill: var(--ink);
+  font-size: 38px;
+  font-weight: 430;
+  letter-spacing: -0.025em;
+}
+
+html[lang="ko"] .habitus-word-flow text {
+  font-size: 42px;
+  letter-spacing: -0.018em;
+}
+
+.habitus-word-flow path {
+  fill: none;
+  marker-end: url(#habitus-arrow);
+  stroke: rgba(24, 23, 19, 0.28);
+  stroke-linecap: round;
+  stroke-width: 1.2;
+}
+
+.js .habitus-board .habitus-word-flow {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (max-width: 680px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    min-height: 0;
+  }
+
+  .habitus-system {
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .habitus-word-flow text,
+  html[lang="ko"] .habitus-word-flow text {
+    font-size: 44px;
+  }
+}
+
+/* Habitus overlap diagram: experience and repetition form habit. */
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  min-height: clamp(24rem, 38vw, 36rem);
+}
+
+.habitus-system {
+  flex-basis: 64rem;
+  max-width: 64rem;
+}
+
+.habitus-overlap-diagram .habitus-circle {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.18);
+  stroke-width: 1.15;
+}
+
+.habitus-lens {
+  fill: var(--ink);
+  stroke: var(--ink);
+  stroke-width: 1.15;
+}
+
+.habitus-circle-label {
+  fill: rgba(24, 23, 19, 0.58);
+  font-size: 24px;
+  font-weight: 520;
+  letter-spacing: -0.01em;
+  text-anchor: middle;
+}
+
+.habitus-lens-label {
+  fill: var(--paper);
+  font-size: 25px;
+  font-weight: 470;
+  letter-spacing: -0.02em;
+  text-anchor: middle;
+}
+
+.habitus-choice-ray {
+  fill: none;
+  stroke: rgba(123, 91, 66, 0.82);
+  stroke-linecap: round;
+  stroke-width: 1.25;
+}
+
+.habitus-choice-point {
+  fill: rgba(123, 91, 66, 0.92);
+  stroke: none;
+}
+
+.habitus-choice-label {
+  fill: rgba(123, 91, 66, 0.92);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.js .habitus-board .habitus-overlap-diagram {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (max-width: 680px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    min-height: 0;
+  }
+
+  .habitus-system {
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .habitus-circle-label {
+    font-size: 30px;
+  }
+
+  .habitus-lens-label {
+    font-size: 30px;
+  }
+
+  .habitus-choice-label {
+    font-size: 26px;
+  }
+}
+
+/* Habitus reason diagram: taste matters because criteria explain choice. */
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  min-height: clamp(25rem, 38vw, 36rem);
+}
+
+.habitus-system {
+  flex-basis: 64rem;
+  max-width: 64rem;
+}
+
+.habitus-reason-diagram .habitus-circle {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.18);
+  stroke-width: 1.15;
+}
+
+.habitus-reason-diagram .habitus-lens {
+  fill: var(--ink);
+  stroke: var(--ink);
+  stroke-width: 1.15;
+}
+
+.habitus-reason-diagram .habitus-circle-label {
+  fill: rgba(24, 23, 19, 0.58);
+  font-size: 26px;
+  font-weight: 520;
+  letter-spacing: -0.01em;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.habitus-reason-diagram .habitus-lens-label {
+  fill: var(--paper);
+  font-size: 26px;
+  font-weight: 470;
+  letter-spacing: -0.02em;
+  text-anchor: middle;
+}
+
+.habitus-reason-diagram .habitus-choice-ray {
+  fill: none;
+  stroke: rgba(123, 91, 66, 0.86);
+  stroke-linecap: round;
+  stroke-width: 1.35;
+}
+
+.habitus-reason-diagram .habitus-ray-label,
+.habitus-reason-diagram .habitus-choice-label {
+  fill: rgba(123, 91, 66, 0.92);
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.habitus-reason-diagram .habitus-option {
+  fill: rgba(24, 23, 19, 0.35);
+  stroke: none;
+}
+
+.habitus-reason-diagram .habitus-option.is-selected {
+  fill: rgba(123, 91, 66, 0.92);
+}
+
+.js .habitus-board .habitus-reason-diagram {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (max-width: 680px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    min-height: 0;
+  }
+
+  .habitus-system {
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .habitus-reason-diagram .habitus-circle-label,
+  .habitus-reason-diagram .habitus-lens-label {
+    font-size: 31px;
+  }
+
+  .habitus-reason-diagram .habitus-ray-label,
+  .habitus-reason-diagram .habitus-choice-label {
+    font-size: 26px;
+  }
+}
+
+/* Habitus filter diagram: taste as the criteria that narrow choices. */
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  min-height: clamp(22rem, 32vw, 32rem);
+}
+
+.habitus-system {
+  flex-basis: 60rem;
+  max-width: 60rem;
+}
+
+.habitus-system #habitus-arrow path {
+  fill: rgba(24, 23, 19, 0.34);
+}
+
+.habitus-filter-diagram .habitus-funnel {
+  fill: rgba(24, 23, 19, 0.018);
+  stroke: rgba(24, 23, 19, 0.18);
+  stroke-width: 1.15;
+}
+
+.habitus-filter-diagram .habitus-funnel-label {
+  fill: rgba(24, 23, 19, 0.58);
+  font-size: 28px;
+  font-weight: 520;
+  letter-spacing: -0.012em;
+}
+
+.habitus-filter-diagram .habitus-filter-gate {
+  fill: var(--ink);
+  stroke: var(--ink);
+  stroke-width: 1.15;
+}
+
+.habitus-filter-diagram .habitus-filter-label {
+  fill: var(--paper);
+  font-size: 26px;
+  font-weight: 470;
+  letter-spacing: -0.02em;
+  text-anchor: middle;
+}
+
+.habitus-filter-diagram .habitus-choice-ray {
+  fill: none;
+  marker-end: url(#habitus-arrow);
+  stroke: rgba(24, 23, 19, 0.32);
+  stroke-linecap: round;
+  stroke-width: 1.25;
+}
+
+.habitus-filter-diagram .habitus-choice-point {
+  fill: rgba(123, 91, 66, 0.9);
+  stroke: none;
+}
+
+.habitus-filter-diagram .habitus-choice-label {
+  fill: rgba(123, 91, 66, 0.9);
+  font-size: 24px;
+  font-weight: 520;
+  letter-spacing: -0.012em;
+  text-anchor: middle;
+}
+
+.js .habitus-board .habitus-filter-diagram {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (max-width: 680px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    min-height: 0;
+  }
+
+  .habitus-system {
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .habitus-filter-diagram .habitus-funnel-label {
+    font-size: 34px;
+  }
+
+  .habitus-filter-diagram .habitus-filter-label {
+    font-size: 31px;
+  }
+
+  .habitus-filter-diagram .habitus-choice-label {
+    font-size: 30px;
+  }
+}
+
+/* Habitus aperture diagram: repeated experience narrows into one choice. */
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  min-height: clamp(21rem, 30vw, 31rem);
+}
+
+.habitus-system {
+  flex-basis: 60rem;
+  max-width: 60rem;
+}
+
+.habitus-aperture-diagram .habitus-input-lines path,
+.habitus-aperture-diagram .habitus-output-line {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.24);
+  stroke-linecap: square;
+  stroke-width: 1.15;
+}
+
+.habitus-aperture-diagram .habitus-input-lines path:nth-child(2),
+.habitus-aperture-diagram .habitus-output-line {
+  stroke: rgba(24, 23, 19, 0.34);
+  stroke-width: 1.45;
+}
+
+.habitus-aperture {
+  fill: var(--ink);
+  stroke: none;
+}
+
+.habitus-output-point {
+  fill: rgba(123, 91, 66, 0.92);
+  stroke: none;
+}
+
+.habitus-aperture-labels text {
+  fill: rgba(24, 23, 19, 0.62);
+  font-size: 24px;
+  font-weight: 520;
+  letter-spacing: -0.01em;
+}
+
+.habitus-aperture-labels .is-criteria {
+  fill: var(--ink);
+  font-size: 25px;
+  text-anchor: middle;
+}
+
+.habitus-aperture-labels .is-choice {
+  fill: rgba(123, 91, 66, 0.92);
+  font-size: 25px;
+}
+
+.js .habitus-board .habitus-aperture-diagram {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (max-width: 680px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    min-height: 0;
+  }
+
+  .habitus-system {
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .habitus-aperture-labels text,
+  .habitus-aperture-labels .is-criteria,
+  .habitus-aperture-labels .is-choice {
+    font-size: 31px;
+  }
+}
+
+/* Habitus slit diagram: central artwork with short supporting copy below. */
+.home-habitus {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.6rem, 3.6vw, 3.4rem);
+  align-items: start;
+  justify-items: center;
+  min-height: 0;
+  overflow: visible;
+}
+
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  justify-content: center;
+  width: min(100%, 72rem);
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.habitus-board::before,
+.habitus-board::after,
+html[lang="ko"] .habitus-board::before,
+html[lang="ko"] .habitus-board::after {
+  content: none !important;
+}
+
+.habitus-copy {
+  position: relative;
+  top: auto;
+  z-index: 2;
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: center;
+  width: min(100%, 43rem);
+  max-width: 43rem;
+  margin: 0;
+}
+
+.habitus-copy h2,
+html[lang="ko"] .habitus-copy h2 {
+  max-width: 10.5ch;
+  font-size: clamp(2.45rem, 6.2vw, 6.2rem);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+html[lang="ko"] .habitus-copy h2 {
+  max-width: 9.6ch;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.habitus-copy p:not(.kicker) {
+  max-width: 42rem;
+  font-size: clamp(1rem, 1.25vw, 1.22rem);
+  line-height: 1.72;
+}
+
+.habitus-link {
+  width: min(100%, 42rem);
+}
+
+.habitus-system {
+  display: block;
+  flex: 0 1 72rem;
+  width: 100%;
+  max-width: 72rem;
+  height: auto;
+  overflow: visible;
+}
+
+.habitus-slit-diagram .habitus-rails path,
+.habitus-slit-diagram .habitus-choice-line {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.22);
+  stroke-linecap: square;
+  stroke-width: 1.05;
+}
+
+.habitus-slit-diagram .habitus-rails .is-core,
+.habitus-slit-diagram .habitus-choice-line {
+  stroke: rgba(24, 23, 19, 0.38);
+  stroke-width: 1.28;
+}
+
+.habitus-slit-gate rect {
+  fill: var(--ink);
+  stroke: none;
+}
+
+.habitus-choice-mark {
+  fill: rgba(123, 91, 66, 0.9);
+  stroke: none;
+}
+
+.habitus-slit-labels text {
+  fill: rgba(24, 23, 19, 0.58);
+  font-size: 23px;
+  font-weight: 520;
+  letter-spacing: -0.01em;
+}
+
+.habitus-slit-labels .is-criteria {
+  fill: var(--ink);
+  font-size: 24px;
+  text-anchor: middle;
+}
+
+.habitus-slit-labels .is-choice {
+  fill: rgba(123, 91, 66, 0.92);
+  font-size: 24px;
+}
+
+.js .habitus-board .habitus-slit-diagram {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (max-width: 680px) {
+  .home-habitus {
+    gap: clamp(1.35rem, 7vw, 2.6rem);
+  }
+
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    width: 100%;
+  }
+
+  .habitus-system {
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .habitus-copy {
+    width: 100%;
+  }
+
+  .habitus-copy h2,
+  html[lang="ko"] .habitus-copy h2 {
+    font-size: clamp(2.2rem, 12vw, 4.2rem);
+  }
+
+  .habitus-slit-labels text,
+  .habitus-slit-labels .is-criteria,
+  .habitus-slit-labels .is-choice {
+    font-size: 30px;
+  }
+}
+
+/* Habitus rail diagram: refined central geometry. */
+.home-habitus {
+  gap: clamp(1.25rem, 2.5vw, 2.4rem);
+}
+
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  width: min(100%, 68rem);
+}
+
+.habitus-system {
+  flex-basis: 68rem;
+  max-width: 68rem;
+}
+
+.habitus-slit-diagram .habitus-rails path,
+.habitus-slit-diagram .habitus-choice-line {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.2);
+  stroke-linecap: butt;
+  stroke-width: 1.05;
+}
+
+.habitus-slit-diagram .habitus-rails .is-core,
+.habitus-slit-diagram .habitus-choice-line {
+  stroke: rgba(24, 23, 19, 0.36);
+  stroke-width: 1.32;
+}
+
+.habitus-slit {
+  fill: var(--ink);
+  stroke: none;
+}
+
+.habitus-choice-mark {
+  fill: rgba(123, 91, 66, 0.9);
+  stroke: none;
+}
+
+.habitus-slit-labels text {
+  fill: rgba(24, 23, 19, 0.56);
+  font-size: 20px;
+  font-weight: 520;
+  letter-spacing: -0.008em;
+}
+
+.habitus-slit-labels .is-criteria {
+  fill: var(--ink);
+  font-size: 21px;
+  text-anchor: middle;
+}
+
+.habitus-slit-labels .is-choice {
+  fill: rgba(123, 91, 66, 0.92);
+  font-size: 21px;
+}
+
+.habitus-copy {
+  margin-top: 0;
+}
+
+@media (max-width: 680px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion],
+  .habitus-system {
+    width: 100%;
+    max-width: none;
+  }
+
+  .habitus-slit-labels text,
+  .habitus-slit-labels .is-criteria,
+  .habitus-slit-labels .is-choice {
+    font-size: 27px;
+  }
+}
+
+/* Habitus slot diagram: quieter, calibrated filter geometry. */
+.home-habitus {
+  gap: clamp(1rem, 2.2vw, 2rem);
+}
+
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  width: min(100%, 66rem);
+}
+
+.habitus-system {
+  flex-basis: 66rem;
+  max-width: 66rem;
+}
+
+.habitus-slot-diagram .habitus-input-stack path,
+.habitus-slot-diagram .habitus-slot-thread {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.18);
+  stroke-linecap: butt;
+  stroke-width: 1;
+}
+
+.habitus-slot-diagram .habitus-input-stack .is-core,
+.habitus-slot-diagram .habitus-slot-thread {
+  stroke: rgba(24, 23, 19, 0.42);
+  stroke-width: 1.2;
+}
+
+.habitus-slot-gate {
+  fill: var(--ink);
+  stroke: none;
+}
+
+.habitus-slot-opening {
+  fill: var(--paper);
+  stroke: none;
+}
+
+.habitus-slot-diagram .habitus-choice-line {
+  fill: none;
+  stroke: rgba(123, 91, 66, 0.78);
+  stroke-linecap: butt;
+  stroke-width: 1.2;
+}
+
+.habitus-choice-mark {
+  fill: rgba(123, 91, 66, 0.92);
+  stroke: none;
+}
+
+.habitus-slot-labels text {
+  fill: rgba(24, 23, 19, 0.56);
+  font-size: 19px;
+  font-weight: 520;
+  letter-spacing: -0.006em;
+}
+
+.habitus-slot-labels .is-criteria {
+  fill: var(--ink);
+  font-size: 20px;
+  text-anchor: middle;
+}
+
+.habitus-slot-labels .is-choice {
+  fill: rgba(123, 91, 66, 0.92);
+  font-size: 20px;
+}
+
+.js .habitus-board .habitus-slot-diagram {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (max-width: 680px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion],
+  .habitus-system {
+    width: 100%;
+    max-width: none;
+  }
+
+  .habitus-slot-labels text,
+  .habitus-slot-labels .is-criteria,
+  .habitus-slot-labels .is-choice {
+    font-size: 27px;
+  }
+}
+
+/* Habitus Venn flow: experience and repetition overlap into habit. */
+.home-habitus {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  align-items: center;
+  gap: clamp(1.2rem, 2.6vw, 2.7rem);
+  min-height: 0;
+}
+
+.habitus-copy {
+  position: relative;
+  top: auto;
+  display: grid;
+  grid-column: 1;
+  grid-row: auto;
+  order: 1;
+  gap: clamp(0.9rem, 1.5vw, 1.25rem);
+  justify-items: center;
+  width: min(100%, 52rem);
+  max-width: none;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.habitus-copy h2,
+html[lang="ko"] .habitus-copy h2 {
+  max-width: 13.4ch;
+  font-size: clamp(2.45rem, 4.8vw, 5.4rem);
+  font-weight: 440;
+  letter-spacing: -0.042em;
+  line-height: 1.03;
+}
+
+html[lang="ko"] .habitus-copy h2 {
+  max-width: 12.8ch;
+  letter-spacing: -0.034em;
+  line-height: 1.08;
+}
+
+.habitus-copy p:not(.kicker) {
+  max-width: 39rem;
+  margin-inline: auto;
+  font-size: clamp(1rem, 1.08vw, 1.16rem);
+  line-height: 1.7;
+  text-align: center;
+}
+
+.habitus-link {
+  grid-column: 1;
+  grid-row: auto;
+  order: 3;
+  justify-self: center;
+  width: min(100%, 39rem);
+  grid-template-columns: minmax(5.4rem, 0.28fr) minmax(0, 1fr);
+  gap: clamp(1.4rem, 4vw, 3.4rem);
+  margin-top: 0;
+  text-align: left;
+}
+
+.habitus-link strong {
+  justify-self: start;
+}
+
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  grid-column: 1;
+  grid-row: auto;
+  order: 2;
+  width: min(100%, 56rem);
+  min-height: clamp(18rem, 38vw, 25rem);
+  padding: 0;
+  place-items: center;
+}
+
+.habitus-system {
+  display: block;
+  width: 100%;
+  flex-basis: 56rem;
+  max-width: 56rem;
+  overflow: visible;
+}
+
+.habitus-venn-circle {
+  fill: rgba(24, 23, 19, 0.01);
+  stroke: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.habitus-venn-circle.is-repeat {
+  fill: rgba(123, 91, 66, 0.018);
+}
+
+.habitus-venn-lens {
+  fill: rgba(190, 161, 124, 0.46);
+  stroke: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.habitus-venn-ring {
+  fill: none;
+  stroke: rgba(24, 23, 19, 0.18);
+  stroke-width: 1.08;
+  vector-effect: non-scaling-stroke;
+}
+
+.habitus-venn-ring.is-repeat {
+  stroke: rgba(123, 91, 66, 0.22);
+  vector-effect: non-scaling-stroke;
+}
+
+.habitus-choice-arrow,
+.habitus-choice-head {
+  fill: none;
+  stroke: rgba(94, 72, 54, 0.58);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.habitus-strand-labels text {
+  fill: rgba(24, 23, 19, 0.54);
+  font-size: 24px;
+  font-weight: 560;
+  letter-spacing: -0.008em;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.habitus-strand-labels .is-habit {
+  fill: rgba(71, 46, 31, 0.98);
+  font-size: 28px;
+  font-weight: 640;
+  letter-spacing: -0.02em;
+}
+
+.habitus-strand-labels .is-choice {
+  fill: rgba(94, 72, 54, 0.82);
+  font-size: 30px;
+  font-weight: 640;
+  letter-spacing: -0.02em;
+}
+
+html[lang="en"] .habitus-strand-labels .is-experience-label,
+html[lang="en"] .habitus-strand-labels .is-repeat-label {
+  font-size: 16.5px;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+}
+
+html[lang="en"] .habitus-strand-labels .is-habit,
+html[lang="en"] .habitus-strand-labels .is-choice {
+  font-size: 27px;
+}
+
+.habitus-choice-copy {
+  fill: rgba(94, 72, 54, 0.62);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.002em;
+}
+
+.js .habitus-board .habitus-venn-circle,
+.js .habitus-board .habitus-venn-ring,
+.js .habitus-board .habitus-venn-lens,
+.js .habitus-board .habitus-strand-labels text {
+  opacity: 0;
+  transform: scale(0.985);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.js .habitus-board .habitus-venn-lens {
+  transform: scale(0.92);
+  transition-delay: 260ms;
+}
+
+.js .habitus-board .habitus-strand-labels text {
+  transform: translateY(0.28rem);
+  transition: opacity 360ms ease 360ms, transform 360ms ease 360ms;
+}
+
+.js .habitus-board .habitus-strand-labels .is-choice {
+  transition-delay: 620ms;
+}
+
+.js .habitus-board .habitus-strand-labels .habitus-choice-copy {
+  transition-delay: 760ms;
+}
+
+.js .habitus-board .habitus-choice-arrow,
+.js .habitus-board .habitus-choice-head {
+  opacity: 0;
+  transform: translateY(-0.35rem);
+  transition: opacity 360ms ease 440ms, transform 360ms ease 440ms;
+}
+
+.js .habitus-board .habitus-choice-copy {
+  opacity: 0;
+  transform: translateY(0.45rem);
+  transition: opacity 420ms ease 720ms, transform 420ms ease 720ms;
+}
+
+.js .habitus-board.is-visible .habitus-venn-circle,
+.js .habitus-board.is-visible .habitus-venn-ring,
+.js .habitus-board.is-visible .habitus-venn-lens,
+.js .habitus-board.is-visible .habitus-strand-labels text,
+.js .habitus-board.is-visible .habitus-choice-arrow,
+.js .habitus-board.is-visible .habitus-choice-head,
+.js .habitus-board.is-visible .habitus-choice-copy {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 680px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion],
+  .habitus-system {
+    width: 100%;
+    max-width: none;
+  }
+
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    min-height: 0;
+  }
+
+  .habitus-copy {
+    width: min(100%, 28rem);
+  }
+
+  .habitus-copy h2,
+  html[lang="ko"] .habitus-copy h2 {
+    max-width: 11.5ch;
+    font-size: clamp(2.35rem, 12vw, 4.4rem);
+  }
+
+  .habitus-copy p:not(.kicker) {
+    font-size: 1rem;
+    line-height: 1.68;
+  }
+
+  .habitus-link {
+    grid-template-columns: 1fr;
+    gap: 0.32rem;
+    width: min(100%, 25rem);
+    text-align: center;
+  }
+
+  .habitus-link strong {
+    justify-self: center;
+  }
+
+  .habitus-strand-labels text,
+  .habitus-strand-labels .is-choice {
+    font-size: 28px;
+  }
+
+  .habitus-strand-labels .is-habit {
+    font-size: 30px;
+  }
+
+  .habitus-choice-copy {
+    font-size: 18px;
+  }
+
+  html[lang="en"] .habitus-strand-labels .is-experience-label,
+  html[lang="en"] .habitus-strand-labels .is-repeat-label {
+    font-size: 18px;
+  }
+
+  html[lang="en"] .habitus-strand-labels .is-habit,
+  html[lang="en"] .habitus-strand-labels .is-choice {
+    font-size: 26px;
+  }
+
+  html[lang="en"] .habitus-choice-copy {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .habitus-board .habitus-venn-circle,
+  .js .habitus-board .habitus-venn-ring,
+  .js .habitus-board .habitus-venn-lens,
+  .js .habitus-board .habitus-strand-labels text,
+  .js .habitus-board .habitus-choice-arrow,
+  .js .habitus-board .habitus-choice-head,
+  .js .habitus-board .habitus-choice-copy {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Article reading surface: fewer rules, stronger editorial measure. */
 .article-detail.section-pad {
-  padding-top: clamp(1.4rem, 3vw, 2.8rem);
+  padding-top: clamp(1.35rem, 2.7vw, 2.5rem);
 }
 
 .article-hero-grid {
-  grid-template-columns: minmax(0, 0.68fr) minmax(15rem, 0.24fr);
-  gap: clamp(2rem, 5vw, 6.8rem);
+  grid-template-columns: minmax(0, 0.66fr) minmax(13rem, 0.22fr);
+  gap: clamp(2rem, 4.6vw, 6rem);
   border-top: 0 !important;
 }
 
 .article-title-block h1,
 html[lang="ko"] .article-title-block h1 {
-  max-width: 18ch;
-  font-size: clamp(2.8rem, 5vw, 7.4rem);
-  letter-spacing: -0.065em;
-  line-height: 0.98;
+  max-width: 17ch;
+  font-size: clamp(2.55rem, 4.08vw, 5.55rem);
+  font-weight: 450;
+  letter-spacing: -0.052em;
+  line-height: 1.04;
 }
 
 html[lang="ko"] .article-title-block h1 {
-  max-width: 15ch;
-  letter-spacing: -0.04em;
-  line-height: 1.08;
+  max-width: 13.5ch;
+  font-weight: 500;
+  letter-spacing: -0.032em;
+  line-height: 1.14;
 }
 
 .article-title-block p:not(.kicker) {
@@ -14825,63 +17571,78 @@ html[lang="ko"] .article-title-block h1 {
 }
 
 .article-visual {
-  margin: clamp(2.2rem, 5vw, 5.8rem) auto clamp(3rem, 6vw, 7rem);
-  width: min(100%, 68rem);
+  margin: clamp(2rem, 4.4vw, 5.2rem) auto clamp(3rem, 5.6vw, 6.4rem);
+  width: min(100%, 64rem);
 }
 
 .article-body-grid {
-  grid-template-columns: minmax(12rem, 0.24fr) minmax(0, 0.76fr);
-  gap: clamp(2.4rem, 5.2vw, 6.2rem);
+  grid-template-columns: minmax(10rem, 0.2fr) minmax(0, 0.74fr);
+  gap: clamp(2.2rem, 4.8vw, 5.6rem);
   align-items: start;
 }
 
 .article-side {
-  gap: clamp(0.7rem, 1.2vw, 1rem);
-  border-top: 0 !important;
+  gap: clamp(0.55rem, 1vw, 0.85rem);
   padding-top: 0;
+  border-top: 0 !important;
+  color: var(--muted);
 }
 
-.article-side .image-block {
-  width: min(100%, 16rem);
-  aspect-ratio: 4 / 5;
-  opacity: 0.72;
+.article-detail:not(.writer-article) .article-side .image-block {
+  display: none;
+}
+
+.article-detail:not(.writer-article) .article-side-image [data-article-rail-title],
+.article-detail:not(.writer-article) .article-side-image [data-article-rail-text] {
+  display: block;
 }
 
 .article-side strong {
-  max-width: 13rem;
-  color: var(--ink);
-  font-size: clamp(0.98rem, 1.06vw, 1.12rem);
+  max-width: 11.5rem;
+  color: rgba(24, 23, 19, 0.58);
+  font-size: clamp(0.9rem, 0.94vw, 1rem);
+  font-weight: 520;
+  letter-spacing: -0.006em;
   line-height: 1.42;
 }
 
 .article-side p {
-  max-width: 15rem;
-  color: var(--muted);
-  font-size: clamp(0.86rem, 0.92vw, 0.98rem);
-  line-height: 1.72;
+  max-width: 12.8rem;
+  color: rgba(119, 114, 102, 0.68);
+  font-size: clamp(0.76rem, 0.8vw, 0.84rem);
+  line-height: 1.66;
+}
+
+.article-rail-no {
+  color: rgba(24, 23, 19, 0.24);
+  font-size: 0.68rem;
+  font-weight: 560;
+  letter-spacing: 0.12em;
 }
 
 .article-body {
   gap: 0;
+  counter-reset: article-sections;
 }
 
 .article-body blockquote {
-  max-width: 16ch;
-  margin: 0 0 clamp(2.8rem, 6vw, 7rem);
+  max-width: 31rem;
+  margin: 0 0 clamp(3.2rem, 6vw, 6.8rem) clamp(0rem, 4vw, 3.4rem);
   border: 0 !important;
   box-shadow: none !important;
   padding: 0;
-  color: var(--ink);
-  font-size: clamp(2.6rem, 5.7vw, 8.4rem);
-  font-weight: 430;
-  letter-spacing: -0.07em;
-  line-height: 0.98;
+  color: rgba(24, 23, 19, 0.74);
+  font-size: clamp(1.38rem, 2vw, 2.18rem);
+  font-weight: 440;
+  letter-spacing: -0.034em;
+  line-height: 1.24;
 }
 
 html[lang="ko"] .article-body blockquote {
-  max-width: 15ch;
-  letter-spacing: -0.045em;
-  line-height: 1.12;
+  max-width: 28rem;
+  font-weight: 500;
+  letter-spacing: -0.022em;
+  line-height: 1.38;
 }
 
 .article-body blockquote::after {
@@ -14889,45 +17650,57 @@ html[lang="ko"] .article-body blockquote {
 }
 
 .article-section {
-  grid-template-columns: minmax(10rem, 0.22fr) minmax(0, 0.78fr);
-  column-gap: clamp(1.6rem, 4vw, 4.6rem);
-  row-gap: clamp(0.8rem, 1.6vw, 1.3rem);
+  counter-increment: article-sections;
+  grid-template-columns: minmax(8rem, 0.18fr) minmax(0, 0.74fr);
+  column-gap: clamp(1.8rem, 4.4vw, 5rem);
+  row-gap: clamp(0.9rem, 1.7vw, 1.45rem);
+  border-top: 0 !important;
   border-bottom: 0 !important;
-  padding: 0 0 clamp(3.2rem, 6.4vw, 7.4rem);
+  padding: 0 0 clamp(4.5rem, 8vw, 9rem);
 }
 
 .article-section + .article-section {
-  padding-top: clamp(0.4rem, 1vw, 1.2rem);
+  padding-top: clamp(0.5rem, 1.4vw, 1.4rem);
 }
 
 .article-section h2 {
   grid-column: 1;
   max-width: 11ch;
-  color: var(--muted);
-  font-size: clamp(1.2rem, 1.8vw, 2.6rem);
-  font-weight: 430;
-  letter-spacing: -0.03em;
-  line-height: 1.12;
+  color: rgba(24, 23, 19, 0.66);
+  font-size: clamp(1rem, 1.16vw, 1.34rem);
+  font-weight: 520;
+  letter-spacing: -0.014em;
+  line-height: 1.24;
+}
+
+.article-section h2::before {
+  content: counter(article-sections, decimal-leading-zero);
+  display: block;
+  margin-bottom: clamp(0.85rem, 1.3vw, 1.15rem);
+  color: rgba(24, 23, 19, 0.24);
+  font-size: 0.68rem;
+  font-weight: 560;
+  letter-spacing: 0.12em;
 }
 
 html[lang="ko"] .article-section h2 {
-  max-width: 8.5ch;
-  letter-spacing: -0.016em;
-  line-height: 1.22;
+  max-width: 9.5ch;
+  letter-spacing: -0.01em;
+  line-height: 1.28;
   word-break: keep-all;
 }
 
 .article-section.is-active-section h2 {
-  color: var(--ink);
+  color: rgba(24, 23, 19, 0.84);
 }
 
 .article-section p {
   grid-column: 2;
-  max-width: 64ch;
-  margin: 0 0 clamp(1.4rem, 2.2vw, 2.2rem);
-  color: var(--body-ink);
-  font-size: clamp(1.04rem, 1.16vw, 1.2rem);
-  line-height: 1.92;
+  max-width: 56ch;
+  margin: 0 0 clamp(1.45rem, 2.2vw, 2.15rem);
+  color: rgba(55, 52, 47, 0.94);
+  font-size: clamp(1.03rem, 1.1vw, 1.16rem);
+  line-height: 1.94;
 }
 
 .article-section p:last-child {
@@ -14936,13 +17709,14 @@ html[lang="ko"] .article-section h2 {
 
 .article-section-figure {
   grid-column: 2;
-  width: min(100%, 58rem);
-  max-width: 58rem;
-  margin: clamp(0.4rem, 1vw, 0.8rem) 0 clamp(1.3rem, 2.4vw, 2.4rem);
+  width: min(100%, 50rem);
+  max-width: 50rem;
+  margin: clamp(0.25rem, 0.8vw, 0.65rem) 0 clamp(1.2rem, 2.2vw, 2.1rem);
 }
 
 .article-section-figure .image-block {
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 5 / 3.35;
+  opacity: 0.9;
 }
 
 .article-section-figure figcaption {
@@ -14954,19 +17728,19 @@ html[lang="ko"] .article-section h2 {
 }
 
 .writer-article .writer-body-grid {
-  grid-template-columns: minmax(12rem, 0.24fr) minmax(0, 0.76fr);
-  gap: clamp(2.4rem, 5.2vw, 6.2rem);
+  grid-template-columns: minmax(10rem, 0.2fr) minmax(0, 0.74fr);
+  gap: clamp(2.2rem, 4.8vw, 5.6rem);
 }
 
 .writer-article .writer-section {
-  grid-template-columns: minmax(10rem, 0.22fr) minmax(0, 0.78fr);
-  column-gap: clamp(1.6rem, 4vw, 4.6rem);
+  grid-template-columns: minmax(8.5rem, 0.2fr) minmax(0, 0.8fr);
+  column-gap: clamp(1.6rem, 3.8vw, 4.2rem);
   border-top: 0 !important;
-  padding: 0 0 clamp(3.2rem, 6.4vw, 7.4rem);
+  padding: 0 0 clamp(4.5rem, 8vw, 9rem);
 }
 
 .writer-article .writer-section [data-write-paragraph] {
-  max-width: 64ch;
+  max-width: 58ch;
 }
 
 .writer-article .writer-section .writer-section-media {
@@ -14988,7 +17762,7 @@ html[lang="ko"] .article-section h2 {
   .article-body blockquote,
   html[lang="ko"] .article-body blockquote {
     max-width: 100%;
-    font-size: clamp(2.3rem, 9vw, 4.8rem);
+    font-size: clamp(1.55rem, 6vw, 2.8rem);
   }
 
   .article-section h2,
@@ -15006,6 +17780,16 @@ html[lang="ko"] .article-section h2 {
 
   .article-side {
     position: static;
+    display: none;
+  }
+
+  .article-section h2,
+  html[lang="ko"] .article-section h2 {
+    max-width: 100%;
+  }
+
+  .article-section p {
+    max-width: 100%;
   }
 }
 
@@ -15023,10 +17807,16 @@ html[lang="ko"] .article-section h2 {
   .js .habitus-copy.is-visible .habitus-link,
   .js .home-issue-index.is-visible .home-index-list::before,
   .js .home-issue-index.is-visible .home-index-row::before,
+  .js .habitus-board .habitus-diagram::before,
+  .js .habitus-board .habitus-diagram .habitus-axis,
+  .js .habitus-board .habitus-set,
+  .js .habitus-board .habitus-core,
   .js .habitus-board.is-visible .habitus-axis,
   .js .habitus-board.is-visible .habitus-point,
   .js .habitus-board.is-visible .habitus-field {
     animation: none !important;
+    opacity: 1 !important;
+    transition: none !important;
   }
 
   .js .home-stories .home-recent-lead::before,

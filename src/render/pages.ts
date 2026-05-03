@@ -157,7 +157,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-index-tighten";
+const assetVersion = "20260503-article-space-categories";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -491,13 +491,12 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
     })
   ].join("");
   const subcategoryOptions = site.categories
-    .flatMap((category) => category.subcategories.map((subcategory) => `            <option
-              value="${subcategory.key}"
-              data-category="${category.key}"
-              data-label-ko="${escapeHtml(subcategory.label.ko)}"
-              data-label-en="${escapeHtml(subcategory.label.en)}"
-              ${category.key === initialCategory.key && subcategory.key === initialSubcategory.key ? "selected" : ""}
-            >${escapeHtml(text(subcategory.label, locale))}</option>`))
+    .flatMap((category) =>
+      category.subcategories.map((subcategory) => {
+        const selectedAttribute = category.key === initialCategory.key && subcategory.key === initialSubcategory.key ? " selected" : "";
+        return `            <option value="${subcategory.key}" data-category="${category.key}" data-label-ko="${escapeHtml(subcategory.label.ko)}" data-label-en="${escapeHtml(subcategory.label.en)}"${selectedAttribute}>${escapeHtml(text(subcategory.label, locale))}</option>`;
+      })
+    )
     .join("\n");
   const heroOptions = [
     "image-atelier",
@@ -854,48 +853,6 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
       "              </a>"
     ].filter(Boolean).join("\n"))
     .join("\n");
-  const habitusFields = [
-    {
-      no: "01",
-      title: { ko: "몸의 감각", en: "Embodied Sense" },
-      body: {
-        ko: "먼저 몸에 익는 속도와 거리.",
-        en: "Speed and distance learned by the body."
-      }
-    },
-    {
-      no: "02",
-      title: { ko: "사회적 조건", en: "Social Conditions" },
-      body: {
-        ko: "자연스럽다고 느끼게 하는 배경.",
-        en: "The setting that makes something feel natural."
-      }
-    },
-    {
-      no: "03",
-      title: { ko: "선택의 언어", en: "The Language of Choice" },
-      body: {
-        ko: "좋아한다는 말 뒤의 기준.",
-        en: "The criteria behind saying yes."
-      }
-    },
-    {
-      no: "04",
-      title: { ko: "반복의 기록", en: "A Record of Repetition" },
-      body: {
-        ko: "선택이 쌓여 문장이 되는 자리.",
-        en: "Where repeated choices become language."
-      }
-    }
-  ];
-  const habitusCards = habitusFields
-    .map((field) => `              <article class="habitus-card">
-                <span>${escapeHtml(field.no)}</span>
-                <strong>${escapeHtml(text(field.title, locale))}</strong>
-                <p>${escapeHtml(text(field.body, locale))}</p>
-              </article>`)
-    .join("\n");
-
   const body = `
     <section class="cover section-pad" aria-labelledby="hero-title" data-scroll-section>
       <div class="cover-grid home-cover-grid">
@@ -944,33 +901,34 @@ ${storyRows}
 
     <section class="home-habitus section-pad" id="notes" aria-labelledby="notes-title" data-scroll-section>
       <div class="habitus-copy" data-reveal>
-        <p class="kicker">Habitus</p>
         <h2 id="notes-title">${locale === "ko" ? "Habitus, 취향에 관하여." : "Habitus, on taste."}</h2>
-        <p>${escapeHtml(locale === "ko" ? "부르디외가 말한 아비투스처럼 취향은 단순한 선호가 아니라 몸에 밴 감각, 사회적 조건, 반복된 선택이 만나는 자리입니다." : "Following Bourdieu's habitus, taste is not a simple preference. It is where embodied sense, social conditions, and repeated choices meet.")}</p>
-        <a class="habitus-link" href="${withLocale("/about", locale)}">
-          <span>${escapeHtml(labels.about)}</span>
-          <strong>${escapeHtml(locale === "ko" ? "취향의 편집 방향 보기" : "Read the editorial direction")}</strong>
-        </a>
+        <p>${escapeHtml(locale === "ko" ? "취향은 결과가 아니라 거르는 방식입니다. 경험과 반복이 만든 기준을 알면 무엇을 고를지보다 왜 고르는지가 먼저 보입니다." : "Taste is not the result but the way things are filtered. When the criteria shaped by experience and repetition are visible, the reason behind a choice becomes clearer.")}</p>
       </div>
 
       <div class="habitus-board" data-reveal>
-        <div class="habitus-plate" aria-label="${escapeHtml(locale === "ko" ? "Habitus 취향 좌표" : "Habitus taste coordinates")}">
-          <span>${escapeHtml(text(site.title, locale))}</span>
-          <strong>${escapeHtml(locale === "ko" ? "취향에 관하여" : "On Taste")}</strong>
-          <em>${escapeHtml(locale === "ko" ? "몸 / 장 / 선택 / 반복" : "Body / Field / Choice / Repetition")}</em>
-        </div>
-        <div class="habitus-geometry" aria-hidden="true">
-          <span class="habitus-axis is-horizontal"></span>
-          <span class="habitus-axis is-vertical"></span>
-          <span class="habitus-field is-body">${escapeHtml(locale === "ko" ? "몸" : "Body")}</span>
-          <span class="habitus-field is-world">${escapeHtml(locale === "ko" ? "장" : "Field")}</span>
-          <span class="habitus-point is-one"></span>
-          <span class="habitus-point is-two"></span>
-          <span class="habitus-point is-three"></span>
-        </div>
-        <div class="habitus-cards">
-${habitusCards}
-        </div>
+        <svg class="habitus-system" viewBox="0 0 960 430" role="img" aria-label="${escapeHtml(locale === "ko" ? "경험과 반복의 교집합에서 습관이 생기고 선택으로 이어지는 아비투스 도식" : "A habitus diagram where the overlap of experience and repetition forms habit and leads to choice")}">
+          <defs>
+            <clipPath id="habitus-venn-overlap">
+              <circle cx="430" cy="150" r="126" />
+            </clipPath>
+          </defs>
+          <g class="habitus-venn-flow">
+            <circle class="habitus-venn-circle is-experience" cx="430" cy="150" r="126" />
+            <circle class="habitus-venn-circle is-repeat" cx="530" cy="150" r="126" />
+            <circle class="habitus-venn-lens" cx="530" cy="150" r="126" clip-path="url(#habitus-venn-overlap)" />
+            <circle class="habitus-venn-ring is-experience" cx="430" cy="150" r="126" />
+            <circle class="habitus-venn-ring is-repeat" cx="530" cy="150" r="126" />
+            <path class="habitus-choice-arrow" d="M480 292 V338" />
+            <path class="habitus-choice-head" d="M470 327 L480 339 L490 327" />
+            <g class="habitus-strand-labels">
+              <text x="${locale === "ko" ? 362 : 356}" y="150" class="is-experience-label">${escapeHtml(locale === "ko" ? "경험" : "experience")}</text>
+              <text x="${locale === "ko" ? 598 : 604}" y="150" class="is-repeat-label">${escapeHtml(locale === "ko" ? "반복" : "repetition")}</text>
+              <text x="480" y="150" class="is-habit">${escapeHtml(locale === "ko" ? "습관" : "habit")}</text>
+              <text x="480" y="376" class="is-choice">${escapeHtml(locale === "ko" ? "선택" : "choice")}</text>
+              <text x="480" y="410" class="habitus-choice-copy">${escapeHtml(locale === "ko" ? "선택은 취향이 보이는 순간." : "Choice is taste made visible.")}</text>
+            </g>
+          </g>
+        </svg>
       </div>
     </section>
 

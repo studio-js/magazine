@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="취향에 관하여. 예술, 기술, 디자인, 뷰티, 사유를 통해 취향의 조건과 감각의 출처를 읽는 디지털 매거진" />
     <title>Write | Habitus</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-index-tighten" />
-    <script src="/magazine/client.js?v=20260503-index-tighten" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-article-space-categories" />
+    <script src="/magazine/client.js?v=20260503-article-space-categories" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -42,9 +42,6 @@
                   <a class="" href="/magazine/archive/art/sound/">
                     <span>사운드</span>
                   </a>
-                  <a class="" href="/magazine/archive/art/architecture/">
-                    <span>건축</span>
-                  </a>
           </div>
         </div>
         <div class="nav-item ">
@@ -77,11 +74,24 @@
                   <a class="" href="/magazine/archive/design/product/">
                     <span>제품</span>
                   </a>
-                  <a class="" href="/magazine/archive/design/space/">
-                    <span>공간</span>
-                  </a>
                   <a class="" href="/magazine/archive/design/brand/">
                     <span>브랜드</span>
+                  </a>
+          </div>
+        </div>
+        <div class="nav-item ">
+          <a class="nav-link " href="/magazine/archive/space/">
+            <span>공간</span>
+          </a>
+          <div class="nav-submenu" aria-label="공간 하위 카테고리">
+                              <a class="" href="/magazine/archive/space/interior/">
+                    <span>인테리어</span>
+                  </a>
+                  <a class="" href="/magazine/archive/space/architecture/">
+                    <span>건축</span>
+                  </a>
+                  <a class="" href="/magazine/archive/space/urban/">
+                    <span>도시</span>
                   </a>
           </div>
         </div>
@@ -166,9 +176,6 @@
                   <a class="" href="/magazine/archive/art/sound/">
                     <span>사운드</span>
                   </a>
-                  <a class="" href="/magazine/archive/art/architecture/">
-                    <span>건축</span>
-                  </a>
           </div>
         </div>
         <div class="nav-item ">
@@ -201,11 +208,24 @@
                   <a class="" href="/magazine/archive/design/product/">
                     <span>제품</span>
                   </a>
-                  <a class="" href="/magazine/archive/design/space/">
-                    <span>공간</span>
-                  </a>
                   <a class="" href="/magazine/archive/design/brand/">
                     <span>브랜드</span>
+                  </a>
+          </div>
+        </div>
+        <div class="nav-item ">
+          <a class="nav-link " href="/magazine/archive/space/">
+            <span>공간</span>
+          </a>
+          <div class="nav-submenu" aria-label="공간 하위 카테고리">
+                              <a class="" href="/magazine/archive/space/interior/">
+                    <span>인테리어</span>
+                  </a>
+                  <a class="" href="/magazine/archive/space/architecture/">
+                    <span>건축</span>
+                  </a>
+                  <a class="" href="/magazine/archive/space/urban/">
+                    <span>도시</span>
                   </a>
           </div>
         </div>
@@ -300,7 +320,7 @@
           </div>
           <label class="admin-select-control" data-admin-filters>
             <span>분야 필터</span>
-            <select data-admin-filter-select><option value="all" selected>전체 기사 · 8</option><option value="art">예술 · 2</option><option value="tech">테크 · 2</option><option value="design">디자인 · 2</option><option value="beauty">뷰티 · 0</option><option value="philosophy">철학 · 2</option></select>
+            <select data-admin-filter-select><option value="all" selected>전체 기사 · 8</option><option value="art">예술 · 2</option><option value="tech">테크 · 2</option><option value="design">디자인 · 2</option><option value="space">공간 · 0</option><option value="beauty">뷰티 · 0</option><option value="philosophy">철학 · 2</option></select>
           </label>
           <div class="admin-list" data-admin-list></div>
           <div class="admin-sidebar-actions">
@@ -336,158 +356,33 @@
             </label>
             <label>
               <span>카테고리</span>
-              <select data-write-meta="category"><option value="art" data-label-ko="예술" data-label-en="Art" selected>예술</option><option value="tech" data-label-ko="테크" data-label-en="Tech">테크</option><option value="design" data-label-ko="디자인" data-label-en="Design">디자인</option><option value="beauty" data-label-ko="뷰티" data-label-en="Beauty">뷰티</option><option value="philosophy" data-label-ko="철학" data-label-en="Philosophy">철학</option></select>
+              <select data-write-meta="category"><option value="art" data-label-ko="예술" data-label-en="Art" selected>예술</option><option value="tech" data-label-ko="테크" data-label-en="Tech">테크</option><option value="design" data-label-ko="디자인" data-label-en="Design">디자인</option><option value="space" data-label-ko="공간" data-label-en="Space">공간</option><option value="beauty" data-label-ko="뷰티" data-label-en="Beauty">뷰티</option><option value="philosophy" data-label-ko="철학" data-label-en="Philosophy">철학</option></select>
             </label>
             <label>
               <span>세부 카테고리</span>
               <select data-write-meta="subcategory">
-            <option
-              value="exhibitions"
-              data-category="art"
-              data-label-ko="전시"
-              data-label-en="Exhibitions"
-              selected
-            >전시</option>
-            <option
-              value="artists"
-              data-category="art"
-              data-label-ko="작가"
-              data-label-en="Artists"
-              
-            >작가</option>
-            <option
-              value="images"
-              data-category="art"
-              data-label-ko="이미지"
-              data-label-en="Images"
-              
-            >이미지</option>
-            <option
-              value="sound"
-              data-category="art"
-              data-label-ko="사운드"
-              data-label-en="Sound"
-              
-            >사운드</option>
-            <option
-              value="architecture"
-              data-category="art"
-              data-label-ko="건축"
-              data-label-en="Architecture"
-              
-            >건축</option>
-            <option
-              value="ai"
-              data-category="tech"
-              data-label-ko="AI"
-              data-label-en="AI"
-              
-            >AI</option>
-            <option
-              value="interface"
-              data-category="tech"
-              data-label-ko="인터페이스"
-              data-label-en="Interface"
-              
-            >인터페이스</option>
-            <option
-              value="tools"
-              data-category="tech"
-              data-label-ko="도구"
-              data-label-en="Tools"
-              
-            >도구</option>
-            <option
-              value="systems"
-              data-category="tech"
-              data-label-ko="시스템"
-              data-label-en="Systems"
-              
-            >시스템</option>
-            <option
-              value="graphic"
-              data-category="design"
-              data-label-ko="그래픽"
-              data-label-en="Graphic"
-              
-            >그래픽</option>
-            <option
-              value="product"
-              data-category="design"
-              data-label-ko="제품"
-              data-label-en="Product"
-              
-            >제품</option>
-            <option
-              value="space"
-              data-category="design"
-              data-label-ko="공간"
-              data-label-en="Space"
-              
-            >공간</option>
-            <option
-              value="brand"
-              data-category="design"
-              data-label-ko="브랜드"
-              data-label-en="Brand"
-              
-            >브랜드</option>
-            <option
-              value="skincare"
-              data-category="beauty"
-              data-label-ko="스킨케어"
-              data-label-en="Skincare"
-              
-            >스킨케어</option>
-            <option
-              value="makeup"
-              data-category="beauty"
-              data-label-ko="메이크업"
-              data-label-en="Makeup"
-              
-            >메이크업</option>
-            <option
-              value="fragrance"
-              data-category="beauty"
-              data-label-ko="향"
-              data-label-en="Fragrance"
-              
-            >향</option>
-            <option
-              value="haircare"
-              data-category="beauty"
-              data-label-ko="헤어케어"
-              data-label-en="Haircare"
-              
-            >헤어케어</option>
-            <option
-              value="thought"
-              data-category="philosophy"
-              data-label-ko="사유"
-              data-label-en="Thought"
-              
-            >사유</option>
-            <option
-              value="ethics"
-              data-category="philosophy"
-              data-label-ko="윤리"
-              data-label-en="Ethics"
-              
-            >윤리</option>
-            <option
-              value="time"
-              data-category="philosophy"
-              data-label-ko="시간"
-              data-label-en="Time"
-              
-            >시간</option>
-            <option
-              value="body"
-              data-category="philosophy"
-              data-label-ko="몸"
-              data-label-en="Body"
-              
-            >몸</option>
+            <option value="exhibitions" data-category="art" data-label-ko="전시" data-label-en="Exhibitions" selected>전시</option>
+            <option value="artists" data-category="art" data-label-ko="작가" data-label-en="Artists">작가</option>
+            <option value="images" data-category="art" data-label-ko="이미지" data-label-en="Images">이미지</option>
+            <option value="sound" data-category="art" data-label-ko="사운드" data-label-en="Sound">사운드</option>
+            <option value="ai" data-category="tech" data-label-ko="AI" data-label-en="AI">AI</option>
+            <option value="interface" data-category="tech" data-label-ko="인터페이스" data-label-en="Interface">인터페이스</option>
+            <option value="tools" data-category="tech" data-label-ko="도구" data-label-en="Tools">도구</option>
+            <option value="systems" data-category="tech" data-label-ko="시스템" data-label-en="Systems">시스템</option>
+            <option value="graphic" data-category="design" data-label-ko="그래픽" data-label-en="Graphic">그래픽</option>
+            <option value="product" data-category="design" data-label-ko="제품" data-label-en="Product">제품</option>
+            <option value="brand" data-category="design" data-label-ko="브랜드" data-label-en="Brand">브랜드</option>
+            <option value="interior" data-category="space" data-label-ko="인테리어" data-label-en="Interior">인테리어</option>
+            <option value="architecture" data-category="space" data-label-ko="건축" data-label-en="Architecture">건축</option>
+            <option value="urban" data-category="space" data-label-ko="도시" data-label-en="Urban">도시</option>
+            <option value="skincare" data-category="beauty" data-label-ko="스킨케어" data-label-en="Skincare">스킨케어</option>
+            <option value="makeup" data-category="beauty" data-label-ko="메이크업" data-label-en="Makeup">메이크업</option>
+            <option value="fragrance" data-category="beauty" data-label-ko="향" data-label-en="Fragrance">향</option>
+            <option value="haircare" data-category="beauty" data-label-ko="헤어케어" data-label-en="Haircare">헤어케어</option>
+            <option value="thought" data-category="philosophy" data-label-ko="사유" data-label-en="Thought">사유</option>
+            <option value="ethics" data-category="philosophy" data-label-ko="윤리" data-label-en="Ethics">윤리</option>
+            <option value="time" data-category="philosophy" data-label-ko="시간" data-label-en="Time">시간</option>
+            <option value="body" data-category="philosophy" data-label-ko="몸" data-label-en="Body">몸</option>
               </select>
             </label>
             <label>

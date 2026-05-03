@@ -891,8 +891,7 @@ export const categories: CategoryDefinition[] = [
       { key: "exhibitions", label: { ko: "전시", en: "Exhibitions" } },
       { key: "artists", label: { ko: "작가", en: "Artists" } },
       { key: "images", label: { ko: "이미지", en: "Images" } },
-      { key: "sound", label: { ko: "사운드", en: "Sound" } },
-      { key: "architecture", label: { ko: "건축", en: "Architecture" } }
+      { key: "sound", label: { ko: "사운드", en: "Sound" } }
     ]
   },
   {
@@ -919,8 +918,20 @@ export const categories: CategoryDefinition[] = [
     subcategories: [
       { key: "graphic", label: { ko: "그래픽", en: "Graphic" } },
       { key: "product", label: { ko: "제품", en: "Product" } },
-      { key: "space", label: { ko: "공간", en: "Space" } },
       { key: "brand", label: { ko: "브랜드", en: "Brand" } }
+    ]
+  },
+  {
+    key: "space",
+    label: { ko: "공간", en: "Space" },
+    description: {
+      ko: "인테리어, 건축, 도시처럼 몸이 머무는 환경의 감각을 읽습니다.",
+      en: "Interiors, architecture, and urban environments as conditions of embodied taste."
+    },
+    subcategories: [
+      { key: "interior", label: { ko: "인테리어", en: "Interior" } },
+      { key: "architecture", label: { ko: "건축", en: "Architecture" } },
+      { key: "urban", label: { ko: "도시", en: "Urban" } }
     ]
   },
   {

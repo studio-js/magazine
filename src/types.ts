@@ -4,7 +4,7 @@ export type LocalizedText = Record<Locale, string>;
 
 export type LocalizedList = Record<Locale, string[]>;
 
-export type PrimaryCategory = "art" | "tech" | "design" | "beauty" | "philosophy";
+export type PrimaryCategory = "art" | "tech" | "design" | "space" | "beauty" | "philosophy";
 
 export type SubcategoryKey =
   | "exhibitions"
@@ -12,13 +12,14 @@ export type SubcategoryKey =
   | "images"
   | "sound"
   | "architecture"
+  | "interior"
+  | "urban"
   | "ai"
   | "interface"
   | "tools"
   | "systems"
   | "graphic"
   | "product"
-  | "space"
   | "brand"
   | "skincare"
   | "makeup"
