@@ -9704,6 +9704,279 @@ html[lang="ko"] .article-title-block h1 {
   }
 }
 
+/* Archive, home flow, and admin correction pass */
+.archive-page .archive-heading {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.28fr) minmax(0, 0.72fr);
+  gap: clamp(1rem, 3vw, 4rem);
+  align-items: end;
+  margin-bottom: clamp(1rem, 2vw, 1.7rem);
+}
+
+.archive-page .archive-heading > div {
+  gap: 0.38rem;
+}
+
+.archive-page .archive-heading .kicker {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 540;
+  letter-spacing: 0.075em;
+}
+
+.archive-page .archive-heading h1,
+.archive-page .archive-heading h2,
+html[lang="ko"] .archive-page .archive-heading h1,
+html[lang="ko"] .archive-page .archive-heading h2 {
+  max-width: none;
+  font-size: clamp(1.65rem, 2.45vw, 3rem);
+  font-weight: 430;
+  line-height: 1.2;
+}
+
+.archive-page .archive-heading > p {
+  justify-self: end;
+  max-width: 42rem;
+  font-size: clamp(0.96rem, 1.04vw, 1.12rem);
+  line-height: 1.72;
+}
+
+.archive-subnav {
+  gap: 0.46rem clamp(0.85rem, 1.5vw, 1.35rem);
+  max-width: none;
+  padding-top: 0.25rem;
+}
+
+.archive-subnav a {
+  gap: 0.32rem;
+  color: var(--muted);
+  font-size: clamp(0.86rem, 0.95vw, 1rem);
+  font-weight: 520;
+  line-height: 1.2;
+}
+
+.archive-subnav small {
+  color: var(--faint);
+  font-size: 0.72em;
+}
+
+.archive-page .filter-shell {
+  margin: 0 0 clamp(0.85rem, 1.6vw, 1.35rem);
+}
+
+.archive-page .filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem clamp(0.95rem, 2vw, 2.4rem);
+  padding: 0.72rem 0;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.archive-page .filter-button {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.36rem;
+  min-height: 0;
+  padding: 0.12rem 0 0.16rem;
+  color: var(--muted);
+  font-size: clamp(0.9rem, 0.98vw, 1.06rem);
+  line-height: 1.2;
+}
+
+.archive-page .filter-button:hover,
+.archive-page .filter-button:focus-visible {
+  color: var(--ink);
+}
+
+.archive-page .filter-button small {
+  color: var(--faint);
+  font-size: 0.74em;
+}
+
+.archive-page .archive-list {
+  border-top: 1px solid var(--hairline);
+}
+
+.archive-page .archive-row,
+.archive-page .archive-row:hover,
+.archive-page .archive-row:focus,
+.archive-page .archive-row:focus-visible,
+.archive-page .archive-row.is-active {
+  display: grid !important;
+  grid-template-columns: minmax(6.2rem, 0.13fr) minmax(18rem, 0.5fr) minmax(8rem, 0.2fr) minmax(5rem, 0.12fr) !important;
+  gap: clamp(0.75rem, 1.7vw, 2rem) !important;
+  align-items: center !important;
+  min-height: 0 !important;
+  padding: clamp(0.78rem, 1.16vw, 1.08rem) 0 !important;
+  background: transparent;
+  box-shadow: inset 0 -1px 0 var(--hairline) !important;
+}
+
+.archive-page .archive-row:hover,
+.archive-page .archive-row:focus-visible {
+  background: rgba(218, 210, 195, 0.22) !important;
+}
+
+.archive-page .archive-title,
+html[lang="ko"] .archive-page .archive-title {
+  max-width: 42ch !important;
+  font-size: clamp(1.08rem, 1.42vw, 1.7rem) !important;
+  font-weight: 430 !important;
+  letter-spacing: 0.002em !important;
+  line-height: 1.34 !important;
+  text-wrap: pretty;
+}
+
+.archive-page .archive-date,
+.archive-page .archive-category,
+.archive-page .archive-info {
+  color: var(--muted);
+  font-size: clamp(0.76rem, 0.84vw, 0.9rem) !important;
+  font-weight: 520;
+  line-height: 1.35;
+}
+
+.archive-page .archive-category {
+  display: grid !important;
+  gap: 0.18rem !important;
+  justify-self: start;
+  text-align: left;
+}
+
+.archive-page .archive-category small {
+  color: var(--faint);
+  font-size: 0.92em;
+}
+
+.archive-page .archive-info {
+  justify-self: end;
+  text-align: right;
+}
+
+.archive-page .archive-summary {
+  grid-column: 2 / -1 !important;
+  max-width: 68ch;
+  font-size: clamp(0.86rem, 0.92vw, 0.98rem);
+  line-height: 1.62;
+}
+
+.cover-grid {
+  align-items: start;
+}
+
+.cover-art .image-block {
+  aspect-ratio: 4 / 5;
+}
+
+.cover-sidebar > p {
+  color: var(--muted);
+}
+
+.cover-links a[data-scroll-motion],
+.home-story-row[data-scroll-motion] {
+  transform: translateY(calc(var(--scroll-shift, 0) * -0.42rem));
+  transition: background 140ms ease, color 140ms ease, transform 80ms linear;
+}
+
+.cover-links a[data-scroll-motion]:hover,
+.cover-links a[data-scroll-motion]:focus-visible,
+.home-story-row[data-scroll-motion]:hover,
+.home-story-row[data-scroll-motion]:focus-visible {
+  transform: translateY(calc(var(--scroll-shift, 0) * -0.42rem));
+}
+
+.home-story-row {
+  grid-template-columns: 2.6rem minmax(7rem, 0.16fr) minmax(0, 0.5fr) minmax(15rem, 0.34fr);
+}
+
+.home-story-row strong {
+  font-size: clamp(1.08rem, 1.38vw, 1.68rem);
+}
+
+.js .home-stories:not(.is-current-section) .home-story-row,
+.js .notes:not(.is-current-section) .note-item {
+  opacity: 0.72;
+}
+
+.home-story-row,
+.note-item {
+  transition: opacity 220ms ease, background 140ms ease, transform 80ms linear;
+}
+
+.about-page-hero h1,
+html[lang="ko"] .about-page-hero h1 {
+  font-size: clamp(2.45rem, 4.35vw, 5.7rem);
+}
+
+.about-page-hero p:not(.kicker) {
+  font-size: clamp(1.05rem, 1.18vw, 1.28rem);
+  line-height: 1.82;
+}
+
+.about-page-grid h2,
+html[lang="ko"] .about-page-grid h2 {
+  font-size: clamp(1.35rem, 1.9vw, 2.45rem);
+  line-height: 1.24;
+}
+
+.about-page-grid p {
+  font-size: clamp(1rem, 1.08vw, 1.14rem);
+  line-height: 1.78;
+}
+
+.site-footer {
+  padding-block: clamp(1.6rem, 2.6vw, 2.4rem);
+  font-size: clamp(0.86rem, 0.95vw, 1rem);
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.site-footer .footer-links a {
+  font-size: clamp(0.95rem, 1.02vw, 1.08rem);
+  font-weight: 520;
+}
+
+.admin-filter-row {
+  gap: 0.42rem 0.72rem !important;
+  padding: 0.68rem 0.78rem !important;
+}
+
+.admin-filter-row button {
+  display: inline-flex !important;
+  align-items: baseline;
+  gap: 0.28rem !important;
+  padding: 0.25rem 0 !important;
+  white-space: nowrap;
+}
+
+.admin-filter-row button span,
+.admin-filter-row button small {
+  line-height: 1.2;
+}
+
+@media (max-width: 960px) {
+  .archive-page .archive-heading,
+  .archive-page .archive-row,
+  .archive-page .archive-row:hover,
+  .archive-page .archive-row:focus,
+  .archive-page .archive-row:focus-visible,
+  .archive-page .archive-row.is-active,
+  .home-story-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .archive-page .archive-heading > p,
+  .archive-page .archive-info {
+    justify-self: start;
+    text-align: left;
+  }
+
+  .archive-page .archive-summary {
+    grid-column: 1 !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

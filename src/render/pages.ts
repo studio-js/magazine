@@ -137,7 +137,7 @@ const normalizedPage = (page: number | undefined, itemCount: number): number => 
   return Math.min(Math.max(pageNumber, 1), pageCount(itemCount));
 };
 
-const renderPagination = (currentPage: number, totalPages: number, hrefForPage: (page: number) => string, locale: Locale): string => `<nav class="pagination" aria-label="${escapeHtml(locale === "ko" ? "페이지" : "Pagination")}">
+const renderPagination = (currentPage: number, totalPages: number, hrefForPage: (page: number) => string, locale: Locale): string => totalPages <= 1 ? "" : `<nav class="pagination" aria-label="${escapeHtml(locale === "ko" ? "페이지" : "Pagination")}">
         <span>${escapeHtml(locale === "ko" ? "페이지" : "Page")}</span>
         <div>
           ${Array.from({ length: totalPages }, (_, index) => {
@@ -157,7 +157,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-issue-index-about-refine";
+const assetVersion = "20260503-archive-home-flow-fix";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -281,7 +281,11 @@ const renderArchiveRows = (
 ): string => articleList
   .map((article) => {
     const fullLabel = `${categoryLabel(site.categories, article.category, locale)} / ${text(article.subcategory, locale)}`;
-    const rowLabel = selectedCategory || selectedSubcategory ? text(article.subcategory, locale) : fullLabel;
+    const rowLabel = selectedSubcategory
+      ? categoryLabel(site.categories, article.category, locale)
+      : selectedCategory
+        ? text(article.subcategory, locale)
+        : fullLabel;
 
     return `
       <a
@@ -398,7 +402,7 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
     .map((category) => `<option value="${category.key}"${category.key === initialCategory.key ? " selected" : ""}>${escapeHtml(text(category.label, locale))}</option>`)
     .join("");
   const categoryFilters = [
-    `<button type="button" class="is-active" data-admin-filter="all" aria-pressed="true"><span>${escapeHtml(locale === "ko" ? "전체" : "All")}</span><small>${articleList.length}</small></button>`,
+    `<button type="button" class="is-active" data-admin-filter="all" aria-pressed="true"><span>All</span><small>${articleList.length}</small></button>`,
     ...site.categories.map((category) => {
       const count = articleList.filter((article) => article.category === category.key).length;
       return `<button type="button" data-admin-filter="${category.key}" aria-pressed="false"><span>${escapeHtml(text(category.label, locale))}</span><small>${count}</small></button>`;
@@ -722,41 +726,41 @@ ${issueField(locale === "ko" ? "에디터 노트 EN" : "Editor Note EN", "editor
 
 export const renderHomePage = (site: SiteContent, articleList: Article[], locale: Locale, currentPath: string): string => {
   const labels = ui[locale];
-  const featuredArticle = articleList.find((article) => article.slug === "chair-prototype-and-its-shadow") ?? articleList[0];
-  const remainingArticles = articleList.filter((article) => article.slug !== featuredArticle.slug);
-  const openingArticles = remainingArticles.slice(0, 3);
-  const selectedArticles = remainingArticles.slice(3, 8);
+  const currentIssue = latestIssue(site);
+  const issueCoverClass = currentIssue.features[0]?.heroClass ?? "image-material";
+  const issueFeatures = currentIssue.features.slice(0, 4);
+  const selectedArticles = articleList.slice(0, 5);
 
   const body = `
     <section class="cover section-pad" aria-labelledby="hero-title" data-scroll-section>
       <div class="cover-grid">
         <div class="cover-copy" data-reveal>
           <div class="cover-edition" aria-label="Publication context">
-            <span>${escapeHtml(locale === "ko" ? `${text(site.month, locale)}호` : `${text(site.month, locale)} Issue`)}</span>
+            <span>${escapeHtml(`${currentIssue.number} · ${text(currentIssue.date, locale)}`)}</span>
           </div>
-          <p class="kicker">${escapeHtml(text(site.heroKicker, locale))}</p>
-          <h1 id="hero-title">${escapeHtml(text(site.heroTitle, locale))}</h1>
-          <p class="cover-deck">${escapeHtml(locale === "ko" ? "이번 호와 최근 글을 한 화면에 모았습니다." : "The current issue and recent stories, gathered on one surface.")}</p>
+          <p class="kicker">Current Issue</p>
+          <h1 id="hero-title">${escapeHtml(text(currentIssue.title, locale))}</h1>
+          <p class="cover-deck">${escapeHtml(text(currentIssue.deck, locale))}</p>
         </div>
 
-        <a class="cover-art" href="${articleHref(featuredArticle, locale)}" aria-label="${escapeHtml(labels.readFeature)}" data-reveal data-action-card data-scroll-motion data-feature-card>
-          ${renderImageBlock(featuredArticle.heroClass, featuredArticle.heroImage, "data-feature-image")}
+        <a class="cover-art" href="${issueHref(currentIssue, locale)}" aria-label="${escapeHtml(locale === "ko" ? "현재 이슈 읽기" : "Read current issue")}" data-reveal data-action-card data-scroll-motion>
+          ${renderImageBlock(issueCoverClass, undefined, "data-feature-image")}
           <span class="cover-caption">
-            <small data-feature-kicker>${escapeHtml(categoryLabel(site.categories, featuredArticle.category, locale))} / ${escapeHtml(formatDate(featuredArticle.date, locale))}</small>
-            <strong data-feature-title>${escapeHtml(text(featuredArticle.title, locale))}</strong>
+            <small>${escapeHtml(text(currentIssue.format, locale))}</small>
+            <strong>${escapeHtml(text(currentIssue.subtitle, locale))}</strong>
           </span>
         </a>
 
         <aside class="cover-sidebar" data-reveal>
-          <p>${escapeHtml(locale === "ko" ? "Opening Stories" : "Opening Stories")}</p>
-          <div class="cover-links" aria-label="Opening articles">
-            ${openingArticles
+          <p>${escapeHtml(locale === "ko" ? "Issue Contents" : "Issue Contents")}</p>
+          <div class="cover-links" aria-label="Issue contents">
+            ${issueFeatures
               .map(
-                (article, index) => `
-                  <a href="${articleHref(article, locale)}" data-feature-link data-feature-class="${article.heroClass}" data-feature-image="${escapeHtml(article.heroImage ?? "")}" data-feature-kicker="${escapeHtml(`${categoryLabel(site.categories, article.category, locale)} / ${formatDate(article.date, locale)}`)}" data-feature-title="${escapeHtml(text(article.title, locale))}">
+                (feature, index) => `
+                  <a href="${issueHref(currentIssue, locale)}#issue-${escapeHtml(feature.slug)}" data-scroll-motion>
                     <span>${String(index + 1).padStart(2, "0")}</span>
-                    <small>${escapeHtml(categoryLabel(site.categories, article.category, locale))}</small>
-                    <strong>${escapeHtml(text(article.title, locale))}</strong>
+                    <small>${escapeHtml(text(feature.role, locale))}</small>
+                    <strong>${escapeHtml(text(feature.title, locale))}</strong>
                   </a>`
               )
               .join("")}
@@ -775,7 +779,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
 ${selectedArticles
           .map(
             (article, index) => `
-              <a class="home-story-row" href="${articleHref(article, locale)}" data-reveal data-action-card>
+              <a class="home-story-row" href="${articleHref(article, locale)}" data-reveal data-action-card data-scroll-motion>
                 <span class="river-no">${String(index + 1).padStart(2, "0")}</span>
                 <span class="home-story-meta">${escapeHtml(categoryLabel(site.categories, article.category, locale))} / ${escapeHtml(formatDate(article.date, locale))}</span>
                 <strong>${escapeHtml(text(article.title, locale))}</strong>
@@ -887,8 +891,7 @@ export const renderIssueCollectionPage = (site: SiteContent, locale: Locale, cur
 
       <div class="issue-collection-list" aria-label="${escapeHtml(locale === "ko" ? "전체 이슈" : "All issues")}">
 ${renderIssueCollectionItems(issues, locale, (currentPage - 1) * pageSize)}
-      </div>
-      ${renderPagination(currentPage, totalPages, (pageNumber) => issueIndexHref(locale, pageNumber), locale)}
+      </div>${renderPagination(currentPage, totalPages, (pageNumber) => issueIndexHref(locale, pageNumber), locale)}
     </section>`;
 
   return renderLayout({
@@ -1140,11 +1143,11 @@ export const renderArchivePage = (
       ? text(selectedCategoryDefinition.label, locale)
       : labels.fullArchive;
   const archiveLead = selectedCategoryDefinition ? text(selectedCategoryDefinition.description, locale) : labels.archiveLead;
-  const archiveKicker = selectedCategoryDefinition ? "Archive" : "Index";
+  const archiveKicker = selectedCategoryDefinition ? "Archive" : "All Articles";
   const archiveSubnav = selectedCategoryDefinition
     ? `
           <nav class="archive-subnav" aria-label="${escapeHtml(locale === "ko" ? `${text(selectedCategoryDefinition.label, locale)} 하위 카테고리` : `${text(selectedCategoryDefinition.label, locale)} subcategories`)}">
-            <a class="${selectedSubcategoryDefinition ? "" : "is-active"}" href="${archiveHref(locale, selectedCategoryDefinition.key)}"${selectedSubcategoryDefinition ? "" : " aria-current=\"page\""}>Index<small>${articleList.filter((article) => article.category === selectedCategoryDefinition.key).length}</small></a>
+            <a class="${selectedSubcategoryDefinition ? "" : "is-active"}" href="${archiveHref(locale, selectedCategoryDefinition.key)}"${selectedSubcategoryDefinition ? "" : " aria-current=\"page\""}>All<small>${articleList.filter((article) => article.category === selectedCategoryDefinition.key).length}</small></a>
             ${selectedCategoryDefinition.subcategories
               .map((subcategory) => {
                 const count = articleList.filter((article) => article.category === selectedCategoryDefinition.key && articleHasSubcategory(article, subcategory.key)).length;
