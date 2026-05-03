@@ -253,7 +253,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-magazine-spread-paging";
+const assetVersion = "20260504-image-copy-polish";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">

@@ -20137,9 +20137,41 @@ html[lang="ko"] .home-index-row strong {
   transform: scaleX(1.35);
 }
 
+/* Final image QA pass */
+.magazine-spread-image-slot.is-large {
+  grid-column: 2 / 12;
+  grid-row: 1 / 6;
+}
+
+.magazine-spread-image-slot.is-large .image-block {
+  background: rgba(250, 248, 241, 0.68);
+}
+
+.magazine-spread-image-slot.is-large .image-block.has-custom-image img {
+  object-fit: contain;
+}
+
+.magazine-spread-image-slot:nth-child(2),
+.magazine-spread-image-slot:nth-child(3),
+.magazine-spread-image-slot:nth-child(4) {
+  grid-row: 7 / 11;
+}
+
+.issue-cover-card .magazine-cover-sheet > .image-block.has-custom-image img {
+  filter: contrast(1.06) saturate(1.05);
+}
+
 @media (min-width: 1181px) {
   .home-issue-index,
   .home-issue-index[data-scroll-motion] {
     margin-top: clamp(3.2rem, 6.6vw, 6rem);
+  }
+}
+
+@media (max-width: 680px) {
+  .magazine-spread-image-slot.is-large {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    min-height: 13rem;
   }
 }
