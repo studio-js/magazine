@@ -1168,7 +1168,311 @@ export const notes: Note[] = [
   }
 ];
 
-export const issueProject: IssueProject = {
+export const issueProjects: IssueProject[] = [
+  {
+    number: "No. 03",
+    title: { ko: "Soft Indexes", en: "Soft Indexes" },
+    subtitle: {
+      ko: "목록과 표지가 서로를 읽게 만드는 세 번째 디지털 에디션",
+      en: "A third digital edition where lists and covers learn to read one another."
+    },
+    deck: {
+      ko: "세 번째 이슈는 인덱스, 표지, 검색 화면, 리듬 있는 목록을 독립된 편집 장면으로 다룹니다. 무엇을 먼저 보여줄지보다 어떤 속도로 발견하게 할지를 묻습니다.",
+      en: "The third issue treats indexes, covers, search screens, and rhythmic lists as independent editorial scenes. It asks less what should be shown first than at what speed discovery should happen."
+    },
+    date: { ko: "2026년 7월", en: "July 2026" },
+    format: { ko: "온라인 에디션 / 5개 피처", en: "Online edition / 5 features" },
+    availability: { ko: "오픈 액세스", en: "Open access" },
+    coverCredit: {
+      ko: "커버 이미지: 편집부가 구성한 색인 표면 스터디",
+      en: "Cover image: an editorial study of an index surface."
+    },
+    editorNote: {
+      ko: "이번 호는 읽는 사람을 빠르게 이동시키는 대신 조금 더 정확히 머물게 하는 색인을 상상합니다. 목록, 검색창, 표지, 캡션은 단순한 부속물이 아니라 발행본 전체의 속도를 결정하는 장치입니다.",
+      en: "This issue imagines an index that keeps readers in place with greater precision instead of moving them faster. Lists, search bars, covers, and captions are not accessories but devices that set the edition's speed."
+    },
+    credits: [
+      { label: { ko: "편집", en: "Editor" }, value: { ko: "The Thing Editorial Desk", en: "The Thing Editorial Desk" } },
+      { label: { ko: "이미지 시스템", en: "Image System" }, value: { ko: "Index Surface Unit", en: "Index Surface Unit" } },
+      { label: { ko: "리서치", en: "Research" }, value: { ko: "서울 / 코펜하겐 원격 노트", en: "Seoul / Copenhagen remote notes" } }
+    ],
+    features: [
+      {
+        slug: "cover-as-index",
+        role: { ko: "Cover Essay", en: "Cover Essay" },
+        title: { ko: "표지는 가장 작은 목차다", en: "A Cover Is the Smallest Contents Page" },
+        intro: {
+          ko: "표지를 대표 이미지가 아니라 읽기 순서를 정하는 장치로 봅니다.",
+          en: "The cover is treated as a device for ordering reading, not a representative image."
+        },
+        excerpt: {
+          ko: "한 장의 표지는 발행본 전체의 제목, 속도, 밀도를 한 번에 압축합니다. 이 글은 표지를 가장 작은 목차로 다시 읽습니다.",
+          en: "A single cover compresses title, speed, and density at once. This essay rereads the cover as the smallest table of contents."
+        },
+        body: {
+          ko: [
+            "표지는 가장 먼저 보이지만 가장 나중에 이해되는 면입니다. 이번 호는 커버 이미지를 독자의 시선을 붙잡는 광고판이 아니라 읽는 순서를 정리하는 작은 목차로 다룹니다.",
+            "이미지의 중앙보다 가장자리, 제목보다 간격, 강한 색보다 남겨진 여백이 더 많은 정보를 운반할 수 있습니다. 표지가 조용할수록 다음 장면의 리듬은 또렷해집니다."
+          ],
+          en: [
+            "A cover is seen first and understood last. This issue treats the cover image not as a billboard for attention but as a small table of contents for reading order.",
+            "Edges can carry more information than centers, intervals more than titles, and remaining space more than strong color. The quieter the cover, the clearer the rhythm of the next scene becomes."
+          ]
+        },
+        credit: { ko: "Cover / Index Surface Unit", en: "Cover / Index Surface Unit" },
+        location: { ko: "Editorial", en: "Editorial" },
+        readTime: { ko: "에세이", en: "Essay" },
+        heroClass: "image-library"
+      },
+      {
+        slug: "search-without-hurry",
+        role: { ko: "Interface Note", en: "Interface Note" },
+        title: { ko: "서두르지 않는 검색창", en: "The Search Bar That Does Not Hurry" },
+        intro: {
+          ko: "검색은 답을 당기는 기능보다 질문을 다듬는 편집면에 가깝습니다.",
+          en: "Search is closer to an editorial surface for refining questions than a function that pulls answers."
+        },
+        excerpt: {
+          ko: "자동완성, 빈 상태, 결과 개수의 표현이 읽는 사람의 판단 시간을 어떻게 바꾸는지 살핍니다.",
+          en: "Autocomplete, empty states, and result counts are examined as ways of changing the reader's judgment time."
+        },
+        body: {
+          ko: [
+            "검색창은 빠르게 답을 제시하는 곳처럼 보이지만, 좋은 검색 화면은 질문을 조금 더 정확하게 만들 시간을 줍니다. 자동완성의 언어와 결과 없음의 문장은 모두 편집된 안내입니다.",
+            "이 장면은 검색을 성능의 문제가 아니라 독자의 호흡을 정하는 인터페이스의 문제로 옮깁니다. 빠른 반응보다 덜 서두르는 피드백이 더 오래 남습니다."
+          ],
+          en: [
+            "A search bar appears to offer quick answers, but a good search screen gives a question time to become more precise. Autocomplete language and empty-state sentences are both edited guidance.",
+            "This scene moves search from a performance problem to an interface problem that sets the reader's breath. Feedback that hurries less often lasts longer."
+          ]
+        },
+        credit: { ko: "Interface / Reading Systems", en: "Interface / Reading Systems" },
+        location: { ko: "Search room", en: "Search room" },
+        readTime: { ko: "노트", en: "Note" },
+        heroClass: "image-interface"
+      },
+      {
+        slug: "ledger-of-images",
+        role: { ko: "Portfolio", en: "Portfolio" },
+        title: { ko: "이미지 장부", en: "Ledger of Images" },
+        intro: {
+          ko: "이미지를 카드가 아니라 반복되는 회계 장부처럼 배열합니다.",
+          en: "Images are arranged like a repeated ledger rather than isolated cards."
+        },
+        excerpt: {
+          ko: "사진, 캡션, 번호, 여백이 같은 규칙으로 반복될 때 이미지 목록은 하나의 긴 문장처럼 읽힙니다.",
+          en: "When photographs, captions, numbers, and space repeat under one rule, an image list reads like one long sentence."
+        },
+        body: {
+          ko: [
+            "이미지 목록은 화려한 그리드가 아니라 규칙이 드러나는 장부가 될 수 있습니다. 같은 크기, 같은 캡션 거리, 같은 번호 체계는 개별 이미지를 하나의 흐름 안에 묶습니다.",
+            "포트폴리오의 목표는 많은 장면을 보여주는 것이 아니라 다음 이미지로 넘어가는 이유를 만드는 것입니다. 반복은 지루함이 아니라 신뢰의 방식이 됩니다."
+          ],
+          en: [
+            "An image list can be a ledger where rules become visible rather than a spectacular grid. Shared size, caption distance, and numbering bind separate images into one flow.",
+            "The goal of a portfolio is not to show many scenes, but to create a reason to move to the next image. Repetition becomes a form of trust rather than boredom."
+          ]
+        },
+        credit: { ko: "Images / Editorial Desk", en: "Images / Editorial Desk" },
+        location: { ko: "12 plates", en: "12 plates" },
+        readTime: { ko: "시각 노트", en: "Visual note" },
+        heroClass: "image-field"
+      },
+      {
+        slug: "caption-temperature",
+        role: { ko: "Dossier", en: "Dossier" },
+        title: { ko: "캡션의 온도", en: "The Temperature of Captions" },
+        intro: {
+          ko: "캡션이 이미지의 방향과 독자의 거리를 조절하는 방식을 기록합니다.",
+          en: "A record of how captions adjust the direction of an image and the reader's distance."
+        },
+        excerpt: {
+          ko: "건조한 정보, 편집자의 개입, 물성의 묘사가 각기 다른 온도로 이미지 아래에 놓입니다.",
+          en: "Dry information, editorial intervention, and material description sit beneath images at different temperatures."
+        },
+        body: {
+          ko: [
+            "캡션은 이미지의 설명문이 아니라 이미지가 과하게 말하지 않도록 잡아주는 무게추입니다. 너무 가까우면 이미지를 닫고, 너무 멀면 독자를 떠나게 합니다.",
+            "이번 파일은 캡션의 길이, 고유명사의 위치, 날짜와 장소의 순서를 나란히 놓고 읽습니다. 작은 문장이 이미지의 온도를 바꾸는 순간을 모았습니다."
+          ],
+          en: [
+            "A caption is not an image explanation but a counterweight that keeps an image from speaking too much. Too close, it closes the image; too far, it lets the reader leave.",
+            "This file reads caption length, proper-name placement, and the order of date and place side by side. It collects the moments when a small sentence changes an image's temperature."
+          ]
+        },
+        credit: { ko: "Dossier / Caption Desk", en: "Dossier / Caption Desk" },
+        location: { ko: "Caption table", en: "Caption table" },
+        readTime: { ko: "파일", en: "File" },
+        heroClass: "image-material"
+      },
+      {
+        slug: "after-index",
+        role: { ko: "Afterword", en: "Afterword" },
+        title: { ko: "색인 이후의 독자", en: "The Reader After the Index" },
+        intro: {
+          ko: "잘 만든 색인은 독자를 빠르게 끝내게 하지 않고 다시 돌아오게 합니다.",
+          en: "A well-made index does not help readers finish quickly; it makes them return."
+        },
+        excerpt: {
+          ko: "이슈의 마지막 장은 발견, 재방문, 저장의 리듬을 편집의 책임으로 닫습니다.",
+          en: "The final chapter closes discovery, return, and saving as editorial responsibilities."
+        },
+        body: {
+          ko: [
+            "좋은 색인은 길을 줄이는 장치가 아닙니다. 독자가 왜 여기서 멈췄는지, 왜 다시 돌아올 수 있는지를 남겨두는 장치입니다.",
+            "이번 호는 목록을 기능이 아니라 태도로 읽습니다. 빠른 이동보다 정확한 재방문을 가능하게 하는 것이 디지털 발행본의 오래 남는 형식입니다."
+          ],
+          en: [
+            "A good index is not a shortcut. It leaves behind why a reader stopped here and why they might return later.",
+            "This issue reads lists as an attitude rather than a feature. Enabling accurate return instead of faster movement is the more durable form of a digital edition."
+          ]
+        },
+        credit: { ko: "Afterword / Editorial Desk", en: "Afterword / Editorial Desk" },
+        location: { ko: "Closing", en: "Closing" },
+        readTime: { ko: "후기", en: "Afterword" },
+        heroClass: "image-thought"
+      }
+    ]
+  },
+  {
+    number: "No. 02",
+    title: { ko: "Rooms for Defaults", en: "Rooms for Defaults" },
+    subtitle: {
+      ko: "보이지 않는 선택이 생활의 리듬을 바꾸는 두 번째 디지털 에디션",
+      en: "A second digital edition on invisible choices changing the rhythm of living."
+    },
+    deck: {
+      ko: "두 번째 이슈는 기본 설정, 알림, 추천, 빈 화면을 작은 방처럼 배열합니다. 기능의 크기보다 선택의 방향이 어떻게 감각을 바꾸는지 살핍니다.",
+      en: "The second issue arranges defaults, notifications, recommendations, and empty states as small rooms. It studies how the direction of choice changes sense more than the size of a feature."
+    },
+    date: { ko: "2026년 6월", en: "June 2026" },
+    format: { ko: "온라인 에디션 / 4개 피처", en: "Online edition / 4 features" },
+    availability: { ko: "오픈 액세스", en: "Open access" },
+    coverCredit: {
+      ko: "커버 이미지: 기본값 패널과 조용한 알림 스터디",
+      en: "Cover image: a study of default panels and quiet notifications."
+    },
+    editorNote: {
+      ko: "기본값은 중립적인 출발점처럼 보이지만, 실제로는 누군가 먼저 정해 둔 방향입니다. 이번 호는 그 방향이 몸의 습관과 화면의 신뢰를 어떻게 바꾸는지 따라갑니다.",
+      en: "A default looks like a neutral starting point, but it is a direction someone set in advance. This issue follows how that direction changes bodily habits and trust in screens."
+    },
+    credits: [
+      { label: { ko: "편집", en: "Editor" }, value: { ko: "The Thing Editorial Desk", en: "The Thing Editorial Desk" } },
+      { label: { ko: "시스템 노트", en: "Systems Notes" }, value: { ko: "Default Rooms", en: "Default Rooms" } },
+      { label: { ko: "리서치", en: "Research" }, value: { ko: "서울 / 도쿄 원격 노트", en: "Seoul / Tokyo remote notes" } }
+    ],
+    features: [
+      {
+        slug: "default-room",
+        role: { ko: "Cover Note", en: "Cover Note" },
+        title: { ko: "기본값이 놓인 방", en: "The Room Where Defaults Sit" },
+        intro: {
+          ko: "기본 설정 화면을 사소한 부속 페이지가 아니라 발행본의 주제처럼 읽습니다.",
+          en: "The default settings screen is read as the issue's subject, not a minor accessory page."
+        },
+        excerpt: {
+          ko: "켜짐과 꺼짐, 추천과 보류, 저장과 삭제가 하나의 방 안에서 서로 다른 윤곽을 만듭니다.",
+          en: "On and off, recommendation and pause, save and delete form different outlines in one room."
+        },
+        body: {
+          ko: [
+            "기본값은 사용자가 처음 만나는 결정입니다. 그래서 설정 화면은 뒤에 숨은 기술 페이지가 아니라 생활 리듬을 먼저 정하는 편집면에 가깝습니다.",
+            "이번 표지는 조용한 토글과 흐린 패널을 한 방 안에 놓습니다. 중요한 것은 버튼의 수가 아니라 사용자가 무엇을 당연하게 받아들이도록 설계되었는가입니다."
+          ],
+          en: [
+            "A default is the first decision a user meets. A settings screen is therefore less a hidden technical page than an editorial surface that sets the rhythm of living.",
+            "This cover places quiet toggles and pale panels in one room. The point is not the number of buttons, but what the user is designed to accept as obvious."
+          ]
+        },
+        credit: { ko: "Cover / Default Rooms", en: "Cover / Default Rooms" },
+        location: { ko: "Editorial", en: "Editorial" },
+        readTime: { ko: "소개", en: "Intro" },
+        heroClass: "image-system"
+      },
+      {
+        slug: "quiet-notifications",
+        role: { ko: "Interface File", en: "Interface File" },
+        title: { ko: "조용한 알림의 문장", en: "Sentences for Quiet Notifications" },
+        intro: {
+          ko: "알림은 소리보다 문장의 온도로 더 오래 기억됩니다.",
+          en: "Notifications are remembered longer through sentence temperature than through sound."
+        },
+        excerpt: {
+          ko: "알림의 어휘, 빈도, 묵음 상태가 화면과 사용자 사이의 신뢰를 조정합니다.",
+          en: "Vocabulary, frequency, and silent states adjust trust between screen and user."
+        },
+        body: {
+          ko: [
+            "알림은 작은 문장이지만 하루의 속도를 크게 바꿉니다. 너무 자주 말하면 신뢰를 잃고, 너무 늦게 말하면 책임을 잃습니다.",
+            "이 파일은 알림을 마케팅의 장치가 아니라 사용자의 시간에 들어가는 편집 문장으로 다룹니다. 조용함은 기능 부족이 아니라 정확한 판단의 결과입니다."
+          ],
+          en: [
+            "A notification is a small sentence that can strongly change the speed of a day. Speak too often and it loses trust; speak too late and it loses responsibility.",
+            "This file treats notifications not as marketing devices but as edited sentences entering a user's time. Quietness is not a lack of function but the result of precise judgment."
+          ]
+        },
+        credit: { ko: "File / Interface Desk", en: "File / Interface Desk" },
+        location: { ko: "Notification table", en: "Notification table" },
+        readTime: { ko: "파일", en: "File" },
+        heroClass: "image-signal"
+      },
+      {
+        slug: "recommended-by-whom",
+        role: { ko: "Conversation", en: "Conversation" },
+        title: { ko: "누가 추천을 말하는가", en: "Who Speaks the Recommendation" },
+        intro: {
+          ko: "추천 시스템의 목소리를 대화 형식으로 낮춰 읽습니다.",
+          en: "The voice of recommendation systems is lowered into a conversation format."
+        },
+        excerpt: {
+          ko: "추천은 선택지를 넓히기도 하지만 취향의 바깥을 더 조용히 지울 수도 있습니다.",
+          en: "Recommendation can widen options, but it can also quietly erase the outside of taste."
+        },
+        body: {
+          ko: [
+            "추천은 친절한 제안처럼 보이지만 언제나 특정한 방향을 갖습니다. 그 방향이 누구의 편의를 기준으로 정해졌는지 묻는 순간 추천은 편집의 문제가 됩니다.",
+            "대화는 알고리즘을 설명하기보다 추천의 말투를 읽습니다. 사용자가 선택했다고 느끼는 순간에도 화면은 이미 선택지를 배열하고 있습니다."
+          ],
+          en: [
+            "Recommendation looks like a helpful suggestion, but it always has a direction. The moment we ask whose convenience set that direction, recommendation becomes an editorial problem.",
+            "The conversation reads the tone of recommendation rather than explaining the algorithm. Even when users feel they have chosen, the screen has already arranged the options."
+          ]
+        },
+        credit: { ko: "Dialogue / Systems Desk", en: "Dialogue / Systems Desk" },
+        location: { ko: "Remote notes", en: "Remote notes" },
+        readTime: { ko: "대화", en: "Dialogue" },
+        heroClass: "image-interface"
+      },
+      {
+        slug: "empty-state",
+        role: { ko: "Afterword", en: "Afterword" },
+        title: { ko: "빈 상태의 책임", en: "The Responsibility of Empty States" },
+        intro: {
+          ko: "아무것도 없다는 화면은 실제로 가장 많은 방향을 제안합니다.",
+          en: "A screen that says nothing is there often suggests the most directions."
+        },
+        excerpt: {
+          ko: "빈 화면의 문장과 버튼은 사용자가 다음에 무엇을 해야 하는지 조용히 결정합니다.",
+          en: "Sentences and buttons in empty states quietly decide what the user should do next."
+        },
+        body: {
+          ko: [
+            "빈 상태는 비어 있는 화면이 아닙니다. 아직 데이터가 없다는 사실을 어떤 감정과 행동으로 연결할지 결정하는 첫 문장입니다.",
+            "마지막 장은 빈 화면을 책임의 문제로 닫습니다. 아무것도 없을 때조차 화면은 사용자의 다음 시간을 편집합니다."
+          ],
+          en: [
+            "An empty state is not an empty screen. It is the first sentence deciding what feeling and action should follow the absence of data.",
+            "The final chapter closes the empty screen as a question of responsibility. Even when there is nothing, the screen edits the user's next time."
+          ]
+        },
+        credit: { ko: "Afterword / Editorial Desk", en: "Afterword / Editorial Desk" },
+        location: { ko: "Closing", en: "Closing" },
+        readTime: { ko: "후기", en: "Afterword" },
+        heroClass: "image-thought"
+      }
+    ]
+  },
+  {
   number: "No. 01",
   title: { ko: "Screen of Things", en: "Screen of Things" },
   subtitle: {
@@ -1332,7 +1636,8 @@ export const issueProject: IssueProject = {
       heroClass: "image-thought"
     }
   ]
-};
+  }
+];
 
 export const site: SiteContent = {
   title: { ko: "The Thing", en: "The Thing" },
@@ -1340,9 +1645,8 @@ export const site: SiteContent = {
     ko: "예술, 테크, 디자인, 뷰티, 철학을 하나의 감각적 편집면으로 엮는 디지털 저널",
     en: "A digital journal connecting art, tech, design, beauty, and philosophy through a quiet editorial lens."
   },
-  issue: issueProject.number,
-  issueProject,
-  month: { ko: "2026년 5월", en: "May 2026" },
+  issueProjects,
+  month: { ko: "2026년 7월", en: "July 2026" },
   heroKicker: { ko: "Objects, Screens, Systems", en: "Objects, Screens, Systems" },
   heroTitle: {
     ko: "사물이 화면이 되고, 화면이 다시 사유가 되는 순간.",

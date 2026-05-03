@@ -304,6 +304,11 @@ if (writer) {
   const loginError = writer.querySelector<HTMLElement>("[data-admin-login-error]");
   const articleData = writer.querySelector<HTMLScriptElement>("[data-write-articles]");
   const issueData = writer.querySelector<HTMLScriptElement>("[data-write-issue]");
+  const issueList = writer.querySelector<HTMLElement>("[data-write-issue-list]");
+  const issueCount = writer.querySelector<HTMLElement>("[data-write-issue-count]");
+  const issueSummaryTitle = writer.querySelector<HTMLElement>("[data-write-issue-summary-title]");
+  const issueSummarySubtitle = writer.querySelector<HTMLElement>("[data-write-issue-summary-subtitle]");
+  const issueSummaryMeta = writer.querySelector<HTMLElement>("[data-write-issue-summary-meta]");
   const adminList = writer.querySelector<HTMLElement>("[data-admin-list]");
   const adminFilters = writer.querySelector<HTMLElement>("[data-admin-filters]");
   const adminCount = writer.querySelector<HTMLElement>("[data-admin-count]");
@@ -328,6 +333,7 @@ if (writer) {
   let saveTimer = 0;
   let issueSaveTimer = 0;
   let currentIndex = 0;
+  let currentIssueIndex = 0;
   let activeCategoryFilter = "all";
 
   const quoteTs = (value: string): string => JSON.stringify(value.trim());
@@ -585,29 +591,46 @@ if (writer) {
     }
   };
 
-  const initialIssue = (): AdminIssueProject => {
+  const normalizeIssueCollection = (value: unknown): AdminIssueProject[] => {
+    const issues = Array.isArray(value)
+      ? value
+      : value && typeof value === "object"
+        ? [value]
+        : [];
+    const normalizedIssues = issues.map((issue) => normalizeIssue(issue as Partial<AdminIssueProject>));
+
+    return normalizedIssues.length > 0 ? normalizedIssues : [fallbackIssue()];
+  };
+
+  const initialIssues = (): AdminIssueProject[] => {
     const stored = window.localStorage.getItem(issueStorageKey);
 
     if (stored) {
       try {
-        return normalizeIssue(JSON.parse(stored) as AdminIssueProject);
+        return normalizeIssueCollection(JSON.parse(stored));
       } catch {
         window.localStorage.removeItem(issueStorageKey);
       }
     }
 
     try {
-      return normalizeIssue(JSON.parse(issueData?.textContent || "{}") as AdminIssueProject);
+      return normalizeIssueCollection(JSON.parse(issueData?.textContent || "[]"));
     } catch {
-      return fallbackIssue();
+      return [fallbackIssue()];
     }
   };
 
   let adminArticles = initialArticles();
-  let adminIssue = initialIssue();
+  let adminIssues = initialIssues();
+  let adminIssue = adminIssues[0] || fallbackIssue();
 
   if (adminArticles.length === 0) {
     adminArticles = [fallbackArticle()];
+  }
+
+  if (adminIssues.length === 0) {
+    adminIssues = [fallbackIssue()];
+    adminIssue = adminIssues[0];
   }
 
   const unlockAdmin = (): void => {
@@ -764,6 +787,37 @@ if (writer) {
         <label><small>Value EN</small><input type="text" value="${issueCreditField(credit, "value.en")}" data-write-issue-credit-field="value.en" /></label>
         <button type="button" data-write-issue-credit-remove>삭제</button>
       </div>`).join("");
+  };
+
+  const renderIssueList = (): void => {
+    if (!issueList) {
+      return;
+    }
+
+    issueList.innerHTML = adminIssues.map((issue, index) => `
+      <button type="button" class="issue-admin-list-item ${index === currentIssueIndex ? "is-active" : ""}" data-write-issue-index="${index}" aria-pressed="${index === currentIssueIndex ? "true" : "false"}">
+        <span><strong>${escapeHtmlClient(issue.number)}</strong><small>${index === 0 ? "Latest" : `Stack ${String(index + 1).padStart(2, "0")}`}</small></span>
+        <strong>${escapeHtmlClient(issue.title.ko || issue.title.en || issue.number)}</strong>
+        <small>${escapeHtmlClient(issue.date.ko || issue.date.en)} / ${issue.features.length} scenes</small>
+      </button>`).join("");
+
+    if (issueCount) {
+      issueCount.textContent = String(adminIssues.length);
+    }
+  };
+
+  const updateIssueSummary = (): void => {
+    if (issueSummaryTitle) {
+      issueSummaryTitle.textContent = adminIssue.title.ko || adminIssue.title.en || adminIssue.number;
+    }
+
+    if (issueSummarySubtitle) {
+      issueSummarySubtitle.textContent = adminIssue.subtitle.ko || adminIssue.subtitle.en;
+    }
+
+    if (issueSummaryMeta) {
+      issueSummaryMeta.textContent = `장면 ${adminIssue.features.length} / 크레딧 ${adminIssue.credits.length}`;
+    }
   };
 
   const collectIssueFeature = (feature: HTMLElement): AdminIssueFeature => {
@@ -1255,7 +1309,7 @@ if (writer) {
 
   const articlesArrayCode = (): string => `import type { Article } from "../types";\n\nexport const articles = ${JSON.stringify(adminArticles, null, 2)} satisfies Article[];\n`;
 
-  const issueProjectCode = (): string => `import type { IssueProject } from "../types";\n\nexport const issueProject = ${JSON.stringify(adminIssue, null, 2)} satisfies IssueProject;\n`;
+  const issueProjectsCode = (): string => `import type { IssueProject } from "../types";\n\nexport const issueProjects = ${JSON.stringify(adminIssues, null, 2)} satisfies IssueProject[];\n`;
 
   const generateArticleObject = (): string => {
     return articleCode(formArticle());
@@ -1263,13 +1317,17 @@ if (writer) {
 
   const updateIssueOutput = (): void => {
     adminIssue = formIssue();
+    adminIssues[currentIssueIndex] = adminIssue;
 
     if (issueTitle) {
       issueTitle.textContent = `${adminIssue.number} · ${adminIssue.title.ko || adminIssue.title.en}`;
     }
 
+    updateIssueSummary();
+    renderIssueList();
+
     if (issueOutput) {
-      issueOutput.value = issueProjectCode();
+      issueOutput.value = issueProjectsCode();
     }
   };
 
@@ -1284,11 +1342,11 @@ if (writer) {
   };
 
   const downloadIssueFile = (): void => {
-    const blob = new Blob([issueProjectCode()], { type: "text/typescript" });
+    const blob = new Blob([issueProjectsCode()], { type: "text/typescript" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "issue-project.ts";
+    link.download = "issue-projects.ts";
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -1379,7 +1437,7 @@ if (writer) {
 
   const saveIssueCollection = (message = "이슈 자동 저장됨"): void => {
     updateIssueOutput();
-    window.localStorage.setItem(issueStorageKey, JSON.stringify(adminIssue));
+    window.localStorage.setItem(issueStorageKey, JSON.stringify(adminIssues));
     setIssueStatus(message);
   };
 
@@ -1390,17 +1448,17 @@ if (writer) {
       const response = await fetch("/api/admin/issue", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ issueProject: adminIssue })
+        body: JSON.stringify({ issueProjects: adminIssues })
       });
 
       if (!response.ok) {
         throw new Error(`Save failed: ${response.status}`);
       }
 
-      setIssueStatus("src/content/magazine.ts의 issueProject에 저장했고 로컬 서버에 바로 반영했습니다.");
+      setIssueStatus("src/content/magazine.ts의 issueProjects에 저장했고 로컬 서버에 바로 반영했습니다.");
     } catch {
       downloadIssueFile();
-      setIssueStatus("정적 페이지에서는 이슈 저장이 불가해 issue-project.ts를 내려받았습니다. 로컬 서버에서 열면 폴더에 저장됩니다.");
+      setIssueStatus("정적 페이지에서는 이슈 저장이 불가해 issue-projects.ts를 내려받았습니다. 로컬 서버에서 열면 폴더에 저장됩니다.");
     }
   };
 
@@ -1482,6 +1540,19 @@ if (writer) {
     return true;
   };
 
+  const moveCurrentIssue = (direction: -1 | 1): boolean => {
+    adminIssues[currentIssueIndex] = formIssue();
+    const targetIndex = currentIssueIndex + direction;
+
+    if (targetIndex < 0 || targetIndex >= adminIssues.length) {
+      return false;
+    }
+
+    [adminIssues[currentIssueIndex], adminIssues[targetIndex]] = [adminIssues[targetIndex], adminIssues[currentIssueIndex]];
+    applyIssue(targetIndex);
+    return true;
+  };
+
   const writeMeta = (key: string, value: string): void => {
     const field = metaField(key);
 
@@ -1490,8 +1561,10 @@ if (writer) {
     }
   };
 
-  const applyIssue = (issue: AdminIssueProject): void => {
-    adminIssue = normalizeIssue(issue);
+  const applyIssue = (index: number): void => {
+    currentIssueIndex = Math.max(0, Math.min(index, adminIssues.length - 1));
+    adminIssue = normalizeIssue(adminIssues[currentIssueIndex] || fallbackIssue());
+    adminIssues[currentIssueIndex] = adminIssue;
     writeIssueField("number", adminIssue.number);
     writeIssueField("title.ko", adminIssue.title.ko);
     writeIssueField("title.en", adminIssue.title.en);
@@ -1511,6 +1584,8 @@ if (writer) {
     writeIssueField("editorNote.en", adminIssue.editorNote.en);
     renderIssueFeatures();
     renderIssueCredits();
+    renderIssueList();
+    updateIssueSummary();
     updateIssueOutput();
   };
 
@@ -1602,7 +1677,11 @@ if (writer) {
 
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "s") {
       event.preventDefault();
-      await saveArticlesToProject();
+      if (writer.dataset.writeMode === "issue") {
+        await saveIssueToProject();
+      } else {
+        await saveArticlesToProject();
+      }
       return;
     }
 
@@ -1700,7 +1779,7 @@ if (writer) {
     scheduleSave();
   };
 
-  applyIssue(adminIssue);
+  applyIssue(0);
   applyArticle(0);
 
   writer.addEventListener("keydown", (event) => {
@@ -1740,6 +1819,63 @@ if (writer) {
       return;
     }
 
+    const issueListItem = target.closest<HTMLElement>("[data-write-issue-index]");
+
+    if (issueListItem) {
+      adminIssues[currentIssueIndex] = formIssue();
+      applyIssue(Number(issueListItem.dataset.writeIssueIndex || 0));
+      saveIssueCollection("선택한 이슈를 불러왔습니다.");
+      return;
+    }
+
+    if (target.closest("[data-write-issue-new]")) {
+      adminIssues[currentIssueIndex] = formIssue();
+      const nextIssue = fallbackIssue();
+      nextIssue.number = `No. ${String(adminIssues.length + 1).padStart(2, "0")}`;
+      nextIssue.title.ko = "새 이슈";
+      nextIssue.title.en = "New Issue";
+      adminIssues.unshift(nextIssue);
+      applyIssue(0);
+      saveIssueCollection("새 이슈를 만들었습니다.");
+      return;
+    }
+
+    if (target.closest("[data-write-issue-duplicate]")) {
+      adminIssues[currentIssueIndex] = formIssue();
+      const duplicateIssue = normalizeIssue(JSON.parse(JSON.stringify(adminIssues[currentIssueIndex])) as AdminIssueProject);
+      duplicateIssue.number = `No. ${String(adminIssues.length + 1).padStart(2, "0")}`;
+      duplicateIssue.title.ko = `${duplicateIssue.title.ko} 복사`;
+      duplicateIssue.title.en = `${duplicateIssue.title.en} Copy`;
+      adminIssues.splice(currentIssueIndex + 1, 0, duplicateIssue);
+      applyIssue(currentIssueIndex + 1);
+      saveIssueCollection("이슈를 복제했습니다.");
+      return;
+    }
+
+    if (target.closest("[data-write-issue-delete]") && window.confirm("현재 이슈를 삭제할까요?")) {
+      if (adminIssues.length > 1) {
+        adminIssues.splice(currentIssueIndex, 1);
+        applyIssue(Math.min(currentIssueIndex, adminIssues.length - 1));
+        saveIssueCollection("이슈를 삭제했습니다.");
+      }
+
+      return;
+    }
+
+    if (target.closest("[data-write-issue-move-up]")) {
+      if (moveCurrentIssue(-1)) {
+        saveIssueCollection("이슈 순서를 위로 이동했습니다.");
+      }
+      return;
+    }
+
+    if (target.closest("[data-write-issue-move-down]")) {
+      if (moveCurrentIssue(1)) {
+        saveIssueCollection("이슈 순서를 아래로 이동했습니다.");
+      }
+      return;
+    }
+
     if (target.closest("[data-write-issue-add-feature]")) {
       adminIssue = formIssue();
       const nextFeature = fallbackIssueFeature();
@@ -1747,7 +1883,8 @@ if (writer) {
       nextFeature.title.ko = `새 이슈 장면 ${adminIssue.features.length + 1}`;
       nextFeature.title.en = `New Issue Scene ${adminIssue.features.length + 1}`;
       adminIssue.features.push(nextFeature);
-      applyIssue(adminIssue);
+      adminIssues[currentIssueIndex] = adminIssue;
+      applyIssue(currentIssueIndex);
       saveIssueCollection("이슈 장면을 추가했습니다.");
       return;
     }
@@ -1769,7 +1906,8 @@ if (writer) {
 
       if (featureIndex >= 0 && adminIssue.features.length > 1) {
         adminIssue.features.splice(featureIndex, 1);
-        applyIssue(adminIssue);
+        adminIssues[currentIssueIndex] = adminIssue;
+        applyIssue(currentIssueIndex);
         saveIssueCollection("이슈 장면을 삭제했습니다.");
       }
 
@@ -1779,7 +1917,8 @@ if (writer) {
     if (target.closest("[data-write-issue-add-credit]")) {
       adminIssue = formIssue();
       adminIssue.credits.push({ label: { ko: "크레딧", en: "Credit" }, value: { ko: "이름", en: "Name" } });
-      applyIssue(adminIssue);
+      adminIssues[currentIssueIndex] = adminIssue;
+      applyIssue(currentIssueIndex);
       saveIssueCollection("이슈 크레딧을 추가했습니다.");
       return;
     }
@@ -1792,7 +1931,8 @@ if (writer) {
 
       if (creditIndex >= 0 && adminIssue.credits.length > 1) {
         adminIssue.credits.splice(creditIndex, 1);
-        applyIssue(adminIssue);
+        adminIssues[currentIssueIndex] = adminIssue;
+        applyIssue(currentIssueIndex);
         saveIssueCollection("이슈 크레딧을 삭제했습니다.");
       }
 
@@ -1801,7 +1941,7 @@ if (writer) {
 
     if (target.closest("[data-write-issue-copy]")) {
       saveIssueCollection("이슈 코드를 준비했습니다.");
-      const code = issueProjectCode();
+      const code = issueProjectsCode();
 
       try {
         await navigator.clipboard.writeText(code);
@@ -1811,7 +1951,7 @@ if (writer) {
         document.execCommand("copy");
       }
 
-      setIssueStatus("IssueProject 객체를 복사했습니다.");
+      setIssueStatus("issueProjects 배열을 복사했습니다.");
       return;
     }
 

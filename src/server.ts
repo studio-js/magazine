@@ -67,17 +67,20 @@ const writeArticlesToContentFile = async (nextArticles: Article[]): Promise<void
   await fs.writeFile(contentFilePath, nextSource, "utf8");
 };
 
-const writeIssueToContentFile = async (nextIssue: IssueProject): Promise<void> => {
+const isIssueProjectArray = (value: unknown): value is IssueProject[] =>
+  Array.isArray(value) && value.every(isIssueProject) && value.length > 0;
+
+const writeIssueProjectsToContentFile = async (nextIssues: IssueProject[]): Promise<void> => {
   const source = await fs.readFile(contentFilePath, "utf8");
-  const startMatch = /export const issueProject(?:: IssueProject)? = /.exec(source);
+  const startMatch = /export const issueProjects(?:: IssueProject\[])? = /.exec(source);
   const start = startMatch?.index ?? -1;
   const end = start === -1 ? -1 : source.indexOf("\n\nexport const site", start + (startMatch?.[0].length ?? 0));
 
   if (start === -1 || end === -1) {
-    throw new Error("Could not find issueProject block in content file");
+    throw new Error("Could not find issueProjects block in content file");
   }
 
-  const nextSource = `${source.slice(0, start)}export const issueProject: IssueProject = ${JSON.stringify(nextIssue, null, 2)};${source.slice(end)}`;
+  const nextSource = `${source.slice(0, start)}export const issueProjects: IssueProject[] = ${JSON.stringify(nextIssues, null, 2)};${source.slice(end)}`;
   await fs.writeFile(contentFilePath, nextSource, "utf8");
 };
 
@@ -181,18 +184,17 @@ app.post("/api/admin/articles", async (request, response) => {
 });
 
 app.post("/api/admin/issue", async (request, response) => {
-  const nextIssue = (request.body as { issueProject?: unknown }).issueProject;
+  const nextIssues = (request.body as { issueProjects?: unknown }).issueProjects;
 
-  if (!isIssueProject(nextIssue)) {
-    response.status(400).json({ ok: false, message: "Invalid issue payload" });
+  if (!isIssueProjectArray(nextIssues)) {
+    response.status(400).json({ ok: false, message: "Invalid issues payload" });
     return;
   }
 
   try {
-    await writeIssueToContentFile(nextIssue);
-    site.issue = nextIssue.number;
-    site.issueProject = nextIssue;
-    response.json({ ok: true, path: contentFilePath, number: nextIssue.number });
+    await writeIssueProjectsToContentFile(nextIssues);
+    site.issueProjects.splice(0, site.issueProjects.length, ...nextIssues);
+    response.json({ ok: true, path: contentFilePath, count: nextIssues.length, latest: nextIssues[0].number });
   } catch (error) {
     response.status(500).json({ ok: false, message: error instanceof Error ? error.message : "Save failed" });
   }

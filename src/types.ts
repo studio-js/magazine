@@ -136,8 +136,7 @@ export interface IssueProject {
 export interface SiteContent {
   title: LocalizedText;
   description: LocalizedText;
-  issue: string;
-  issueProject: IssueProject;
+  issueProjects: IssueProject[];
   month: LocalizedText;
   heroKicker: LocalizedText;
   heroTitle: LocalizedText;

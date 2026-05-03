@@ -1,4 +1,4 @@
-import type { Article, ArticleSection, CategoryDefinition, Locale, LocalizedText, Note, PrimaryCategory, SiteContent, SubcategoryKey } from "../types";
+import type { Article, ArticleSection, CategoryDefinition, IssueProject, Locale, LocalizedText, Note, PrimaryCategory, SiteContent, SubcategoryKey } from "../types";
 
 interface LayoutOptions {
   title: string;
@@ -98,6 +98,13 @@ const withLocale = (path: string, locale: Locale): string => {
 
 const articleHref = (article: Article, locale: Locale): string => withLocale(`/articles/${article.slug}`, locale);
 
+const latestIssue = (site: SiteContent): IssueProject => site.issueProjects[0];
+
+const issueAnchor = (issue: IssueProject): string => issue.number
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/^-+|-+$/g, "") || "issue";
+
 const archiveHref = (locale: Locale, category?: PrimaryCategory, subcategory?: SubcategoryKey): string => {
   if (category && subcategory) {
     return withLocale(`/archive/${category}/${subcategory}/`, locale);
@@ -116,7 +123,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-write-desk-modes";
+const assetVersion = "20260503-issue-stack-collection";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -126,6 +133,7 @@ const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
 
 const renderLayout = ({ title, description, body, locale, currentPath, site }: LayoutOptions): string => {
   const labels = ui[locale];
+  const currentIssue = latestIssue(site);
   const currentPathname = currentPath.split(/[?#]/)[0].replace(/\/$/, "") || "/";
   const isIssueActive = currentPathname === "/issues" || currentPathname.startsWith("/issues/");
   const issueNavItem = `        <div class="nav-item issue-nav-item ${isIssueActive ? "is-active" : ""}">
@@ -133,7 +141,7 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
             <span>${escapeHtml(labels.issue)}</span>
           </a>
           <div class="nav-submenu issue-submenu" aria-label="${escapeHtml(locale === "ko" ? "이슈 안내" : "Issue guide")}">
-            <a href="${withLocale("/issues", locale)}"><span>${escapeHtml(`${site.issueProject.number} · ${text(site.issueProject.title, locale)}`)}</span></a>
+            <a href="${withLocale("/issues", locale)}"><span>${escapeHtml(`${currentIssue.number} · ${text(currentIssue.title, locale)}`)}</span></a>
           </div>
         </div>`;
   const categoryLinks = site.categories
@@ -342,8 +350,9 @@ const renderDepartmentCards = (site: SiteContent, articleList: Article[], locale
 export const renderWritePage = (site: SiteContent, articleList: Article[], locale: Locale, currentPath: string): string => {
   const initialCategory = site.categories[0];
   const initialSubcategory = initialCategory.subcategories[0];
+  const currentIssue = latestIssue(site);
   const articleJson = JSON.stringify(articleList).replace(/</g, "\\u003c");
-  const issueJson = JSON.stringify(site.issueProject).replace(/</g, "\\u003c");
+  const issueJson = JSON.stringify(site.issueProjects).replace(/</g, "\\u003c");
   const issueField = (label: string, key: string, value: string, multiline = false): string => `            <label>
               <span>${escapeHtml(label)}</span>
               ${multiline
@@ -589,51 +598,59 @@ ${subcategoryOptions}
 
         <aside class="admin-sidebar issue-admin-sidebar" aria-label="${escapeHtml(locale === "ko" ? "이슈 관리" : "Issue manager")}" data-write-issue-panel>
           <div class="admin-sidebar-head">
-            <span>${escapeHtml(locale === "ko" ? "이슈 관리" : "Issue")}</span>
-            <strong>${escapeHtml(site.issueProject.number)}</strong>
+            <span>${escapeHtml(locale === "ko" ? "이슈 목록" : "Issues")}</span>
+            <strong data-write-issue-count>${site.issueProjects.length}</strong>
           </div>
+          <div class="issue-admin-list" data-write-issue-list></div>
           <div class="issue-sidebar-summary">
-            <p class="kicker">Current Issue</p>
-            <strong>${escapeHtml(text(site.issueProject.title, locale))}</strong>
-            <p>${escapeHtml(text(site.issueProject.subtitle, locale))}</p>
-            <small>${escapeHtml(locale === "ko" ? "장면" : "Scenes")} ${site.issueProject.features.length} / ${escapeHtml(locale === "ko" ? "크레딧" : "Credits")} ${site.issueProject.credits.length}</small>
+            <p class="kicker">Selected Issue</p>
+            <strong data-write-issue-summary-title>${escapeHtml(text(currentIssue.title, locale))}</strong>
+            <p data-write-issue-summary-subtitle>${escapeHtml(text(currentIssue.subtitle, locale))}</p>
+            <small data-write-issue-summary-meta>${escapeHtml(locale === "ko" ? "장면" : "Scenes")} ${currentIssue.features.length} / ${escapeHtml(locale === "ko" ? "크레딧" : "Credits")} ${currentIssue.credits.length}</small>
+          </div>
+          <div class="admin-sidebar-actions issue-order-actions">
+            <button type="button" class="is-primary" data-write-issue-new>${escapeHtml(locale === "ko" ? "새 이슈" : "New Issue")}</button>
+            <button type="button" data-write-issue-duplicate>${escapeHtml(locale === "ko" ? "복제" : "Duplicate")}</button>
+            <button type="button" data-write-issue-move-up>${escapeHtml(locale === "ko" ? "위로" : "Move Up")}</button>
+            <button type="button" data-write-issue-move-down>${escapeHtml(locale === "ko" ? "아래로" : "Move Down")}</button>
+            <button type="button" data-write-issue-delete>${escapeHtml(locale === "ko" ? "삭제" : "Delete")}</button>
           </div>
           <div class="admin-sidebar-actions is-export">
-            <button type="button" class="is-primary" data-write-issue-save>${escapeHtml(locale === "ko" ? "이슈 파일 저장" : "Save Issue")}</button>
-            <button type="button" data-write-issue-copy>${escapeHtml(locale === "ko" ? "이슈 복사" : "Copy Issue")}</button>
-            <button type="button" data-write-issue-download>${escapeHtml(locale === "ko" ? "이슈 내려받기" : "Download Issue")}</button>
-            <button type="button" data-write-issue-reset>${escapeHtml(locale === "ko" ? "이슈 로컬 초기화" : "Reset Issue")}</button>
+            <button type="button" class="is-primary" data-write-issue-save>${escapeHtml(locale === "ko" ? "이슈 컬렉션 저장" : "Save Issues")}</button>
+            <button type="button" data-write-issue-copy>${escapeHtml(locale === "ko" ? "컬렉션 복사" : "Copy Issues")}</button>
+            <button type="button" data-write-issue-download>${escapeHtml(locale === "ko" ? "컬렉션 내려받기" : "Download Issues")}</button>
+            <button type="button" data-write-issue-reset>${escapeHtml(locale === "ko" ? "이슈 로컬 초기화" : "Reset Issues")}</button>
           </div>
-          <p class="issue-sidebar-note">${escapeHtml(locale === "ko" ? "라이브 페이지에서는 다운로드로 대체되고, 로컬 서버에서는 issueProject에 바로 저장됩니다." : "On the live static page this falls back to download; on the local server it writes directly to issueProject.")}</p>
+          <p class="issue-sidebar-note">${escapeHtml(locale === "ko" ? "목록의 첫 번째 이슈가 공개 페이지와 상단 메뉴의 최신호가 됩니다. 로컬 서버에서는 issueProjects에 바로 저장됩니다." : "The first issue in this list becomes the public latest issue and top-menu issue. On the local server this writes directly to issueProjects.")}</p>
         </aside>
 
         <section class="admin-editor issue-admin-editor" aria-label="${escapeHtml(locale === "ko" ? "이슈 편집" : "Issue editor")}" data-write-issue-panel data-write-issue-editor>
         <div class="admin-editor-bar">
           <div>
             <span>${escapeHtml(locale === "ko" ? "이슈 편집" : "Issue Editing")}</span>
-            <strong data-write-issue-title>${escapeHtml(`${site.issueProject.number} · ${text(site.issueProject.title, locale)}`)}</strong>
+            <strong data-write-issue-title>${escapeHtml(`${currentIssue.number} · ${text(currentIssue.title, locale)}`)}</strong>
           </div>
           <p data-write-issue-status>${escapeHtml(locale === "ko" ? "이슈도 브라우저에 자동 저장됩니다." : "Issue edits also autosave in this browser.")}</p>
         </div>
 
         <div class="issue-admin-grid">
-${issueField(locale === "ko" ? "번호" : "Number", "number", site.issueProject.number)}
-${issueField(locale === "ko" ? "제목 KR" : "Title KR", "title.ko", site.issueProject.title.ko)}
-${issueField(locale === "ko" ? "제목 EN" : "Title EN", "title.en", site.issueProject.title.en)}
-${issueField(locale === "ko" ? "부제 KR" : "Subtitle KR", "subtitle.ko", site.issueProject.subtitle.ko, true)}
-${issueField(locale === "ko" ? "부제 EN" : "Subtitle EN", "subtitle.en", site.issueProject.subtitle.en, true)}
-${issueField(locale === "ko" ? "덱 KR" : "Deck KR", "deck.ko", site.issueProject.deck.ko, true)}
-${issueField(locale === "ko" ? "덱 EN" : "Deck EN", "deck.en", site.issueProject.deck.en, true)}
-${issueField(locale === "ko" ? "발행 KR" : "Date KR", "date.ko", site.issueProject.date.ko)}
-${issueField(locale === "ko" ? "발행 EN" : "Date EN", "date.en", site.issueProject.date.en)}
-${issueField(locale === "ko" ? "형식 KR" : "Format KR", "format.ko", site.issueProject.format.ko)}
-${issueField(locale === "ko" ? "형식 EN" : "Format EN", "format.en", site.issueProject.format.en)}
-${issueField(locale === "ko" ? "상태 KR" : "Access KR", "availability.ko", site.issueProject.availability.ko)}
-${issueField(locale === "ko" ? "상태 EN" : "Access EN", "availability.en", site.issueProject.availability.en)}
-${issueField(locale === "ko" ? "커버 크레딧 KR" : "Cover Credit KR", "coverCredit.ko", site.issueProject.coverCredit.ko, true)}
-${issueField(locale === "ko" ? "커버 크레딧 EN" : "Cover Credit EN", "coverCredit.en", site.issueProject.coverCredit.en, true)}
-${issueField(locale === "ko" ? "에디터 노트 KR" : "Editor Note KR", "editorNote.ko", site.issueProject.editorNote.ko, true)}
-${issueField(locale === "ko" ? "에디터 노트 EN" : "Editor Note EN", "editorNote.en", site.issueProject.editorNote.en, true)}
+${issueField(locale === "ko" ? "번호" : "Number", "number", currentIssue.number)}
+${issueField(locale === "ko" ? "제목 KR" : "Title KR", "title.ko", currentIssue.title.ko)}
+${issueField(locale === "ko" ? "제목 EN" : "Title EN", "title.en", currentIssue.title.en)}
+${issueField(locale === "ko" ? "부제 KR" : "Subtitle KR", "subtitle.ko", currentIssue.subtitle.ko, true)}
+${issueField(locale === "ko" ? "부제 EN" : "Subtitle EN", "subtitle.en", currentIssue.subtitle.en, true)}
+${issueField(locale === "ko" ? "덱 KR" : "Deck KR", "deck.ko", currentIssue.deck.ko, true)}
+${issueField(locale === "ko" ? "덱 EN" : "Deck EN", "deck.en", currentIssue.deck.en, true)}
+${issueField(locale === "ko" ? "발행 KR" : "Date KR", "date.ko", currentIssue.date.ko)}
+${issueField(locale === "ko" ? "발행 EN" : "Date EN", "date.en", currentIssue.date.en)}
+${issueField(locale === "ko" ? "형식 KR" : "Format KR", "format.ko", currentIssue.format.ko)}
+${issueField(locale === "ko" ? "형식 EN" : "Format EN", "format.en", currentIssue.format.en)}
+${issueField(locale === "ko" ? "상태 KR" : "Access KR", "availability.ko", currentIssue.availability.ko)}
+${issueField(locale === "ko" ? "상태 EN" : "Access EN", "availability.en", currentIssue.availability.en)}
+${issueField(locale === "ko" ? "커버 크레딧 KR" : "Cover Credit KR", "coverCredit.ko", currentIssue.coverCredit.ko, true)}
+${issueField(locale === "ko" ? "커버 크레딧 EN" : "Cover Credit EN", "coverCredit.en", currentIssue.coverCredit.en, true)}
+${issueField(locale === "ko" ? "에디터 노트 KR" : "Editor Note KR", "editorNote.ko", currentIssue.editorNote.ko, true)}
+${issueField(locale === "ko" ? "에디터 노트 EN" : "Editor Note EN", "editorNote.en", currentIssue.editorNote.en, true)}
         </div>
 
         <div class="issue-admin-section-head">
@@ -670,6 +687,7 @@ ${issueField(locale === "ko" ? "에디터 노트 EN" : "Editor Note EN", "editor
 
 export const renderHomePage = (site: SiteContent, articleList: Article[], locale: Locale, currentPath: string): string => {
   const labels = ui[locale];
+  const currentIssue = latestIssue(site);
   const [featuredArticle, secondaryArticle] = articleList;
   const digestArticles = articleList.slice(1, 4);
   const riverArticles = articleList.slice(3, 8);
@@ -721,7 +739,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
       <div class="brief-index" data-reveal>
         <a href="${withLocale("/issues", locale)}">
           <span>Issue</span>
-          <strong>${escapeHtml(`${site.issueProject.number} · ${text(site.issueProject.title, locale)}`)}</strong>
+          <strong>${escapeHtml(`${currentIssue.number} · ${text(currentIssue.title, locale)}`)}</strong>
         </a>
         <a href="${archiveHref(locale)}">
           <span>Archive</span>
@@ -824,8 +842,8 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
 };
 
 export const renderIssuePage = (site: SiteContent, _articleList: Article[], locale: Locale, currentPath: string): string => {
-  const issue = site.issueProject;
-  const coverFeature = issue.features[0];
+  const issue = latestIssue(site);
+  const coverVisual = issue.features[0]?.heroClass ?? "image-material";
   const issueRows = issue.features
     .map((feature, index) => `        <a class="issue-toc-row issue-feature-row" href="#issue-${escapeHtml(feature.slug)}" data-reveal>
           <span class="issue-toc-no">${String(index + 1).padStart(2, "0")}</span>
@@ -854,19 +872,51 @@ export const renderIssuePage = (site: SiteContent, _articleList: Article[], loca
           <strong>${escapeHtml(text(credit.value, locale))}</strong>
         </span>`)
     .join("\n");
+  const issueStack = site.issueProjects
+    .map((stackIssue, index) => {
+      const stackCover = stackIssue.features[0]?.heroClass ?? "image-material";
+      const stackId = `issue-stack-${issueAnchor(stackIssue)}`;
+      const stackScenes = stackIssue.features.slice(0, 4)
+        .map((feature, featureIndex) => `              <span>
+                <small>${String(featureIndex + 1).padStart(2, "0")} / ${escapeHtml(text(feature.role, locale))}</small>
+                <strong>${escapeHtml(text(feature.title, locale))}</strong>
+              </span>`)
+        .join("\n");
+
+      return `        <article class="issue-stack-item ${index === 0 ? "is-current" : ""}" id="${escapeHtml(stackId)}" data-reveal>
+          <div class="issue-stack-cover" aria-label="${escapeHtml(locale === "ko" ? "이슈 커버" : "Issue cover")}">
+            <span class="image-block ${stackCover}" data-visual-cycle role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "스택 커버 비주얼 바꾸기" : "Cycle stacked issue cover visual")}"></span>
+            <small>${escapeHtml(index === 0 ? (locale === "ko" ? "최신호" : "Latest") : (locale === "ko" ? "지난호" : "Archive"))}</small>
+          </div>
+          <div class="issue-stack-copy">
+            <p class="kicker">${escapeHtml(stackIssue.number)} / ${escapeHtml(text(stackIssue.date, locale))}</p>
+            <h3><span>${escapeHtml(stackIssue.number)}</span>${escapeHtml(text(stackIssue.title, locale))}</h3>
+            <p>${escapeHtml(text(stackIssue.deck, locale))}</p>
+            <div class="issue-stack-meta">
+              <span>${escapeHtml(text(stackIssue.format, locale))}</span>
+              <span>${escapeHtml(text(stackIssue.availability, locale))}</span>
+              <span>${stackIssue.features.length} ${escapeHtml(locale === "ko" ? "장면" : "scenes")}</span>
+            </div>
+            <div class="issue-stack-scenes" aria-label="${escapeHtml(locale === "ko" ? "이슈 장면 요약" : "Issue scene summary")}">
+${stackScenes}
+            </div>
+          </div>
+        </article>`;
+    })
+    .join("\n");
 
   const body = `
     <section class="issue-page issue-project-page section-pad" aria-labelledby="issue-page-title">
       <header class="issue-project-hero" data-reveal>
         <div class="issue-project-title">
-          <p class="kicker">Magazine Issue</p>
+          <p class="kicker">Latest Magazine Issue</p>
           <span class="issue-project-no">${escapeHtml(issue.number)}</span>
           <h1 id="issue-page-title">${escapeHtml(text(issue.title, locale))}</h1>
           <p>${escapeHtml(text(issue.subtitle, locale))}</p>
         </div>
 
         <aside class="issue-cover-card" aria-label="${escapeHtml(locale === "ko" ? "이슈 커버" : "Issue cover")}">
-          <span class="image-block ${coverFeature.heroClass}" data-visual-cycle role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "이슈 커버 비주얼 바꾸기" : "Cycle issue cover visual")}"></span>
+          <span class="image-block ${coverVisual}" data-visual-cycle role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "이슈 커버 비주얼 바꾸기" : "Cycle issue cover visual")}"></span>
           <small>${escapeHtml(locale === "ko" ? "표지" : "Cover")}</small>
           <strong>${escapeHtml(issue.number)}</strong>
           <em>${escapeHtml(text(issue.coverCredit, locale))}</em>
@@ -882,7 +932,7 @@ export const renderIssuePage = (site: SiteContent, _articleList: Article[], loca
       <section class="issue-editorial-note" aria-label="${escapeHtml(locale === "ko" ? "편집 노트" : "Editor's note")}" data-reveal>
         <div>
           <p class="kicker">Editor's Note</p>
-          <h2>${escapeHtml(locale === "ko" ? "사물의 표면에서 시작한 첫 번째 호" : "The first issue begins on the surface of things")}</h2>
+          <h2>${escapeHtml(locale === "ko" ? "가장 앞에 놓인 한 호가 다음 읽기를 정한다" : "The front issue sets the next reading order")}</h2>
         </div>
         <div class="issue-editorial-copy">
           <p>${escapeHtml(text(issue.deck, locale))}</p>
@@ -893,7 +943,7 @@ export const renderIssuePage = (site: SiteContent, _articleList: Article[], loca
       <section class="issue-contents" aria-labelledby="issue-contents-title">
         <div class="issue-section-heading" data-reveal>
           <p class="kicker">Contents</p>
-          <h2 id="issue-contents-title">${escapeHtml(locale === "ko" ? "이번 호의 장면" : "Scenes in this issue")}</h2>
+          <h2 id="issue-contents-title">${escapeHtml(locale === "ko" ? "최신호의 장면" : "Scenes in the latest issue")}</h2>
         </div>
         <div class="issue-toc" aria-label="${escapeHtml(locale === "ko" ? "이슈 목차" : "Issue table of contents")}">
 ${issueRows}
@@ -907,6 +957,17 @@ ${issueChapters}
       <div class="issue-credit-grid" aria-label="${escapeHtml(locale === "ko" ? "이슈 크레딧" : "Issue credits")}" data-reveal>
 ${credits}
       </div>
+
+      <section class="issue-stack" aria-labelledby="issue-stack-title">
+        <div class="issue-stack-head" data-reveal>
+          <p class="kicker">Issue Stack</p>
+          <h2 id="issue-stack-title">${escapeHtml(locale === "ko" ? "쌓여 가는 발행본" : "A growing stack of editions")}</h2>
+          <p>${escapeHtml(locale === "ko" ? "첫 번째 카드가 최신호입니다. 지난 호는 카테고리가 아니라 하나의 독립 발행본으로 남아 다음 편집면의 기준이 됩니다." : "The first card is the latest issue. Earlier issues remain as complete editions, not category groups, setting the measure for the next surface.")}</p>
+        </div>
+        <div class="issue-stack-list" aria-label="${escapeHtml(locale === "ko" ? "전체 이슈" : "All issues")}">
+${issueStack}
+        </div>
+      </section>
     </section>`;
 
   return renderLayout({ title: `${issue.number} · ${text(issue.title, locale)} | ${text(site.title, locale)}`, description: text(issue.deck, locale), body, locale, currentPath, site });
