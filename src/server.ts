@@ -10,6 +10,7 @@ const port = Number(process.env.PORT) || 3000;
 const projectRoot = path.resolve(__dirname, "..");
 const contentFilePath = path.join(projectRoot, "src", "content", "magazine.ts");
 const uploadsDir = path.join(projectRoot, "public", "uploads");
+const localBasePath = "/magazine";
 const uploadExtensions: Record<string, string> = {
   "image/gif": "gif",
   "image/jpeg": "jpg",
@@ -22,6 +23,7 @@ const getLocale = (requestPath: string, queryValue?: unknown): Locale =>
 
 const getCurrentPath = (originalUrl: string): string => {
   const url = new URL(originalUrl, "http://localhost");
+  url.pathname = url.pathname.replace(/^\/magazine(?=\/|$)/, "") || "/";
   url.searchParams.delete("lang");
   const pathname = url.pathname === "/en" ? "/" : url.pathname.replace(/^\/en(?=\/)/, "");
   const query = url.searchParams.toString();
@@ -90,6 +92,14 @@ const writeIssueProjectsToContentFile = async (nextIssues: IssueProject[]): Prom
 };
 
 app.use(express.json({ limit: "18mb" }));
+app.use((request, _response, next) => {
+  if (request.url === localBasePath || request.url.startsWith(`${localBasePath}/`) || request.url.startsWith(`${localBasePath}?`)) {
+    const strippedUrl = request.url.slice(localBasePath.length) || "/";
+    request.url = strippedUrl.startsWith("/") ? strippedUrl : `/${strippedUrl}`;
+  }
+
+  next();
+});
 app.use(express.static(path.join(projectRoot, "public")));
 app.use("/client.js", express.static(path.join(projectRoot, "dist", "client.js")));
 

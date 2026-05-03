@@ -16,6 +16,9 @@ const imageClasses = [
   "image-library",
   "image-field"
 ];
+const clientScriptSrc = document.querySelector<HTMLScriptElement>('script[src*="client.js"]')?.getAttribute("src") || "/client.js";
+const clientBasePath = new URL(clientScriptSrc, window.location.href).pathname.replace(/\/client\.js$/, "");
+const apiPath = (path: string): string => `${clientBasePath}${path}`;
 
 const setImageBlockVisual = (element: HTMLElement, visualClass: string, imageUrl = ""): void => {
   const existingImage = element.querySelector<HTMLImageElement>("[data-image-source]");
@@ -1780,7 +1783,7 @@ if (writer) {
     const dataUrl = await readFileAsDataUrl(file);
 
     try {
-      const response = await fetch("/api/admin/uploads", {
+      const response = await fetch(apiPath("/api/admin/uploads"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ fileName: file.name, dataUrl })
@@ -1864,7 +1867,7 @@ if (writer) {
     saveCollection("저장 중...");
 
     try {
-      const response = await fetch("/api/admin/articles", {
+      const response = await fetch(apiPath("/api/admin/articles"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ articles: adminArticles })
@@ -1892,7 +1895,7 @@ if (writer) {
     saveIssueCollection("이슈 저장 중...");
 
     try {
-      const response = await fetch("/api/admin/issue", {
+      const response = await fetch(apiPath("/api/admin/issue"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ issueProjects: adminIssues })
@@ -3321,9 +3324,7 @@ document.querySelectorAll<HTMLSelectElement>("[data-navigation-select]").forEach
       return;
     }
 
-    const scriptSrc = document.querySelector<HTMLScriptElement>('script[src*="/client.js"]')?.getAttribute("src") || "";
-    const basePath = scriptSrc.replace(/\/client\.js.*$/, "");
-    const nextPath = select.value.startsWith("/") && basePath && !select.value.startsWith(`${basePath}/`) ? `${basePath}${select.value}` : select.value;
+    const nextPath = select.value.startsWith("/") && clientBasePath && !select.value.startsWith(`${clientBasePath}/`) ? `${clientBasePath}${select.value}` : select.value;
 
     if (nextPath !== window.location.pathname) {
       window.location.href = nextPath;
