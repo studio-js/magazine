@@ -56,14 +56,12 @@ const writeLocalizedPages = async (locale: Locale): Promise<void> => {
     )
   );
 
-  await Promise.all(
-    articles.map((article) =>
-      writeHtml(
-        `${prefix}articles/${article.slug}/index.html`,
-        renderArticlePage(site, article, articles.filter((item) => item.slug !== article.slug).slice(0, 3), locale, `/articles/${article.slug}`)
-      )
-    )
-  );
+  for (const article of articles) {
+    await writeHtml(
+      `${prefix}articles/${article.slug}/index.html`,
+      renderArticlePage(site, article, articles.filter((item) => item.slug !== article.slug).slice(0, 3), locale, `/articles/${article.slug}`)
+    );
+  }
 };
 
 const main = async (): Promise<void> => {
