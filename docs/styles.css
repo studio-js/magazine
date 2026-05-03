@@ -1278,6 +1278,13 @@ html[lang="ko"] .archive-preview h3 {
   background-size: cover !important;
 }
 
+.image-block.has-custom-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .image-block.has-custom-image::before,
 .image-block.has-custom-image::after {
   display: none;
@@ -18119,5 +18126,430 @@ html[lang="ko"] .article-detail:not(.writer-article) .article-section .article-i
   .writer-article .writer-section-quote {
     grid-column: 1;
     width: 100%;
+  }
+}
+
+/* Write page final alignment: the draft preview follows the published article. */
+.admin-page[data-write-mode="article"] .article-admin-sidebar {
+  grid-template-columns: minmax(9rem, 0.14fr) minmax(12rem, 0.16fr) minmax(18rem, 1fr) max-content max-content;
+  border: 1px solid var(--hairline);
+  background: rgba(var(--paper-rgb), 0.34);
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-head,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-select-control,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions {
+  min-height: 100%;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export {
+  display: grid;
+  grid-auto-rows: min-content;
+  align-content: start;
+  gap: 1px;
+  width: max-content;
+  min-width: 0;
+  padding: 0;
+  border-left: 1px solid var(--hairline);
+  background: var(--hairline);
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions {
+  grid-template-columns: repeat(2, minmax(2.5rem, max-content));
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export {
+  grid-template-columns: repeat(3, minmax(3.5rem, max-content));
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions button,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export button,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions button.is-primary {
+  grid-column: auto;
+  min-width: 2.5rem;
+  min-height: 2.55rem;
+  border: 0;
+  border-radius: 0;
+  padding: 0.62rem 0.78rem;
+  background: rgba(var(--paper-rgb), 0.82);
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions button.is-primary {
+  color: var(--ink);
+  font-weight: 560;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions button:hover,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions button:focus-visible {
+  background: rgba(24, 23, 19, 0.075);
+  color: var(--ink);
+}
+
+.writer-article .writer-body-grid {
+  display: block;
+  width: min(100%, 72rem);
+  margin-inline: auto;
+}
+
+.writer-article .article-body {
+  display: block;
+  width: min(100%, 42.5rem);
+  margin-inline: auto;
+  counter-reset: article-sections;
+}
+
+.writer-article .writer-section-rail-card {
+  display: none !important;
+}
+
+.writer-article .writer-section {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 42.5rem;
+  margin: 0 0 clamp(5rem, 7.8vw, 8.6rem);
+  padding: 0;
+  border: 0 !important;
+}
+
+.writer-article .article-body > blockquote:not(.article-inline-quote),
+html[lang="ko"] .writer-article .article-body > blockquote:not(.article-inline-quote) {
+  width: 100%;
+  max-width: 31rem;
+  margin: 0 0 clamp(4rem, 7vw, 7.2rem);
+  padding: 0;
+  color: rgba(24, 23, 19, 0.56);
+  font-size: clamp(1.1rem, 1.36vw, 1.48rem);
+  font-style: italic;
+  font-weight: 420;
+  letter-spacing: -0.018em;
+  line-height: 1.68;
+}
+
+html[lang="ko"] .writer-article .article-body > blockquote:not(.article-inline-quote) {
+  line-height: 1.78;
+  word-break: keep-all;
+}
+
+.writer-article .writer-section h2,
+html[lang="ko"] .writer-article .writer-section h2 {
+  max-width: 18ch;
+  margin: 0 0 clamp(1.45rem, 2.4vw, 2.1rem);
+  color: rgba(24, 23, 19, 0.82);
+  font-size: clamp(1.32rem, 1.72vw, 2.05rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+}
+
+html[lang="ko"] .writer-article .writer-section h2 {
+  max-width: 12ch;
+  letter-spacing: -0.012em;
+  line-height: 1.26;
+}
+
+.writer-article .writer-section [data-write-paragraph] {
+  max-width: 56ch;
+  min-height: 1.92em;
+  margin: 0 0 clamp(1.35rem, 2vw, 1.95rem);
+  color: rgba(55, 52, 47, 0.9);
+  font-size: clamp(1.02rem, 1.08vw, 1.14rem);
+  line-height: 1.92;
+}
+
+.writer-article .writer-section [data-write-paragraph]:first-of-type {
+  color: rgba(24, 23, 19, 0.84);
+  font-size: clamp(1.08rem, 1.16vw, 1.22rem);
+  line-height: 1.88;
+}
+
+.writer-article .writer-section .writer-section-media,
+.writer-article .writer-section-gallery {
+  width: min(100%, 42.5rem);
+  max-width: 42.5rem;
+  margin: clamp(2.3rem, 4.4vw, 4.6rem) 0;
+}
+
+.writer-article .writer-section-media-button .image-block,
+.writer-article .writer-gallery-item .writer-section-media-button .image-block {
+  aspect-ratio: 4 / 3;
+}
+
+.article-detail:not(.writer-article) .article-visual .image-block.has-custom-image,
+.article-detail:not(.writer-article) .article-section-figure .image-block.has-custom-image,
+.writer-article .article-visual .image-block.has-custom-image,
+.writer-article .writer-section-media-button .image-block.has-custom-image,
+.writer-article .writer-gallery-item .writer-section-media-button .image-block.has-custom-image {
+  aspect-ratio: auto !important;
+  background-image: none !important;
+}
+
+.article-detail:not(.writer-article) .article-visual .image-block.has-custom-image img,
+.article-detail:not(.writer-article) .article-section-figure .image-block.has-custom-image img,
+.writer-article .article-visual .image-block.has-custom-image img,
+.writer-article .writer-section-media-button .image-block.has-custom-image img,
+.writer-article .writer-gallery-item .writer-section-media-button .image-block.has-custom-image img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.writer-article .writer-section-quote,
+html[lang="ko"] .writer-article .writer-section-quote {
+  width: min(100%, 34rem);
+  max-width: 34rem;
+  margin: clamp(2.2rem, 4.2vw, 4.2rem) 0;
+  padding: 0 0 0 clamp(1.1rem, 2.2vw, 1.7rem);
+  color: rgba(24, 23, 19, 0.66);
+  font-size: clamp(1.18rem, 1.54vw, 1.72rem);
+  font-style: italic;
+  font-weight: 420;
+  letter-spacing: -0.018em;
+  line-height: 1.62;
+}
+
+.writer-article .writer-section-tools {
+  width: min(100%, 42.5rem);
+  margin-top: clamp(1.8rem, 3vw, 2.8rem);
+}
+
+@media (max-width: 1180px) {
+  .admin-page[data-write-mode="article"] .article-admin-sidebar {
+    grid-template-columns: minmax(10rem, 0.24fr) minmax(0, 0.76fr);
+  }
+
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list,
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions,
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export {
+    grid-column: 1 / -1;
+  }
+
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions,
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export {
+    width: 100%;
+    border-left: 0;
+    border-top: 1px solid var(--hairline);
+  }
+}
+
+@media (max-width: 680px) {
+  .admin-page[data-write-mode="article"] .article-admin-sidebar,
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions,
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export {
+    grid-template-columns: 1fr;
+  }
+
+  .writer-article .article-body,
+  .writer-article .writer-section {
+    width: min(100%, 42rem);
+    margin-inline: auto;
+  }
+}
+
+/* Write page control strip and draft breathing room. */
+.admin-page[data-write-mode="article"] .article-admin-sidebar {
+  grid-template-columns: minmax(8rem, 0.14fr) minmax(11rem, 0.18fr) minmax(18rem, 1fr) minmax(12rem, auto) minmax(14rem, auto);
+  align-items: start;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export {
+  display: flex;
+  flex-wrap: wrap;
+  align-self: start;
+  align-content: start;
+  gap: 0.55rem 0.85rem;
+  width: auto;
+  min-height: 0;
+  padding: 1rem 1.05rem;
+  border-left: 1px solid var(--hairline);
+  background: transparent;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions button,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export button,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions button.is-primary {
+  min-width: 0;
+  min-height: 0;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  padding: 0.16rem 0;
+  background: transparent;
+  color: rgba(24, 23, 19, 0.58);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions button.is-primary {
+  color: var(--ink);
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions button:hover,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions button:focus-visible {
+  border-bottom-color: rgba(24, 23, 19, 0.3);
+  background: transparent;
+  color: var(--ink);
+}
+
+.writer-article {
+  padding-inline: clamp(1.15rem, 3vw, 3.8rem);
+}
+
+.writer-article .article-hero-grid {
+  width: min(100%, 72rem);
+  margin: 0 auto clamp(3rem, 5.6vw, 6.4rem);
+  padding-top: clamp(1.4rem, 3.4vw, 3.6rem);
+}
+
+.writer-article .article-title-block {
+  padding-left: 0;
+}
+
+@media (max-width: 1180px) {
+  .admin-page[data-write-mode="article"] .article-admin-sidebar {
+    grid-template-columns: minmax(10rem, 0.3fr) minmax(0, 0.7fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .writer-article {
+    padding-inline: clamp(1rem, 5vw, 1.35rem);
+  }
+}
+
+/* Compact article manager: controls above, article list as a low filmstrip. */
+.admin-page[data-write-mode="article"] .article-admin-sidebar {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.18fr) minmax(12rem, 0.22fr) minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    "head filter spacer order export"
+    "list list list list list";
+  align-items: stretch;
+  gap: 0;
+  max-height: none;
+  overflow: hidden;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-head {
+  grid-area: head;
+  min-height: 3.6rem;
+  padding: 0 1rem;
+  border-right: 1px solid var(--hairline);
+  border-bottom: 0;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-select-control {
+  grid-area: filter;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-width: 0;
+  min-height: 3.6rem !important;
+  padding: 0 1rem;
+  border-right: 1px solid var(--hairline);
+  border-bottom: 0;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-select-control > span {
+  flex: 0 0 auto;
+  color: rgba(24, 23, 19, 0.5);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-select-control select {
+  width: min(100%, 13.5rem);
+  min-height: 2.15rem;
+  border: 0;
+  border-bottom: 1px solid rgba(24, 23, 19, 0.18);
+  border-radius: 0;
+  padding: 0 1.6rem 0 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 0.86rem;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list {
+  grid-area: list;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(13rem, 18rem);
+  max-height: none;
+  min-height: 4.6rem !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-top: 1px solid var(--hairline);
+  border-inline: 0;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list-item {
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  min-height: 4.6rem;
+  border-right: 1px solid var(--hairline);
+  border-bottom: 0;
+  padding: 0.72rem 0.86rem;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list-item > strong {
+  font-size: 0.9rem;
+  line-height: 1.22;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list-item > small,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list-no small {
+  font-size: 0.62rem !important;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions:not(.is-export) {
+  grid-area: order;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export {
+  grid-area: export;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export {
+  min-height: 3.6rem !important;
+  padding: 0.85rem 1rem;
+  border-top: 0;
+  border-left: 1px solid var(--hairline);
+}
+
+@media (max-width: 1180px) {
+  .admin-page[data-write-mode="article"] .article-admin-sidebar {
+    grid-template-columns: minmax(8rem, 0.28fr) minmax(0, 0.72fr);
+    grid-template-areas:
+      "head filter"
+      "order export"
+      "list list";
+  }
+
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions,
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export {
+    border-top: 1px solid var(--hairline);
+  }
+}
+
+@media (max-width: 680px) {
+  .admin-page[data-write-mode="article"] .article-admin-sidebar {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "head"
+      "filter"
+      "order"
+      "export"
+      "list";
+  }
+
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-select-control {
+    border-top: 1px solid var(--hairline);
   }
 }

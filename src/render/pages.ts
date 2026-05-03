@@ -150,14 +150,10 @@ const renderPagination = (currentPage: number, totalPages: number, hrefForPage: 
 const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, locale: Locale): string =>
   text(categories.find((category) => category.key === key)?.label ?? { ko: key, en: key }, locale);
 
-const imageStyle = (imageUrl?: string): string => imageUrl
-  ? ` style="background-image: url(${escapeHtml(JSON.stringify(imageUrl))})"`
-  : "";
-
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
-  `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
+  `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${attributes ? ` ${attributes}` : ""}>${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="" loading="lazy" decoding="async" data-image-source />` : ""}</span>`;
 
-const assetVersion = "20260504-section-block-gallery";
+const assetVersion = "20260504-image-ratio-preview";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -657,6 +653,7 @@ ${subcategoryOptions}
 
             <div class="article-visual" data-write-hero-shell>
               <span class="image-block image-material" data-write-hero-preview></span>
+              <input type="file" accept="image/gif,image/jpeg,image/png,image/webp" data-write-hero-image-file hidden />
             </div>
 
             <div class="article-body-grid writer-body-grid">
@@ -677,6 +674,7 @@ ${subcategoryOptions}
                         <select data-write-section-rail-class>${heroOptions}</select>
                       </label>
                       <input type="url" value="" data-write-section-rail-image hidden />
+                      <input type="file" accept="image/gif,image/jpeg,image/png,image/webp" data-write-section-rail-image-file hidden />
                       <input type="hidden" value="false" data-write-section-rail-hidden />
                       <button type="button" data-write-section-rail-use-visual>${escapeHtml(locale === "ko" ? "자동 비주얼" : "Use Visual")}</button>
                       <button type="button" data-write-section-rail-hide>${escapeHtml(locale === "ko" ? "이미지 숨김" : "Hide Image")}</button>

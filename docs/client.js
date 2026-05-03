@@ -17,13 +17,24 @@ const imageClasses = [
     "image-field"
 ];
 const setImageBlockVisual = (element, visualClass, imageUrl = "") => {
+    const existingImage = element.querySelector("[data-image-source]");
     element.classList.remove(...imageClasses);
     element.classList.toggle("has-custom-image", imageUrl.length > 0);
     if (imageUrl.length > 0) {
-        element.style.backgroundImage = `url(${JSON.stringify(imageUrl)})`;
+        element.style.backgroundImage = "";
+        const image = existingImage || document.createElement("img");
+        image.src = imageUrl;
+        image.alt = "";
+        image.loading = "lazy";
+        image.decoding = "async";
+        image.dataset.imageSource = "";
+        if (!existingImage) {
+            element.append(image);
+        }
         return;
     }
     element.style.backgroundImage = "";
+    existingImage?.remove();
     element.classList.add(visualClass || "image-material");
 };
 const currentImageClass = (element) => imageClasses.find((imageClass) => element.classList.contains(imageClass)) || imageClasses[0];
@@ -934,6 +945,11 @@ if (writer) {
         railImageInput.hidden = true;
         railImageInput.value = railImage;
         railImageInput.dataset.writeSectionRailImage = "";
+        const railImageFile = document.createElement("input");
+        railImageFile.type = "file";
+        railImageFile.accept = "image/gif,image/jpeg,image/png,image/webp";
+        railImageFile.hidden = true;
+        railImageFile.dataset.writeSectionRailImageFile = "";
         const railHiddenInput = document.createElement("input");
         railHiddenInput.type = "hidden";
         railHiddenInput.value = hideRailImage ? "true" : "false";
@@ -946,7 +962,7 @@ if (writer) {
         hideImage.type = "button";
         hideImage.dataset.writeSectionRailHide = "";
         hideImage.textContent = "이미지 숨김";
-        railSettings.append(railClassLabel, railImageInput, railHiddenInput, useVisual, hideImage);
+        railSettings.append(railClassLabel, railImageInput, railImageFile, railHiddenInput, useVisual, hideImage);
         railCard.append(railNo, railImageButton, railCardTitle, railCardText, railSettings);
         section.append(railCard);
         const title = document.createElement("h2");
@@ -1366,6 +1382,28 @@ if (writer) {
             caption.innerText = file.name.replace(/\.[^.]+$/, "");
         }
     };
+    const applyImageFileToHero = async (file) => {
+        const imageMode = metaField("imageMode");
+        const heroImage = metaField("heroImage");
+        const imageUrl = await uploadImageFile(file);
+        if (imageMode) {
+            imageMode.value = "custom";
+        }
+        if (heroImage) {
+            heroImage.value = imageUrl;
+        }
+    };
+    const applyImageFileToSectionRail = async (section, file) => {
+        const imageInput = section.querySelector("[data-write-section-rail-image]");
+        const hiddenInput = section.querySelector("[data-write-section-rail-hidden]");
+        const imageUrl = await uploadImageFile(file);
+        if (imageInput) {
+            imageInput.value = imageUrl;
+        }
+        if (hiddenInput) {
+            hiddenInput.value = "false";
+        }
+    };
     const applyImageFileToGalleryItem = async (item, file) => {
         const imageInput = item.querySelector("[data-write-gallery-image]");
         const imageUrl = await uploadImageFile(file);
@@ -1677,6 +1715,35 @@ if (writer) {
     };
     const handleWriterChange = async (event) => {
         const target = event.target;
+        if (target instanceof HTMLInputElement && target.matches("[data-write-hero-image-file]")) {
+            const file = target.files?.[0];
+            if (file) {
+                try {
+                    setStatus("대표 이미지를 저장 중...");
+                    await applyImageFileToHero(file);
+                    setStatus("대표 이미지를 반영했습니다.");
+                }
+                catch (error) {
+                    setStatus(error instanceof Error ? error.message : "이미지 업로드에 실패했습니다.");
+                }
+                target.value = "";
+            }
+        }
+        if (target instanceof HTMLInputElement && target.matches("[data-write-section-rail-image-file]")) {
+            const section = target.closest("[data-write-section]");
+            const file = target.files?.[0];
+            if (section && file) {
+                try {
+                    setStatus("레일 이미지를 저장 중...");
+                    await applyImageFileToSectionRail(section, file);
+                    setStatus("레일 이미지를 반영했습니다.");
+                }
+                catch (error) {
+                    setStatus(error instanceof Error ? error.message : "이미지 업로드에 실패했습니다.");
+                }
+                target.value = "";
+            }
+        }
         if (target instanceof HTMLInputElement && target.matches("[data-write-gallery-image-file]")) {
             const item = target.closest("[data-write-gallery-item]");
             const file = target.files?.[0];
@@ -1952,29 +2019,19 @@ if (writer) {
         const galleryItem = target.closest("[data-write-gallery-item]");
         const heroVisual = target.closest("[data-write-hero-preview]");
         if (heroVisual) {
-            cycleSelectVisual(metaField("heroClass"), clickDirection(event, heroVisual));
-            const imageMode = metaField("imageMode");
-            const heroImage = metaField("heroImage");
-            if (imageMode) {
-                imageMode.value = "visual";
-            }
-            if (heroImage) {
-                heroImage.value = "";
-            }
-            scheduleSave();
+            writer.querySelector("[data-write-hero-image-file]")?.click();
             return;
         }
         const galleryVisual = target.closest("[data-write-gallery-image-preview]");
         if (galleryVisual && galleryItem) {
-            cycleSelectVisual(galleryItem.querySelector("[data-write-gallery-image-class]"), clickDirection(event, galleryVisual));
-            const imageInput = galleryItem.querySelector("[data-write-gallery-image]");
-            if (imageInput) {
-                imageInput.value = "";
-            }
-            scheduleSave();
+            galleryItem.querySelector("[data-write-gallery-image-file]")?.click();
             return;
         }
-        if ((target.closest("[data-write-gallery-image-button]") || target.closest("[data-write-gallery-image-url]")) && galleryItem) {
+        if (target.closest("[data-write-gallery-image-button]") && galleryItem) {
+            galleryItem.querySelector("[data-write-gallery-image-file]")?.click();
+            return;
+        }
+        if (target.closest("[data-write-gallery-image-url]") && galleryItem) {
             if (promptGalleryImage(galleryItem)) {
                 scheduleSave();
             }
@@ -2017,30 +2074,12 @@ if (writer) {
         }
         const railVisual = target.closest("[data-write-section-rail-preview]");
         if (railVisual && section) {
-            cycleSelectVisual(section.querySelector("[data-write-section-rail-class]"), clickDirection(event, railVisual));
-            const imageInput = section.querySelector("[data-write-section-rail-image]");
-            const hiddenInput = section.querySelector("[data-write-section-rail-hidden]");
-            if (imageInput) {
-                imageInput.value = "";
-            }
-            if (hiddenInput) {
-                hiddenInput.value = "false";
-            }
-            scheduleSave();
+            section.querySelector("[data-write-section-rail-image-file]")?.click();
             return;
         }
         const sectionVisual = target.closest("[data-write-section-image-preview]");
         if (sectionVisual && section) {
-            cycleSelectVisual(section.querySelector("[data-write-section-image-class]"), clickDirection(event, sectionVisual));
-            const imageInput = section.querySelector("[data-write-section-image]");
-            const enabledInput = section.querySelector("[data-write-section-image-enabled]");
-            if (imageInput) {
-                imageInput.value = "";
-            }
-            if (enabledInput) {
-                enabledInput.value = "true";
-            }
-            scheduleSave();
+            section.querySelector("[data-write-section-image-file]")?.click();
             return;
         }
         if (target.closest("[data-write-section-rail-image-button]") && section) {
@@ -2080,10 +2119,7 @@ if (writer) {
             return;
         }
         if (target.closest("[data-write-section-image-button]") && section) {
-            if (!promptSectionImage(section)) {
-                return;
-            }
-            scheduleSave();
+            section.querySelector("[data-write-section-image-file]")?.click();
             return;
         }
         if (target.closest("[data-write-section-image-url]") && section) {
