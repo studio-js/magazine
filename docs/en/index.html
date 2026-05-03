@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="A digital journal connecting art, tech, design, beauty, and philosophy through a quiet editorial lens." />
     <title>The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-write-panel-scroll-cue" />
-    <script src="/magazine/client.js?v=20260503-write-panel-scroll-cue" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-home-geometry-scroll" />
+    <script src="/magazine/client.js?v=20260503-home-geometry-scroll" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -259,7 +259,7 @@
 
     <main id="top">
     <section class="cover section-pad" aria-labelledby="hero-title" data-scroll-section>
-      <div class="cover-grid">
+      <div class="cover-grid home-cover-grid">
         <div class="cover-copy" data-reveal>
           <div class="cover-edition" aria-label="Publication context">
             <span>No. 03 · July 2026</span>
@@ -267,6 +267,19 @@
           <p class="kicker">Current Issue</p>
           <h1 id="hero-title">Soft Indexes</h1>
           <p class="cover-deck">The third issue treats indexes, covers, search screens, and rhythmic lists as independent editorial scenes. It asks less what should be shown first than at what speed discovery should happen.</p>
+          <a class="home-issue-link" href="/magazine/en/issues/no-03/">
+            <span>Read Latest Issue</span>
+            <small>No. 03</small>
+          </a>
+        </div>
+
+        <div class="home-geometry" aria-hidden="true" data-reveal>
+          <span class="home-geo-circle home-geo-readers" data-scroll-motion><em>Readers</em></span>
+          <span class="home-geo-circle home-geo-issue" data-scroll-motion><em>Issue</em></span>
+          <span class="home-geo-lens" data-scroll-motion></span>
+          <span class="home-geo-vector" data-scroll-motion></span>
+          <span class="home-geo-pin" data-scroll-motion></span>
+          <span class="home-geo-signal" data-scroll-motion>Better Reading</span>
         </div>
 
         <a class="cover-art" href="/magazine/en/issues/no-03/" aria-label="Read current issue" data-reveal data-action-card data-scroll-motion>
@@ -312,7 +325,16 @@
         <h2 id="features-title">Recent Stories</h2>
       </div>
 
-      <div class="home-story-list">
+      <div class="home-story-stage">
+        <div class="home-story-map" aria-hidden="true" data-reveal>
+          <span class="home-map-circle home-map-primary" data-scroll-motion><em>Archive</em></span>
+          <span class="home-map-circle home-map-secondary" data-scroll-motion><em>Stories</em></span>
+          <span class="home-map-lens" data-scroll-motion></span>
+          <span class="home-map-marker" data-scroll-motion></span>
+          <span class="home-map-label" data-scroll-motion>Reading / Index</span>
+        </div>
+
+        <div class="home-story-list">
 
               <a class="home-story-row" href="/magazine/en/articles/quiet-images-after-the-opening" data-reveal data-action-card data-scroll-motion>
                 <span class="river-no">01</span>
@@ -344,6 +366,7 @@
                 <strong>A Brand System With Room to Breathe</strong>
                 <em>A brand system is less a set of rules than a repeatable attitude.</em>
               </a>
+        </div>
       </div>
     </section>
 

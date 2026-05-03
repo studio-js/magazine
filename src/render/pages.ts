@@ -157,7 +157,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-write-panel-scroll-cue";
+const assetVersion = "20260503-home-geometry-scroll";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -794,10 +794,12 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
   const issueCoverClass = currentIssue.features[0]?.heroClass ?? "image-material";
   const issueFeatures = currentIssue.features.slice(0, 4);
   const selectedArticles = articleList.slice(0, 5);
+  const geometryLine = locale === "ko" ? "Reading / Index" : "Reading / Index";
+  const geometrySignal = locale === "ko" ? "Better Reading" : "Better Reading";
 
   const body = `
     <section class="cover section-pad" aria-labelledby="hero-title" data-scroll-section>
-      <div class="cover-grid">
+      <div class="cover-grid home-cover-grid">
         <div class="cover-copy" data-reveal>
           <div class="cover-edition" aria-label="Publication context">
             <span>${escapeHtml(`${currentIssue.number} · ${text(currentIssue.date, locale)}`)}</span>
@@ -805,6 +807,19 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
           <p class="kicker">Current Issue</p>
           <h1 id="hero-title">${escapeHtml(text(currentIssue.title, locale))}</h1>
           <p class="cover-deck">${escapeHtml(text(currentIssue.deck, locale))}</p>
+          <a class="home-issue-link" href="${issueHref(currentIssue, locale)}">
+            <span>${escapeHtml(locale === "ko" ? "최신 이슈 읽기" : "Read Latest Issue")}</span>
+            <small>${escapeHtml(currentIssue.number)}</small>
+          </a>
+        </div>
+
+        <div class="home-geometry" aria-hidden="true" data-reveal>
+          <span class="home-geo-circle home-geo-readers" data-scroll-motion><em>Readers</em></span>
+          <span class="home-geo-circle home-geo-issue" data-scroll-motion><em>Issue</em></span>
+          <span class="home-geo-lens" data-scroll-motion></span>
+          <span class="home-geo-vector" data-scroll-motion></span>
+          <span class="home-geo-pin" data-scroll-motion></span>
+          <span class="home-geo-signal" data-scroll-motion>${escapeHtml(geometrySignal)}</span>
         </div>
 
         <a class="cover-art" href="${issueHref(currentIssue, locale)}" aria-label="${escapeHtml(locale === "ko" ? "현재 이슈 읽기" : "Read current issue")}" data-reveal data-action-card data-scroll-motion>
@@ -839,7 +854,16 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
         <h2 id="features-title">${locale === "ko" ? "최근 글" : "Recent Stories"}</h2>
       </div>
 
-      <div class="home-story-list">
+      <div class="home-story-stage">
+        <div class="home-story-map" aria-hidden="true" data-reveal>
+          <span class="home-map-circle home-map-primary" data-scroll-motion><em>Archive</em></span>
+          <span class="home-map-circle home-map-secondary" data-scroll-motion><em>Stories</em></span>
+          <span class="home-map-lens" data-scroll-motion></span>
+          <span class="home-map-marker" data-scroll-motion></span>
+          <span class="home-map-label" data-scroll-motion>${escapeHtml(geometryLine)}</span>
+        </div>
+
+        <div class="home-story-list">
 ${selectedArticles
           .map(
             (article, index) => `
@@ -851,6 +875,7 @@ ${selectedArticles
               </a>`
           )
           .join("")}
+        </div>
       </div>
     </section>
 

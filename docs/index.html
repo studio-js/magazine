@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="예술, 테크, 디자인, 뷰티, 철학을 하나의 감각적 편집면으로 엮는 디지털 저널" />
     <title>The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-write-panel-scroll-cue" />
-    <script src="/magazine/client.js?v=20260503-write-panel-scroll-cue" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-home-geometry-scroll" />
+    <script src="/magazine/client.js?v=20260503-home-geometry-scroll" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -259,7 +259,7 @@
 
     <main id="top">
     <section class="cover section-pad" aria-labelledby="hero-title" data-scroll-section>
-      <div class="cover-grid">
+      <div class="cover-grid home-cover-grid">
         <div class="cover-copy" data-reveal>
           <div class="cover-edition" aria-label="Publication context">
             <span>No. 03 · 2026년 7월</span>
@@ -267,6 +267,19 @@
           <p class="kicker">Current Issue</p>
           <h1 id="hero-title">Soft Indexes</h1>
           <p class="cover-deck">세 번째 이슈는 인덱스, 표지, 검색 화면, 리듬 있는 목록을 독립된 편집 장면으로 다룹니다. 무엇을 먼저 보여줄지보다 어떤 속도로 발견하게 할지를 묻습니다.</p>
+          <a class="home-issue-link" href="/magazine/issues/no-03/">
+            <span>최신 이슈 읽기</span>
+            <small>No. 03</small>
+          </a>
+        </div>
+
+        <div class="home-geometry" aria-hidden="true" data-reveal>
+          <span class="home-geo-circle home-geo-readers" data-scroll-motion><em>Readers</em></span>
+          <span class="home-geo-circle home-geo-issue" data-scroll-motion><em>Issue</em></span>
+          <span class="home-geo-lens" data-scroll-motion></span>
+          <span class="home-geo-vector" data-scroll-motion></span>
+          <span class="home-geo-pin" data-scroll-motion></span>
+          <span class="home-geo-signal" data-scroll-motion>Better Reading</span>
         </div>
 
         <a class="cover-art" href="/magazine/issues/no-03/" aria-label="현재 이슈 읽기" data-reveal data-action-card data-scroll-motion>
@@ -312,7 +325,16 @@
         <h2 id="features-title">최근 글</h2>
       </div>
 
-      <div class="home-story-list">
+      <div class="home-story-stage">
+        <div class="home-story-map" aria-hidden="true" data-reveal>
+          <span class="home-map-circle home-map-primary" data-scroll-motion><em>Archive</em></span>
+          <span class="home-map-circle home-map-secondary" data-scroll-motion><em>Stories</em></span>
+          <span class="home-map-lens" data-scroll-motion></span>
+          <span class="home-map-marker" data-scroll-motion></span>
+          <span class="home-map-label" data-scroll-motion>Reading / Index</span>
+        </div>
+
+        <div class="home-story-list">
 
               <a class="home-story-row" href="/magazine/articles/quiet-images-after-the-opening" data-reveal data-action-card data-scroll-motion>
                 <span class="river-no">01</span>
@@ -344,6 +366,7 @@
                 <strong>숨 쉴 공간이 있는 브랜드 시스템</strong>
                 <em>브랜드 시스템은 모든 것을 통제하기 위해 존재하지 않는다. 좋은 시스템은 상황이 달라져도 같은 태도를 유지하게 한다.</em>
               </a>
+        </div>
       </div>
     </section>
 
