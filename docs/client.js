@@ -226,6 +226,7 @@ if (writer) {
     const adminList = writer.querySelector("[data-admin-list]");
     const adminFilters = writer.querySelector("[data-admin-filters]");
     const adminFilterSelect = writer.querySelector("[data-admin-filter-select]");
+    const adminSearchInput = writer.querySelector("[data-admin-search-input]");
     const adminCount = writer.querySelector("[data-admin-count]");
     const currentTitle = writer.querySelector("[data-admin-current-title]");
     const outputArea = writer.querySelector("[data-write-output]");
@@ -253,6 +254,7 @@ if (writer) {
     let currentIndex = 0;
     let currentIssueIndex = 0;
     let activeCategoryFilter = "all";
+    let activeArticleSearch = "";
     const storedWriteLocale = window.localStorage.getItem(localeStorageKey);
     let activeWriteLocale = storedWriteLocale === "ko" || storedWriteLocale === "en"
         ? storedWriteLocale
@@ -462,6 +464,26 @@ if (writer) {
         return { type: "paragraph", text: normalizeBlockText(block.text) };
     };
     const articleMatchesFilter = (article) => activeCategoryFilter === "all" || article.category === activeCategoryFilter;
+    const searchableArticleText = (article) => [
+        article.slug,
+        article.title.ko,
+        article.title.en,
+        article.deck.ko,
+        article.deck.en,
+        article.category,
+        article.subcategoryKey,
+        article.subcategory.ko,
+        article.subcategory.en,
+        ...(article.tags.ko || []),
+        ...(article.tags.en || [])
+    ].join(" ").toLowerCase();
+    const articleMatchesAdminControls = (article) => {
+        if (!articleMatchesFilter(article)) {
+            return false;
+        }
+        const query = activeArticleSearch.trim().toLowerCase();
+        return query === "" || searchableArticleText(article).includes(query);
+    };
     const normalizeArticle = (article) => {
         const fallback = fallbackArticle();
         const firstSection = article.sections?.[0];
@@ -1476,7 +1498,7 @@ if (writer) {
         };
         const visibleArticles = adminArticles
             .map((article, index) => ({ article, index }))
-            .filter(({ article }) => articleMatchesFilter(article));
+            .filter(({ article }) => articleMatchesAdminControls(article));
         adminList.innerHTML = visibleArticles.length > 0 ? visibleArticles.map(({ article, index }, rank) => {
             const globalNo = String(index + 1).padStart(2, "0");
             const filteredNo = String(rank + 1).padStart(2, "0");
@@ -1488,9 +1510,11 @@ if (writer) {
         <strong>${escapeHtmlClient(article.title[activeWriteLocale] || article.title.ko || article.title.en)}</strong>
         <small>${article.category} / ${article.subcategoryKey}</small>
       </button>`;
-        }).join("") : `<p class="admin-empty">이 카테고리의 기사가 아직 없습니다. 새 기사를 만들면 현재 필터에 맞춰 시작합니다.</p>`;
+        }).join("") : `<p class="admin-empty">검색 조건에 맞는 기사가 없습니다. 필터나 검색어를 줄여보세요.</p>`;
         if (adminCount) {
-            adminCount.textContent = activeCategoryFilter === "all" ? String(adminArticles.length) : `${visibleArticles.length}/${adminArticles.length}`;
+            adminCount.textContent = activeCategoryFilter === "all" && activeArticleSearch.trim() === ""
+                ? String(adminArticles.length)
+                : `${visibleArticles.length}/${adminArticles.length}`;
         }
         adminFilters?.querySelectorAll("[data-admin-filter]").forEach((button) => {
             const filter = button.dataset.adminFilter || "all";
@@ -1511,6 +1535,9 @@ if (writer) {
                 const label = option.textContent?.split(" · ")[0] || filter;
                 option.textContent = `${label} · ${count}`;
             });
+        }
+        if (adminSearchInput && adminSearchInput.value !== activeArticleSearch) {
+            adminSearchInput.value = activeArticleSearch;
         }
     };
     const moveCurrentArticle = (direction) => {
@@ -1797,6 +1824,11 @@ if (writer) {
     });
     writer.addEventListener("input", (event) => {
         const target = event.target;
+        if (target instanceof HTMLInputElement && target.matches("[data-admin-search-input]")) {
+            activeArticleSearch = target.value;
+            renderAdminList();
+            return;
+        }
         if (target instanceof HTMLElement && target.closest("[data-write-issue-editor]")) {
             scheduleIssueSave();
             return;

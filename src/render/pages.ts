@@ -153,7 +153,7 @@ const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, l
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${attributes ? ` ${attributes}` : ""}>${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="" loading="lazy" decoding="async" data-image-source />` : ""}</span>`;
 
-const assetVersion = "20260504-image-ratio-preview";
+const assetVersion = "20260504-write-library-sidebar";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -549,6 +549,10 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
           <label class="admin-select-control" data-admin-filters>
             <span>${escapeHtml(locale === "ko" ? "분야 필터" : "Category Filter")}</span>
             <select data-admin-filter-select>${categoryFilters}</select>
+          </label>
+          <label class="admin-search-control">
+            <span>${escapeHtml(locale === "ko" ? "기사 검색" : "Search Articles")}</span>
+            <input type="search" placeholder="${escapeHtml(locale === "ko" ? "제목, slug, 분야" : "Title, slug, category")}" autocomplete="off" data-admin-search-input />
           </label>
           <div class="admin-list" data-admin-list></div>
           <div class="admin-sidebar-actions">
