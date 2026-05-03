@@ -18696,7 +18696,7 @@ html[lang="ko"] .writer-article .writer-section-quote {
 .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions,
 .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) 2.75rem 2.75rem minmax(0, 1fr);
   gap: 1px;
   width: 100%;
   padding: 0;
@@ -18707,6 +18707,14 @@ html[lang="ko"] .writer-article .writer-section-quote {
 
 .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions:not(.is-export) button:nth-child(2) {
+  border-left: 1px solid var(--hairline);
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions:not(.is-export) button:nth-child(3) {
+  border-right: 1px solid var(--hairline);
 }
 
 .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions button,
