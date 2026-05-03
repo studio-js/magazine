@@ -18567,6 +18567,7 @@ html[lang="ko"] .writer-article .writer-section-quote {
   grid-column: 1 !important;
   display: grid;
   grid-template-columns: 1fr !important;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto auto;
   grid-template-areas: none;
   align-content: start;
   max-height: calc(100vh - 5.2rem);
@@ -18637,24 +18638,59 @@ html[lang="ko"] .writer-article .writer-section-quote {
   display: grid;
   grid-auto-flow: row;
   grid-auto-columns: auto;
+  align-content: start;
   max-height: none;
+  min-height: 0 !important;
   overflow-x: hidden;
   overflow-y: auto;
   border-top: 0;
   border-inline: 0;
+  cursor: grab;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  user-select: none;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list.is-dragging {
+  cursor: grabbing;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list::-webkit-scrollbar {
+  width: 0.45rem;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list::-webkit-scrollbar-thumb {
+  background: rgba(24, 23, 19, 0.18);
 }
 
 .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list-item {
-  grid-template-columns: 2.8rem minmax(0, 1fr);
+  grid-template-columns: 4.85rem minmax(0, 1fr);
   min-height: 4.4rem;
   border-right: 0;
   border-bottom: 1px solid var(--hairline);
-  padding: 0.74rem 0.95rem;
+  padding: 0.74rem 0.9rem;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list-no {
+  min-width: 0;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list-no small {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.15;
 }
 
 .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list-item > strong {
   font-size: 0.94rem;
   line-height: 1.22;
+  min-width: 0;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list-item > small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.25;
 }
 
 .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions,
@@ -18705,5 +18741,6 @@ html[lang="ko"] .writer-article .writer-section-quote {
   .admin-page[data-write-mode="article"] .article-admin-sidebar {
     position: static;
     max-height: none;
+    grid-template-rows: auto;
   }
 }

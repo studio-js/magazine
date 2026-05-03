@@ -1485,6 +1485,50 @@ if (writer) {
         window.localStorage.setItem(storageKey, JSON.stringify(adminArticles));
         setStatus(message);
     };
+    if (adminList) {
+        let listDragPointerId = null;
+        let listDragStartY = 0;
+        let listDragStartScroll = 0;
+        let listDragMoved = false;
+        let listDragEndedAt = 0;
+        const stopListDrag = () => {
+            listDragPointerId = null;
+            adminList.classList.remove("is-dragging");
+            if (listDragMoved) {
+                listDragEndedAt = Date.now();
+            }
+        };
+        adminList.addEventListener("pointerdown", (event) => {
+            if (event.button !== 0 || event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement) {
+                return;
+            }
+            listDragPointerId = event.pointerId;
+            listDragStartY = event.clientY;
+            listDragStartScroll = adminList.scrollTop;
+            listDragMoved = false;
+            adminList.setPointerCapture(event.pointerId);
+        });
+        adminList.addEventListener("pointermove", (event) => {
+            if (listDragPointerId !== event.pointerId) {
+                return;
+            }
+            const deltaY = event.clientY - listDragStartY;
+            if (Math.abs(deltaY) > 3) {
+                listDragMoved = true;
+                adminList.classList.add("is-dragging");
+                adminList.scrollTop = listDragStartScroll - deltaY;
+                event.preventDefault();
+            }
+        });
+        adminList.addEventListener("pointerup", stopListDrag);
+        adminList.addEventListener("pointercancel", stopListDrag);
+        adminList.addEventListener("click", (event) => {
+            if (Date.now() - listDragEndedAt < 180) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        }, true);
+    }
     const renderAdminList = () => {
         if (!adminList) {
             return;
