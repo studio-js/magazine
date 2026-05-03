@@ -30,6 +30,61 @@ const setImageBlockVisual = (element: HTMLElement, visualClass: string, imageUrl
   element.classList.add(visualClass || "image-material");
 };
 
+const currentImageClass = (element: HTMLElement): string =>
+  imageClasses.find((imageClass) => element.classList.contains(imageClass)) || imageClasses[0];
+
+const nextImageClass = (currentClass: string, direction: number): string => {
+  const currentIndex = imageClasses.indexOf(currentClass);
+  const nextIndex = (currentIndex + direction + imageClasses.length) % imageClasses.length;
+
+  return imageClasses[nextIndex] || imageClasses[0];
+};
+
+const clickDirection = (event: MouseEvent, element: HTMLElement): number => {
+  const rect = element.getBoundingClientRect();
+
+  return event.clientX < rect.left + rect.width / 2 ? -1 : 1;
+};
+
+const cycleGeneratedVisual = (element: HTMLElement, direction: number): string => {
+  const nextClass = nextImageClass(currentImageClass(element), direction);
+  setImageBlockVisual(element, nextClass);
+
+  return nextClass;
+};
+
+document.addEventListener("click", (event) => {
+  const target = event.target;
+
+  if (!(target instanceof HTMLElement) || target.closest("[data-write-editor]")) {
+    return;
+  }
+
+  const visual = target.closest<HTMLElement>("[data-visual-cycle]");
+
+  if (!visual || visual.classList.contains("has-custom-image")) {
+    return;
+  }
+
+  event.preventDefault();
+  cycleGeneratedVisual(visual, clickDirection(event, visual));
+});
+
+document.addEventListener("keydown", (event) => {
+  const target = event.target;
+
+  if (!(target instanceof HTMLElement) || !target.matches("[data-visual-cycle]") || target.closest("[data-write-editor]") || target.classList.contains("has-custom-image")) {
+    return;
+  }
+
+  if (event.key !== "ArrowLeft" && event.key !== "ArrowRight" && event.key !== "Enter" && event.key !== " ") {
+    return;
+  }
+
+  event.preventDefault();
+  cycleGeneratedVisual(target, event.key === "ArrowLeft" ? -1 : 1);
+});
+
 const animateTextSwap = (elements: HTMLElement[]): void => {
   if (reduceMotion) {
     return;
@@ -206,7 +261,40 @@ if (writer) {
     sections: AdminSection[];
   };
 
+  type AdminIssueCredit = {
+    label: AdminLocalizedText;
+    value: AdminLocalizedText;
+  };
+
+  type AdminIssueFeature = {
+    slug: string;
+    role: AdminLocalizedText;
+    title: AdminLocalizedText;
+    intro: AdminLocalizedText;
+    excerpt: AdminLocalizedText;
+    body: AdminLocalizedList;
+    credit: AdminLocalizedText;
+    location: AdminLocalizedText;
+    readTime: AdminLocalizedText;
+    heroClass: string;
+  };
+
+  type AdminIssueProject = {
+    number: string;
+    title: AdminLocalizedText;
+    subtitle: AdminLocalizedText;
+    deck: AdminLocalizedText;
+    date: AdminLocalizedText;
+    format: AdminLocalizedText;
+    availability: AdminLocalizedText;
+    coverCredit: AdminLocalizedText;
+    editorNote: AdminLocalizedText;
+    credits: AdminIssueCredit[];
+    features: AdminIssueFeature[];
+  };
+
   const storageKey = writer.dataset.writeStorageKey || "the-thing-admin-articles";
+  const issueStorageKey = `${storageKey}-issue`;
   const authKey = `${storageKey}-auth`;
   const adminPassword = writer.dataset.adminPassword || "promise";
   const lock = writer.querySelector<HTMLElement>("[data-admin-lock]");
@@ -214,6 +302,7 @@ if (writer) {
   const loginInput = writer.querySelector<HTMLInputElement>("[data-admin-password-input]");
   const loginError = writer.querySelector<HTMLElement>("[data-admin-login-error]");
   const articleData = writer.querySelector<HTMLScriptElement>("[data-write-articles]");
+  const issueData = writer.querySelector<HTMLScriptElement>("[data-write-issue]");
   const adminList = writer.querySelector<HTMLElement>("[data-admin-list]");
   const adminFilters = writer.querySelector<HTMLElement>("[data-admin-filters]");
   const adminCount = writer.querySelector<HTMLElement>("[data-admin-count]");
@@ -228,7 +317,14 @@ if (writer) {
   const heroPreview = writer.querySelector<HTMLElement>("[data-write-hero-preview]");
   const rail = writer.querySelector<HTMLElement>("[data-write-rail]");
   const kicker = writer.querySelector<HTMLElement>("[data-write-kicker]");
+  const issueEditor = writer.querySelector<HTMLElement>("[data-write-issue-editor]");
+  const issueStatus = writer.querySelector<HTMLElement>("[data-write-issue-status]");
+  const issueTitle = writer.querySelector<HTMLElement>("[data-write-issue-title]");
+  const issueFeatures = writer.querySelector<HTMLElement>("[data-write-issue-features]");
+  const issueCredits = writer.querySelector<HTMLElement>("[data-write-issue-credits]");
+  const issueOutput = writer.querySelector<HTMLTextAreaElement>("[data-write-issue-output]");
   let saveTimer = 0;
+  let issueSaveTimer = 0;
   let currentIndex = 0;
   let activeCategoryFilter = "all";
 
@@ -246,6 +342,21 @@ if (writer) {
       status.textContent = message;
     }
   };
+
+  const setIssueStatus = (message: string): void => {
+    if (issueStatus) {
+      issueStatus.textContent = message;
+    }
+  };
+
+  const escapeHtmlClient = (value: string): string => value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+  const linesFromTextarea = (value: string): string[] =>
+    value.split(/\n+/).map((line) => line.trim()).filter(Boolean);
 
   const today = (): string => {
     const date = new Date();
@@ -293,6 +404,73 @@ if (writer) {
       }
     ]
   });
+
+  const fallbackIssueFeature = (): AdminIssueFeature => ({
+    slug: "new-scene",
+    role: { ko: "Scene", en: "Scene" },
+    title: { ko: "새 이슈 장면", en: "New Issue Scene" },
+    intro: { ko: "이 장면의 한 줄 소개를 작성합니다.", en: "Write a one-line introduction for this scene." },
+    excerpt: { ko: "이슈 목차에 보일 요약을 작성합니다.", en: "Write the summary shown in the issue table of contents." },
+    body: { ko: ["첫 번째 문단을 작성합니다."], en: ["Write the first paragraph."] },
+    credit: { ko: "Editorial Desk", en: "Editorial Desk" },
+    location: { ko: "Editorial", en: "Editorial" },
+    readTime: { ko: "노트", en: "Note" },
+    heroClass: "image-material"
+  });
+
+  const fallbackIssue = (): AdminIssueProject => ({
+    number: "No. 01",
+    title: { ko: "Screen of Things", en: "Screen of Things" },
+    subtitle: { ko: "이슈 부제를 작성합니다.", en: "Write the issue subtitle." },
+    deck: { ko: "이슈 덱을 작성합니다.", en: "Write the issue deck." },
+    date: { ko: "2026년 5월", en: "May 2026" },
+    format: { ko: "온라인 에디션", en: "Online edition" },
+    availability: { ko: "오픈 액세스", en: "Open access" },
+    coverCredit: { ko: "커버 크레딧", en: "Cover credit" },
+    editorNote: { ko: "에디터 노트를 작성합니다.", en: "Write the editor's note." },
+    credits: [{ label: { ko: "편집", en: "Editor" }, value: { ko: "The Thing Editorial Desk", en: "The Thing Editorial Desk" } }],
+    features: [fallbackIssueFeature()]
+  });
+
+  const normalizeIssueFeature = (feature: Partial<AdminIssueFeature>): AdminIssueFeature => {
+    const fallback = fallbackIssueFeature();
+
+    return {
+      ...fallback,
+      ...feature,
+      role: { ...fallback.role, ...feature.role },
+      title: { ...fallback.title, ...feature.title },
+      intro: { ...fallback.intro, ...feature.intro },
+      excerpt: { ...fallback.excerpt, ...feature.excerpt },
+      body: { ...fallback.body, ...feature.body },
+      credit: { ...fallback.credit, ...feature.credit },
+      location: { ...fallback.location, ...feature.location },
+      readTime: { ...fallback.readTime, ...feature.readTime },
+      heroClass: feature.heroClass || fallback.heroClass
+    };
+  };
+
+  const normalizeIssue = (issue: Partial<AdminIssueProject>): AdminIssueProject => {
+    const fallback = fallbackIssue();
+
+    return {
+      ...fallback,
+      ...issue,
+      title: { ...fallback.title, ...issue.title },
+      subtitle: { ...fallback.subtitle, ...issue.subtitle },
+      deck: { ...fallback.deck, ...issue.deck },
+      date: { ...fallback.date, ...issue.date },
+      format: { ...fallback.format, ...issue.format },
+      availability: { ...fallback.availability, ...issue.availability },
+      coverCredit: { ...fallback.coverCredit, ...issue.coverCredit },
+      editorNote: { ...fallback.editorNote, ...issue.editorNote },
+      credits: (issue.credits && issue.credits.length > 0 ? issue.credits : fallback.credits).map((credit) => ({
+        label: { ko: credit.label?.ko || "", en: credit.label?.en || "" },
+        value: { ko: credit.value?.ko || "", en: credit.value?.en || "" }
+      })),
+      features: (issue.features && issue.features.length > 0 ? issue.features : fallback.features).map(normalizeIssueFeature)
+    };
+  };
 
   const firstSubcategoryForCategory = (category: string): HTMLOptionElement | null =>
     Array.from(subcategorySelect?.options || []).find((option) => option.dataset.category === category) || null;
@@ -395,7 +573,26 @@ if (writer) {
     }
   };
 
+  const initialIssue = (): AdminIssueProject => {
+    const stored = window.localStorage.getItem(issueStorageKey);
+
+    if (stored) {
+      try {
+        return normalizeIssue(JSON.parse(stored) as AdminIssueProject);
+      } catch {
+        window.localStorage.removeItem(issueStorageKey);
+      }
+    }
+
+    try {
+      return normalizeIssue(JSON.parse(issueData?.textContent || "{}") as AdminIssueProject);
+    } catch {
+      return fallbackIssue();
+    }
+  };
+
   let adminArticles = initialArticles();
+  let adminIssue = initialIssue();
 
   if (adminArticles.length === 0) {
     adminArticles = [fallbackArticle()];
@@ -436,6 +633,19 @@ if (writer) {
   const metaValue = (key: string): string => metaField(key)?.value.trim() || "";
   const textValue = (key: string): string => textField(key)?.innerText.trim() || "";
 
+  const issueField = (key: string): HTMLInputElement | HTMLTextAreaElement | null =>
+    issueEditor?.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[data-write-issue-field="${key}"]`) || null;
+
+  const issueFieldValue = (key: string): string => issueField(key)?.value.trim() || "";
+
+  const writeIssueField = (key: string, value: string): void => {
+    const field = issueField(key);
+
+    if (field) {
+      field.value = value;
+    }
+  };
+
   const writeText = (key: string, value: string): void => {
     const field = textField(key);
 
@@ -459,6 +669,130 @@ if (writer) {
   };
 
   const imageClassOptions = imageClasses.map((imageClass) => ({ value: imageClass, label: imageClass }));
+
+  const cycleSelectVisual = (select: HTMLSelectElement | null, direction: number): string => {
+    if (!select) {
+      return "image-material";
+    }
+
+    select.value = nextImageClass(select.value || "image-material", direction);
+    return select.value;
+  };
+
+  const imageClassOptionsHtml = (selectedClass: string): string => imageClasses
+    .map((imageClass) => `<option value="${imageClass}"${imageClass === selectedClass ? " selected" : ""}>${imageClass}</option>`)
+    .join("");
+
+  const issueFeatureField = (feature: AdminIssueFeature, key: string): string => {
+    const [group, locale] = key.split(".") as [keyof AdminIssueFeature, "ko" | "en"];
+    const value = feature[group] as AdminLocalizedText | undefined;
+
+    return escapeHtmlClient(value?.[locale] || "");
+  };
+
+  const issueCreditField = (credit: AdminIssueCredit, key: string): string => {
+    const [group, locale] = key.split(".") as [keyof AdminIssueCredit, "ko" | "en"];
+    const value = credit[group] as AdminLocalizedText | undefined;
+
+    return escapeHtmlClient(value?.[locale] || "");
+  };
+
+  const renderIssueFeatures = (): void => {
+    if (!issueFeatures) {
+      return;
+    }
+
+    issueFeatures.innerHTML = adminIssue.features.map((feature, index) => `
+      <article class="issue-feature-editor" data-write-issue-feature>
+        <div class="issue-feature-editor-head">
+          <span>${String(index + 1).padStart(2, "0")}</span>
+          <strong>${escapeHtmlClient(feature.title.ko || feature.title.en || feature.slug)}</strong>
+          <button type="button" data-write-issue-feature-remove>삭제</button>
+        </div>
+        <div class="issue-feature-editor-grid">
+          <button type="button" class="issue-feature-visual-button" data-write-issue-feature-preview aria-label="이슈 장면 비주얼 좌우 클릭으로 변경">
+            <span class="image-block ${escapeHtmlClient(feature.heroClass)}"></span>
+            <small>Left / Right visual</small>
+          </button>
+          <label><span>Slug</span><input type="text" value="${escapeHtmlClient(feature.slug)}" data-write-issue-feature-field="slug" /></label>
+          <label><span>Role KR</span><input type="text" value="${issueFeatureField(feature, "role.ko")}" data-write-issue-feature-field="role.ko" /></label>
+          <label><span>Role EN</span><input type="text" value="${issueFeatureField(feature, "role.en")}" data-write-issue-feature-field="role.en" /></label>
+          <label><span>Visual</span><select data-write-issue-feature-field="heroClass">${imageClassOptionsHtml(feature.heroClass)}</select></label>
+          <label><span>Title KR</span><input type="text" value="${issueFeatureField(feature, "title.ko")}" data-write-issue-feature-field="title.ko" /></label>
+          <label><span>Title EN</span><input type="text" value="${issueFeatureField(feature, "title.en")}" data-write-issue-feature-field="title.en" /></label>
+          <label><span>Intro KR</span><textarea rows="2" data-write-issue-feature-field="intro.ko">${issueFeatureField(feature, "intro.ko")}</textarea></label>
+          <label><span>Intro EN</span><textarea rows="2" data-write-issue-feature-field="intro.en">${issueFeatureField(feature, "intro.en")}</textarea></label>
+          <label><span>Excerpt KR</span><textarea rows="2" data-write-issue-feature-field="excerpt.ko">${issueFeatureField(feature, "excerpt.ko")}</textarea></label>
+          <label><span>Excerpt EN</span><textarea rows="2" data-write-issue-feature-field="excerpt.en">${issueFeatureField(feature, "excerpt.en")}</textarea></label>
+          <label><span>Body KR</span><textarea rows="4" data-write-issue-feature-field="body.ko">${escapeHtmlClient(feature.body.ko.join("\n"))}</textarea></label>
+          <label><span>Body EN</span><textarea rows="4" data-write-issue-feature-field="body.en">${escapeHtmlClient(feature.body.en.join("\n"))}</textarea></label>
+          <label><span>Credit KR</span><input type="text" value="${issueFeatureField(feature, "credit.ko")}" data-write-issue-feature-field="credit.ko" /></label>
+          <label><span>Credit EN</span><input type="text" value="${issueFeatureField(feature, "credit.en")}" data-write-issue-feature-field="credit.en" /></label>
+          <label><span>Location KR</span><input type="text" value="${issueFeatureField(feature, "location.ko")}" data-write-issue-feature-field="location.ko" /></label>
+          <label><span>Location EN</span><input type="text" value="${issueFeatureField(feature, "location.en")}" data-write-issue-feature-field="location.en" /></label>
+          <label><span>Read KR</span><input type="text" value="${issueFeatureField(feature, "readTime.ko")}" data-write-issue-feature-field="readTime.ko" /></label>
+          <label><span>Read EN</span><input type="text" value="${issueFeatureField(feature, "readTime.en")}" data-write-issue-feature-field="readTime.en" /></label>
+        </div>
+      </article>`).join("");
+  };
+
+  const renderIssueCredits = (): void => {
+    if (!issueCredits) {
+      return;
+    }
+
+    issueCredits.innerHTML = adminIssue.credits.map((credit, index) => `
+      <div class="issue-credit-editor" data-write-issue-credit>
+        <span>${String(index + 1).padStart(2, "0")}</span>
+        <label><small>Label KR</small><input type="text" value="${issueCreditField(credit, "label.ko")}" data-write-issue-credit-field="label.ko" /></label>
+        <label><small>Label EN</small><input type="text" value="${issueCreditField(credit, "label.en")}" data-write-issue-credit-field="label.en" /></label>
+        <label><small>Value KR</small><input type="text" value="${issueCreditField(credit, "value.ko")}" data-write-issue-credit-field="value.ko" /></label>
+        <label><small>Value EN</small><input type="text" value="${issueCreditField(credit, "value.en")}" data-write-issue-credit-field="value.en" /></label>
+        <button type="button" data-write-issue-credit-remove>삭제</button>
+      </div>`).join("");
+  };
+
+  const collectIssueFeature = (feature: HTMLElement): AdminIssueFeature => {
+    const field = (key: string): string =>
+      feature.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(`[data-write-issue-feature-field="${key}"]`)?.value.trim() || "";
+
+    return normalizeIssueFeature({
+      slug: toSlug(field("slug") || field("title.en") || field("title.ko") || "new-scene"),
+      role: { ko: field("role.ko"), en: field("role.en") },
+      title: { ko: field("title.ko"), en: field("title.en") },
+      intro: { ko: field("intro.ko"), en: field("intro.en") },
+      excerpt: { ko: field("excerpt.ko"), en: field("excerpt.en") },
+      body: { ko: linesFromTextarea(field("body.ko")), en: linesFromTextarea(field("body.en")) },
+      credit: { ko: field("credit.ko"), en: field("credit.en") },
+      location: { ko: field("location.ko"), en: field("location.en") },
+      readTime: { ko: field("readTime.ko"), en: field("readTime.en") },
+      heroClass: field("heroClass") || "image-material"
+    });
+  };
+
+  const collectIssueCredit = (credit: HTMLElement): AdminIssueCredit => {
+    const field = (key: string): string =>
+      credit.querySelector<HTMLInputElement>(`[data-write-issue-credit-field="${key}"]`)?.value.trim() || "";
+
+    return {
+      label: { ko: field("label.ko"), en: field("label.en") },
+      value: { ko: field("value.ko"), en: field("value.en") }
+    };
+  };
+
+  const formIssue = (): AdminIssueProject => normalizeIssue({
+    number: issueFieldValue("number") || adminIssue.number,
+    title: { ko: issueFieldValue("title.ko"), en: issueFieldValue("title.en") },
+    subtitle: { ko: issueFieldValue("subtitle.ko"), en: issueFieldValue("subtitle.en") },
+    deck: { ko: issueFieldValue("deck.ko"), en: issueFieldValue("deck.en") },
+    date: { ko: issueFieldValue("date.ko"), en: issueFieldValue("date.en") },
+    format: { ko: issueFieldValue("format.ko"), en: issueFieldValue("format.en") },
+    availability: { ko: issueFieldValue("availability.ko"), en: issueFieldValue("availability.en") },
+    coverCredit: { ko: issueFieldValue("coverCredit.ko"), en: issueFieldValue("coverCredit.en") },
+    editorNote: { ko: issueFieldValue("editorNote.ko"), en: issueFieldValue("editorNote.en") },
+    credits: Array.from(issueCredits?.querySelectorAll<HTMLElement>("[data-write-issue-credit]") || []).map(collectIssueCredit),
+    features: Array.from(issueFeatures?.querySelectorAll<HTMLElement>("[data-write-issue-feature]") || []).map(collectIssueFeature)
+  });
 
   const createParagraph = (text: string): HTMLParagraphElement => {
     const paragraph = document.createElement("p");
@@ -907,8 +1241,22 @@ if (writer) {
 
   const articlesArrayCode = (): string => `import type { Article } from "../types";\n\nexport const articles = ${JSON.stringify(adminArticles, null, 2)} satisfies Article[];\n`;
 
+  const issueProjectCode = (): string => `import type { IssueProject } from "../types";\n\nexport const issueProject = ${JSON.stringify(adminIssue, null, 2)} satisfies IssueProject;\n`;
+
   const generateArticleObject = (): string => {
     return articleCode(formArticle());
+  };
+
+  const updateIssueOutput = (): void => {
+    adminIssue = formIssue();
+
+    if (issueTitle) {
+      issueTitle.textContent = `${adminIssue.number} · ${adminIssue.title.ko || adminIssue.title.en}`;
+    }
+
+    if (issueOutput) {
+      issueOutput.value = issueProjectCode();
+    }
   };
 
   const downloadArticlesFile = (): void => {
@@ -917,6 +1265,16 @@ if (writer) {
     const link = document.createElement("a");
     link.href = url;
     link.download = "articles.ts";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadIssueFile = (): void => {
+    const blob = new Blob([issueProjectCode()], { type: "text/typescript" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "issue-project.ts";
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -1005,6 +1363,39 @@ if (writer) {
     }
   };
 
+  const saveIssueCollection = (message = "이슈 자동 저장됨"): void => {
+    updateIssueOutput();
+    window.localStorage.setItem(issueStorageKey, JSON.stringify(adminIssue));
+    setIssueStatus(message);
+  };
+
+  const saveIssueToProject = async (): Promise<void> => {
+    saveIssueCollection("이슈 저장 중...");
+
+    try {
+      const response = await fetch("/api/admin/issue", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ issueProject: adminIssue })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Save failed: ${response.status}`);
+      }
+
+      setIssueStatus("src/content/magazine.ts의 issueProject에 저장했고 로컬 서버에 바로 반영했습니다.");
+    } catch {
+      downloadIssueFile();
+      setIssueStatus("정적 페이지에서는 이슈 저장이 불가해 issue-project.ts를 내려받았습니다. 로컬 서버에서 열면 폴더에 저장됩니다.");
+    }
+  };
+
+  const scheduleIssueSave = (): void => {
+    updateIssueOutput();
+    window.clearTimeout(issueSaveTimer);
+    issueSaveTimer = window.setTimeout(() => saveIssueCollection(), 250);
+  };
+
   const saveCollection = (message = "자동 저장됨"): void => {
     window.localStorage.setItem(storageKey, JSON.stringify(adminArticles));
     setStatus(message);
@@ -1083,6 +1474,30 @@ if (writer) {
     if (field) {
       field.value = value;
     }
+  };
+
+  const applyIssue = (issue: AdminIssueProject): void => {
+    adminIssue = normalizeIssue(issue);
+    writeIssueField("number", adminIssue.number);
+    writeIssueField("title.ko", adminIssue.title.ko);
+    writeIssueField("title.en", adminIssue.title.en);
+    writeIssueField("subtitle.ko", adminIssue.subtitle.ko);
+    writeIssueField("subtitle.en", adminIssue.subtitle.en);
+    writeIssueField("deck.ko", adminIssue.deck.ko);
+    writeIssueField("deck.en", adminIssue.deck.en);
+    writeIssueField("date.ko", adminIssue.date.ko);
+    writeIssueField("date.en", adminIssue.date.en);
+    writeIssueField("format.ko", adminIssue.format.ko);
+    writeIssueField("format.en", adminIssue.format.en);
+    writeIssueField("availability.ko", adminIssue.availability.ko);
+    writeIssueField("availability.en", adminIssue.availability.en);
+    writeIssueField("coverCredit.ko", adminIssue.coverCredit.ko);
+    writeIssueField("coverCredit.en", adminIssue.coverCredit.en);
+    writeIssueField("editorNote.ko", adminIssue.editorNote.ko);
+    writeIssueField("editorNote.en", adminIssue.editorNote.en);
+    renderIssueFeatures();
+    renderIssueCredits();
+    updateIssueOutput();
   };
 
   const applyArticle = (index: number): void => {
@@ -1271,19 +1686,128 @@ if (writer) {
     scheduleSave();
   };
 
+  applyIssue(adminIssue);
   applyArticle(0);
 
   writer.addEventListener("keydown", (event) => {
     void handleEditorKeydown(event);
   });
-  writer.addEventListener("input", scheduleSave);
+  writer.addEventListener("input", (event) => {
+    const target = event.target;
+
+    if (target instanceof HTMLElement && target.closest("[data-write-issue-editor]")) {
+      scheduleIssueSave();
+      return;
+    }
+
+    scheduleSave();
+  });
   writer.addEventListener("change", (event) => {
+    const target = event.target;
+
+    if (target instanceof HTMLElement && target.closest("[data-write-issue-editor]")) {
+      scheduleIssueSave();
+      return;
+    }
+
     void handleWriterChange(event);
   });
   writer.addEventListener("click", async (event) => {
     const target = event.target;
 
     if (!(target instanceof HTMLElement)) {
+      return;
+    }
+
+    if (target.closest("[data-write-issue-add-feature]")) {
+      adminIssue = formIssue();
+      const nextFeature = fallbackIssueFeature();
+      nextFeature.slug = `scene-${adminIssue.features.length + 1}`;
+      nextFeature.title.ko = `새 이슈 장면 ${adminIssue.features.length + 1}`;
+      nextFeature.title.en = `New Issue Scene ${adminIssue.features.length + 1}`;
+      adminIssue.features.push(nextFeature);
+      applyIssue(adminIssue);
+      saveIssueCollection("이슈 장면을 추가했습니다.");
+      return;
+    }
+
+    const issueFeatureCard = target.closest<HTMLElement>("[data-write-issue-feature]");
+
+    const issueFeatureVisual = target.closest<HTMLElement>("[data-write-issue-feature-preview]");
+
+    if (issueFeatureVisual && issueFeatureCard) {
+      const nextVisual = cycleSelectVisual(issueFeatureCard.querySelector<HTMLSelectElement>('[data-write-issue-feature-field="heroClass"]'), clickDirection(event, issueFeatureVisual));
+      setImageBlockVisual(issueFeatureVisual.querySelector<HTMLElement>(".image-block") || issueFeatureVisual, nextVisual);
+      scheduleIssueSave();
+      return;
+    }
+
+    if (target.closest("[data-write-issue-feature-remove]") && issueFeatureCard) {
+      adminIssue = formIssue();
+      const featureIndex = Array.from(issueFeatures?.querySelectorAll<HTMLElement>("[data-write-issue-feature]") || []).indexOf(issueFeatureCard);
+
+      if (featureIndex >= 0 && adminIssue.features.length > 1) {
+        adminIssue.features.splice(featureIndex, 1);
+        applyIssue(adminIssue);
+        saveIssueCollection("이슈 장면을 삭제했습니다.");
+      }
+
+      return;
+    }
+
+    if (target.closest("[data-write-issue-add-credit]")) {
+      adminIssue = formIssue();
+      adminIssue.credits.push({ label: { ko: "크레딧", en: "Credit" }, value: { ko: "이름", en: "Name" } });
+      applyIssue(adminIssue);
+      saveIssueCollection("이슈 크레딧을 추가했습니다.");
+      return;
+    }
+
+    const issueCreditCard = target.closest<HTMLElement>("[data-write-issue-credit]");
+
+    if (target.closest("[data-write-issue-credit-remove]") && issueCreditCard) {
+      adminIssue = formIssue();
+      const creditIndex = Array.from(issueCredits?.querySelectorAll<HTMLElement>("[data-write-issue-credit]") || []).indexOf(issueCreditCard);
+
+      if (creditIndex >= 0 && adminIssue.credits.length > 1) {
+        adminIssue.credits.splice(creditIndex, 1);
+        applyIssue(adminIssue);
+        saveIssueCollection("이슈 크레딧을 삭제했습니다.");
+      }
+
+      return;
+    }
+
+    if (target.closest("[data-write-issue-copy]")) {
+      saveIssueCollection("이슈 코드를 준비했습니다.");
+      const code = issueProjectCode();
+
+      try {
+        await navigator.clipboard.writeText(code);
+      } catch {
+        issueOutput?.focus();
+        issueOutput?.select();
+        document.execCommand("copy");
+      }
+
+      setIssueStatus("IssueProject 객체를 복사했습니다.");
+      return;
+    }
+
+    if (target.closest("[data-write-issue-download]")) {
+      saveIssueCollection("이슈 파일을 내려받았습니다.");
+      downloadIssueFile();
+      return;
+    }
+
+    if (target.closest("[data-write-issue-save]")) {
+      await saveIssueToProject();
+      return;
+    }
+
+    if (target.closest("[data-write-issue-reset]") && window.confirm("이슈 로컬 변경 내용을 지우고 원래 이슈를 다시 불러올까요?")) {
+      window.localStorage.removeItem(issueStorageKey);
+      window.location.reload();
       return;
     }
 
@@ -1294,6 +1818,60 @@ if (writer) {
     }
 
     const section = target.closest<HTMLElement>("[data-write-section]");
+
+    const heroVisual = target.closest<HTMLElement>("[data-write-hero-preview]");
+    if (heroVisual) {
+      cycleSelectVisual(metaField("heroClass") as HTMLSelectElement | null, clickDirection(event, heroVisual));
+      const imageMode = metaField("imageMode");
+      const heroImage = metaField("heroImage");
+
+      if (imageMode) {
+        imageMode.value = "visual";
+      }
+
+      if (heroImage) {
+        heroImage.value = "";
+      }
+
+      scheduleSave();
+      return;
+    }
+
+    const railVisual = target.closest<HTMLElement>("[data-write-section-rail-preview]");
+    if (railVisual && section) {
+      cycleSelectVisual(section.querySelector<HTMLSelectElement>("[data-write-section-rail-class]"), clickDirection(event, railVisual));
+      const imageInput = section.querySelector<HTMLInputElement>("[data-write-section-rail-image]");
+      const hiddenInput = section.querySelector<HTMLInputElement>("[data-write-section-rail-hidden]");
+
+      if (imageInput) {
+        imageInput.value = "";
+      }
+
+      if (hiddenInput) {
+        hiddenInput.value = "false";
+      }
+
+      scheduleSave();
+      return;
+    }
+
+    const sectionVisual = target.closest<HTMLElement>("[data-write-section-image-preview]");
+    if (sectionVisual && section) {
+      cycleSelectVisual(section.querySelector<HTMLSelectElement>("[data-write-section-image-class]"), clickDirection(event, sectionVisual));
+      const imageInput = section.querySelector<HTMLInputElement>("[data-write-section-image]");
+      const enabledInput = section.querySelector<HTMLInputElement>("[data-write-section-image-enabled]");
+
+      if (imageInput) {
+        imageInput.value = "";
+      }
+
+      if (enabledInput) {
+        enabledInput.value = "true";
+      }
+
+      scheduleSave();
+      return;
+    }
 
     if (target.closest("[data-write-section-rail-image-button]") && section) {
       const imageInput = section.querySelector<HTMLInputElement>("[data-write-section-rail-image]");

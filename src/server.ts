@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { articles, site } from "./content/magazine";
 import { renderArchivePage, renderArticlePage, renderHomePage, renderIssuePage, renderNotFoundPage, renderWritePage } from "./render/pages";
-import type { Article, Locale, PrimaryCategory, SubcategoryKey } from "./types";
+import type { Article, IssueProject, Locale, PrimaryCategory, SubcategoryKey } from "./types";
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
@@ -37,6 +37,14 @@ const isSubcategory = (categoryKey: PrimaryCategory | undefined, value: unknown)
 const isArticleArray = (value: unknown): value is Article[] =>
   Array.isArray(value) && value.every((article) => typeof article === "object" && article !== null && typeof (article as { slug?: unknown }).slug === "string");
 
+const isIssueProject = (value: unknown): value is IssueProject =>
+  typeof value === "object" &&
+  value !== null &&
+  typeof (value as { number?: unknown }).number === "string" &&
+  typeof (value as { title?: unknown }).title === "object" &&
+  Array.isArray((value as { features?: unknown }).features) &&
+  ((value as { features?: unknown[] }).features?.length ?? 0) > 0;
+
 const safeUploadName = (fileName: string): string => {
   const baseName = path.basename(fileName).replace(/\.[^.]+$/, "");
   return baseName
@@ -56,6 +64,20 @@ const writeArticlesToContentFile = async (nextArticles: Article[]): Promise<void
   }
 
   const nextSource = `${source.slice(0, start)}export const articles = ${JSON.stringify(nextArticles, null, 2)} satisfies Article[];${source.slice(end)}`;
+  await fs.writeFile(contentFilePath, nextSource, "utf8");
+};
+
+const writeIssueToContentFile = async (nextIssue: IssueProject): Promise<void> => {
+  const source = await fs.readFile(contentFilePath, "utf8");
+  const startMatch = /export const issueProject(?:: IssueProject)? = /.exec(source);
+  const start = startMatch?.index ?? -1;
+  const end = start === -1 ? -1 : source.indexOf("\n\nexport const site", start + (startMatch?.[0].length ?? 0));
+
+  if (start === -1 || end === -1) {
+    throw new Error("Could not find issueProject block in content file");
+  }
+
+  const nextSource = `${source.slice(0, start)}export const issueProject: IssueProject = ${JSON.stringify(nextIssue, null, 2)};${source.slice(end)}`;
   await fs.writeFile(contentFilePath, nextSource, "utf8");
 };
 
@@ -153,6 +175,24 @@ app.post("/api/admin/articles", async (request, response) => {
     await writeArticlesToContentFile(nextArticles);
     (articles as Article[]).splice(0, articles.length, ...nextArticles);
     response.json({ ok: true, path: contentFilePath, count: nextArticles.length });
+  } catch (error) {
+    response.status(500).json({ ok: false, message: error instanceof Error ? error.message : "Save failed" });
+  }
+});
+
+app.post("/api/admin/issue", async (request, response) => {
+  const nextIssue = (request.body as { issueProject?: unknown }).issueProject;
+
+  if (!isIssueProject(nextIssue)) {
+    response.status(400).json({ ok: false, message: "Invalid issue payload" });
+    return;
+  }
+
+  try {
+    await writeIssueToContentFile(nextIssue);
+    site.issue = nextIssue.number;
+    site.issueProject = nextIssue;
+    response.json({ ok: true, path: contentFilePath, number: nextIssue.number });
   } catch (error) {
     response.status(500).json({ ok: false, message: error instanceof Error ? error.message : "Save failed" });
   }

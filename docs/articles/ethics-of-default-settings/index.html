@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="기본값은 중립적이지 않다. 알림, 공개 범위, 추천 방식은 사용자의 시간을 어떤 방향으로 흐르게 할지 미리 정한다." />
     <title>기본값의 윤리 | The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-nav-flow-margin" />
-    <script src="/magazine/client.js?v=20260503-nav-flow-margin" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-issue-editor-visual-cycle" />
+    <script src="/magazine/client.js?v=20260503-issue-editor-visual-cycle" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -273,13 +273,13 @@
       </header>
 
       <div class="article-visual" data-reveal data-action-card data-scroll-motion>
-        <span class="image-block image-library"></span>
+        <span class="image-block image-library" data-visual-cycle role="button" tabindex="0" aria-label="대표 비주얼 바꾸기"></span>
       </div>
 
       <div class="article-body-grid">
         <aside class="article-side article-side-default" data-reveal data-article-rail>
           <span class="article-rail-no" data-article-rail-no>01</span>
-          <span class="image-block image-library" data-article-rail-visual></span>
+          <span class="image-block image-library" data-article-rail-visual data-visual-cycle role="button" tabindex="0" aria-label="레일 비주얼 바꾸기"></span>
           <strong data-article-rail-title>중립처럼 보이는 선택</strong>
           <p data-article-rail-text>대부분의 사용자는 모든 설정을 검토하지 않는다. 그래서 기본값은 사실상 가장 강력한 제안이 된다.</p>
         </aside>

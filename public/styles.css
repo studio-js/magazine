@@ -7567,6 +7567,197 @@ html[lang="ko"] .river-card-copy strong {
   }
 }
 
+/* Visual cycling, issue editor, and issue readability pass */
+[data-visual-cycle],
+[data-write-hero-preview],
+[data-write-issue-feature-preview],
+[data-write-section-rail-preview],
+[data-write-section-image-preview] {
+  cursor: ew-resize;
+}
+
+.issue-admin-editor {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.issue-admin-grid,
+.issue-feature-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.8rem, 1.4vw, 1.2rem);
+  padding: clamp(0.9rem, 1.6vw, 1.35rem);
+}
+
+.issue-admin-grid label,
+.issue-feature-editor-grid label,
+.issue-credit-editor label {
+  display: grid;
+  gap: 0.32rem;
+}
+
+.issue-admin-grid label span,
+.issue-feature-editor-grid label span,
+.issue-credit-editor small {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.issue-admin-grid input,
+.issue-admin-grid textarea,
+.issue-feature-editor-grid input,
+.issue-feature-editor-grid textarea,
+.issue-feature-editor-grid select,
+.issue-credit-editor input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--hairline);
+  border-radius: 0;
+  padding: 0.5rem 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+}
+
+.issue-admin-grid textarea,
+.issue-feature-editor-grid textarea {
+  min-height: 5.2rem;
+  resize: vertical;
+  line-height: 1.58;
+}
+
+.issue-admin-section-head,
+.issue-feature-editor-head,
+.issue-credit-editor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+  padding: clamp(0.85rem, 1.5vw, 1.2rem) clamp(0.9rem, 1.6vw, 1.35rem);
+  border-top: 1px solid var(--line);
+}
+
+.issue-admin-section-head h2 {
+  margin: 0;
+  font-size: clamp(1.25rem, 1.7vw, 2rem);
+  font-weight: 430;
+  letter-spacing: -0.02em;
+}
+
+.issue-admin-section-head button,
+.issue-feature-editor-head button,
+.issue-credit-editor button {
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 0.45rem 0.72rem;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+}
+
+.issue-feature-editor,
+.issue-credit-editor {
+  border-top: 1px solid var(--hairline);
+}
+
+.issue-feature-editor-head span,
+.issue-credit-editor > span {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 560;
+  letter-spacing: 0.03em;
+}
+
+.issue-feature-editor-head strong {
+  min-width: 0;
+  overflow: hidden;
+  font-size: clamp(1rem, 1.12vw, 1.18rem);
+  font-weight: 520;
+  letter-spacing: -0.018em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.issue-feature-visual-button {
+  display: grid;
+  grid-row: span 3;
+  gap: 0.45rem;
+  align-self: stretch;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  text-align: left;
+}
+
+.issue-feature-visual-button .image-block {
+  width: 100%;
+  min-height: 11rem;
+  aspect-ratio: 4 / 5;
+}
+
+.issue-feature-visual-button small {
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.issue-credit-editor {
+  display: grid;
+  grid-template-columns: 2.4rem repeat(4, minmax(0, 1fr)) auto;
+}
+
+.issue-admin-actions {
+  padding: clamp(0.9rem, 1.6vw, 1.35rem);
+  border-top: 1px solid var(--line);
+}
+
+.issue-project-title h1,
+html[lang="ko"] .issue-project-title h1 {
+  max-width: 14ch;
+  font-size: clamp(2.25rem, 4.2vw, 5.6rem);
+  line-height: 1.08;
+}
+
+.issue-editorial-note h2,
+html[lang="ko"] .issue-editorial-note h2 {
+  max-width: 16ch;
+  font-size: clamp(1.85rem, 2.55vw, 3.35rem);
+  line-height: 1.28;
+  letter-spacing: 0.002em;
+}
+
+.issue-chapter h2,
+html[lang="ko"] .issue-chapter h2 {
+  max-width: 18ch;
+  font-size: clamp(1.7rem, 2.75vw, 3.7rem);
+  line-height: 1.22;
+}
+
+@media (max-width: 960px) {
+  .issue-admin-grid,
+  .issue-feature-editor-grid,
+  .issue-credit-editor {
+    grid-template-columns: 1fr;
+  }
+
+  .issue-admin-section-head,
+  .issue-feature-editor-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .issue-editorial-note h2,
+  html[lang="ko"] .issue-editorial-note h2 {
+    max-width: 13.5ch;
+    font-size: clamp(2rem, 9vw, 3.4rem);
+  }
+}
+
 /* Final writing desk and magazine image sizing pass */
 .admin-page.section-pad {
   padding-top: 0;
