@@ -13489,15 +13489,27 @@ html[lang="ko"] .home-index-row strong {
 
 .home-recent-lead,
 .home-recent-lead[data-scroll-motion] {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(7rem, 0.32fr) minmax(0, 0.68fr);
   gap: clamp(1rem, 2.4vw, 2rem);
   align-items: start;
   padding-bottom: 0;
   color: var(--ink);
-  opacity: calc(0.92 + (var(--scroll-visibility, 0) * 0.08));
-  transform: translate3d(0, calc(var(--scroll-shift, 0) * 0.1rem), 0);
-  transition: color 180ms ease, opacity 180ms ease, padding-bottom 520ms cubic-bezier(0.16, 1, 0.3, 1), transform 220ms ease;
+  opacity: 1;
+  transform: none;
+  transition: color 180ms ease, padding-bottom 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-recent-lead::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -0.55rem;
+  height: 1px;
+  background: rgba(24, 23, 19, 0.14);
+  clip-path: inset(0 100% 0 0);
 }
 
 .home-recent-visual {
@@ -13519,11 +13531,10 @@ html[lang="ko"] .home-index-row strong {
   right: 0;
   bottom: 0;
   left: 0;
+  width: 36%;
   height: 1px;
   background: rgba(24, 23, 19, 0.18);
-  transform: scaleX(0.36);
-  transform-origin: left center;
-  transition: background 180ms ease, transform 480ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background 180ms ease, width 480ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .home-recent-copy {
@@ -13574,7 +13585,6 @@ html[lang="ko"] .home-recent-copy strong {
 .home-recent-lead:focus-visible {
   color: var(--clay);
   padding-bottom: clamp(1rem, 2vw, 1.7rem);
-  transform: translate3d(0, 0.22rem, 0);
 }
 
 .home-recent-lead:hover .image-block,
@@ -13586,7 +13596,7 @@ html[lang="ko"] .home-recent-copy strong {
 .home-recent-lead:hover .home-recent-visual::after,
 .home-recent-lead:focus-visible .home-recent-visual::after {
   background: rgba(123, 91, 66, 0.42);
-  transform: scaleX(1);
+  width: 100%;
 }
 
 .home-story-index-list {
@@ -13605,9 +13615,9 @@ html[lang="ko"] .home-recent-copy strong {
   min-width: 0;
   padding-block: clamp(0.42rem, 0.8vw, 0.68rem);
   color: var(--ink);
-  opacity: calc(0.9 + (var(--scroll-visibility, 0) * 0.1));
-  transform: translate3d(0, calc(var(--scroll-shift, 0) * -0.08rem), 0);
-  transition: color 180ms ease, opacity 180ms ease, padding 420ms cubic-bezier(0.16, 1, 0.3, 1), transform 220ms ease;
+  opacity: 1;
+  transform: none;
+  transition: color 180ms ease, padding 420ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .home-story-line::before {
@@ -13690,6 +13700,82 @@ html[lang="ko"] .home-story-line strong {
 .home-story-more:focus-visible {
   color: var(--clay);
 }
+
+/* Recent stories assemble by clipping into place, without blur or fade. */
+.js .home-stories .home-recent-lead[data-reveal],
+.js .home-stories .home-story-line[data-reveal],
+.js .home-stories .home-story-more[data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+.js .home-stories .home-recent-lead::before {
+  transition: clip-path 560ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js .home-stories .home-recent-lead .home-recent-visual,
+.js .home-stories .home-recent-copy small,
+.js .home-stories .home-recent-copy strong,
+.js .home-stories .home-story-line span,
+.js .home-stories .home-story-line strong,
+.js .home-stories .home-story-line small,
+.js .home-stories .home-story-more span,
+.js .home-stories .home-story-more strong {
+  clip-path: inset(0 100% 0 0);
+  translate: var(--recent-assemble-x, -0.55rem) 0;
+  transition: clip-path 620ms cubic-bezier(0.16, 1, 0.3, 1), translate 620ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js .home-stories .home-recent-visual::after,
+.js .home-stories .home-story-line::before {
+  width: 0;
+}
+
+.js .home-stories .home-recent-lead.is-visible::before,
+.js .home-stories .home-recent-lead.is-visible .home-recent-visual,
+.js .home-stories .home-recent-lead.is-visible .home-recent-copy small,
+.js .home-stories .home-recent-lead.is-visible .home-recent-copy strong,
+.js .home-stories .home-story-line.is-visible span,
+.js .home-stories .home-story-line.is-visible strong,
+.js .home-stories .home-story-line.is-visible small,
+.js .home-stories .home-story-more.is-visible span,
+.js .home-stories .home-story-more.is-visible strong {
+  clip-path: inset(0);
+  translate: 0 0;
+}
+
+.js .home-stories .home-recent-lead.is-visible .home-recent-visual::after {
+  width: 36%;
+}
+
+.js .home-stories .home-story-line.is-visible::before {
+  width: 0.42rem;
+}
+
+.js .home-stories .home-story-line.is-visible:hover::before,
+.js .home-stories .home-story-line.is-visible:focus-visible::before {
+  width: 0.92rem;
+}
+
+.js .home-stories .home-recent-lead.is-visible:hover .home-recent-visual::after,
+.js .home-stories .home-recent-lead.is-visible:focus-visible .home-recent-visual::after {
+  width: 100%;
+}
+
+.js .home-stories .home-recent-copy small { --recent-assemble-x: -0.45rem; transition-delay: 80ms; }
+.js .home-stories .home-recent-copy strong { --recent-assemble-x: -0.32rem; transition-delay: 150ms; }
+.js .home-stories .home-story-line span { --recent-assemble-x: 0.42rem; transition-delay: 70ms; }
+.js .home-stories .home-story-line strong { --recent-assemble-x: 0.34rem; transition-delay: 125ms; }
+.js .home-stories .home-story-line small { --recent-assemble-x: 0.26rem; transition-delay: 180ms; }
+.js .home-stories .home-story-line:nth-child(2) span,
+.js .home-stories .home-story-line:nth-child(2) strong,
+.js .home-stories .home-story-line:nth-child(2) small { transition-delay: 150ms; }
+.js .home-stories .home-story-line:nth-child(3) span,
+.js .home-stories .home-story-line:nth-child(3) strong,
+.js .home-stories .home-story-line:nth-child(3) small { transition-delay: 215ms; }
+.js .home-stories .home-story-line:nth-child(4) span,
+.js .home-stories .home-story-line:nth-child(4) strong,
+.js .home-stories .home-story-line:nth-child(4) small { transition-delay: 280ms; }
 
 .home-archive-map {
   display: grid;
@@ -14474,9 +14560,6 @@ html[lang="ko"] .habitus-card strong {
 .js .cover-copy.is-visible .home-issue-link,
 .js .home-issue-index.is-visible .home-index-headline,
 .js .home-issue-index.is-visible .home-index-row,
-.js .home-recent-lead.is-visible,
-.js .home-story-line.is-visible,
-.js .home-story-more.is-visible,
 .js .habitus-copy.is-visible .kicker,
 .js .habitus-copy.is-visible h2,
 .js .habitus-copy.is-visible p,
@@ -14497,11 +14580,6 @@ html[lang="ko"] .habitus-card strong {
 .js .home-issue-index.is-visible .home-index-row:nth-child(3) { animation-delay: 290ms; --assemble-x: -0.4rem; }
 .js .home-issue-index.is-visible .home-index-row:nth-child(4) { animation-delay: 345ms; --assemble-x: -0.32rem; }
 .js .home-issue-index.is-visible .home-index-row:nth-child(5) { animation-delay: 400ms; --assemble-x: -0.25rem; }
-.js .home-recent-lead.is-visible { animation-delay: 90ms; --assemble-x: -0.45rem; }
-.js .home-story-line.is-visible:nth-child(1) { animation-delay: 130ms; --assemble-x: 0.42rem; }
-.js .home-story-line.is-visible:nth-child(2) { animation-delay: 185ms; --assemble-x: 0.36rem; }
-.js .home-story-line.is-visible:nth-child(3) { animation-delay: 240ms; --assemble-x: 0.3rem; }
-.js .home-story-line.is-visible:nth-child(4) { animation-delay: 295ms; --assemble-x: 0.24rem; }
 .js .habitus-copy.is-visible .kicker { animation-delay: 60ms; }
 .js .habitus-copy.is-visible h2 { animation-delay: 125ms; --assemble-y: 0.7rem; }
 .js .habitus-copy.is-visible p { animation-delay: 205ms; --assemble-y: 0.62rem; }
@@ -14602,9 +14680,6 @@ html[lang="ko"] .habitus-card strong {
   .js .cover-copy.is-visible .home-issue-link,
   .js .home-issue-index.is-visible .home-index-headline,
   .js .home-issue-index.is-visible .home-index-row,
-  .js .home-recent-lead.is-visible,
-  .js .home-story-line.is-visible,
-  .js .home-story-more.is-visible,
   .js .habitus-copy.is-visible .kicker,
   .js .habitus-copy.is-visible h2,
   .js .habitus-copy.is-visible p,
@@ -14617,5 +14692,20 @@ html[lang="ko"] .habitus-card strong {
   .js .habitus-board.is-visible .habitus-point,
   .js .habitus-board.is-visible .habitus-field {
     animation: none !important;
+  }
+
+  .js .home-stories .home-recent-lead::before,
+  .js .home-stories .home-recent-lead .home-recent-visual,
+  .js .home-stories .home-recent-copy small,
+  .js .home-stories .home-recent-copy strong,
+  .js .home-stories .home-story-line::before,
+  .js .home-stories .home-story-line span,
+  .js .home-stories .home-story-line strong,
+  .js .home-stories .home-story-line small,
+  .js .home-stories .home-story-more span,
+  .js .home-stories .home-story-more strong {
+    clip-path: inset(0) !important;
+    translate: 0 0 !important;
+    transition: none !important;
   }
 }

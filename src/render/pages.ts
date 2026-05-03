@@ -157,7 +157,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-habitus-motion-width-2";
+const assetVersion = "20260503-recent-assembly";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -833,7 +833,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
               </a>`)
     .join("\n");
   const homeRecentLead = leadArticle
-    ? `          <a class="home-recent-lead" href="${articleHref(leadArticle, locale)}" data-reveal data-action-card data-scroll-motion>
+    ? `          <a class="home-recent-lead" href="${articleHref(leadArticle, locale)}" data-reveal data-action-card>
             <span class="home-recent-visual" aria-hidden="true">
               ${renderImageBlock(leadArticle.heroClass, leadArticle.heroImage)}
             </span>
@@ -846,7 +846,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
     : "";
   const storyRows = secondaryArticles
     .map((article, index) => [
-      `              <a class="home-story-line" href="${articleHref(article, locale)}" data-reveal data-action-card data-scroll-motion>`,
+      `              <a class="home-story-line" href="${articleHref(article, locale)}" data-reveal data-action-card>`,
       `                <span>${String(index + 2).padStart(2, "0")}</span>`,
       `                <strong>${escapeHtml(text(article.title, locale))}</strong>`,
       `                <small>${escapeHtml(categoryLabel(site.categories, article.category, locale))} / ${escapeHtml(formatDate(article.date, locale))}</small>`,
@@ -934,7 +934,7 @@ ${homeIndexRows}
 ${homeRecentLead}
         <div class="home-story-index-list">
 ${storyRows}
-          <a class="home-story-more" href="${archiveHref(locale)}" data-reveal data-scroll-motion>
+          <a class="home-story-more" href="${archiveHref(locale)}" data-reveal>
             <span>${escapeHtml(locale === "ko" ? "전체 보기" : "View all")}</span>
             <strong>${escapeHtml(labels.fullArchive)}</strong>
           </a>
