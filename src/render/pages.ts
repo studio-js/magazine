@@ -116,7 +116,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-issue-editor-visual-cycle";
+const assetVersion = "20260503-write-desk-modes";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -382,7 +382,7 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
     .map((heroClass) => `<option value="${heroClass}"${heroClass === "image-material" ? " selected" : ""}>${heroClass}</option>`)
     .join("");
   const body = `
-    <section class="admin-page section-pad" data-write-editor data-write-storage-key="the-thing-admin-articles" data-admin-password="promise">
+    <section class="admin-page section-pad" data-write-editor data-write-mode="article" data-write-storage-key="the-thing-admin-articles" data-admin-password="promise">
       <div class="admin-lock" data-admin-lock>
         <form class="admin-lock-card" data-admin-login>
           <p class="kicker">Admin</p>
@@ -402,11 +402,17 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
           <p class="kicker">Editorial Admin</p>
           <h1>${escapeHtml(locale === "ko" ? "기사 / 이슈 데스크" : "Article / Issue Desk")}</h1>
         </div>
-        <p>${escapeHtml(locale === "ko" ? "기존 기사와 이슈를 실제 페이지 폭에 맞춰 편집합니다. 로컬 서버에서는 파일 저장이 src/content/magazine.ts를 직접 수정하고, 정적 배포 페이지에서는 내려받기 파일로 대체됩니다." : "Edit existing articles and issue pages at live page scale. On the local server, Save File writes directly to src/content/magazine.ts; on the static deployment, it falls back to a download.")}</p>
+        <div class="admin-header-copy">
+          <p>${escapeHtml(locale === "ko" ? "기존 기사와 이슈를 실제 페이지 폭에 맞춰 편집합니다. 글쓰기 화면은 공개 기사 폭과 리듬을 기준으로 맞췄고, 로컬 서버에서는 파일 저장이 src/content/magazine.ts를 직접 수정합니다." : "Edit existing articles and issue pages at live page scale. The writing surface follows the published article width and rhythm; on the local server, Save File writes directly to src/content/magazine.ts.")}</p>
+          <div class="admin-mode-tabs" aria-label="${escapeHtml(locale === "ko" ? "편집 종류" : "Editor type")}">
+            <button type="button" class="is-active" data-write-mode-button="article" aria-pressed="true">${escapeHtml(locale === "ko" ? "기사" : "Article")}</button>
+            <button type="button" data-write-mode-button="issue" aria-pressed="false">${escapeHtml(locale === "ko" ? "이슈" : "Issue")}</button>
+          </div>
+        </div>
       </header>
 
       <div class="admin-shell">
-        <aside class="admin-sidebar" aria-label="Article manager">
+        <aside class="admin-sidebar article-admin-sidebar" aria-label="Article manager" data-write-article-panel>
           <div class="admin-sidebar-head">
             <span>${escapeHtml(locale === "ko" ? "기사 목록" : "Articles")}</span>
             <strong data-admin-count>${articleList.length}</strong>
@@ -416,19 +422,19 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
           </div>
           <div class="admin-list" data-admin-list></div>
           <div class="admin-sidebar-actions">
-            <button type="button" data-admin-new>${escapeHtml(locale === "ko" ? "새 기사" : "New Article")}</button>
+            <button type="button" class="is-primary" data-admin-new>${escapeHtml(locale === "ko" ? "새 기사" : "New Article")}</button>
             <button type="button" data-admin-move-up>${escapeHtml(locale === "ko" ? "위로" : "Move Up")}</button>
             <button type="button" data-admin-move-down>${escapeHtml(locale === "ko" ? "아래로" : "Move Down")}</button>
             <button type="button" data-admin-delete>${escapeHtml(locale === "ko" ? "삭제" : "Delete")}</button>
           </div>
           <div class="admin-sidebar-actions is-export">
-            <button type="button" data-admin-save-file>${escapeHtml(locale === "ko" ? "파일 저장" : "Save File")}</button>
+            <button type="button" class="is-primary" data-admin-save-file>${escapeHtml(locale === "ko" ? "파일 저장" : "Save File")}</button>
             <button type="button" data-admin-copy-all>${escapeHtml(locale === "ko" ? "전체 배열 복사" : "Copy All")}</button>
             <button type="button" data-admin-download-all>${escapeHtml(locale === "ko" ? "전체 파일 내려받기" : "Download All")}</button>
           </div>
         </aside>
 
-        <section class="admin-editor" aria-label="Article editor">
+        <section class="admin-editor article-admin-editor" aria-label="Article editor" data-write-article-panel>
           <div class="admin-editor-bar">
             <div>
               <span>${escapeHtml(locale === "ko" ? "편집 중" : "Editing")}</span>
@@ -567,7 +573,7 @@ ${subcategoryOptions}
                   <p contenteditable="true" spellcheck="true" data-write-paragraph>의자의 비례는 가까이서보다 한 발 물러섰을 때 더 분명해진다. 등받이의 높이, 좌판의 깊이, 다리 사이의 간격이 하나의 실루엣으로 묶이기 때문이다.</p>
                   <p contenteditable="true" spellcheck="true" data-write-paragraph>잘 만든 의자는 장식을 앞세우지 않는다. 대신 방 안에서 어느 정도의 존재감을 가져야 하는지 정확히 알고 있는 물건처럼 보인다.</p>
                   <div class="writer-section-tools" contenteditable="false">
-                    <button type="button" data-write-add-paragraph>${escapeHtml(locale === "ko" ? "문단 추가" : "Add Paragraph")}</button>
+                    <button type="button" data-write-add-section-after>${escapeHtml(locale === "ko" ? "다음 섹션" : "Next Section")}</button>
                     <button type="button" data-write-remove-section>${escapeHtml(locale === "ko" ? "섹션 삭제" : "Remove Section")}</button>
                   </div>
                 </section>
@@ -580,9 +586,28 @@ ${subcategoryOptions}
             <textarea readonly data-write-output aria-label="Generated Article code"></textarea>
           </details>
         </section>
-      </div>
 
-      <section class="admin-editor issue-admin-editor" aria-label="${escapeHtml(locale === "ko" ? "이슈 편집" : "Issue editor")}" data-write-issue-editor>
+        <aside class="admin-sidebar issue-admin-sidebar" aria-label="${escapeHtml(locale === "ko" ? "이슈 관리" : "Issue manager")}" data-write-issue-panel>
+          <div class="admin-sidebar-head">
+            <span>${escapeHtml(locale === "ko" ? "이슈 관리" : "Issue")}</span>
+            <strong>${escapeHtml(site.issueProject.number)}</strong>
+          </div>
+          <div class="issue-sidebar-summary">
+            <p class="kicker">Current Issue</p>
+            <strong>${escapeHtml(text(site.issueProject.title, locale))}</strong>
+            <p>${escapeHtml(text(site.issueProject.subtitle, locale))}</p>
+            <small>${escapeHtml(locale === "ko" ? "장면" : "Scenes")} ${site.issueProject.features.length} / ${escapeHtml(locale === "ko" ? "크레딧" : "Credits")} ${site.issueProject.credits.length}</small>
+          </div>
+          <div class="admin-sidebar-actions is-export">
+            <button type="button" class="is-primary" data-write-issue-save>${escapeHtml(locale === "ko" ? "이슈 파일 저장" : "Save Issue")}</button>
+            <button type="button" data-write-issue-copy>${escapeHtml(locale === "ko" ? "이슈 복사" : "Copy Issue")}</button>
+            <button type="button" data-write-issue-download>${escapeHtml(locale === "ko" ? "이슈 내려받기" : "Download Issue")}</button>
+            <button type="button" data-write-issue-reset>${escapeHtml(locale === "ko" ? "이슈 로컬 초기화" : "Reset Issue")}</button>
+          </div>
+          <p class="issue-sidebar-note">${escapeHtml(locale === "ko" ? "라이브 페이지에서는 다운로드로 대체되고, 로컬 서버에서는 issueProject에 바로 저장됩니다." : "On the live static page this falls back to download; on the local server it writes directly to issueProject.")}</p>
+        </aside>
+
+        <section class="admin-editor issue-admin-editor" aria-label="${escapeHtml(locale === "ko" ? "이슈 편집" : "Issue editor")}" data-write-issue-panel data-write-issue-editor>
         <div class="admin-editor-bar">
           <div>
             <span>${escapeHtml(locale === "ko" ? "이슈 편집" : "Issue Editing")}</span>
@@ -629,18 +654,12 @@ ${issueField(locale === "ko" ? "에디터 노트 EN" : "Editor Note EN", "editor
         </div>
         <div class="issue-credit-editor-list" data-write-issue-credits></div>
 
-        <div class="writer-actions issue-admin-actions">
-          <button type="button" data-write-issue-save>${escapeHtml(locale === "ko" ? "이슈 파일 저장" : "Save Issue")}</button>
-          <button type="button" data-write-issue-copy>${escapeHtml(locale === "ko" ? "이슈 복사" : "Copy Issue")}</button>
-          <button type="button" data-write-issue-download>${escapeHtml(locale === "ko" ? "이슈 내려받기" : "Download Issue")}</button>
-          <button type="button" data-write-issue-reset>${escapeHtml(locale === "ko" ? "이슈 로컬 초기화" : "Reset Issue")}</button>
-        </div>
-
         <details class="writer-output">
           <summary>${escapeHtml(locale === "ko" ? "생성된 이슈 코드 보기" : "View Generated Issue Code")}</summary>
           <textarea readonly data-write-issue-output aria-label="Generated Issue code"></textarea>
         </details>
-      </section>
+        </section>
+      </div>
 
       <script type="application/json" data-write-articles>${articleJson}</script>
       <script type="application/json" data-write-issue>${issueJson}</script>

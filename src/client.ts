@@ -295,6 +295,7 @@ if (writer) {
 
   const storageKey = writer.dataset.writeStorageKey || "the-thing-admin-articles";
   const issueStorageKey = `${storageKey}-issue`;
+  const modeStorageKey = `${storageKey}-mode`;
   const authKey = `${storageKey}-auth`;
   const adminPassword = writer.dataset.adminPassword || "promise";
   const lock = writer.querySelector<HTMLElement>("[data-admin-lock]");
@@ -309,6 +310,7 @@ if (writer) {
   const currentTitle = writer.querySelector<HTMLElement>("[data-admin-current-title]");
   const outputArea = writer.querySelector<HTMLTextAreaElement>("[data-write-output]");
   const status = writer.querySelector<HTMLElement>("[data-write-status]");
+  const modeButtons = writer.querySelectorAll<HTMLButtonElement>("[data-write-mode-button]");
   const categorySelect = writer.querySelector<HTMLSelectElement>('[data-write-meta="category"]');
   const subcategorySelect = writer.querySelector<HTMLSelectElement>('[data-write-meta="subcategory"]');
   const railModeSelect = writer.querySelector<HTMLSelectElement>('[data-write-meta="railMode"]');
@@ -347,6 +349,16 @@ if (writer) {
     if (issueStatus) {
       issueStatus.textContent = message;
     }
+  };
+
+  const setWriteMode = (mode: "article" | "issue"): void => {
+    writer.dataset.writeMode = mode;
+    window.localStorage.setItem(modeStorageKey, mode);
+    modeButtons.forEach((button) => {
+      const isActive = button.dataset.writeModeButton === mode;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-pressed", String(isActive));
+    });
   };
 
   const escapeHtmlClient = (value: string): string => value
@@ -609,6 +621,8 @@ if (writer) {
   } else {
     loginInput?.focus();
   }
+
+  setWriteMode(window.localStorage.getItem(modeStorageKey) === "issue" ? "issue" : "article");
 
   loginForm?.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -981,17 +995,17 @@ if (writer) {
     tools.className = "writer-section-tools";
     tools.contentEditable = "false";
 
-    const addParagraph = document.createElement("button");
-    addParagraph.type = "button";
-    addParagraph.dataset.writeAddParagraph = "";
-    addParagraph.textContent = "문단 추가";
+    const addSection = document.createElement("button");
+    addSection.type = "button";
+    addSection.dataset.writeAddSectionAfter = "";
+    addSection.textContent = "다음 섹션";
 
     const removeSection = document.createElement("button");
     removeSection.type = "button";
     removeSection.dataset.writeRemoveSection = "";
     removeSection.textContent = "섹션 삭제";
 
-    tools.append(addParagraph, removeSection);
+    tools.append(addSection, removeSection);
     section.append(tools);
     return section;
   };
@@ -1719,6 +1733,13 @@ if (writer) {
       return;
     }
 
+    const modeButton = target.closest<HTMLButtonElement>("[data-write-mode-button]");
+
+    if (modeButton) {
+      setWriteMode(modeButton.dataset.writeModeButton === "issue" ? "issue" : "article");
+      return;
+    }
+
     if (target.closest("[data-write-issue-add-feature]")) {
       adminIssue = formIssue();
       const nextFeature = fallbackIssueFeature();
@@ -1967,6 +1988,12 @@ if (writer) {
         enabledInput.value = "false";
       }
 
+      scheduleSave();
+      return;
+    }
+
+    if (target.closest("[data-write-add-section-after]") && section) {
+      addSectionAfter(section);
       scheduleSave();
       return;
     }
