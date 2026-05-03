@@ -157,7 +157,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-recent-assembly";
+const assetVersion = "20260503-balanced-habitus";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -857,39 +857,39 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
   const habitusFields = [
     {
       no: "01",
-      title: { ko: "몸에 밴 감각", en: "Embodied Sense" },
+      title: { ko: "몸의 감각", en: "Embodied Sense" },
       body: {
-        ko: "취향은 머릿속 의견보다 먼저 몸의 속도, 익숙한 재료, 반복된 장면으로 남습니다.",
-        en: "Taste stays in bodily speed, familiar materials, and repeated scenes before it becomes an opinion."
+        ko: "먼저 몸에 익는 속도와 거리.",
+        en: "Speed and distance learned by the body."
       }
     },
     {
       no: "02",
       title: { ko: "사회적 조건", en: "Social Conditions" },
       body: {
-        ko: "무엇을 자연스럽다고 느끼는지는 개인의 선택만이 아니라 환경과 학습의 층위에서 생깁니다.",
-        en: "What feels natural is shaped not only by choice but by layers of environment and learning."
+        ko: "자연스럽다고 느끼게 하는 배경.",
+        en: "The setting that makes something feel natural."
       }
     },
     {
       no: "03",
       title: { ko: "선택의 언어", en: "The Language of Choice" },
       body: {
-        ko: "좋아한다는 말 뒤에는 가격, 이미지, 기술, 윤리, 분위기를 구별하는 문장이 숨어 있습니다.",
-        en: "Behind liking something are sentences that distinguish price, image, technology, ethics, and mood."
+        ko: "좋아한다는 말 뒤의 기준.",
+        en: "The criteria behind saying yes."
       }
     },
     {
       no: "04",
-      title: { ko: "취향의 기록", en: "A Record of Taste" },
+      title: { ko: "반복의 기록", en: "A Record of Repetition" },
       body: {
-        ko: "아비투스는 그 문장을 기사, 이슈, 이미지, 목록의 형태로 천천히 기록합니다.",
-        en: "Habitus records those sentences slowly through articles, issues, images, and lists."
+        ko: "선택이 쌓여 문장이 되는 자리.",
+        en: "Where repeated choices become language."
       }
     }
   ];
   const habitusCards = habitusFields
-    .map((field) => `              <article class="habitus-card" data-scroll-motion>
+    .map((field) => `              <article class="habitus-card">
                 <span>${escapeHtml(field.no)}</span>
                 <strong>${escapeHtml(text(field.title, locale))}</strong>
                 <p>${escapeHtml(text(field.body, locale))}</p>
@@ -953,17 +953,17 @@ ${storyRows}
         </a>
       </div>
 
-      <div class="habitus-board" data-reveal data-scroll-motion>
+      <div class="habitus-board" data-reveal>
         <div class="habitus-plate" aria-label="${escapeHtml(locale === "ko" ? "Habitus 취향 좌표" : "Habitus taste coordinates")}">
           <span>${escapeHtml(text(site.title, locale))}</span>
           <strong>${escapeHtml(locale === "ko" ? "취향에 관하여" : "On Taste")}</strong>
-          <em>${escapeHtml(locale === "ko" ? "몸 / 조건 / 선택 / 기록" : "Body / Conditions / Choice / Record")}</em>
+          <em>${escapeHtml(locale === "ko" ? "몸 / 장 / 선택 / 반복" : "Body / Field / Choice / Repetition")}</em>
         </div>
         <div class="habitus-geometry" aria-hidden="true">
           <span class="habitus-axis is-horizontal"></span>
           <span class="habitus-axis is-vertical"></span>
-          <span class="habitus-field is-body">Body</span>
-          <span class="habitus-field is-world">World</span>
+          <span class="habitus-field is-body">${escapeHtml(locale === "ko" ? "몸" : "Body")}</span>
+          <span class="habitus-field is-world">${escapeHtml(locale === "ko" ? "장" : "Field")}</span>
           <span class="habitus-point is-one"></span>
           <span class="habitus-point is-two"></span>
           <span class="habitus-point is-three"></span>
