@@ -1,4 +1,4 @@
-import type { Article, CategoryDefinition, Locale, LocalizedText, Note, PrimaryCategory, SiteContent, SubcategoryKey } from "../types";
+import type { Article, ArticleSection, CategoryDefinition, Locale, LocalizedText, Note, PrimaryCategory, SiteContent, SubcategoryKey } from "../types";
 
 interface LayoutOptions {
   title: string;
@@ -116,7 +116,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-section-rail-save-pass";
+const assetVersion = "20260503-write-image-sizing";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -395,7 +395,7 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
           <p class="kicker">Editorial Admin</p>
           <h1>${escapeHtml(locale === "ko" ? "기사 데스크" : "Article Desk")}</h1>
         </div>
-        <p>${escapeHtml(locale === "ko" ? "기존 기사를 불러와 같은 기사 포맷에서 편집하고, 새 글을 만들고, 순서를 바꾸거나 삭제할 수 있습니다. 정적 사이트라 저장은 이 브라우저에 임시 보관되며, 최종 반영은 내보낸 articles 배열을 코드에 적용하는 방식입니다." : "Edit existing articles inside the live article format, create new drafts, reorder or delete entries. Because this is a static site, edits are stored in this browser until you export the articles array back into code.")}</p>
+        <p>${escapeHtml(locale === "ko" ? "기존 기사를 불러와 실제 기사 폭에 맞춰 편집합니다. 로컬 서버에서는 파일 저장이 src/content/magazine.ts를 직접 수정하고, 정적 배포 페이지에서는 내려받기 파일로 대체됩니다." : "Edit existing articles at the live article scale. On the local server, Save File writes directly to src/content/magazine.ts; on the static deployment, it falls back to a download.")}</p>
       </header>
 
       <div class="admin-shell">
@@ -474,22 +474,6 @@ ${subcategoryOptions}
               </select>
             </label>
             <label>
-              <span>${escapeHtml(locale === "ko" ? "레일 비주얼" : "Rail Visual")}</span>
-              <select data-write-meta="railClass">${heroOptions}</select>
-            </label>
-            <label>
-              <span>${escapeHtml(locale === "ko" ? "레일 이미지" : "Rail Image")}</span>
-              <select data-write-meta="railImageMode">
-                <option value="visual">${escapeHtml(locale === "ko" ? "자동 비주얼" : "Generated Visual")}</option>
-                <option value="custom">${escapeHtml(locale === "ko" ? "이미지 URL" : "Image URL")}</option>
-                <option value="none">${escapeHtml(locale === "ko" ? "이미지 없음" : "No Image")}</option>
-              </select>
-            </label>
-            <label class="writer-image-url-field writer-rail-image-url-field">
-              <span>${escapeHtml(locale === "ko" ? "레일 이미지 URL" : "Rail Image URL")}</span>
-              <input type="url" placeholder="https://..." data-write-meta="railImage" />
-            </label>
-            <label>
               <span>${escapeHtml(locale === "ko" ? "읽기 시간" : "Read Time")}</span>
               <input type="text" value="6분 읽기" data-write-meta="readTime" />
             </label>
@@ -508,6 +492,7 @@ ${subcategoryOptions}
               <button type="button" data-write-reset>${escapeHtml(locale === "ko" ? "로컬 변경 초기화" : "Reset Local Edits")}</button>
             </div>
           </div>
+          <p class="writer-shortcuts">${escapeHtml(locale === "ko" ? "Enter 새 문단 · 빈 문단에서 Enter 새 섹션 · /image 본문 이미지 · ⌘/Ctrl+S 파일 저장" : "Enter new paragraph · Enter on an empty paragraph creates a section · /image inline image · Cmd/Ctrl+S saves the file")}</p>
 
           <article class="article-detail writer-article">
             <header class="article-hero-grid">
@@ -528,18 +513,50 @@ ${subcategoryOptions}
               <span class="image-block image-material" data-write-hero-preview></span>
             </div>
 
-            <div class="article-body-grid">
-              <aside class="article-side writer-side" data-write-rail>
-                <span class="article-rail-no">01</span>
-                <span class="image-block image-material" data-write-rail-visual></span>
-                <strong contenteditable="true" spellcheck="true" data-write-text="railTitle" data-write-rail-title>실루엣의 무게</strong>
-                <p contenteditable="true" spellcheck="true" data-write-text="railText" data-write-rail-text>의자의 비례는 가까이서보다 한 발 물러섰을 때 더 분명해진다.</p>
-              </aside>
-
+            <div class="article-body-grid writer-body-grid">
               <div class="article-body" data-write-body>
                 <blockquote contenteditable="true" spellcheck="true" data-write-text="quote">좋은 제품 디자인은 사용자의 몸을 생각하지만, 동시에 공간 안에서 어떤 그림자를 남길지도 생각한다.</blockquote>
                 <section class="article-section writer-section" data-write-section>
+                  <aside class="writer-section-rail-card" data-write-section-rail-card>
+                    <span class="article-rail-no" data-write-section-rail-no>01</span>
+                    <button type="button" class="writer-section-rail-image" data-write-section-rail-image-button aria-label="${escapeHtml(locale === "ko" ? "섹션 레일 이미지 수정" : "Edit section rail image")}">
+                      <span class="image-block image-material" data-write-section-rail-preview></span>
+                      <span>${escapeHtml(locale === "ko" ? "이미지 클릭" : "Click image")}</span>
+                    </button>
+                    <strong contenteditable="true" spellcheck="true" data-write-section-rail-title>좌측 레일 제목</strong>
+                    <p contenteditable="true" spellcheck="true" data-write-section-rail-text>좌측 레일 설명을 이곳에서 직접 수정합니다.</p>
+                    <div class="writer-section-rail-settings" contenteditable="false">
+                      <label>
+                        <span>${escapeHtml(locale === "ko" ? "자동 비주얼" : "Generated Visual")}</span>
+                        <select data-write-section-rail-class>${heroOptions}</select>
+                      </label>
+                      <input type="url" value="" data-write-section-rail-image hidden />
+                      <input type="hidden" value="false" data-write-section-rail-hidden />
+                      <button type="button" data-write-section-rail-use-visual>${escapeHtml(locale === "ko" ? "자동 비주얼" : "Use Visual")}</button>
+                      <button type="button" data-write-section-rail-hide>${escapeHtml(locale === "ko" ? "이미지 숨김" : "Hide Image")}</button>
+                    </div>
+                  </aside>
                   <h2 contenteditable="true" spellcheck="true" data-write-section-heading>실루엣의 무게</h2>
+                  <figure class="writer-section-media is-section-image-disabled" data-write-section-media contenteditable="false">
+                    <button type="button" class="writer-section-media-button" data-write-section-image-button aria-label="${escapeHtml(locale === "ko" ? "본문 이미지 수정" : "Edit inline image")}">
+                      <span class="image-block image-material" data-write-section-image-preview></span>
+                      <span data-write-section-image-label>${escapeHtml(locale === "ko" ? "본문 이미지 추가" : "Add Inline Image")}</span>
+                    </button>
+                    <figcaption contenteditable="true" spellcheck="true" data-write-section-image-caption>${escapeHtml(locale === "ko" ? "이미지 설명" : "Image caption")}</figcaption>
+                    <div class="writer-section-media-tools" contenteditable="false">
+                      <label>
+                        <span>${escapeHtml(locale === "ko" ? "이미지 비주얼" : "Image Visual")}</span>
+                        <select data-write-section-image-class>${heroOptions}</select>
+                      </label>
+                      <input type="url" value="" data-write-section-image hidden />
+                      <input type="hidden" value="false" data-write-section-image-enabled />
+                      <input type="file" accept="image/gif,image/jpeg,image/png,image/webp" data-write-section-image-file hidden />
+                      <button type="button" data-write-section-image-url>${escapeHtml(locale === "ko" ? "URL" : "URL")}</button>
+                      <button type="button" data-write-section-image-file-button>${escapeHtml(locale === "ko" ? "파일" : "File")}</button>
+                      <button type="button" data-write-section-image-use-visual>${escapeHtml(locale === "ko" ? "자동 이미지" : "Use Visual")}</button>
+                      <button type="button" data-write-section-image-hide>${escapeHtml(locale === "ko" ? "이미지 끄기" : "Remove Image")}</button>
+                    </div>
+                  </figure>
                   <p contenteditable="true" spellcheck="true" data-write-paragraph>의자의 비례는 가까이서보다 한 발 물러섰을 때 더 분명해진다. 등받이의 높이, 좌판의 깊이, 다리 사이의 간격이 하나의 실루엣으로 묶이기 때문이다.</p>
                   <p contenteditable="true" spellcheck="true" data-write-paragraph>잘 만든 의자는 장식을 앞세우지 않는다. 대신 방 안에서 어느 정도의 존재감을 가져야 하는지 정확히 알고 있는 물건처럼 보인다.</p>
                   <div class="writer-section-tools" contenteditable="false">
@@ -837,8 +854,8 @@ export const renderArticlePage = (
   });
   const railMode = article.railMode ?? "default";
   const railImageStateClass = railImageHidden[0] ? " is-rail-image-hidden" : "";
-  const firstRailTitle = article.railTitle ? text(article.railTitle, locale) : firstSection ? text(firstSection.heading, locale) : text(article.subtitle, locale);
-  const firstRailText = article.railText ? text(article.railText, locale) : firstSection?.paragraphs[locale][0] ?? text(article.subtitle, locale);
+  const firstRailTitle = firstSection?.railTitle ? text(firstSection.railTitle, locale) : article.railTitle ? text(article.railTitle, locale) : firstSection ? text(firstSection.heading, locale) : text(article.subtitle, locale);
+  const firstRailText = firstSection?.railText ? text(firstSection.railText, locale) : article.railText ? text(article.railText, locale) : firstSection?.paragraphs[locale][0] ?? text(article.subtitle, locale);
   const articleVisual = article.hideHeroImage
     ? ""
     : `      <div class="article-visual" data-reveal data-action-card data-scroll-motion>
@@ -849,6 +866,18 @@ export const renderArticlePage = (
   const metaLabels = locale === "ko"
     ? { date: "발행", location: "장소", readTime: "읽기", tags: "태그" }
     : { date: "Published", location: "Location", readTime: "Reading", tags: "Tags" };
+  const renderSectionFigure = (section: ArticleSection): string => {
+    if (section.hideSectionImage || (!section.sectionImage && !section.sectionImageClass)) {
+      return "";
+    }
+
+    const caption = section.sectionImageCaption ? text(section.sectionImageCaption, locale) : "";
+    return `
+                  <figure class="article-section-figure">
+                    ${renderImageBlock(section.sectionImageClass ?? section.railClass ?? article.heroClass, section.sectionImage)}
+                    ${caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : ""}
+                  </figure>`;
+  };
 
   const body = `
     <article class="article-detail section-pad">
@@ -880,8 +909,8 @@ ${articleVisual}      <div class="article-body-grid">
           ${article.sections
             .map(
               (section, index) => `
-                <section class="article-section" data-reveal data-article-section data-rail-no="${String(index + 1).padStart(2, "0")}" data-rail-title="${escapeHtml(text(section.heading, locale))}" data-rail-text="${escapeHtml(section.paragraphs[locale][0] ?? "")}" data-rail-visual="${railVisuals[index] ?? article.heroClass}" data-rail-image="${escapeHtml(railImages[index] ?? "")}" data-rail-image-hidden="${railImageHidden[index] ? "true" : "false"}">
-                  <h2>${escapeHtml(text(section.heading, locale))}</h2>
+                <section class="article-section" data-reveal data-article-section data-rail-no="${String(index + 1).padStart(2, "0")}" data-rail-title="${escapeHtml(section.railTitle ? text(section.railTitle, locale) : text(section.heading, locale))}" data-rail-text="${escapeHtml(section.railText ? text(section.railText, locale) : section.paragraphs[locale][0] ?? "")}" data-rail-visual="${railVisuals[index] ?? article.heroClass}" data-rail-image="${escapeHtml(railImages[index] ?? "")}" data-rail-image-hidden="${railImageHidden[index] ? "true" : "false"}">
+                  <h2>${escapeHtml(text(section.heading, locale))}</h2>${renderSectionFigure(section)}
                   ${section.paragraphs[locale].map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
                 </section>`
             )

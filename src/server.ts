@@ -9,6 +9,13 @@ const app = express();
 const port = Number(process.env.PORT) || 3000;
 const projectRoot = path.resolve(__dirname, "..");
 const contentFilePath = path.join(projectRoot, "src", "content", "magazine.ts");
+const uploadsDir = path.join(projectRoot, "public", "uploads");
+const uploadExtensions: Record<string, string> = {
+  "image/gif": "gif",
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp"
+};
 
 const getLocale = (requestPath: string, queryValue?: unknown): Locale =>
   requestPath === "/en" || requestPath.startsWith("/en/") || queryValue === "en" ? "en" : "ko";
@@ -30,22 +37,29 @@ const isSubcategory = (categoryKey: PrimaryCategory | undefined, value: unknown)
 const isArticleArray = (value: unknown): value is Article[] =>
   Array.isArray(value) && value.every((article) => typeof article === "object" && article !== null && typeof (article as { slug?: unknown }).slug === "string");
 
+const safeUploadName = (fileName: string): string => {
+  const baseName = path.basename(fileName).replace(/\.[^.]+$/, "");
+  return baseName
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "image";
+};
+
 const writeArticlesToContentFile = async (nextArticles: Article[]): Promise<void> => {
   const source = await fs.readFile(contentFilePath, "utf8");
-  const startMarker = "export const articles: Article[] = ";
-  const endMarker = "\n\nexport const issueProject";
-  const start = source.indexOf(startMarker);
-  const end = source.indexOf(endMarker, start);
+  const startMatch = /export const articles(?:: Article\[])? = /.exec(source);
+  const start = startMatch?.index ?? -1;
+  const end = start === -1 ? -1 : source.indexOf("\n\nexport const ", start + (startMatch?.[0].length ?? 0));
 
   if (start === -1 || end === -1) {
     throw new Error("Could not find articles block in content file");
   }
 
-  const nextSource = `${source.slice(0, start)}${startMarker}${JSON.stringify(nextArticles, null, 2)};${source.slice(end)}`;
+  const nextSource = `${source.slice(0, start)}export const articles = ${JSON.stringify(nextArticles, null, 2)} satisfies Article[];${source.slice(end)}`;
   await fs.writeFile(contentFilePath, nextSource, "utf8");
 };
 
-app.use(express.json({ limit: "4mb" }));
+app.use(express.json({ limit: "18mb" }));
 app.use(express.static(path.join(projectRoot, "public")));
 app.use("/client.js", express.static(path.join(projectRoot, "dist", "client.js")));
 
@@ -98,6 +112,35 @@ app.get("/api/articles", (request, response) => {
   response.json({ locale, articles });
 });
 
+app.post("/api/admin/uploads", async (request, response) => {
+  const { fileName, dataUrl } = request.body as { fileName?: unknown; dataUrl?: unknown };
+
+  if (typeof fileName !== "string" || typeof dataUrl !== "string") {
+    response.status(400).json({ ok: false, message: "Invalid upload payload" });
+    return;
+  }
+
+  const match = /^data:(image\/(?:gif|jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(dataUrl);
+
+  if (!match) {
+    response.status(400).json({ ok: false, message: "Only GIF, JPEG, PNG, and WebP images are supported" });
+    return;
+  }
+
+  try {
+    const [, mimeType, payload] = match;
+    const extension = uploadExtensions[mimeType] ?? "jpg";
+    const outputName = `${Date.now()}-${safeUploadName(fileName)}.${extension}`;
+    const outputPath = path.join(uploadsDir, outputName);
+
+    await fs.mkdir(uploadsDir, { recursive: true });
+    await fs.writeFile(outputPath, Buffer.from(payload, "base64"));
+    response.json({ ok: true, url: `/uploads/${outputName}` });
+  } catch (error) {
+    response.status(500).json({ ok: false, message: error instanceof Error ? error.message : "Upload failed" });
+  }
+});
+
 app.post("/api/admin/articles", async (request, response) => {
   const nextArticles = (request.body as { articles?: unknown }).articles;
 
@@ -108,7 +151,8 @@ app.post("/api/admin/articles", async (request, response) => {
 
   try {
     await writeArticlesToContentFile(nextArticles);
-    response.json({ ok: true, path: contentFilePath });
+    (articles as Article[]).splice(0, articles.length, ...nextArticles);
+    response.json({ ok: true, path: contentFilePath, count: nextArticles.length });
   } catch (error) {
     response.status(500).json({ ok: false, message: error instanceof Error ? error.message : "Save failed" });
   }

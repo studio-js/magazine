@@ -132,12 +132,8 @@ if (writer) {
     const subcategorySelect = writer.querySelector('[data-write-meta="subcategory"]');
     const railModeSelect = writer.querySelector('[data-write-meta="railMode"]');
     const imageUrlField = writer.querySelector(".writer-image-url-field");
-    const railImageUrlField = writer.querySelector(".writer-rail-image-url-field");
     const heroShell = writer.querySelector("[data-write-hero-shell]");
     const heroPreview = writer.querySelector("[data-write-hero-preview]");
-    const railVisual = writer.querySelector("[data-write-rail-visual]");
-    const railTitle = writer.querySelector("[data-write-rail-title]");
-    const railText = writer.querySelector("[data-write-rail-text]");
     const rail = writer.querySelector("[data-write-rail]");
     const kicker = writer.querySelector("[data-write-kicker]");
     let saveTimer = 0;
@@ -188,7 +184,16 @@ if (writer) {
         sections: [
             {
                 heading: { ko: "첫 번째 섹션", en: "First Section" },
-                paragraphs: { ko: ["첫 번째 문단을 작성합니다."], en: ["Write the first paragraph."] }
+                paragraphs: { ko: ["첫 번째 문단을 작성합니다."], en: ["Write the first paragraph."] },
+                railTitle: { ko: "좌측 레일 제목", en: "Rail title" },
+                railText: { ko: "좌측 레일 설명을 이곳에서 직접 수정합니다.", en: "Edit the rail text here." },
+                railClass: "image-material",
+                railImage: "",
+                hideRailImage: false,
+                sectionImageClass: "",
+                sectionImage: "",
+                sectionImageCaption: { ko: "", en: "" },
+                hideSectionImage: true
             }
         ]
     });
@@ -238,14 +243,28 @@ if (writer) {
             },
             sections: articleSections.map((section, index) => {
                 const fallbackSection = fallback.sections[index] || fallback.sections[0];
+                const heading = { ...fallbackSection.heading, ...section.heading };
+                const paragraphs = { ...fallbackSection.paragraphs, ...section.paragraphs };
+                const sectionRailTitle = section.railTitle || (index === 0 ? article.railTitle : undefined) || heading;
+                const sectionRailText = section.railText || (index === 0 ? article.railText : undefined) || {
+                    ko: paragraphs.ko[0] || fallbackSection.railText?.ko || "",
+                    en: paragraphs.en[0] || fallbackSection.railText?.en || ""
+                };
+                const sectionImageCaption = section.sectionImageCaption || fallbackSection.sectionImageCaption || { ko: "", en: "" };
                 return {
                     ...fallbackSection,
                     ...section,
-                    heading: { ...fallbackSection.heading, ...section.heading },
-                    paragraphs: { ...fallbackSection.paragraphs, ...section.paragraphs },
+                    heading,
+                    paragraphs,
+                    railTitle: sectionRailTitle,
+                    railText: sectionRailText,
                     railClass: section.railClass || article.railClass || article.heroClass || fallback.railClass,
                     railImage: section.railImage || "",
-                    hideRailImage: Boolean(section.hideRailImage)
+                    hideRailImage: Boolean(section.hideRailImage),
+                    sectionImageClass: section.sectionImageClass || "",
+                    sectionImage: section.sectionImage || "",
+                    sectionImageCaption,
+                    hideSectionImage: section.hideSectionImage === true || (!section.sectionImage && !section.sectionImageClass)
                 };
             })
         };
@@ -315,11 +334,6 @@ if (writer) {
         return select;
     };
     const imageClassOptions = imageClasses.map((imageClass) => ({ value: imageClass, label: imageClass }));
-    const imageModeOptions = [
-        { value: "visual", label: "자동 비주얼" },
-        { value: "custom", label: "이미지 URL" },
-        { value: "none", label: "이미지 없음" }
-    ];
     const createParagraph = (text) => {
         const paragraph = document.createElement("p");
         paragraph.contentEditable = "true";
@@ -328,45 +342,136 @@ if (writer) {
         paragraph.innerText = text;
         return paragraph;
     };
-    const createSection = (heading = "새 섹션 제목", paragraphs = ["새 문단을 입력하세요."], railClass = "image-material", railImage = "", hideRailImage = false) => {
+    const createSection = (heading = "새 섹션 제목", paragraphs = ["새 문단을 입력하세요."], railClass = "image-material", railImage = "", hideRailImage = false, railTitle = "좌측 레일 제목", railText = "좌측 레일 설명을 이곳에서 직접 수정합니다.", sectionImageClass = "", sectionImage = "", hideSectionImage = true, sectionImageCaption = "") => {
         const section = document.createElement("section");
         section.className = "article-section writer-section";
         section.dataset.writeSection = "";
+        const railCard = document.createElement("aside");
+        railCard.className = "writer-section-rail-card";
+        railCard.dataset.writeSectionRailCard = "";
+        const railNo = document.createElement("span");
+        railNo.className = "article-rail-no";
+        railNo.dataset.writeSectionRailNo = "";
+        const railImageButton = document.createElement("button");
+        railImageButton.type = "button";
+        railImageButton.className = "writer-section-rail-image";
+        railImageButton.dataset.writeSectionRailImageButton = "";
+        railImageButton.setAttribute("aria-label", "섹션 레일 이미지 수정");
+        const railPreview = document.createElement("span");
+        railPreview.className = `image-block ${railClass}`;
+        railPreview.dataset.writeSectionRailPreview = "";
+        const railImageHint = document.createElement("span");
+        railImageHint.textContent = "이미지 클릭";
+        railImageButton.append(railPreview, railImageHint);
+        const railCardTitle = document.createElement("strong");
+        railCardTitle.contentEditable = "true";
+        railCardTitle.spellcheck = true;
+        railCardTitle.dataset.writeSectionRailTitle = "";
+        railCardTitle.innerText = railTitle || heading;
+        const railCardText = document.createElement("p");
+        railCardText.contentEditable = "true";
+        railCardText.spellcheck = true;
+        railCardText.dataset.writeSectionRailText = "";
+        railCardText.innerText = railText || paragraphs[0] || "";
+        const railSettings = document.createElement("div");
+        railSettings.className = "writer-section-rail-settings";
+        railSettings.contentEditable = "false";
+        const railClassLabel = document.createElement("label");
+        const railClassText = document.createElement("span");
+        railClassText.textContent = "자동 비주얼";
+        const railClassSelect = createSelect(imageClassOptions, railClass);
+        railClassSelect.dataset.writeSectionRailClass = "";
+        railClassLabel.append(railClassText, railClassSelect);
+        const railImageInput = document.createElement("input");
+        railImageInput.type = "url";
+        railImageInput.hidden = true;
+        railImageInput.value = railImage;
+        railImageInput.dataset.writeSectionRailImage = "";
+        const railHiddenInput = document.createElement("input");
+        railHiddenInput.type = "hidden";
+        railHiddenInput.value = hideRailImage ? "true" : "false";
+        railHiddenInput.dataset.writeSectionRailHidden = "";
+        const useVisual = document.createElement("button");
+        useVisual.type = "button";
+        useVisual.dataset.writeSectionRailUseVisual = "";
+        useVisual.textContent = "자동 비주얼";
+        const hideImage = document.createElement("button");
+        hideImage.type = "button";
+        hideImage.dataset.writeSectionRailHide = "";
+        hideImage.textContent = "이미지 숨김";
+        railSettings.append(railClassLabel, railImageInput, railHiddenInput, useVisual, hideImage);
+        railCard.append(railNo, railImageButton, railCardTitle, railCardText, railSettings);
+        section.append(railCard);
         const title = document.createElement("h2");
         title.contentEditable = "true";
         title.spellcheck = true;
         title.dataset.writeSectionHeading = "";
         title.innerText = heading;
         section.append(title);
+        const sectionMedia = document.createElement("figure");
+        sectionMedia.className = "writer-section-media";
+        sectionMedia.dataset.writeSectionMedia = "";
+        sectionMedia.contentEditable = "false";
+        const sectionImageButton = document.createElement("button");
+        sectionImageButton.type = "button";
+        sectionImageButton.className = "writer-section-media-button";
+        sectionImageButton.dataset.writeSectionImageButton = "";
+        sectionImageButton.setAttribute("aria-label", "본문 이미지 수정");
+        const sectionImagePreview = document.createElement("span");
+        sectionImagePreview.className = `image-block ${sectionImageClass || railClass || "image-material"}`;
+        sectionImagePreview.dataset.writeSectionImagePreview = "";
+        const sectionImageLabel = document.createElement("span");
+        sectionImageLabel.dataset.writeSectionImageLabel = "";
+        sectionImageLabel.textContent = "본문 이미지 추가";
+        sectionImageButton.append(sectionImagePreview, sectionImageLabel);
+        const caption = document.createElement("figcaption");
+        caption.contentEditable = "true";
+        caption.spellcheck = true;
+        caption.dataset.writeSectionImageCaption = "";
+        caption.innerText = sectionImageCaption;
+        const mediaTools = document.createElement("div");
+        mediaTools.className = "writer-section-media-tools";
+        mediaTools.contentEditable = "false";
+        const imageClassLabel = document.createElement("label");
+        const imageClassText = document.createElement("span");
+        imageClassText.textContent = "이미지 비주얼";
+        const imageClassSelect = createSelect(imageClassOptions, sectionImageClass || railClass || "image-material");
+        imageClassSelect.dataset.writeSectionImageClass = "";
+        imageClassLabel.append(imageClassText, imageClassSelect);
+        const sectionImageInput = document.createElement("input");
+        sectionImageInput.type = "url";
+        sectionImageInput.hidden = true;
+        sectionImageInput.value = sectionImage;
+        sectionImageInput.dataset.writeSectionImage = "";
+        const sectionImageEnabled = document.createElement("input");
+        sectionImageEnabled.type = "hidden";
+        sectionImageEnabled.value = hideSectionImage ? "false" : "true";
+        sectionImageEnabled.dataset.writeSectionImageEnabled = "";
+        const sectionImageFile = document.createElement("input");
+        sectionImageFile.type = "file";
+        sectionImageFile.accept = "image/gif,image/jpeg,image/png,image/webp";
+        sectionImageFile.hidden = true;
+        sectionImageFile.dataset.writeSectionImageFile = "";
+        const useSectionUrl = document.createElement("button");
+        useSectionUrl.type = "button";
+        useSectionUrl.dataset.writeSectionImageUrl = "";
+        useSectionUrl.textContent = "URL";
+        const useSectionFile = document.createElement("button");
+        useSectionFile.type = "button";
+        useSectionFile.dataset.writeSectionImageFileButton = "";
+        useSectionFile.textContent = "파일";
+        const useSectionVisual = document.createElement("button");
+        useSectionVisual.type = "button";
+        useSectionVisual.dataset.writeSectionImageUseVisual = "";
+        useSectionVisual.textContent = "자동 이미지";
+        const hideSectionVisual = document.createElement("button");
+        hideSectionVisual.type = "button";
+        hideSectionVisual.dataset.writeSectionImageHide = "";
+        hideSectionVisual.textContent = "이미지 끄기";
+        mediaTools.append(imageClassLabel, sectionImageInput, sectionImageEnabled, sectionImageFile, useSectionUrl, useSectionFile, useSectionVisual, hideSectionVisual);
+        sectionMedia.append(sectionImageButton, caption, mediaTools);
+        section.append(sectionMedia);
         paragraphs.forEach((paragraph) => section.append(createParagraph(paragraph)));
-        const railTools = document.createElement("div");
-        railTools.className = "writer-section-rail-tools";
-        railTools.contentEditable = "false";
-        const railClassLabel = document.createElement("label");
-        const railClassText = document.createElement("span");
-        railClassText.textContent = "레일 비주얼";
-        const railClassSelect = createSelect(imageClassOptions, railClass);
-        railClassSelect.dataset.writeSectionRailClass = "";
-        railClassLabel.append(railClassText, railClassSelect);
-        const railImageMode = hideRailImage ? "none" : railImage ? "custom" : "visual";
-        const railModeLabel = document.createElement("label");
-        const railModeText = document.createElement("span");
-        railModeText.textContent = "레일 이미지";
-        const railModeSelect = createSelect(imageModeOptions, railImageMode);
-        railModeSelect.dataset.writeSectionRailMode = "";
-        railModeLabel.append(railModeText, railModeSelect);
-        const railImageLabel = document.createElement("label");
-        railImageLabel.className = `writer-section-rail-url-field${railImageMode === "custom" ? " is-visible" : ""}`;
-        const railImageText = document.createElement("span");
-        railImageText.textContent = "레일 이미지 URL";
-        const railImageInput = document.createElement("input");
-        railImageInput.type = "url";
-        railImageInput.placeholder = "https://...";
-        railImageInput.value = railImage;
-        railImageInput.dataset.writeSectionRailImage = "";
-        railImageLabel.append(railImageText, railImageInput);
-        railTools.append(railClassLabel, railModeLabel, railImageLabel);
-        section.append(railTools);
         const tools = document.createElement("div");
         tools.className = "writer-section-tools";
         tools.contentEditable = "false";
@@ -382,22 +487,111 @@ if (writer) {
         section.append(tools);
         return section;
     };
+    const focusEditableEnd = (element) => {
+        if (!element) {
+            return;
+        }
+        window.requestAnimationFrame(() => {
+            element.focus();
+            const range = document.createRange();
+            range.selectNodeContents(element);
+            range.collapse(false);
+            const selection = window.getSelection();
+            selection?.removeAllRanges();
+            selection?.addRange(range);
+        });
+    };
+    const focusFirstParagraph = (section) => {
+        let paragraph = section.querySelector("[data-write-paragraph]");
+        if (!paragraph) {
+            paragraph = createParagraph("");
+            section.querySelector(".writer-section-tools")?.before(paragraph);
+        }
+        focusEditableEnd(paragraph);
+    };
+    const addSectionAfter = (section) => {
+        const nextSection = createSection();
+        if (section) {
+            section.after(nextSection);
+        }
+        else {
+            sectionsContainer()?.append(nextSection);
+        }
+        focusEditableEnd(nextSection.querySelector("[data-write-section-heading]"));
+        return nextSection;
+    };
+    const promptSectionImage = (section) => {
+        const imageInput = section.querySelector("[data-write-section-image]");
+        const enabledInput = section.querySelector("[data-write-section-image-enabled]");
+        const nextImage = window.prompt("본문 이미지 URL을 입력하세요. 비우면 자동 이미지로 사용됩니다.", imageInput?.value || "");
+        if (nextImage === null) {
+            return false;
+        }
+        if (imageInput) {
+            imageInput.value = nextImage.trim();
+        }
+        if (enabledInput) {
+            enabledInput.value = "true";
+        }
+        return true;
+    };
     const sectionsContainer = () => writer.querySelector("[data-write-body]");
     const sections = () => Array.from(writer.querySelectorAll("[data-write-section]"));
-    const updateSectionRailControlState = () => {
+    const updateSectionRailCards = () => {
         sections().forEach((section) => {
-            const mode = section.querySelector("[data-write-section-rail-mode]")?.value || "visual";
-            section.querySelector(".writer-section-rail-url-field")?.classList.toggle("is-visible", mode === "custom");
+            const index = sections().indexOf(section);
+            const railClass = section.querySelector("[data-write-section-rail-class]")?.value || metaValue("heroClass") || "image-material";
+            const railImage = section.querySelector("[data-write-section-rail-image]")?.value.trim() || "";
+            const isHidden = section.querySelector("[data-write-section-rail-hidden]")?.value === "true";
+            const preview = section.querySelector("[data-write-section-rail-preview]");
+            const card = section.querySelector("[data-write-section-rail-card]");
+            const railNo = section.querySelector("[data-write-section-rail-no]");
+            const hideButton = section.querySelector("[data-write-section-rail-hide]");
+            const sectionImageClass = section.querySelector("[data-write-section-image-class]")?.value || railClass;
+            const sectionImage = section.querySelector("[data-write-section-image]")?.value.trim() || "";
+            const imageEnabled = section.querySelector("[data-write-section-image-enabled]")?.value === "true";
+            const sectionMedia = section.querySelector("[data-write-section-media]");
+            const sectionImagePreview = section.querySelector("[data-write-section-image-preview]");
+            const sectionImageLabel = section.querySelector("[data-write-section-image-label]");
+            if (railNo) {
+                railNo.textContent = String(index + 1).padStart(2, "0");
+            }
+            card?.classList.toggle("is-rail-image-hidden", isHidden);
+            if (preview) {
+                setImageBlockVisual(preview, railClass, !isHidden ? railImage : "");
+            }
+            if (hideButton) {
+                hideButton.textContent = isHidden ? "이미지 보이기" : "이미지 숨김";
+            }
+            sectionMedia?.classList.toggle("is-section-image-disabled", !imageEnabled);
+            if (sectionImagePreview) {
+                setImageBlockVisual(sectionImagePreview, sectionImageClass, imageEnabled ? sectionImage : "");
+            }
+            if (sectionImageLabel) {
+                sectionImageLabel.textContent = imageEnabled
+                    ? sectionImage ? "본문 이미지 수정" : "자동 본문 이미지"
+                    : "본문 이미지 추가";
+            }
         });
     };
     const sectionData = () => sections().map((section) => ({
         heading: section.querySelector("[data-write-section-heading]")?.innerText.trim() || "",
         paragraphs: Array.from(section.querySelectorAll("[data-write-paragraph]")).map((paragraph) => paragraph.innerText.trim()).filter(Boolean),
+        railTitle: section.querySelector("[data-write-section-rail-title]")?.innerText.trim() || "",
+        railText: section.querySelector("[data-write-section-rail-text]")?.innerText.trim() || "",
         railClass: section.querySelector("[data-write-section-rail-class]")?.value || "",
-        railImage: section.querySelector("[data-write-section-rail-mode]")?.value === "custom"
-            ? section.querySelector("[data-write-section-rail-image]")?.value.trim() || ""
+        railImage: section.querySelector("[data-write-section-rail-hidden]")?.value === "true"
+            ? ""
+            : section.querySelector("[data-write-section-rail-image]")?.value.trim() || "",
+        hideRailImage: section.querySelector("[data-write-section-rail-hidden]")?.value === "true",
+        sectionImageClass: section.querySelector("[data-write-section-image-enabled]")?.value === "true"
+            ? section.querySelector("[data-write-section-image-class]")?.value || ""
             : "",
-        hideRailImage: section.querySelector("[data-write-section-rail-mode]")?.value === "none"
+        sectionImage: section.querySelector("[data-write-section-image-enabled]")?.value === "true"
+            ? section.querySelector("[data-write-section-image]")?.value.trim() || ""
+            : "",
+        sectionImageCaption: section.querySelector("[data-write-section-image-caption]")?.innerText.trim() || "",
+        hideSectionImage: section.querySelector("[data-write-section-image-enabled]")?.value !== "true"
     }));
     const selectedSubcategory = () => subcategorySelect?.selectedOptions.item(0) || null;
     const updateSubcategoryOptions = () => {
@@ -423,21 +617,11 @@ if (writer) {
         const heroImage = metaValue("heroImage");
         const useCustomImage = imageMode === "custom" && heroImage.length > 0;
         const isHidden = imageMode === "none";
-        const firstSection = sections()[0];
-        const railClass = firstSection?.querySelector("[data-write-section-rail-class]")?.value || metaValue("railClass") || heroClass;
-        const railImageMode = firstSection?.querySelector("[data-write-section-rail-mode]")?.value || metaValue("railImageMode") || "visual";
-        const railImage = firstSection?.querySelector("[data-write-section-rail-image]")?.value.trim() || metaValue("railImage");
-        const useCustomRailImage = railImageMode === "custom" && railImage.length > 0;
         heroShell?.classList.toggle("is-hidden", isHidden);
         imageUrlField?.classList.toggle("is-visible", imageMode === "custom");
-        rail?.classList.toggle("is-rail-image-hidden", railImageMode === "none");
-        railImageUrlField?.classList.toggle("is-visible", railImageMode === "custom");
-        updateSectionRailControlState();
+        updateSectionRailCards();
         if (heroPreview) {
             setImageBlockVisual(heroPreview, heroClass, useCustomImage ? heroImage : "");
-        }
-        if (railVisual) {
-            setImageBlockVisual(railVisual, railClass, useCustomRailImage ? railImage : "");
         }
     };
     const updateRailMode = () => {
@@ -455,17 +639,26 @@ if (writer) {
         const sectionValues = sectionData();
         const nextSections = sectionValues.map((section, index) => {
             const previous = base.sections[index];
+            const heading = { ko: section.heading || previous?.heading.ko || "섹션 제목", en: previous?.heading.en || "TODO: English section heading" };
+            const paragraphs = {
+                ko: section.paragraphs.length > 0 ? section.paragraphs : previous?.paragraphs.ko || [""],
+                en: previous?.paragraphs.en || section.paragraphs.map(() => "TODO: English paragraph")
+            };
             return {
-                heading: { ko: section.heading || previous?.heading.ko || "섹션 제목", en: previous?.heading.en || "TODO: English section heading" },
-                paragraphs: {
-                    ko: section.paragraphs.length > 0 ? section.paragraphs : previous?.paragraphs.ko || [""],
-                    en: previous?.paragraphs.en || section.paragraphs.map(() => "TODO: English paragraph")
-                },
+                heading,
+                paragraphs,
+                railTitle: { ko: section.railTitle || previous?.railTitle?.ko || heading.ko, en: previous?.railTitle?.en || heading.en },
+                railText: { ko: section.railText || previous?.railText?.ko || paragraphs.ko[0] || "", en: previous?.railText?.en || paragraphs.en[0] || "" },
                 railClass: section.railClass || previous?.railClass || metaValue("railClass") || base.railClass || base.heroClass,
                 railImage: section.railImage,
-                hideRailImage: section.hideRailImage
+                hideRailImage: section.hideRailImage,
+                sectionImageClass: section.sectionImageClass || previous?.sectionImageClass || "",
+                sectionImage: section.sectionImage,
+                sectionImageCaption: { ko: section.sectionImageCaption || previous?.sectionImageCaption?.ko || "", en: previous?.sectionImageCaption?.en || "" },
+                hideSectionImage: section.hideSectionImage
             };
         });
+        const firstNextSection = nextSections[0];
         return normalizeArticle({
             ...base,
             slug: toSlug(metaValue("slug") || textValue("title") || base.slug),
@@ -492,8 +685,8 @@ if (writer) {
             railClass: metaValue("railClass") || base.railClass || base.heroClass,
             railImage: metaValue("railImageMode") === "custom" ? metaValue("railImage") : "",
             hideRailImage: metaValue("railImageMode") === "none",
-            railTitle: { ko: textValue("railTitle") || base.railTitle?.ko || "", en: base.railTitle?.en || base.title.en },
-            railText: { ko: textValue("railText") || base.railText?.ko || "", en: base.railText?.en || base.deck.en },
+            railTitle: firstNextSection?.railTitle || base.railTitle,
+            railText: firstNextSection?.railText || base.railText,
             sections: nextSections.length > 0 ? nextSections : base.sections
         });
     };
@@ -511,6 +704,55 @@ if (writer) {
         link.click();
         URL.revokeObjectURL(url);
     };
+    const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => resolve(String(reader.result || "")));
+        reader.addEventListener("error", () => reject(reader.error || new Error("File read failed")));
+        reader.readAsDataURL(file);
+    });
+    const uploadImageFile = async (file) => {
+        if (!/^image\/(gif|jpe?g|png|webp)$/.test(file.type)) {
+            throw new Error("GIF, JPEG, PNG, WebP 이미지만 업로드할 수 있습니다.");
+        }
+        if (file.size > 8 * 1024 * 1024) {
+            throw new Error("이미지는 8MB 이하로 올려주세요.");
+        }
+        const dataUrl = await readFileAsDataUrl(file);
+        try {
+            const response = await fetch("/api/admin/uploads", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ fileName: file.name, dataUrl })
+            });
+            if (!response.ok) {
+                throw new Error(`Upload failed: ${response.status}`);
+            }
+            const result = await response.json();
+            if (!result.url) {
+                throw new Error("Upload URL missing");
+            }
+            return result.url;
+        }
+        catch {
+            setStatus("정적 페이지에서는 파일 업로드 서버가 없어 data URL로 임시 반영했습니다. 로컬 서버에서 파일 저장하면 public/uploads에 저장됩니다.");
+            return dataUrl;
+        }
+    };
+    const applyImageFileToSection = async (section, file) => {
+        const imageInput = section.querySelector("[data-write-section-image]");
+        const enabledInput = section.querySelector("[data-write-section-image-enabled]");
+        const caption = section.querySelector("[data-write-section-image-caption]");
+        const imageUrl = await uploadImageFile(file);
+        if (imageInput) {
+            imageInput.value = imageUrl;
+        }
+        if (enabledInput) {
+            enabledInput.value = "true";
+        }
+        if (caption && caption.innerText.trim() === "") {
+            caption.innerText = file.name.replace(/\.[^.]+$/, "");
+        }
+    };
     const saveArticlesToProject = async () => {
         adminArticles[currentIndex] = formArticle();
         saveCollection("저장 중...");
@@ -523,7 +765,8 @@ if (writer) {
             if (!response.ok) {
                 throw new Error(`Save failed: ${response.status}`);
             }
-            setStatus("src/content/magazine.ts에 저장했습니다. export 후 push하면 반영됩니다.");
+            const result = await response.json().catch(() => null);
+            setStatus(`src/content/magazine.ts에 저장했고 로컬 서버에 바로 반영했습니다.${result?.count ? ` (${result.count}개)` : ""}`);
         }
         catch {
             downloadArticlesFile();
@@ -538,15 +781,28 @@ if (writer) {
         if (!adminList) {
             return;
         }
+        const categoryRank = (globalIndex) => {
+            const article = adminArticles[globalIndex];
+            if (!article) {
+                return 0;
+            }
+            return adminArticles.slice(0, globalIndex + 1).filter((item) => item.category === article.category).length;
+        };
         const visibleArticles = adminArticles
             .map((article, index) => ({ article, index }))
             .filter(({ article }) => articleMatchesFilter(article));
-        adminList.innerHTML = visibleArticles.length > 0 ? visibleArticles.map(({ article, index }) => `
+        adminList.innerHTML = visibleArticles.length > 0 ? visibleArticles.map(({ article, index }, rank) => {
+            const globalNo = String(index + 1).padStart(2, "0");
+            const filteredNo = String(rank + 1).padStart(2, "0");
+            const categoryNo = String(categoryRank(index)).padStart(2, "0");
+            const isFiltered = activeCategoryFilter !== "all";
+            return `
       <button type="button" class="admin-list-item ${index === currentIndex ? "is-active" : ""}" data-admin-index="${index}">
-        <span>${String(index + 1).padStart(2, "0")}</span>
+        <span class="admin-list-no"><strong>${isFiltered ? filteredNo : globalNo}</strong><small>${isFiltered ? `전체 ${globalNo}` : `${article.category} ${categoryNo}`}</small></span>
         <strong>${article.title.ko}</strong>
         <small>${article.category} / ${article.subcategoryKey}</small>
-      </button>`).join("") : `<p class="admin-empty">이 카테고리의 기사가 아직 없습니다. 새 기사를 만들면 현재 필터에 맞춰 시작합니다.</p>`;
+      </button>`;
+        }).join("") : `<p class="admin-empty">이 카테고리의 기사가 아직 없습니다. 새 기사를 만들면 현재 필터에 맞춰 시작합니다.</p>`;
         if (adminCount) {
             adminCount.textContent = activeCategoryFilter === "all" ? String(adminArticles.length) : `${visibleArticles.length}/${adminArticles.length}`;
         }
@@ -561,6 +817,20 @@ if (writer) {
                 countElement.textContent = String(count);
             }
         });
+    };
+    const moveCurrentArticle = (direction) => {
+        adminArticles[currentIndex] = formArticle();
+        const visibleIndexes = adminArticles
+            .map((_, index) => index)
+            .filter((index) => activeCategoryFilter === "all" || adminArticles[index]?.category === activeCategoryFilter);
+        const position = visibleIndexes.indexOf(currentIndex);
+        const targetIndex = visibleIndexes[position + direction];
+        if (targetIndex === undefined) {
+            return false;
+        }
+        [adminArticles[currentIndex], adminArticles[targetIndex]] = [adminArticles[targetIndex], adminArticles[currentIndex]];
+        applyArticle(targetIndex);
+        return true;
     };
     const writeMeta = (key, value) => {
         const field = metaField(key);
@@ -589,12 +859,10 @@ if (writer) {
         writeText("title", article.title.ko);
         writeText("deck", article.deck.ko);
         writeText("quote", article.quote.ko);
-        writeText("railTitle", article.railTitle?.ko || article.sections[0]?.heading.ko || article.title.ko);
-        writeText("railText", article.railText?.ko || article.sections[0]?.paragraphs.ko[0] || article.deck.ko);
         const container = sectionsContainer();
         if (container) {
             container.querySelectorAll("[data-write-section]").forEach((section) => section.remove());
-            article.sections.forEach((section) => container.append(createSection(section.heading.ko, section.paragraphs.ko, section.railClass || article.railClass || article.heroClass, section.railImage || "", Boolean(section.hideRailImage))));
+            article.sections.forEach((section) => container.append(createSection(section.heading.ko, section.paragraphs.ko, section.railClass || article.railClass || article.heroClass, section.railImage || "", Boolean(section.hideRailImage), section.railTitle?.ko || section.heading.ko, section.railText?.ko || section.paragraphs.ko[0] || "", section.sectionImageClass || "", section.sectionImage || "", Boolean(section.hideSectionImage), section.sectionImageCaption?.ko || "")));
         }
         renderAdminList();
         updatePreview();
@@ -625,20 +893,183 @@ if (writer) {
         window.clearTimeout(saveTimer);
         saveTimer = window.setTimeout(saveState, 250);
     };
+    const handleEditorKeydown = async (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) {
+            return;
+        }
+        if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "s") {
+            event.preventDefault();
+            await saveArticlesToProject();
+            return;
+        }
+        const section = target.closest("[data-write-section]");
+        if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+            event.preventDefault();
+            addSectionAfter(section);
+            scheduleSave();
+            return;
+        }
+        if (event.key === "Backspace" && target.matches("[data-write-paragraph]") && target.innerText.trim() === "" && section) {
+            const sectionParagraphs = Array.from(section.querySelectorAll("[data-write-paragraph]"));
+            if (sectionParagraphs.length > 1) {
+                event.preventDefault();
+                const index = sectionParagraphs.indexOf(target);
+                const nextFocus = sectionParagraphs[index - 1] || section.querySelector("[data-write-section-heading]");
+                target.remove();
+                focusEditableEnd(nextFocus);
+                scheduleSave();
+            }
+            return;
+        }
+        if (event.key !== "Enter" || event.shiftKey || event.isComposing || event.metaKey || event.ctrlKey || event.altKey) {
+            return;
+        }
+        if (target.matches("[data-write-section-heading]") && section) {
+            event.preventDefault();
+            focusFirstParagraph(section);
+            return;
+        }
+        if (!target.matches("[data-write-paragraph]") || !section) {
+            return;
+        }
+        const value = target.innerText.trim().toLowerCase();
+        if (value === "/image") {
+            event.preventDefault();
+            if (promptSectionImage(section)) {
+                target.remove();
+                focusFirstParagraph(section);
+                scheduleSave();
+            }
+            return;
+        }
+        if (value === "/section" || value === "") {
+            event.preventDefault();
+            if (value === "" && section.querySelectorAll("[data-write-paragraph]").length > 1) {
+                target.remove();
+            }
+            addSectionAfter(section);
+            scheduleSave();
+            return;
+        }
+        event.preventDefault();
+        const paragraph = createParagraph("");
+        target.after(paragraph);
+        focusEditableEnd(paragraph);
+        scheduleSave();
+    };
+    const handleWriterChange = async (event) => {
+        const target = event.target;
+        if (target instanceof HTMLInputElement && target.matches("[data-write-section-image-file]")) {
+            const section = target.closest("[data-write-section]");
+            const file = target.files?.[0];
+            if (section && file) {
+                try {
+                    setStatus("이미지 파일을 저장 중...");
+                    await applyImageFileToSection(section, file);
+                    setStatus("본문 이미지 파일을 반영했습니다.");
+                }
+                catch (error) {
+                    setStatus(error instanceof Error ? error.message : "이미지 업로드에 실패했습니다.");
+                }
+                target.value = "";
+            }
+        }
+        scheduleSave();
+    };
     applyArticle(0);
+    writer.addEventListener("keydown", (event) => {
+        void handleEditorKeydown(event);
+    });
     writer.addEventListener("input", scheduleSave);
-    writer.addEventListener("change", scheduleSave);
+    writer.addEventListener("change", (event) => {
+        void handleWriterChange(event);
+    });
     writer.addEventListener("click", async (event) => {
         const target = event.target;
         if (!(target instanceof HTMLElement)) {
             return;
         }
         if (target.closest("[data-write-add-section]")) {
-            sectionsContainer()?.append(createSection());
+            addSectionAfter(sections().at(-1));
             scheduleSave();
             return;
         }
         const section = target.closest("[data-write-section]");
+        if (target.closest("[data-write-section-rail-image-button]") && section) {
+            const imageInput = section.querySelector("[data-write-section-rail-image]");
+            const hiddenInput = section.querySelector("[data-write-section-rail-hidden]");
+            const nextImage = window.prompt("섹션 레일 이미지 URL을 입력하세요. 비우면 자동 비주얼로 돌아갑니다.", imageInput?.value || "");
+            if (nextImage === null) {
+                return;
+            }
+            if (imageInput) {
+                imageInput.value = nextImage.trim();
+            }
+            if (hiddenInput) {
+                hiddenInput.value = "false";
+            }
+            scheduleSave();
+            return;
+        }
+        if (target.closest("[data-write-section-rail-use-visual]") && section) {
+            const imageInput = section.querySelector("[data-write-section-rail-image]");
+            const hiddenInput = section.querySelector("[data-write-section-rail-hidden]");
+            if (imageInput) {
+                imageInput.value = "";
+            }
+            if (hiddenInput) {
+                hiddenInput.value = "false";
+            }
+            scheduleSave();
+            return;
+        }
+        if (target.closest("[data-write-section-rail-hide]") && section) {
+            const hiddenInput = section.querySelector("[data-write-section-rail-hidden]");
+            if (hiddenInput) {
+                hiddenInput.value = hiddenInput.value === "true" ? "false" : "true";
+            }
+            scheduleSave();
+            return;
+        }
+        if (target.closest("[data-write-section-image-button]") && section) {
+            if (!promptSectionImage(section)) {
+                return;
+            }
+            scheduleSave();
+            return;
+        }
+        if (target.closest("[data-write-section-image-url]") && section) {
+            if (!promptSectionImage(section)) {
+                return;
+            }
+            scheduleSave();
+            return;
+        }
+        if (target.closest("[data-write-section-image-file-button]") && section) {
+            section.querySelector("[data-write-section-image-file]")?.click();
+            return;
+        }
+        if (target.closest("[data-write-section-image-use-visual]") && section) {
+            const imageInput = section.querySelector("[data-write-section-image]");
+            const enabledInput = section.querySelector("[data-write-section-image-enabled]");
+            if (imageInput) {
+                imageInput.value = "";
+            }
+            if (enabledInput) {
+                enabledInput.value = "true";
+            }
+            scheduleSave();
+            return;
+        }
+        if (target.closest("[data-write-section-image-hide]") && section) {
+            const enabledInput = section.querySelector("[data-write-section-image-enabled]");
+            if (enabledInput) {
+                enabledInput.value = "false";
+            }
+            scheduleSave();
+            return;
+        }
         if (target.closest("[data-write-add-paragraph]") && section) {
             section.querySelector(".writer-section-tools")?.before(createParagraph("새 문단을 입력하세요."));
             scheduleSave();
@@ -723,18 +1154,16 @@ if (writer) {
             saveCollection("기사를 삭제했습니다.");
             return;
         }
-        if (target.closest("[data-admin-move-up]") && currentIndex > 0) {
-            adminArticles[currentIndex] = formArticle();
-            [adminArticles[currentIndex - 1], adminArticles[currentIndex]] = [adminArticles[currentIndex], adminArticles[currentIndex - 1]];
-            applyArticle(currentIndex - 1);
-            saveCollection("순서를 위로 이동했습니다.");
+        if (target.closest("[data-admin-move-up]")) {
+            if (moveCurrentArticle(-1)) {
+                saveCollection(activeCategoryFilter === "all" ? "전체 순서를 위로 이동했습니다." : "현재 카테고리 안에서 순서를 위로 이동했습니다.");
+            }
             return;
         }
-        if (target.closest("[data-admin-move-down]") && currentIndex < adminArticles.length - 1) {
-            adminArticles[currentIndex] = formArticle();
-            [adminArticles[currentIndex + 1], adminArticles[currentIndex]] = [adminArticles[currentIndex], adminArticles[currentIndex + 1]];
-            applyArticle(currentIndex + 1);
-            saveCollection("순서를 아래로 이동했습니다.");
+        if (target.closest("[data-admin-move-down]")) {
+            if (moveCurrentArticle(1)) {
+                saveCollection(activeCategoryFilter === "all" ? "전체 순서를 아래로 이동했습니다." : "현재 카테고리 안에서 순서를 아래로 이동했습니다.");
+            }
             return;
         }
         if (target.closest("[data-admin-copy-all]")) {
