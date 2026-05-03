@@ -97,12 +97,14 @@ if (desktopNav && desktopNavItems.length > 0) {
 
   const closeSubnav = (): void => {
     clearNavCloseTimer();
+    header?.classList.remove("is-nav-expanded");
     desktopNav.classList.remove("is-submenu-active");
     desktopNavItems.forEach((item) => item.classList.remove("is-submenu-open"));
   };
 
   const openSubnav = (item: HTMLElement): void => {
     clearNavCloseTimer();
+    header?.classList.add("is-nav-expanded");
     desktopNav.classList.add("is-submenu-active");
     desktopNavItems.forEach((navItem) => navItem.classList.toggle("is-submenu-open", navItem === item));
   };
