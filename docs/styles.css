@@ -13335,6 +13335,21 @@ html[lang="ko"] .method-item h3 {
   will-change: opacity, transform;
 }
 
+@media (min-width: 1181px) {
+  .home-cover-grid {
+    grid-template-columns: minmax(20rem, 0.44fr) minmax(0, 0.56fr) !important;
+    width: auto;
+    max-width: 100%;
+    margin-inline: 0;
+  }
+
+  .home-issue-index,
+  .home-issue-index[data-scroll-motion] {
+    width: min(100%, clamp(24rem, 29vw, 31.5rem));
+    max-width: 100%;
+  }
+}
+
 .home-index-headline {
   display: block;
 }
@@ -13687,7 +13702,7 @@ html[lang="ko"] .home-story-line strong {
 .home-story-more,
 .home-story-more[data-scroll-motion] {
   display: inline-grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: max-content max-content;
   gap: 1rem;
   align-items: baseline;
   justify-self: start;
@@ -13701,6 +13716,11 @@ html[lang="ko"] .home-story-line strong {
   font-size: clamp(0.95rem, 1vw, 1.08rem);
   font-weight: 430;
   letter-spacing: -0.006em;
+  white-space: nowrap;
+}
+
+.home-story-more span {
+  white-space: nowrap;
 }
 
 .home-story-more:hover,
