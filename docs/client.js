@@ -173,6 +173,7 @@ if (writer) {
     const storageKey = writer.dataset.writeStorageKey || "the-thing-admin-articles";
     const issueStorageKey = `${storageKey}-issue`;
     const modeStorageKey = `${storageKey}-mode`;
+    const localeStorageKey = `${storageKey}-locale`;
     const authKey = `${storageKey}-auth`;
     const adminPassword = writer.dataset.adminPassword || "promise";
     const lock = writer.querySelector("[data-admin-lock]");
@@ -194,6 +195,9 @@ if (writer) {
     const outputArea = writer.querySelector("[data-write-output]");
     const status = writer.querySelector("[data-write-status]");
     const modeButtons = writer.querySelectorAll("[data-write-mode-button]");
+    const localeButtons = writer.querySelectorAll("[data-write-locale-button]");
+    const activeLocaleLabels = writer.querySelectorAll("[data-write-active-locale]");
+    const activeLanguageLabels = writer.querySelectorAll("[data-write-active-language]");
     const categorySelect = writer.querySelector('[data-write-meta="category"]');
     const subcategorySelect = writer.querySelector('[data-write-meta="subcategory"]');
     const railModeSelect = writer.querySelector('[data-write-meta="railMode"]');
@@ -213,6 +217,10 @@ if (writer) {
     let currentIndex = 0;
     let currentIssueIndex = 0;
     let activeCategoryFilter = "all";
+    const storedWriteLocale = window.localStorage.getItem(localeStorageKey);
+    let activeWriteLocale = storedWriteLocale === "ko" || storedWriteLocale === "en"
+        ? storedWriteLocale
+        : document.documentElement.lang === "en" ? "en" : "ko";
     const quoteTs = (value) => JSON.stringify(value.trim());
     const splitTags = (value) => value.split(",").map((tag) => tag.trim()).filter(Boolean);
     const toSlug = (value) => value
@@ -240,6 +248,33 @@ if (writer) {
             button.setAttribute("aria-pressed", String(isActive));
         });
     };
+    const localeLabel = (locale) => locale === "ko" ? "KR" : "EN";
+    const languageName = (locale) => locale === "ko" ? "한국어" : "English";
+    const updateLocaleControls = () => {
+        writer.dataset.writeLocale = activeWriteLocale;
+        window.localStorage.setItem(localeStorageKey, activeWriteLocale);
+        localeButtons.forEach((button) => {
+            const isActive = button.dataset.writeLocaleButton === activeWriteLocale;
+            button.classList.toggle("is-active", isActive);
+            button.setAttribute("aria-pressed", String(isActive));
+        });
+        activeLocaleLabels.forEach((label) => {
+            label.textContent = localeLabel(activeWriteLocale);
+        });
+        activeLanguageLabels.forEach((label) => {
+            label.textContent = languageName(activeWriteLocale);
+        });
+    };
+    const localizedText = (base, value) => ({
+        ...base,
+        [activeWriteLocale]: value || base[activeWriteLocale] || ""
+    });
+    const localizedList = (base, value) => ({
+        ...base,
+        [activeWriteLocale]: value.length > 0 ? value : base[activeWriteLocale] || []
+    });
+    const activeText = (value) => value?.[activeWriteLocale] || "";
+    const activeList = (value) => value?.[activeWriteLocale] || [];
     const escapeHtmlClient = (value) => value
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -540,15 +575,16 @@ if (writer) {
     const imageClassOptionsHtml = (selectedClass) => imageClasses
         .map((imageClass) => `<option value="${imageClass}"${imageClass === selectedClass ? " selected" : ""}>${imageClass}</option>`)
         .join("");
-    const issueFeatureField = (feature, key) => {
-        const [group, locale] = key.split(".");
+    const issueFeatureField = (feature, group) => {
         const value = feature[group];
-        return escapeHtmlClient(value?.[locale] || "");
+        if (Array.isArray(value?.[activeWriteLocale])) {
+            return escapeHtmlClient((value[activeWriteLocale] || []).join("\n"));
+        }
+        return escapeHtmlClient(value?.[activeWriteLocale] || "");
     };
-    const issueCreditField = (credit, key) => {
-        const [group, locale] = key.split(".");
+    const issueCreditField = (credit, group) => {
         const value = credit[group];
-        return escapeHtmlClient(value?.[locale] || "");
+        return escapeHtmlClient(value?.[activeWriteLocale] || "");
     };
     const renderIssueFeatures = () => {
         if (!issueFeatures) {
@@ -558,32 +594,39 @@ if (writer) {
       <article class="issue-feature-editor" data-write-issue-feature>
         <div class="issue-feature-editor-head">
           <span>${String(index + 1).padStart(2, "0")}</span>
-          <strong>${escapeHtmlClient(feature.title.ko || feature.title.en || feature.slug)}</strong>
-          <button type="button" data-write-issue-feature-remove>삭제</button>
+          <strong>${escapeHtmlClient(feature.title[activeWriteLocale] || feature.title.ko || feature.title.en || feature.slug)}</strong>
         </div>
         <div class="issue-feature-editor-grid">
-          <button type="button" class="issue-feature-visual-button" data-write-issue-feature-preview aria-label="이슈 장면 비주얼 좌우 클릭으로 변경">
-            <span class="image-block ${escapeHtmlClient(feature.heroClass)}"></span>
-            <small>Left / Right visual</small>
-          </button>
-          <label><span>Slug</span><input type="text" value="${escapeHtmlClient(feature.slug)}" data-write-issue-feature-field="slug" /></label>
-          <label><span>Role KR</span><input type="text" value="${issueFeatureField(feature, "role.ko")}" data-write-issue-feature-field="role.ko" /></label>
-          <label><span>Role EN</span><input type="text" value="${issueFeatureField(feature, "role.en")}" data-write-issue-feature-field="role.en" /></label>
-          <label><span>Visual</span><select data-write-issue-feature-field="heroClass">${imageClassOptionsHtml(feature.heroClass)}</select></label>
-          <label><span>Title KR</span><input type="text" value="${issueFeatureField(feature, "title.ko")}" data-write-issue-feature-field="title.ko" /></label>
-          <label><span>Title EN</span><input type="text" value="${issueFeatureField(feature, "title.en")}" data-write-issue-feature-field="title.en" /></label>
-          <label><span>Intro KR</span><textarea rows="2" data-write-issue-feature-field="intro.ko">${issueFeatureField(feature, "intro.ko")}</textarea></label>
-          <label><span>Intro EN</span><textarea rows="2" data-write-issue-feature-field="intro.en">${issueFeatureField(feature, "intro.en")}</textarea></label>
-          <label><span>Excerpt KR</span><textarea rows="2" data-write-issue-feature-field="excerpt.ko">${issueFeatureField(feature, "excerpt.ko")}</textarea></label>
-          <label><span>Excerpt EN</span><textarea rows="2" data-write-issue-feature-field="excerpt.en">${issueFeatureField(feature, "excerpt.en")}</textarea></label>
-          <label><span>Body KR</span><textarea rows="4" data-write-issue-feature-field="body.ko">${escapeHtmlClient(feature.body.ko.join("\n"))}</textarea></label>
-          <label><span>Body EN</span><textarea rows="4" data-write-issue-feature-field="body.en">${escapeHtmlClient(feature.body.en.join("\n"))}</textarea></label>
-          <label><span>Credit KR</span><input type="text" value="${issueFeatureField(feature, "credit.ko")}" data-write-issue-feature-field="credit.ko" /></label>
-          <label><span>Credit EN</span><input type="text" value="${issueFeatureField(feature, "credit.en")}" data-write-issue-feature-field="credit.en" /></label>
-          <label><span>Location KR</span><input type="text" value="${issueFeatureField(feature, "location.ko")}" data-write-issue-feature-field="location.ko" /></label>
-          <label><span>Location EN</span><input type="text" value="${issueFeatureField(feature, "location.en")}" data-write-issue-feature-field="location.en" /></label>
-          <label><span>Read KR</span><input type="text" value="${issueFeatureField(feature, "readTime.ko")}" data-write-issue-feature-field="readTime.ko" /></label>
-          <label><span>Read EN</span><input type="text" value="${issueFeatureField(feature, "readTime.en")}" data-write-issue-feature-field="readTime.en" /></label>
+          <div class="issue-feature-common">
+            <button type="button" class="issue-feature-visual-button" data-write-issue-feature-preview aria-label="이슈 장면 비주얼 좌우 클릭으로 변경">
+              <span class="image-block ${escapeHtmlClient(feature.heroClass)}"></span>
+              <small>Left / Right visual</small>
+            </button>
+            <label><span>Slug</span><input type="text" value="${escapeHtmlClient(feature.slug)}" data-write-issue-feature-field="slug" /></label>
+            <label><span>Visual</span><select data-write-issue-feature-field="heroClass">${imageClassOptionsHtml(feature.heroClass)}</select></label>
+          </div>
+          <section class="issue-feature-writing-panel" aria-label="${languageName(activeWriteLocale)} scene fields">
+            <header>
+              <span>${localeLabel(activeWriteLocale)}</span>
+              <strong>${languageName(activeWriteLocale)}</strong>
+            </header>
+            <div class="issue-field-row">
+              <label><span>Role</span><input type="text" value="${issueFeatureField(feature, "role")}" data-write-issue-feature-field="role" /></label>
+              <label><span>Title</span><input type="text" value="${issueFeatureField(feature, "title")}" data-write-issue-feature-field="title" /></label>
+            </div>
+            <label><span>Intro</span><textarea rows="2" data-write-issue-feature-field="intro">${issueFeatureField(feature, "intro")}</textarea></label>
+            <label><span>Excerpt</span><textarea rows="2" data-write-issue-feature-field="excerpt">${issueFeatureField(feature, "excerpt")}</textarea></label>
+            <label><span>Body</span><textarea rows="5" data-write-issue-feature-field="body">${issueFeatureField(feature, "body")}</textarea></label>
+            <div class="issue-field-row">
+              <label><span>Credit</span><input type="text" value="${issueFeatureField(feature, "credit")}" data-write-issue-feature-field="credit" /></label>
+              <label><span>Location</span><input type="text" value="${issueFeatureField(feature, "location")}" data-write-issue-feature-field="location" /></label>
+              <label><span>Read</span><input type="text" value="${issueFeatureField(feature, "readTime")}" data-write-issue-feature-field="readTime" /></label>
+            </div>
+            <div class="issue-feature-actions">
+              <button type="button" data-write-issue-feature-add-after>아래 장면 추가</button>
+              <button type="button" data-write-issue-feature-remove${adminIssue.features.length <= 1 ? " disabled" : ""}>삭제</button>
+            </div>
+          </section>
         </div>
       </article>`).join("");
     };
@@ -594,11 +637,10 @@ if (writer) {
         issueCredits.innerHTML = adminIssue.credits.map((credit, index) => `
       <div class="issue-credit-editor" data-write-issue-credit>
         <span>${String(index + 1).padStart(2, "0")}</span>
-        <label><small>Label KR</small><input type="text" value="${issueCreditField(credit, "label.ko")}" data-write-issue-credit-field="label.ko" /></label>
-        <label><small>Label EN</small><input type="text" value="${issueCreditField(credit, "label.en")}" data-write-issue-credit-field="label.en" /></label>
-        <label><small>Value KR</small><input type="text" value="${issueCreditField(credit, "value.ko")}" data-write-issue-credit-field="value.ko" /></label>
-        <label><small>Value EN</small><input type="text" value="${issueCreditField(credit, "value.en")}" data-write-issue-credit-field="value.en" /></label>
-        <button type="button" data-write-issue-credit-remove>삭제</button>
+        <label><small>${localeLabel(activeWriteLocale)} Label</small><input type="text" value="${issueCreditField(credit, "label")}" data-write-issue-credit-field="label" /></label>
+        <label><small>${localeLabel(activeWriteLocale)} Value</small><input type="text" value="${issueCreditField(credit, "value")}" data-write-issue-credit-field="value" /></label>
+        <button type="button" data-write-issue-credit-add-after>아래 크레딧 추가</button>
+        <button type="button" data-write-issue-credit-remove${adminIssue.credits.length <= 1 ? " disabled" : ""}>삭제</button>
       </div>`).join("");
     };
     const renderIssueList = () => {
@@ -607,14 +649,14 @@ if (writer) {
         }
         if (issueList instanceof HTMLSelectElement) {
             issueList.innerHTML = adminIssues.map((issue, index) => `
-        <option value="${index}"${index === currentIssueIndex ? " selected" : ""}>${escapeHtmlClient(issue.number)} · ${escapeHtmlClient(issue.title.ko || issue.title.en || issue.number)}</option>`).join("");
+        <option value="${index}"${index === currentIssueIndex ? " selected" : ""}>${escapeHtmlClient(issue.number)} · ${escapeHtmlClient(issue.title[activeWriteLocale] || issue.title.ko || issue.title.en || issue.number)}</option>`).join("");
         }
         else {
             issueList.innerHTML = adminIssues.map((issue, index) => `
         <button type="button" class="issue-admin-list-item ${index === currentIssueIndex ? "is-active" : ""}" data-write-issue-index="${index}" aria-pressed="${index === currentIssueIndex ? "true" : "false"}">
           <span><strong>${escapeHtmlClient(issue.number)}</strong><small>${index === 0 ? "Latest" : `Stack ${String(index + 1).padStart(2, "0")}`}</small></span>
-          <strong>${escapeHtmlClient(issue.title.ko || issue.title.en || issue.number)}</strong>
-          <small>${escapeHtmlClient(issue.date.ko || issue.date.en)} / ${issue.features.length} scenes</small>
+          <strong>${escapeHtmlClient(issue.title[activeWriteLocale] || issue.title.ko || issue.title.en || issue.number)}</strong>
+          <small>${escapeHtmlClient(issue.date[activeWriteLocale] || issue.date.ko || issue.date.en)} / ${issue.features.length} scenes</small>
         </button>`).join("");
         }
         if (issueCount) {
@@ -623,47 +665,51 @@ if (writer) {
     };
     const updateIssueSummary = () => {
         if (issueSummaryTitle) {
-            issueSummaryTitle.textContent = adminIssue.title.ko || adminIssue.title.en || adminIssue.number;
+            issueSummaryTitle.textContent = adminIssue.title[activeWriteLocale] || adminIssue.title.ko || adminIssue.title.en || adminIssue.number;
         }
         if (issueSummarySubtitle) {
-            issueSummarySubtitle.textContent = adminIssue.subtitle.ko || adminIssue.subtitle.en;
+            issueSummarySubtitle.textContent = adminIssue.subtitle[activeWriteLocale] || adminIssue.subtitle.ko || adminIssue.subtitle.en;
         }
         if (issueSummaryMeta) {
             issueSummaryMeta.textContent = `장면 ${adminIssue.features.length} / 크레딧 ${adminIssue.credits.length}`;
         }
     };
-    const collectIssueFeature = (feature) => {
+    const collectIssueFeature = (feature, index) => {
+        const base = adminIssue.features[index] || fallbackIssueFeature();
         const field = (key) => feature.querySelector(`[data-write-issue-feature-field="${key}"]`)?.value.trim() || "";
         return normalizeIssueFeature({
-            slug: toSlug(field("slug") || field("title.en") || field("title.ko") || "new-scene"),
-            role: { ko: field("role.ko"), en: field("role.en") },
-            title: { ko: field("title.ko"), en: field("title.en") },
-            intro: { ko: field("intro.ko"), en: field("intro.en") },
-            excerpt: { ko: field("excerpt.ko"), en: field("excerpt.en") },
-            body: { ko: linesFromTextarea(field("body.ko")), en: linesFromTextarea(field("body.en")) },
-            credit: { ko: field("credit.ko"), en: field("credit.en") },
-            location: { ko: field("location.ko"), en: field("location.en") },
-            readTime: { ko: field("readTime.ko"), en: field("readTime.en") },
+            ...base,
+            slug: toSlug(field("slug") || field("title") || base.slug || "new-scene"),
+            role: localizedText(base.role, field("role")),
+            title: localizedText(base.title, field("title")),
+            intro: localizedText(base.intro, field("intro")),
+            excerpt: localizedText(base.excerpt, field("excerpt")),
+            body: localizedList(base.body, linesFromTextarea(field("body"))),
+            credit: localizedText(base.credit, field("credit")),
+            location: localizedText(base.location, field("location")),
+            readTime: localizedText(base.readTime, field("readTime")),
             heroClass: field("heroClass") || "image-material"
         });
     };
-    const collectIssueCredit = (credit) => {
+    const collectIssueCredit = (credit, index) => {
+        const base = adminIssue.credits[index] || { label: { ko: "", en: "" }, value: { ko: "", en: "" } };
         const field = (key) => credit.querySelector(`[data-write-issue-credit-field="${key}"]`)?.value.trim() || "";
         return {
-            label: { ko: field("label.ko"), en: field("label.en") },
-            value: { ko: field("value.ko"), en: field("value.en") }
+            label: localizedText(base.label, field("label")),
+            value: localizedText(base.value, field("value"))
         };
     };
     const formIssue = () => normalizeIssue({
+        ...adminIssue,
         number: issueFieldValue("number") || adminIssue.number,
-        title: { ko: issueFieldValue("title.ko"), en: issueFieldValue("title.en") },
-        subtitle: { ko: issueFieldValue("subtitle.ko"), en: issueFieldValue("subtitle.en") },
-        deck: { ko: issueFieldValue("deck.ko"), en: issueFieldValue("deck.en") },
-        date: { ko: issueFieldValue("date.ko"), en: issueFieldValue("date.en") },
-        format: { ko: issueFieldValue("format.ko"), en: issueFieldValue("format.en") },
-        availability: { ko: issueFieldValue("availability.ko"), en: issueFieldValue("availability.en") },
-        coverCredit: { ko: issueFieldValue("coverCredit.ko"), en: issueFieldValue("coverCredit.en") },
-        editorNote: { ko: issueFieldValue("editorNote.ko"), en: issueFieldValue("editorNote.en") },
+        title: localizedText(adminIssue.title, issueFieldValue("title")),
+        subtitle: localizedText(adminIssue.subtitle, issueFieldValue("subtitle")),
+        deck: localizedText(adminIssue.deck, issueFieldValue("deck")),
+        date: localizedText(adminIssue.date, issueFieldValue("date")),
+        format: localizedText(adminIssue.format, issueFieldValue("format")),
+        availability: localizedText(adminIssue.availability, issueFieldValue("availability")),
+        coverCredit: localizedText(adminIssue.coverCredit, issueFieldValue("coverCredit")),
+        editorNote: localizedText(adminIssue.editorNote, issueFieldValue("editorNote")),
         credits: Array.from(issueCredits?.querySelectorAll("[data-write-issue-credit]") || []).map(collectIssueCredit),
         features: Array.from(issueFeatures?.querySelectorAll("[data-write-issue-feature]") || []).map(collectIssueFeature)
     });
@@ -675,7 +721,7 @@ if (writer) {
         paragraph.innerText = text;
         return paragraph;
     };
-    const createSection = (heading = "새 섹션 제목", paragraphs = ["새 문단을 입력하세요."], railClass = "image-material", railImage = "", hideRailImage = false, railTitle = "좌측 레일 제목", railText = "좌측 레일 설명을 이곳에서 직접 수정합니다.", sectionImageClass = "", sectionImage = "", hideSectionImage = true, sectionImageCaption = "") => {
+    const createSection = (heading = activeWriteLocale === "ko" ? "새 섹션 제목" : "New Section", paragraphs = [activeWriteLocale === "ko" ? "새 문단을 입력하세요." : "Write a new paragraph."], railClass = "image-material", railImage = "", hideRailImage = false, railTitle = activeWriteLocale === "ko" ? "좌측 레일 제목" : "Rail title", railText = activeWriteLocale === "ko" ? "좌측 레일 설명을 이곳에서 직접 수정합니다." : "Edit the rail text here.", sectionImageClass = "", sectionImage = "", hideSectionImage = true, sectionImageCaption = "") => {
         const section = document.createElement("section");
         section.className = "article-section writer-section";
         section.dataset.writeSection = "";
@@ -942,8 +988,14 @@ if (writer) {
             subcategorySelect.value = visibleOptions[0]?.value || "";
         }
     };
-    const categoryLabel = () => categorySelect?.selectedOptions.item(0)?.textContent?.trim() || "";
-    const subcategoryLabel = () => selectedSubcategory()?.textContent?.trim() || "";
+    const categoryLabel = () => {
+        const option = categorySelect?.selectedOptions.item(0);
+        return (activeWriteLocale === "ko" ? option?.dataset.labelKo : option?.dataset.labelEn) || option?.textContent?.trim() || "";
+    };
+    const subcategoryLabel = () => {
+        const option = selectedSubcategory();
+        return (activeWriteLocale === "ko" ? option?.dataset.labelKo : option?.dataset.labelEn) || option?.textContent?.trim() || "";
+    };
     const updateVisualClass = () => {
         const heroClass = metaValue("heroClass") || "image-material";
         const imageMode = metaValue("imageMode") || "visual";
@@ -972,22 +1024,24 @@ if (writer) {
         const sectionValues = sectionData();
         const nextSections = sectionValues.map((section, index) => {
             const previous = base.sections[index];
-            const heading = { ko: section.heading || previous?.heading.ko || "섹션 제목", en: previous?.heading.en || "TODO: English section heading" };
-            const paragraphs = {
-                ko: section.paragraphs.length > 0 ? section.paragraphs : previous?.paragraphs.ko || [""],
-                en: previous?.paragraphs.en || section.paragraphs.map(() => "TODO: English paragraph")
-            };
+            const previousHeading = previous?.heading || { ko: "", en: "" };
+            const previousParagraphs = previous?.paragraphs || { ko: [], en: [] };
+            const previousRailTitle = previous?.railTitle || previousHeading;
+            const previousRailText = previous?.railText || { ko: previousParagraphs.ko[0] || "", en: previousParagraphs.en[0] || "" };
+            const previousCaption = previous?.sectionImageCaption || { ko: "", en: "" };
+            const heading = localizedText(previousHeading, section.heading);
+            const paragraphs = localizedList(previousParagraphs, section.paragraphs);
             return {
                 heading,
                 paragraphs,
-                railTitle: { ko: section.railTitle || previous?.railTitle?.ko || heading.ko, en: previous?.railTitle?.en || heading.en },
-                railText: { ko: section.railText || previous?.railText?.ko || paragraphs.ko[0] || "", en: previous?.railText?.en || paragraphs.en[0] || "" },
+                railTitle: localizedText(previousRailTitle, section.railTitle || heading[activeWriteLocale]),
+                railText: localizedText(previousRailText, section.railText || paragraphs[activeWriteLocale]?.[0] || ""),
                 railClass: section.railClass || previous?.railClass || metaValue("railClass") || base.railClass || base.heroClass,
                 railImage: section.railImage,
                 hideRailImage: section.hideRailImage,
                 sectionImageClass: section.sectionImageClass || previous?.sectionImageClass || "",
                 sectionImage: section.sectionImage,
-                sectionImageCaption: { ko: section.sectionImageCaption || previous?.sectionImageCaption?.ko || "", en: previous?.sectionImageCaption?.en || "" },
+                sectionImageCaption: localizedText(previousCaption, section.sectionImageCaption),
                 hideSectionImage: section.hideSectionImage
             };
         });
@@ -995,9 +1049,9 @@ if (writer) {
         return normalizeArticle({
             ...base,
             slug: toSlug(metaValue("slug") || textValue("title") || base.slug),
-            title: { ko: textValue("title") || base.title.ko, en: base.title.en },
-            subtitle: { ko: textValue("deck") || base.subtitle.ko, en: base.subtitle.en },
-            deck: { ko: textValue("deck") || base.deck.ko, en: base.deck.en },
+            title: localizedText(base.title, textValue("title")),
+            subtitle: localizedText(base.subtitle, textValue("deck")),
+            deck: localizedText(base.deck, textValue("deck")),
             category: metaValue("category") || base.category,
             subcategoryKey,
             subcategoryKeys: [subcategoryKey],
@@ -1006,14 +1060,14 @@ if (writer) {
                 en: subcategory?.dataset.labelEn || base.subcategory.en
             },
             date: metaValue("date") || base.date,
-            readTime: { ko: metaValue("readTime") || base.readTime.ko, en: base.readTime.en },
-            location: { ko: metaValue("location") || base.location.ko, en: base.location.en },
+            readTime: localizedText(base.readTime, metaValue("readTime")),
+            location: localizedText(base.location, metaValue("location")),
             heroClass: metaValue("heroClass") || base.heroClass,
             heroImage: metaValue("imageMode") === "custom" ? metaValue("heroImage") : "",
             hideHeroImage: metaValue("imageMode") === "none",
-            tags: { ko: tags.length > 0 ? tags : base.tags.ko, en: base.tags.en },
-            excerpt: { ko: textValue("deck") || base.excerpt.ko, en: base.excerpt.en },
-            quote: { ko: textValue("quote") || base.quote.ko, en: base.quote.en },
+            tags: localizedList(base.tags, tags),
+            excerpt: localizedText(base.excerpt, textValue("deck")),
+            quote: localizedText(base.quote, textValue("quote")),
             railMode: (metaValue("railMode") || "default"),
             railClass: metaValue("railClass") || base.railClass || base.heroClass,
             railImage: metaValue("railImageMode") === "custom" ? metaValue("railImage") : "",
@@ -1033,7 +1087,7 @@ if (writer) {
         adminIssue = formIssue();
         adminIssues[currentIssueIndex] = adminIssue;
         if (issueTitle) {
-            issueTitle.textContent = `${adminIssue.number} · ${adminIssue.title.ko || adminIssue.title.en}`;
+            issueTitle.textContent = `${adminIssue.number} · ${adminIssue.title[activeWriteLocale] || adminIssue.title.ko || adminIssue.title.en}`;
         }
         updateIssueSummary();
         renderIssueList();
@@ -1182,7 +1236,7 @@ if (writer) {
             return `
       <button type="button" class="admin-list-item ${index === currentIndex ? "is-active" : ""}" data-admin-index="${index}">
         <span class="admin-list-no"><strong>${isFiltered ? filteredNo : globalNo}</strong><small>${isFiltered ? `전체 ${globalNo}` : `${article.category} ${categoryNo}`}</small></span>
-        <strong>${article.title.ko}</strong>
+        <strong>${escapeHtmlClient(article.title[activeWriteLocale] || article.title.ko || article.title.en)}</strong>
         <small>${article.category} / ${article.subcategoryKey}</small>
       </button>`;
         }).join("") : `<p class="admin-empty">이 카테고리의 기사가 아직 없습니다. 새 기사를 만들면 현재 필터에 맞춰 시작합니다.</p>`;
@@ -1245,22 +1299,14 @@ if (writer) {
         adminIssue = normalizeIssue(adminIssues[currentIssueIndex] || fallbackIssue());
         adminIssues[currentIssueIndex] = adminIssue;
         writeIssueField("number", adminIssue.number);
-        writeIssueField("title.ko", adminIssue.title.ko);
-        writeIssueField("title.en", adminIssue.title.en);
-        writeIssueField("subtitle.ko", adminIssue.subtitle.ko);
-        writeIssueField("subtitle.en", adminIssue.subtitle.en);
-        writeIssueField("deck.ko", adminIssue.deck.ko);
-        writeIssueField("deck.en", adminIssue.deck.en);
-        writeIssueField("date.ko", adminIssue.date.ko);
-        writeIssueField("date.en", adminIssue.date.en);
-        writeIssueField("format.ko", adminIssue.format.ko);
-        writeIssueField("format.en", adminIssue.format.en);
-        writeIssueField("availability.ko", adminIssue.availability.ko);
-        writeIssueField("availability.en", adminIssue.availability.en);
-        writeIssueField("coverCredit.ko", adminIssue.coverCredit.ko);
-        writeIssueField("coverCredit.en", adminIssue.coverCredit.en);
-        writeIssueField("editorNote.ko", adminIssue.editorNote.ko);
-        writeIssueField("editorNote.en", adminIssue.editorNote.en);
+        writeIssueField("title", activeText(adminIssue.title));
+        writeIssueField("subtitle", activeText(adminIssue.subtitle));
+        writeIssueField("deck", activeText(adminIssue.deck));
+        writeIssueField("date", activeText(adminIssue.date));
+        writeIssueField("format", activeText(adminIssue.format));
+        writeIssueField("availability", activeText(adminIssue.availability));
+        writeIssueField("coverCredit", activeText(adminIssue.coverCredit));
+        writeIssueField("editorNote", activeText(adminIssue.editorNote));
         renderIssueFeatures();
         renderIssueCredits();
         renderIssueList();
@@ -1282,16 +1328,19 @@ if (writer) {
         writeMeta("railClass", article.railClass || article.heroClass);
         writeMeta("railImageMode", article.hideRailImage ? "none" : article.railImage ? "custom" : "visual");
         writeMeta("railImage", article.railImage || "");
-        writeMeta("readTime", article.readTime.ko);
-        writeMeta("location", article.location.ko);
-        writeMeta("tags", article.tags.ko.join(", "));
-        writeText("title", article.title.ko);
-        writeText("deck", article.deck.ko);
-        writeText("quote", article.quote.ko);
+        writeMeta("readTime", activeText(article.readTime));
+        writeMeta("location", activeText(article.location));
+        writeMeta("tags", activeList(article.tags).join(", "));
+        writeText("title", activeText(article.title));
+        writeText("deck", activeText(article.deck));
+        writeText("quote", activeText(article.quote));
         const container = sectionsContainer();
         if (container) {
             container.querySelectorAll("[data-write-section]").forEach((section) => section.remove());
-            article.sections.forEach((section) => container.append(createSection(section.heading.ko, section.paragraphs.ko, section.railClass || article.railClass || article.heroClass, section.railImage || "", Boolean(section.hideRailImage), section.railTitle?.ko || section.heading.ko, section.railText?.ko || section.paragraphs.ko[0] || "", section.sectionImageClass || "", section.sectionImage || "", Boolean(section.hideSectionImage), section.sectionImageCaption?.ko || "")));
+            article.sections.forEach((section) => {
+                const sectionParagraphs = activeList(section.paragraphs);
+                container.append(createSection(activeText(section.heading), sectionParagraphs.length > 0 ? sectionParagraphs : [""], section.railClass || article.railClass || article.heroClass, section.railImage || "", Boolean(section.hideRailImage), activeText(section.railTitle) || activeText(section.heading), activeText(section.railText) || sectionParagraphs[0] || "", section.sectionImageClass || "", section.sectionImage || "", Boolean(section.hideSectionImage), activeText(section.sectionImageCaption)));
+            });
         }
         renderAdminList();
         updatePreview();
@@ -1411,6 +1460,20 @@ if (writer) {
         }
         scheduleSave();
     };
+    const switchWriteLocale = (nextLocale) => {
+        if (nextLocale === activeWriteLocale) {
+            return;
+        }
+        adminArticles[currentIndex] = formArticle();
+        adminIssues[currentIssueIndex] = formIssue();
+        activeWriteLocale = nextLocale;
+        updateLocaleControls();
+        applyIssue(currentIssueIndex);
+        applyArticle(currentIndex);
+        saveCollection(`${languageName(activeWriteLocale)} 입력란으로 전환했습니다.`);
+        saveIssueCollection(`${languageName(activeWriteLocale)} 이슈 입력란으로 전환했습니다.`);
+    };
+    updateLocaleControls();
     applyIssue(0);
     applyArticle(0);
     writer.addEventListener("keydown", (event) => {
@@ -1462,6 +1525,11 @@ if (writer) {
         const modeButton = target.closest("[data-write-mode-button]");
         if (modeButton) {
             setWriteMode(modeButton.dataset.writeModeButton === "issue" ? "issue" : "article");
+            return;
+        }
+        const localeButton = target.closest("[data-write-locale-button]");
+        if (localeButton) {
+            switchWriteLocale(localeButton.dataset.writeLocaleButton === "en" ? "en" : "ko");
             return;
         }
         const issueListItem = target.closest("[data-write-issue-index]");
@@ -1527,6 +1595,24 @@ if (writer) {
         }
         const issueFeatureCard = target.closest("[data-write-issue-feature]");
         const issueFeatureVisual = target.closest("[data-write-issue-feature-preview]");
+        if (target.closest("[data-write-issue-feature-add-after]") && issueFeatureCard) {
+            adminIssue = formIssue();
+            const featureIndex = Array.from(issueFeatures?.querySelectorAll("[data-write-issue-feature]") || []).indexOf(issueFeatureCard);
+            const nextFeature = fallbackIssueFeature();
+            nextFeature.slug = `scene-${adminIssue.features.length + 1}`;
+            nextFeature.title.ko = `새 이슈 장면 ${adminIssue.features.length + 1}`;
+            nextFeature.title.en = `New Issue Scene ${adminIssue.features.length + 1}`;
+            if (featureIndex >= 0) {
+                adminIssue.features.splice(featureIndex + 1, 0, nextFeature);
+            }
+            else {
+                adminIssue.features.push(nextFeature);
+            }
+            adminIssues[currentIssueIndex] = adminIssue;
+            applyIssue(currentIssueIndex);
+            saveIssueCollection("이슈 장면을 추가했습니다.");
+            return;
+        }
         if (issueFeatureVisual && issueFeatureCard) {
             const nextVisual = cycleSelectVisual(issueFeatureCard.querySelector('[data-write-issue-feature-field="heroClass"]'), clickDirection(event, issueFeatureVisual));
             setImageBlockVisual(issueFeatureVisual.querySelector(".image-block") || issueFeatureVisual, nextVisual);
@@ -1553,6 +1639,21 @@ if (writer) {
             return;
         }
         const issueCreditCard = target.closest("[data-write-issue-credit]");
+        if (target.closest("[data-write-issue-credit-add-after]") && issueCreditCard) {
+            adminIssue = formIssue();
+            const creditIndex = Array.from(issueCredits?.querySelectorAll("[data-write-issue-credit]") || []).indexOf(issueCreditCard);
+            const nextCredit = { label: { ko: "크레딧", en: "Credit" }, value: { ko: "이름", en: "Name" } };
+            if (creditIndex >= 0) {
+                adminIssue.credits.splice(creditIndex + 1, 0, nextCredit);
+            }
+            else {
+                adminIssue.credits.push(nextCredit);
+            }
+            adminIssues[currentIssueIndex] = adminIssue;
+            applyIssue(currentIssueIndex);
+            saveIssueCollection("이슈 크레딧을 추가했습니다.");
+            return;
+        }
         if (target.closest("[data-write-issue-credit-remove]") && issueCreditCard) {
             adminIssue = formIssue();
             const creditIndex = Array.from(issueCredits?.querySelectorAll("[data-write-issue-credit]") || []).indexOf(issueCreditCard);
@@ -1859,6 +1960,7 @@ const updateScrollState = () => {
             const viewportCenter = window.innerHeight / 2;
             const shift = Math.max(-1, Math.min(1, (itemCenter - viewportCenter) / window.innerHeight));
             item.style.setProperty("--scroll-shift", shift.toFixed(3));
+            item.style.setProperty("--scroll-visibility", Math.max(0, 1 - Math.abs(shift) * 1.55).toFixed(3));
         });
     }
 };

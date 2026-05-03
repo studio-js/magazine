@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="예술, 테크, 디자인, 뷰티, 철학을 하나의 감각적 편집면으로 엮는 디지털 저널" />
     <title>Write | The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-scalable-control-layout" />
-    <script src="/magazine/client.js?v=20260503-scalable-control-layout" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-writing-locale-toggle" />
+    <script src="/magazine/client.js?v=20260503-writing-locale-toggle" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -284,6 +284,10 @@
             <button type="button" class="is-active" data-write-mode-button="article" aria-pressed="true">기사</button>
             <button type="button" data-write-mode-button="issue" aria-pressed="false">이슈</button>
           </div>
+          <div class="admin-language-tabs" aria-label="입력 언어">
+            <button type="button" class="is-active" data-write-locale-button="ko" aria-pressed="true">KR</button>
+            <button type="button" data-write-locale-button="en" aria-pressed="false">EN</button>
+          </div>
         </div>
       </header>
 
@@ -331,7 +335,7 @@
             </label>
             <label>
               <span>카테고리</span>
-              <select data-write-meta="category"><option value="art" selected>예술</option><option value="tech">테크</option><option value="design">디자인</option><option value="beauty">뷰티</option><option value="philosophy">철학</option></select>
+              <select data-write-meta="category"><option value="art" data-label-ko="예술" data-label-en="Art" selected>예술</option><option value="tech" data-label-ko="테크" data-label-en="Tech">테크</option><option value="design" data-label-ko="디자인" data-label-en="Design">디자인</option><option value="beauty" data-label-ko="뷰티" data-label-en="Beauty">뷰티</option><option value="philosophy" data-label-ko="철학" data-label-en="Philosophy">철학</option></select>
             </label>
             <label>
               <span>세부 카테고리</span>
@@ -522,7 +526,6 @@
               <input type="text" value="제품, 비례, 그림자" data-write-meta="tags" />
             </label>
             <div class="writer-actions">
-              <button type="button" data-write-add-section>섹션 추가</button>
               <button type="button" data-write-copy>현재 기사 복사</button>
               <button type="button" data-write-download>현재 파일 내려받기</button>
               <button type="button" data-write-reset>로컬 변경 초기화</button>
@@ -650,91 +653,51 @@
           <p data-write-issue-status>이슈도 브라우저에 자동 저장됩니다.</p>
         </div>
 
-        <div class="issue-admin-grid issue-admin-language-grid">
+        <div class="issue-admin-grid issue-admin-language-grid issue-admin-single-language-grid">
           <div class="issue-admin-common">
             <label>
               <span>번호</span>
               <input type="text" value="No. 03" data-write-issue-field="number" />
             </label>
           </div>
-          <section class="issue-language-panel" aria-label="한국어 이슈 정보">
+          <section class="issue-language-panel issue-single-language-panel" aria-label="현재 언어 이슈 정보">
             <header>
-              <span>KR</span>
-              <strong>한국어</strong>
+              <span data-write-active-locale>KR</span>
+              <strong data-write-active-language>한국어</strong>
             </header>
             <label>
               <span>제목</span>
-              <input type="text" value="Soft Indexes" data-write-issue-field="title.ko" />
+              <input type="text" value="Soft Indexes" data-write-issue-field="title" />
             </label>
             <label>
               <span>부제</span>
-              <textarea data-write-issue-field="subtitle.ko" rows="2">목록과 표지가 서로를 읽게 만드는 세 번째 디지털 에디션</textarea>
+              <textarea data-write-issue-field="subtitle" rows="2">목록과 표지가 서로를 읽게 만드는 세 번째 디지털 에디션</textarea>
             </label>
             <label>
               <span>덱</span>
-              <textarea data-write-issue-field="deck.ko" rows="4">세 번째 이슈는 인덱스, 표지, 검색 화면, 리듬 있는 목록을 독립된 편집 장면으로 다룹니다. 무엇을 먼저 보여줄지보다 어떤 속도로 발견하게 할지를 묻습니다.</textarea>
+              <textarea data-write-issue-field="deck" rows="4">세 번째 이슈는 인덱스, 표지, 검색 화면, 리듬 있는 목록을 독립된 편집 장면으로 다룹니다. 무엇을 먼저 보여줄지보다 어떤 속도로 발견하게 할지를 묻습니다.</textarea>
             </label>
             <div class="issue-field-row">
             <label>
               <span>발행</span>
-              <input type="text" value="2026년 7월" data-write-issue-field="date.ko" />
+              <input type="text" value="2026년 7월" data-write-issue-field="date" />
             </label>
             <label>
               <span>형식</span>
-              <input type="text" value="온라인 에디션 / 5개 피처" data-write-issue-field="format.ko" />
+              <input type="text" value="온라인 에디션 / 5개 피처" data-write-issue-field="format" />
             </label>
             <label>
               <span>상태</span>
-              <input type="text" value="오픈 액세스" data-write-issue-field="availability.ko" />
+              <input type="text" value="오픈 액세스" data-write-issue-field="availability" />
             </label>
             </div>
             <label>
               <span>커버 크레딧</span>
-              <textarea data-write-issue-field="coverCredit.ko" rows="2">커버 이미지: 편집부가 구성한 색인 표면 스터디</textarea>
+              <textarea data-write-issue-field="coverCredit" rows="2">커버 이미지: 편집부가 구성한 색인 표면 스터디</textarea>
             </label>
             <label>
               <span>에디터 노트</span>
-              <textarea data-write-issue-field="editorNote.ko" rows="4">이번 호는 읽는 사람을 빠르게 이동시키는 대신 조금 더 정확히 머물게 하는 색인을 상상합니다. 목록, 검색창, 표지, 캡션은 단순한 부속물이 아니라 발행본 전체의 속도를 결정하는 장치입니다.</textarea>
-            </label>
-          </section>
-          <section class="issue-language-panel" aria-label="영어 이슈 정보">
-            <header>
-              <span>EN</span>
-              <strong>영어</strong>
-            </header>
-            <label>
-              <span>제목</span>
-              <input type="text" value="Soft Indexes" data-write-issue-field="title.en" />
-            </label>
-            <label>
-              <span>부제</span>
-              <textarea data-write-issue-field="subtitle.en" rows="2">A third digital edition where lists and covers learn to read one another.</textarea>
-            </label>
-            <label>
-              <span>덱</span>
-              <textarea data-write-issue-field="deck.en" rows="4">The third issue treats indexes, covers, search screens, and rhythmic lists as independent editorial scenes. It asks less what should be shown first than at what speed discovery should happen.</textarea>
-            </label>
-            <div class="issue-field-row">
-            <label>
-              <span>발행</span>
-              <input type="text" value="July 2026" data-write-issue-field="date.en" />
-            </label>
-            <label>
-              <span>형식</span>
-              <input type="text" value="Online edition / 5 features" data-write-issue-field="format.en" />
-            </label>
-            <label>
-              <span>상태</span>
-              <input type="text" value="Open access" data-write-issue-field="availability.en" />
-            </label>
-            </div>
-            <label>
-              <span>커버 크레딧</span>
-              <textarea data-write-issue-field="coverCredit.en" rows="2">Cover image: an editorial study of an index surface.</textarea>
-            </label>
-            <label>
-              <span>에디터 노트</span>
-              <textarea data-write-issue-field="editorNote.en" rows="4">This issue imagines an index that keeps readers in place with greater precision instead of moving them faster. Lists, search bars, covers, and captions are not accessories but devices that set the edition&#39;s speed.</textarea>
+              <textarea data-write-issue-field="editorNote" rows="4">이번 호는 읽는 사람을 빠르게 이동시키는 대신 조금 더 정확히 머물게 하는 색인을 상상합니다. 목록, 검색창, 표지, 캡션은 단순한 부속물이 아니라 발행본 전체의 속도를 결정하는 장치입니다.</textarea>
             </label>
           </section>
         </div>
@@ -743,8 +706,8 @@
           <div>
             <p class="kicker">Issue Scenes</p>
             <h2>이슈 장면</h2>
+            <small>각 장면 안에서 바로 아래 장면을 추가하거나 삭제합니다.</small>
           </div>
-          <button type="button" data-write-issue-add-feature>장면 추가</button>
         </div>
         <div class="issue-feature-editor-list" data-write-issue-features></div>
 
@@ -752,8 +715,8 @@
           <div>
             <p class="kicker">Credits</p>
             <h2>이슈 크레딧</h2>
+            <small>크레딧 카드 안에서 바로 다음 항목을 추가하거나 삭제합니다.</small>
           </div>
-          <button type="button" data-write-issue-add-credit>크레딧 추가</button>
         </div>
         <div class="issue-credit-editor-list" data-write-issue-credits></div>
 

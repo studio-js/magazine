@@ -157,7 +157,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-scalable-control-layout";
+const assetVersion = "20260503-writing-locale-toggle";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -452,7 +452,7 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
                 : `<input type="text" value="${escapeHtml(value)}" data-write-issue-field="${escapeHtml(key)}" />`}
             </label>`;
   const categoryOptions = site.categories
-    .map((category) => `<option value="${category.key}"${category.key === initialCategory.key ? " selected" : ""}>${escapeHtml(text(category.label, locale))}</option>`)
+    .map((category) => `<option value="${category.key}" data-label-ko="${escapeHtml(category.label.ko)}" data-label-en="${escapeHtml(category.label.en)}"${category.key === initialCategory.key ? " selected" : ""}>${escapeHtml(text(category.label, locale))}</option>`)
     .join("");
   const categoryFilters = [
     `<option value="all" selected>${escapeHtml(locale === "ko" ? "전체 기사" : "All Articles")} · ${articleList.length}</option>`,
@@ -508,6 +508,10 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
           <div class="admin-mode-tabs" aria-label="${escapeHtml(locale === "ko" ? "편집 종류" : "Editor type")}">
             <button type="button" class="is-active" data-write-mode-button="article" aria-pressed="true">${escapeHtml(locale === "ko" ? "기사" : "Article")}</button>
             <button type="button" data-write-mode-button="issue" aria-pressed="false">${escapeHtml(locale === "ko" ? "이슈" : "Issue")}</button>
+          </div>
+          <div class="admin-language-tabs" aria-label="${escapeHtml(locale === "ko" ? "입력 언어" : "Writing language")}">
+            <button type="button" class="is-active" data-write-locale-button="ko" aria-pressed="true">KR</button>
+            <button type="button" data-write-locale-button="en" aria-pressed="false">EN</button>
           </div>
         </div>
       </header>
@@ -601,7 +605,6 @@ ${subcategoryOptions}
               <input type="text" value="제품, 비례, 그림자" data-write-meta="tags" />
             </label>
             <div class="writer-actions">
-              <button type="button" data-write-add-section>${escapeHtml(locale === "ko" ? "섹션 추가" : "Add Section")}</button>
               <button type="button" data-write-copy>${escapeHtml(locale === "ko" ? "현재 기사 복사" : "Copy Article")}</button>
               <button type="button" data-write-download>${escapeHtml(locale === "ko" ? "현재 파일 내려받기" : "Download Article")}</button>
               <button type="button" data-write-reset>${escapeHtml(locale === "ko" ? "로컬 변경 초기화" : "Reset Local Edits")}</button>
@@ -729,41 +732,25 @@ ${subcategoryOptions}
           <p data-write-issue-status>${escapeHtml(locale === "ko" ? "이슈도 브라우저에 자동 저장됩니다." : "Issue edits also autosave in this browser.")}</p>
         </div>
 
-        <div class="issue-admin-grid issue-admin-language-grid">
+        <div class="issue-admin-grid issue-admin-language-grid issue-admin-single-language-grid">
           <div class="issue-admin-common">
 ${issueField(locale === "ko" ? "번호" : "Number", "number", currentIssue.number)}
           </div>
-          <section class="issue-language-panel" aria-label="${escapeHtml(locale === "ko" ? "한국어 이슈 정보" : "Korean issue fields")}">
+          <section class="issue-language-panel issue-single-language-panel" aria-label="${escapeHtml(locale === "ko" ? "현재 언어 이슈 정보" : "Current language issue fields")}">
             <header>
-              <span>KR</span>
-              <strong>${escapeHtml(locale === "ko" ? "한국어" : "Korean")}</strong>
+              <span data-write-active-locale>KR</span>
+              <strong data-write-active-language>${escapeHtml(locale === "ko" ? "한국어" : "Korean")}</strong>
             </header>
-${issueField(locale === "ko" ? "제목" : "Title", "title.ko", currentIssue.title.ko)}
-${issueField(locale === "ko" ? "부제" : "Subtitle", "subtitle.ko", currentIssue.subtitle.ko, true, 2)}
-${issueField(locale === "ko" ? "덱" : "Deck", "deck.ko", currentIssue.deck.ko, true, 4)}
+${issueField(locale === "ko" ? "제목" : "Title", "title", text(currentIssue.title, locale))}
+${issueField(locale === "ko" ? "부제" : "Subtitle", "subtitle", text(currentIssue.subtitle, locale), true, 2)}
+${issueField(locale === "ko" ? "덱" : "Deck", "deck", text(currentIssue.deck, locale), true, 4)}
             <div class="issue-field-row">
-${issueField(locale === "ko" ? "발행" : "Date", "date.ko", currentIssue.date.ko)}
-${issueField(locale === "ko" ? "형식" : "Format", "format.ko", currentIssue.format.ko)}
-${issueField(locale === "ko" ? "상태" : "Access", "availability.ko", currentIssue.availability.ko)}
+${issueField(locale === "ko" ? "발행" : "Date", "date", text(currentIssue.date, locale))}
+${issueField(locale === "ko" ? "형식" : "Format", "format", text(currentIssue.format, locale))}
+${issueField(locale === "ko" ? "상태" : "Access", "availability", text(currentIssue.availability, locale))}
             </div>
-${issueField(locale === "ko" ? "커버 크레딧" : "Cover Credit", "coverCredit.ko", currentIssue.coverCredit.ko, true, 2)}
-${issueField(locale === "ko" ? "에디터 노트" : "Editor Note", "editorNote.ko", currentIssue.editorNote.ko, true, 4)}
-          </section>
-          <section class="issue-language-panel" aria-label="${escapeHtml(locale === "ko" ? "영어 이슈 정보" : "English issue fields")}">
-            <header>
-              <span>EN</span>
-              <strong>${escapeHtml(locale === "ko" ? "영어" : "English")}</strong>
-            </header>
-${issueField(locale === "ko" ? "제목" : "Title", "title.en", currentIssue.title.en)}
-${issueField(locale === "ko" ? "부제" : "Subtitle", "subtitle.en", currentIssue.subtitle.en, true, 2)}
-${issueField(locale === "ko" ? "덱" : "Deck", "deck.en", currentIssue.deck.en, true, 4)}
-            <div class="issue-field-row">
-${issueField(locale === "ko" ? "발행" : "Date", "date.en", currentIssue.date.en)}
-${issueField(locale === "ko" ? "형식" : "Format", "format.en", currentIssue.format.en)}
-${issueField(locale === "ko" ? "상태" : "Access", "availability.en", currentIssue.availability.en)}
-            </div>
-${issueField(locale === "ko" ? "커버 크레딧" : "Cover Credit", "coverCredit.en", currentIssue.coverCredit.en, true, 2)}
-${issueField(locale === "ko" ? "에디터 노트" : "Editor Note", "editorNote.en", currentIssue.editorNote.en, true, 4)}
+${issueField(locale === "ko" ? "커버 크레딧" : "Cover Credit", "coverCredit", text(currentIssue.coverCredit, locale), true, 2)}
+${issueField(locale === "ko" ? "에디터 노트" : "Editor Note", "editorNote", text(currentIssue.editorNote, locale), true, 4)}
           </section>
         </div>
 
@@ -771,8 +758,8 @@ ${issueField(locale === "ko" ? "에디터 노트" : "Editor Note", "editorNote.e
           <div>
             <p class="kicker">Issue Scenes</p>
             <h2>${escapeHtml(locale === "ko" ? "이슈 장면" : "Issue Scenes")}</h2>
+            <small>${escapeHtml(locale === "ko" ? "각 장면 안에서 바로 아래 장면을 추가하거나 삭제합니다." : "Add the next scene or delete inside each scene card.")}</small>
           </div>
-          <button type="button" data-write-issue-add-feature>${escapeHtml(locale === "ko" ? "장면 추가" : "Add Scene")}</button>
         </div>
         <div class="issue-feature-editor-list" data-write-issue-features></div>
 
@@ -780,8 +767,8 @@ ${issueField(locale === "ko" ? "에디터 노트" : "Editor Note", "editorNote.e
           <div>
             <p class="kicker">Credits</p>
             <h2>${escapeHtml(locale === "ko" ? "이슈 크레딧" : "Issue Credits")}</h2>
+            <small>${escapeHtml(locale === "ko" ? "크레딧 카드 안에서 바로 다음 항목을 추가하거나 삭제합니다." : "Add the next credit or delete inside each credit row.")}</small>
           </div>
-          <button type="button" data-write-issue-add-credit>${escapeHtml(locale === "ko" ? "크레딧 추가" : "Add Credit")}</button>
         </div>
         <div class="issue-credit-editor-list" data-write-issue-credits></div>
 
