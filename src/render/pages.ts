@@ -157,7 +157,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-archive-token-row-fix";
+const assetVersion = "20260503-scalable-control-layout";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -312,6 +312,59 @@ const renderArchiveRows = (
 const articleHasSubcategory = (article: Article, subcategory: SubcategoryKey): boolean =>
   article.subcategoryKeys.includes(subcategory);
 
+const countText = (count: number, locale: Locale): string => locale === "ko" ? `${count}개` : `${count} ${count === 1 ? "article" : "articles"}`;
+
+const renderArchiveControl = (
+  site: SiteContent,
+  articleList: Article[],
+  locale: Locale,
+  selectedCategoryDefinition?: CategoryDefinition,
+  selectedSubcategoryDefinition?: CategoryDefinition["subcategories"][number]
+): string => {
+  if (selectedCategoryDefinition) {
+    const categoryCount = articleList.filter((article) => article.category === selectedCategoryDefinition.key).length;
+    const categoryLabelText = text(selectedCategoryDefinition.label, locale);
+    const currentCount = selectedSubcategoryDefinition
+      ? articleList.filter((article) => article.category === selectedCategoryDefinition.key && articleHasSubcategory(article, selectedSubcategoryDefinition.key)).length
+      : categoryCount;
+
+    return `
+          <div class="archive-control" data-archive-control>
+            <label>
+              <span>${escapeHtml(locale === "ko" ? "세부 분야" : "Subcategory")}</span>
+              <select data-navigation-select aria-label="${escapeHtml(locale === "ko" ? `${categoryLabelText} 세부 분야 선택` : `Choose a ${categoryLabelText} subcategory`)}">
+                <option value="${archiveHref(locale, selectedCategoryDefinition.key)}"${selectedSubcategoryDefinition ? "" : " selected"}>${escapeHtml(locale === "ko" ? `전체 ${categoryLabelText}` : `All ${categoryLabelText}`)} · ${countText(categoryCount, locale)}</option>
+                ${selectedCategoryDefinition.subcategories
+                  .map((subcategory) => {
+                    const count = articleList.filter((article) => article.category === selectedCategoryDefinition.key && articleHasSubcategory(article, subcategory.key)).length;
+                    const isSelected = selectedSubcategoryDefinition?.key === subcategory.key;
+                    return `<option value="${archiveHref(locale, selectedCategoryDefinition.key, subcategory.key)}"${isSelected ? " selected" : ""}>${escapeHtml(text(subcategory.label, locale))} · ${countText(count, locale)}</option>`;
+                  })
+                  .join("")}
+              </select>
+            </label>
+            <span>${escapeHtml(countText(currentCount, locale))}</span>
+          </div>`;
+  }
+
+  return `
+          <div class="archive-control" data-archive-control>
+            <label>
+              <span>${escapeHtml(locale === "ko" ? "분야" : "Department")}</span>
+              <select data-navigation-select aria-label="${escapeHtml(locale === "ko" ? "아카이브 분야 선택" : "Choose an archive department")}">
+                <option value="${archiveHref(locale)}" selected>${escapeHtml(ui[locale].fullArchive)} · ${countText(articleList.length, locale)}</option>
+                ${site.categories
+                  .map((category) => {
+                    const count = articleList.filter((article) => article.category === category.key).length;
+                    return `<option value="${archiveHref(locale, category.key)}">${escapeHtml(text(category.label, locale))} · ${countText(count, locale)}</option>`;
+                  })
+                  .join("")}
+              </select>
+            </label>
+            <span>${escapeHtml(countText(articleList.length, locale))}</span>
+          </div>`;
+};
+
 const renderArchiveBoard = (
   site: SiteContent,
   articleList: Article[],
@@ -392,20 +445,20 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
   const currentIssue = latestIssue(site);
   const articleJson = JSON.stringify(articleList).replace(/</g, "\\u003c");
   const issueJson = JSON.stringify(site.issueProjects).replace(/</g, "\\u003c");
-  const issueField = (label: string, key: string, value: string, multiline = false): string => `            <label>
+  const issueField = (label: string, key: string, value: string, multiline = false, rows = multiline ? 3 : 1): string => `            <label>
               <span>${escapeHtml(label)}</span>
               ${multiline
-                ? `<textarea data-write-issue-field="${escapeHtml(key)}" rows="3">${escapeHtml(value)}</textarea>`
+                ? `<textarea data-write-issue-field="${escapeHtml(key)}" rows="${rows}">${escapeHtml(value)}</textarea>`
                 : `<input type="text" value="${escapeHtml(value)}" data-write-issue-field="${escapeHtml(key)}" />`}
             </label>`;
   const categoryOptions = site.categories
     .map((category) => `<option value="${category.key}"${category.key === initialCategory.key ? " selected" : ""}>${escapeHtml(text(category.label, locale))}</option>`)
     .join("");
   const categoryFilters = [
-    `<button type="button" class="is-active" data-admin-filter="all" aria-pressed="true"><span class="filter-label">All</span><span class="filter-count">${articleList.length}</span></button>`,
+    `<option value="all" selected>${escapeHtml(locale === "ko" ? "전체 기사" : "All Articles")} · ${articleList.length}</option>`,
     ...site.categories.map((category) => {
       const count = articleList.filter((article) => article.category === category.key).length;
-      return `<button type="button" data-admin-filter="${category.key}" aria-pressed="false"><span class="filter-label">${escapeHtml(text(category.label, locale))}</span><span class="filter-count">${count}</span></button>`;
+      return `<option value="${category.key}">${escapeHtml(text(category.label, locale))} · ${count}</option>`;
     })
   ].join("");
   const subcategoryOptions = site.categories
@@ -465,9 +518,10 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
             <span>${escapeHtml(locale === "ko" ? "기사 목록" : "Articles")}</span>
             <strong data-admin-count>${articleList.length}</strong>
           </div>
-          <div class="admin-filter-row" data-admin-filters>
-            ${categoryFilters}
-          </div>
+          <label class="admin-select-control" data-admin-filters>
+            <span>${escapeHtml(locale === "ko" ? "분야 필터" : "Category Filter")}</span>
+            <select data-admin-filter-select>${categoryFilters}</select>
+          </label>
           <div class="admin-list" data-admin-list></div>
           <div class="admin-sidebar-actions">
             <button type="button" class="is-primary" data-admin-new>${escapeHtml(locale === "ko" ? "새 기사" : "New Article")}</button>
@@ -640,7 +694,10 @@ ${subcategoryOptions}
             <span>${escapeHtml(locale === "ko" ? "이슈 목록" : "Issues")}</span>
             <strong data-write-issue-count>${site.issueProjects.length}</strong>
           </div>
-          <div class="issue-admin-list" data-write-issue-list></div>
+          <label class="issue-admin-picker">
+            <span>${escapeHtml(locale === "ko" ? "이슈 선택" : "Select Issue")}</span>
+            <select data-write-issue-list></select>
+          </label>
           <div class="issue-sidebar-summary">
             <p class="kicker">Selected Issue</p>
             <strong data-write-issue-summary-title>${escapeHtml(text(currentIssue.title, locale))}</strong>
@@ -672,24 +729,42 @@ ${subcategoryOptions}
           <p data-write-issue-status>${escapeHtml(locale === "ko" ? "이슈도 브라우저에 자동 저장됩니다." : "Issue edits also autosave in this browser.")}</p>
         </div>
 
-        <div class="issue-admin-grid">
+        <div class="issue-admin-grid issue-admin-language-grid">
+          <div class="issue-admin-common">
 ${issueField(locale === "ko" ? "번호" : "Number", "number", currentIssue.number)}
-${issueField(locale === "ko" ? "제목 KR" : "Title KR", "title.ko", currentIssue.title.ko)}
-${issueField(locale === "ko" ? "제목 EN" : "Title EN", "title.en", currentIssue.title.en)}
-${issueField(locale === "ko" ? "부제 KR" : "Subtitle KR", "subtitle.ko", currentIssue.subtitle.ko, true)}
-${issueField(locale === "ko" ? "부제 EN" : "Subtitle EN", "subtitle.en", currentIssue.subtitle.en, true)}
-${issueField(locale === "ko" ? "덱 KR" : "Deck KR", "deck.ko", currentIssue.deck.ko, true)}
-${issueField(locale === "ko" ? "덱 EN" : "Deck EN", "deck.en", currentIssue.deck.en, true)}
-${issueField(locale === "ko" ? "발행 KR" : "Date KR", "date.ko", currentIssue.date.ko)}
-${issueField(locale === "ko" ? "발행 EN" : "Date EN", "date.en", currentIssue.date.en)}
-${issueField(locale === "ko" ? "형식 KR" : "Format KR", "format.ko", currentIssue.format.ko)}
-${issueField(locale === "ko" ? "형식 EN" : "Format EN", "format.en", currentIssue.format.en)}
-${issueField(locale === "ko" ? "상태 KR" : "Access KR", "availability.ko", currentIssue.availability.ko)}
-${issueField(locale === "ko" ? "상태 EN" : "Access EN", "availability.en", currentIssue.availability.en)}
-${issueField(locale === "ko" ? "커버 크레딧 KR" : "Cover Credit KR", "coverCredit.ko", currentIssue.coverCredit.ko, true)}
-${issueField(locale === "ko" ? "커버 크레딧 EN" : "Cover Credit EN", "coverCredit.en", currentIssue.coverCredit.en, true)}
-${issueField(locale === "ko" ? "에디터 노트 KR" : "Editor Note KR", "editorNote.ko", currentIssue.editorNote.ko, true)}
-${issueField(locale === "ko" ? "에디터 노트 EN" : "Editor Note EN", "editorNote.en", currentIssue.editorNote.en, true)}
+          </div>
+          <section class="issue-language-panel" aria-label="${escapeHtml(locale === "ko" ? "한국어 이슈 정보" : "Korean issue fields")}">
+            <header>
+              <span>KR</span>
+              <strong>${escapeHtml(locale === "ko" ? "한국어" : "Korean")}</strong>
+            </header>
+${issueField(locale === "ko" ? "제목" : "Title", "title.ko", currentIssue.title.ko)}
+${issueField(locale === "ko" ? "부제" : "Subtitle", "subtitle.ko", currentIssue.subtitle.ko, true, 2)}
+${issueField(locale === "ko" ? "덱" : "Deck", "deck.ko", currentIssue.deck.ko, true, 4)}
+            <div class="issue-field-row">
+${issueField(locale === "ko" ? "발행" : "Date", "date.ko", currentIssue.date.ko)}
+${issueField(locale === "ko" ? "형식" : "Format", "format.ko", currentIssue.format.ko)}
+${issueField(locale === "ko" ? "상태" : "Access", "availability.ko", currentIssue.availability.ko)}
+            </div>
+${issueField(locale === "ko" ? "커버 크레딧" : "Cover Credit", "coverCredit.ko", currentIssue.coverCredit.ko, true, 2)}
+${issueField(locale === "ko" ? "에디터 노트" : "Editor Note", "editorNote.ko", currentIssue.editorNote.ko, true, 4)}
+          </section>
+          <section class="issue-language-panel" aria-label="${escapeHtml(locale === "ko" ? "영어 이슈 정보" : "English issue fields")}">
+            <header>
+              <span>EN</span>
+              <strong>${escapeHtml(locale === "ko" ? "영어" : "English")}</strong>
+            </header>
+${issueField(locale === "ko" ? "제목" : "Title", "title.en", currentIssue.title.en)}
+${issueField(locale === "ko" ? "부제" : "Subtitle", "subtitle.en", currentIssue.subtitle.en, true, 2)}
+${issueField(locale === "ko" ? "덱" : "Deck", "deck.en", currentIssue.deck.en, true, 4)}
+            <div class="issue-field-row">
+${issueField(locale === "ko" ? "발행" : "Date", "date.en", currentIssue.date.en)}
+${issueField(locale === "ko" ? "형식" : "Format", "format.en", currentIssue.format.en)}
+${issueField(locale === "ko" ? "상태" : "Access", "availability.en", currentIssue.availability.en)}
+            </div>
+${issueField(locale === "ko" ? "커버 크레딧" : "Cover Credit", "coverCredit.en", currentIssue.coverCredit.en, true, 2)}
+${issueField(locale === "ko" ? "에디터 노트" : "Editor Note", "editorNote.en", currentIssue.editorNote.en, true, 4)}
+          </section>
         </div>
 
         <div class="issue-admin-section-head">
@@ -1144,30 +1219,18 @@ export const renderArchivePage = (
       : labels.fullArchive;
   const archiveLead = selectedCategoryDefinition ? text(selectedCategoryDefinition.description, locale) : labels.archiveLead;
   const archiveKicker = "Archive";
-  const archiveSubnav = selectedCategoryDefinition
-    ? `
-          <nav class="archive-subnav" aria-label="${escapeHtml(locale === "ko" ? `${text(selectedCategoryDefinition.label, locale)} 하위 카테고리` : `${text(selectedCategoryDefinition.label, locale)} subcategories`)}">
-            <a class="${selectedSubcategoryDefinition ? "" : "is-active"}" href="${archiveHref(locale, selectedCategoryDefinition.key)}"${selectedSubcategoryDefinition ? "" : " aria-current=\"page\""}><span class="filter-label">All</span><span class="filter-count">${articleList.filter((article) => article.category === selectedCategoryDefinition.key).length}</span></a>
-            ${selectedCategoryDefinition.subcategories
-              .map((subcategory) => {
-                const count = articleList.filter((article) => article.category === selectedCategoryDefinition.key && articleHasSubcategory(article, subcategory.key)).length;
-                const isActive = selectedSubcategoryDefinition?.key === subcategory.key;
-                return `<a class="${isActive ? "is-active" : ""}" href="${archiveHref(locale, selectedCategoryDefinition.key, subcategory.key)}"${isActive ? " aria-current=\"page\"" : ""}><span class="filter-label">${escapeHtml(text(subcategory.label, locale))}</span><span class="filter-count">${count}</span></a>`;
-              })
-              .join("")}
-          </nav>`
-    : "";
+  const archiveControl = renderArchiveControl(site, articleList, locale, selectedCategoryDefinition, selectedSubcategoryDefinition);
   const body = `
     <section class="archive archive-page section-pad" aria-labelledby="archive-title">
       <div class="archive-heading" data-reveal>
         <div>
           <p class="kicker">${escapeHtml(archiveKicker)}</p>
-          <h1 id="archive-title">${escapeHtml(archiveTitle)}</h1>${archiveSubnav}
+          <h1 id="archive-title">${escapeHtml(archiveTitle)}</h1>${archiveControl}
         </div>
         <p>${escapeHtml(archiveLead)}</p>
       </div>
 
-      ${renderArchiveBoard(site, articleList, locale, true, selectedCategory, selectedSubcategory, page)}
+      ${renderArchiveBoard(site, articleList, locale, false, selectedCategory, selectedSubcategory, page)}
     </section>`;
 
   return renderLayout({ title: `${archiveTitle} | ${text(site.title, locale)}`, description: archiveLead, body, locale, currentPath, site });

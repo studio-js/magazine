@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="날짜, 제목, 분야만 먼저 남겨 읽는 순서를 만드는 목록입니다." />
     <title>All Articles | The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-archive-token-row-fix" />
-    <script src="/magazine/client.js?v=20260503-archive-token-row-fix" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-scalable-control-layout" />
+    <script src="/magazine/client.js?v=20260503-scalable-control-layout" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -263,31 +263,21 @@
         <div>
           <p class="kicker">Archive</p>
           <h1 id="archive-title">All Articles</h1>
+          <div class="archive-control" data-archive-control>
+            <label>
+              <span>분야</span>
+              <select data-navigation-select aria-label="아카이브 분야 선택">
+                <option value="/archive" selected>All Articles · 8개</option>
+                <option value="/archive/art/">예술 · 2개</option><option value="/archive/tech/">테크 · 2개</option><option value="/archive/design/">디자인 · 2개</option><option value="/archive/beauty/">뷰티 · 0개</option><option value="/archive/philosophy/">철학 · 2개</option>
+              </select>
+            </label>
+            <span>8개</span>
+          </div>
         </div>
         <p>날짜, 제목, 분야만 먼저 남겨 읽는 순서를 만드는 목록입니다.</p>
       </div>
 
       
-<div class="filter-shell" data-filter-shell>
-          <div class="filter-row" aria-label="Archive category filter">
-            <a class="filter-button" href="/magazine/archive/art/">
-                  <span class="filter-label">예술</span>
-                  <span class="filter-count">2</span>
-                </a><a class="filter-button" href="/magazine/archive/tech/">
-                  <span class="filter-label">테크</span>
-                  <span class="filter-count">2</span>
-                </a><a class="filter-button" href="/magazine/archive/design/">
-                  <span class="filter-label">디자인</span>
-                  <span class="filter-count">2</span>
-                </a><a class="filter-button" href="/magazine/archive/beauty/">
-                  <span class="filter-label">뷰티</span>
-                  <span class="filter-count">0</span>
-                </a><a class="filter-button" href="/magazine/archive/philosophy/">
-                  <span class="filter-label">철학</span>
-                  <span class="filter-count">2</span>
-                </a>
-          </div>
-        </div>
     <div class="archive-board " data-archive-board data-reveal>
       <div class="archive-list" data-archive-list>
         
@@ -346,13 +336,7 @@
         <span class="archive-summary">기본값은 작은 설정처럼 보이지만 사용자의 행동을 가장 오래 바꾼다.</span>
       </a>
       </div>
-    </div><nav class="pagination" aria-label="페이지">
-        <span>페이지</span>
-        <div>
-          <a class="" href="/magazine/archive">1</a>
-          <a class="is-active" href="/magazine/archive/page/2/" aria-current="page">2</a>
-        </div>
-      </nav>
+    </div>
     </section></main>
 
     <footer class="site-footer">

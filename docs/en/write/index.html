@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="A digital journal connecting art, tech, design, beauty, and philosophy through a quiet editorial lens." />
     <title>Write | The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-archive-token-row-fix" />
-    <script src="/magazine/client.js?v=20260503-archive-token-row-fix" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-scalable-control-layout" />
+    <script src="/magazine/client.js?v=20260503-scalable-control-layout" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -293,9 +293,10 @@
             <span>Articles</span>
             <strong data-admin-count>8</strong>
           </div>
-          <div class="admin-filter-row" data-admin-filters>
-            <button type="button" class="is-active" data-admin-filter="all" aria-pressed="true"><span class="filter-label">All</span><span class="filter-count">8</span></button><button type="button" data-admin-filter="art" aria-pressed="false"><span class="filter-label">Art</span><span class="filter-count">2</span></button><button type="button" data-admin-filter="tech" aria-pressed="false"><span class="filter-label">Tech</span><span class="filter-count">2</span></button><button type="button" data-admin-filter="design" aria-pressed="false"><span class="filter-label">Design</span><span class="filter-count">2</span></button><button type="button" data-admin-filter="beauty" aria-pressed="false"><span class="filter-label">Beauty</span><span class="filter-count">0</span></button><button type="button" data-admin-filter="philosophy" aria-pressed="false"><span class="filter-label">Philosophy</span><span class="filter-count">2</span></button>
-          </div>
+          <label class="admin-select-control" data-admin-filters>
+            <span>Category Filter</span>
+            <select data-admin-filter-select><option value="all" selected>All Articles · 8</option><option value="art">Art · 2</option><option value="tech">Tech · 2</option><option value="design">Design · 2</option><option value="beauty">Beauty · 0</option><option value="philosophy">Philosophy · 2</option></select>
+          </label>
           <div class="admin-list" data-admin-list></div>
           <div class="admin-sidebar-actions">
             <button type="button" class="is-primary" data-admin-new>New Article</button>
@@ -614,7 +615,10 @@
             <span>Issues</span>
             <strong data-write-issue-count>3</strong>
           </div>
-          <div class="issue-admin-list" data-write-issue-list></div>
+          <label class="issue-admin-picker">
+            <span>Select Issue</span>
+            <select data-write-issue-list></select>
+          </label>
           <div class="issue-sidebar-summary">
             <p class="kicker">Selected Issue</p>
             <strong data-write-issue-summary-title>Soft Indexes</strong>
@@ -646,75 +650,93 @@
           <p data-write-issue-status>Issue edits also autosave in this browser.</p>
         </div>
 
-        <div class="issue-admin-grid">
+        <div class="issue-admin-grid issue-admin-language-grid">
+          <div class="issue-admin-common">
             <label>
               <span>Number</span>
               <input type="text" value="No. 03" data-write-issue-field="number" />
             </label>
+          </div>
+          <section class="issue-language-panel" aria-label="Korean issue fields">
+            <header>
+              <span>KR</span>
+              <strong>Korean</strong>
+            </header>
             <label>
-              <span>Title KR</span>
+              <span>Title</span>
               <input type="text" value="Soft Indexes" data-write-issue-field="title.ko" />
             </label>
             <label>
-              <span>Title EN</span>
-              <input type="text" value="Soft Indexes" data-write-issue-field="title.en" />
+              <span>Subtitle</span>
+              <textarea data-write-issue-field="subtitle.ko" rows="2">목록과 표지가 서로를 읽게 만드는 세 번째 디지털 에디션</textarea>
             </label>
             <label>
-              <span>Subtitle KR</span>
-              <textarea data-write-issue-field="subtitle.ko" rows="3">목록과 표지가 서로를 읽게 만드는 세 번째 디지털 에디션</textarea>
+              <span>Deck</span>
+              <textarea data-write-issue-field="deck.ko" rows="4">세 번째 이슈는 인덱스, 표지, 검색 화면, 리듬 있는 목록을 독립된 편집 장면으로 다룹니다. 무엇을 먼저 보여줄지보다 어떤 속도로 발견하게 할지를 묻습니다.</textarea>
             </label>
+            <div class="issue-field-row">
             <label>
-              <span>Subtitle EN</span>
-              <textarea data-write-issue-field="subtitle.en" rows="3">A third digital edition where lists and covers learn to read one another.</textarea>
-            </label>
-            <label>
-              <span>Deck KR</span>
-              <textarea data-write-issue-field="deck.ko" rows="3">세 번째 이슈는 인덱스, 표지, 검색 화면, 리듬 있는 목록을 독립된 편집 장면으로 다룹니다. 무엇을 먼저 보여줄지보다 어떤 속도로 발견하게 할지를 묻습니다.</textarea>
-            </label>
-            <label>
-              <span>Deck EN</span>
-              <textarea data-write-issue-field="deck.en" rows="3">The third issue treats indexes, covers, search screens, and rhythmic lists as independent editorial scenes. It asks less what should be shown first than at what speed discovery should happen.</textarea>
-            </label>
-            <label>
-              <span>Date KR</span>
+              <span>Date</span>
               <input type="text" value="2026년 7월" data-write-issue-field="date.ko" />
             </label>
             <label>
-              <span>Date EN</span>
-              <input type="text" value="July 2026" data-write-issue-field="date.en" />
-            </label>
-            <label>
-              <span>Format KR</span>
+              <span>Format</span>
               <input type="text" value="온라인 에디션 / 5개 피처" data-write-issue-field="format.ko" />
             </label>
             <label>
-              <span>Format EN</span>
+              <span>Access</span>
+              <input type="text" value="오픈 액세스" data-write-issue-field="availability.ko" />
+            </label>
+            </div>
+            <label>
+              <span>Cover Credit</span>
+              <textarea data-write-issue-field="coverCredit.ko" rows="2">커버 이미지: 편집부가 구성한 색인 표면 스터디</textarea>
+            </label>
+            <label>
+              <span>Editor Note</span>
+              <textarea data-write-issue-field="editorNote.ko" rows="4">이번 호는 읽는 사람을 빠르게 이동시키는 대신 조금 더 정확히 머물게 하는 색인을 상상합니다. 목록, 검색창, 표지, 캡션은 단순한 부속물이 아니라 발행본 전체의 속도를 결정하는 장치입니다.</textarea>
+            </label>
+          </section>
+          <section class="issue-language-panel" aria-label="English issue fields">
+            <header>
+              <span>EN</span>
+              <strong>English</strong>
+            </header>
+            <label>
+              <span>Title</span>
+              <input type="text" value="Soft Indexes" data-write-issue-field="title.en" />
+            </label>
+            <label>
+              <span>Subtitle</span>
+              <textarea data-write-issue-field="subtitle.en" rows="2">A third digital edition where lists and covers learn to read one another.</textarea>
+            </label>
+            <label>
+              <span>Deck</span>
+              <textarea data-write-issue-field="deck.en" rows="4">The third issue treats indexes, covers, search screens, and rhythmic lists as independent editorial scenes. It asks less what should be shown first than at what speed discovery should happen.</textarea>
+            </label>
+            <div class="issue-field-row">
+            <label>
+              <span>Date</span>
+              <input type="text" value="July 2026" data-write-issue-field="date.en" />
+            </label>
+            <label>
+              <span>Format</span>
               <input type="text" value="Online edition / 5 features" data-write-issue-field="format.en" />
             </label>
             <label>
-              <span>Access KR</span>
-              <input type="text" value="오픈 액세스" data-write-issue-field="availability.ko" />
-            </label>
-            <label>
-              <span>Access EN</span>
+              <span>Access</span>
               <input type="text" value="Open access" data-write-issue-field="availability.en" />
             </label>
+            </div>
             <label>
-              <span>Cover Credit KR</span>
-              <textarea data-write-issue-field="coverCredit.ko" rows="3">커버 이미지: 편집부가 구성한 색인 표면 스터디</textarea>
+              <span>Cover Credit</span>
+              <textarea data-write-issue-field="coverCredit.en" rows="2">Cover image: an editorial study of an index surface.</textarea>
             </label>
             <label>
-              <span>Cover Credit EN</span>
-              <textarea data-write-issue-field="coverCredit.en" rows="3">Cover image: an editorial study of an index surface.</textarea>
+              <span>Editor Note</span>
+              <textarea data-write-issue-field="editorNote.en" rows="4">This issue imagines an index that keeps readers in place with greater precision instead of moving them faster. Lists, search bars, covers, and captions are not accessories but devices that set the edition&#39;s speed.</textarea>
             </label>
-            <label>
-              <span>Editor Note KR</span>
-              <textarea data-write-issue-field="editorNote.ko" rows="3">이번 호는 읽는 사람을 빠르게 이동시키는 대신 조금 더 정확히 머물게 하는 색인을 상상합니다. 목록, 검색창, 표지, 캡션은 단순한 부속물이 아니라 발행본 전체의 속도를 결정하는 장치입니다.</textarea>
-            </label>
-            <label>
-              <span>Editor Note EN</span>
-              <textarea data-write-issue-field="editorNote.en" rows="3">This issue imagines an index that keeps readers in place with greater precision instead of moving them faster. Lists, search bars, covers, and captions are not accessories but devices that set the edition&#39;s speed.</textarea>
-            </label>
+          </section>
         </div>
 
         <div class="issue-admin-section-head">

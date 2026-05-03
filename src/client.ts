@@ -311,6 +311,7 @@ if (writer) {
   const issueSummaryMeta = writer.querySelector<HTMLElement>("[data-write-issue-summary-meta]");
   const adminList = writer.querySelector<HTMLElement>("[data-admin-list]");
   const adminFilters = writer.querySelector<HTMLElement>("[data-admin-filters]");
+  const adminFilterSelect = writer.querySelector<HTMLSelectElement>("[data-admin-filter-select]");
   const adminCount = writer.querySelector<HTMLElement>("[data-admin-count]");
   const currentTitle = writer.querySelector<HTMLElement>("[data-admin-current-title]");
   const outputArea = writer.querySelector<HTMLTextAreaElement>("[data-write-output]");
@@ -794,12 +795,17 @@ if (writer) {
       return;
     }
 
-    issueList.innerHTML = adminIssues.map((issue, index) => `
-      <button type="button" class="issue-admin-list-item ${index === currentIssueIndex ? "is-active" : ""}" data-write-issue-index="${index}" aria-pressed="${index === currentIssueIndex ? "true" : "false"}">
-        <span><strong>${escapeHtmlClient(issue.number)}</strong><small>${index === 0 ? "Latest" : `Stack ${String(index + 1).padStart(2, "0")}`}</small></span>
-        <strong>${escapeHtmlClient(issue.title.ko || issue.title.en || issue.number)}</strong>
-        <small>${escapeHtmlClient(issue.date.ko || issue.date.en)} / ${issue.features.length} scenes</small>
-      </button>`).join("");
+    if (issueList instanceof HTMLSelectElement) {
+      issueList.innerHTML = adminIssues.map((issue, index) => `
+        <option value="${index}"${index === currentIssueIndex ? " selected" : ""}>${escapeHtmlClient(issue.number)} · ${escapeHtmlClient(issue.title.ko || issue.title.en || issue.number)}</option>`).join("");
+    } else {
+      issueList.innerHTML = adminIssues.map((issue, index) => `
+        <button type="button" class="issue-admin-list-item ${index === currentIssueIndex ? "is-active" : ""}" data-write-issue-index="${index}" aria-pressed="${index === currentIssueIndex ? "true" : "false"}">
+          <span><strong>${escapeHtmlClient(issue.number)}</strong><small>${index === 0 ? "Latest" : `Stack ${String(index + 1).padStart(2, "0")}`}</small></span>
+          <strong>${escapeHtmlClient(issue.title.ko || issue.title.en || issue.number)}</strong>
+          <small>${escapeHtmlClient(issue.date.ko || issue.date.en)} / ${issue.features.length} scenes</small>
+        </button>`).join("");
+    }
 
     if (issueCount) {
       issueCount.textContent = String(adminIssues.length);
@@ -1521,6 +1527,16 @@ if (writer) {
         countElement.textContent = String(count);
       }
     });
+
+    if (adminFilterSelect) {
+      adminFilterSelect.value = activeCategoryFilter;
+      Array.from(adminFilterSelect.options).forEach((option) => {
+        const filter = option.value || "all";
+        const count = filter === "all" ? adminArticles.length : adminArticles.filter((article) => article.category === filter).length;
+        const label = option.textContent?.split(" · ")[0] || filter;
+        option.textContent = `${label} · ${count}`;
+      });
+    }
   };
 
   const moveCurrentArticle = (direction: -1 | 1): boolean => {
@@ -1797,6 +1813,33 @@ if (writer) {
   });
   writer.addEventListener("change", (event) => {
     const target = event.target;
+
+    if (target instanceof HTMLSelectElement && target.matches("[data-write-issue-list]")) {
+      adminIssues[currentIssueIndex] = formIssue();
+      applyIssue(Number(target.value || 0));
+      saveIssueCollection("선택한 이슈를 불러왔습니다.");
+      return;
+    }
+
+    if (target instanceof HTMLSelectElement && target.matches("[data-admin-filter-select]")) {
+      adminArticles[currentIndex] = formArticle();
+      activeCategoryFilter = target.value || "all";
+
+      if (!articleMatchesFilter(adminArticles[currentIndex])) {
+        const nextIndex = adminArticles.findIndex(articleMatchesFilter);
+
+        if (nextIndex >= 0) {
+          applyArticle(nextIndex);
+          saveCollection("카테고리 필터를 적용했습니다.");
+          return;
+        }
+      }
+
+      renderAdminList();
+      updatePreview();
+      saveCollection("카테고리 필터를 적용했습니다.");
+      return;
+    }
 
     if (target instanceof HTMLElement && target.closest("[data-write-issue-editor]")) {
       scheduleIssueSave();
@@ -2340,9 +2383,9 @@ if (revealItems.length > 0) {
 }
 
 const previewRows = document.querySelectorAll<HTMLElement>("[data-preview-class]");
-const previewImage = document.querySelector<HTMLElement>("[data-preview-image]");
-const previewKicker = document.querySelector<HTMLElement>("[data-preview-kicker]");
-const previewTitle = document.querySelector<HTMLElement>("[data-preview-title]");
+const previewImage = document.querySelector<HTMLElement>("[data-archive-preview-image]");
+const previewKicker = document.querySelector<HTMLElement>("[data-archive-preview-kicker]");
+const previewTitle = document.querySelector<HTMLElement>("[data-archive-preview-title]");
 let setArchivePreview: ((row: HTMLElement) => void) | null = null;
 
 if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
@@ -2593,6 +2636,22 @@ if (filterButtons.length > 0) {
     applyFilter(fallbackButton, false);
   }
 }
+
+document.querySelectorAll<HTMLSelectElement>("[data-navigation-select]").forEach((select) => {
+  select.addEventListener("change", () => {
+    if (!select.value) {
+      return;
+    }
+
+    const scriptSrc = document.querySelector<HTMLScriptElement>('script[src*="/client.js"]')?.getAttribute("src") || "";
+    const basePath = scriptSrc.replace(/\/client\.js.*$/, "");
+    const nextPath = select.value.startsWith("/") && basePath && !select.value.startsWith(`${basePath}/`) ? `${basePath}${select.value}` : select.value;
+
+    if (nextPath !== window.location.pathname) {
+      window.location.href = nextPath;
+    }
+  });
+});
 
 const subscribeForm = document.querySelector<HTMLFormElement>(".subscribe-form");
 const formMessage = document.querySelector<HTMLElement>("[data-form-message]");
