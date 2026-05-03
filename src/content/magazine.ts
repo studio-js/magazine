@@ -1,7 +1,7 @@
 import type { Article, CategoryDefinition, IssueProject, Note, SiteContent } from "../types";
 
 const imageUrls = {
-  appleVisionHero: "https://www.apple.com/v/apple-vision-pro/k/images/overview/hero/hero__cvgr5aj1ttsi_large.jpg",
+  appleVisionHero: "https://www.apple.com/v/apple-vision-pro/k/images/overview/hero/hero__cvgr5aj1ttsi_large_2x.jpg",
   appleVisionBand: "https://www.apple.com/v/apple-vision-pro/k/images/overview/design/drawer/dual_knit_band__cuhpalc1t9ea_large.jpg",
   appleVisionPrivacy: "https://www.apple.com/v/apple-vision-pro/k/images/overview/values/drawer/eye_input_startframe__csxoocg1wu82_large.jpg",
   appleVisionSensors: "https://www.apple.com/v/apple-vision-pro/k/images/overview/values/drawer/camera_sensor_data__ed5zeclvc7qu_large.jpg",
@@ -15,9 +15,13 @@ const imageUrls = {
   diptyqueFreesia: "https://images.ctfassets.net/4sg0zck18nfj/5ntZhWP04wzZUWw1TUqZ1s/3170e206e72f2e5711cdd53f0c98919e/HERBIER_CTM_VISUEL_FREESIA-190G_2026_RVB_BD_2025x1518px.jpg?fm=avif&w=1920&q=90",
   diptyqueDecor: "https://images.ctfassets.net/4sg0zck18nfj/76bz8fXgPdqUxRlHQbevC/fde0739b37dfff44642aaf14c9b997c3/CLASSIC_CANDLE_REVAMP_2026_VISUEL_COMPLEMENTAIRE_COLLECTION_NOUVEAUTES_DECORATION_RVB_2025x1518px_DIPTYQUE__1_.jpg?fm=avif&w=1920&q=90",
   dysonLogo: "https://www.dyson.com/etc.clientlibs/dyson/clientlibs/clientlib-main/resources/images/dyson-logo.svg",
-  leicaQ3: "https://leica-camera.com/sites/default/files/styles/menu_product_thumbnail_desktop/public/2025-11/cameraproduct_Q3_Mono.png?h=0b5cfb80&itok=0f4Yluya",
-  leicaM11: "https://leica-camera.com/sites/default/files/styles/menu_product_thumbnail_desktop/public/2024-07/cameraproduct_m11_monochrom.png?itok=aW-vGY1g",
-  leicaMSystem: "https://leica-camera.com/sites/default/files/styles/menu_product_thumbnail_desktop/public/2024-07/cameraportfolio_m_system.png?itok=l9ld-3vi",
+  dysonNuralHero: "https://dyson-h.assetsadobe2.com/is/image/content/dam/dyson/images/products/hero-locale/en_US/598973-01.png?fmt=png-alpha&wid=1600",
+  dysonNuralScalp: "https://dyson-h.assetsadobe2.com/is/image/content/dam/dyson/products/hair-care/2025-colorways/ceramic-pink/605M_Ceramic-Pink_Enhanced_COM_5.jpg?fmt=pjpeg&wid=1920",
+  dysonNuralPause: "https://dyson-h.assetsadobe2.com/is/image/content/dam/dyson/products/hair-care/2025-colorways/ceramic-pink/605M_Ceramic-Pink_Enhanced_COM_4.jpg?fmt=pjpeg&wid=1920",
+  dysonNuralAttachments: "https://dyson-h.assetsadobe2.com/is/image/content/dam/dyson/products/hair-care/2025-colorways/ceramic-pink/605M_Ceramic-Pink_Enhanced_COM_6.jpg?fmt=pjpeg&wid=1920",
+  leicaQ3: "https://leica-camera.com/sites/default/files/2025-11/cameraproduct_Q3_Mono.png",
+  leicaM11: "https://leica-camera.com/sites/default/files/2024-07/cameraproduct_m11_monochrom.png",
+  leicaMSystem: "https://leica-camera.com/sites/default/files/2024-07/cameraportfolio_m_system.png",
   mujiStorage: "https://www.muji.com/public/media/img/item/4547315980925_08_org.jpg?im=Resize%2Ctype%3Ddownsize%2Cwidth%3D3840",
   mujiDailyGoods: "https://www.muji.com/public/media/img/item/4550344144688_04_org.jpg?im=Resize%2Ctype%3Ddownsize%2Cwidth%3D3840",
   mujiInterior: "https://www.muji.com/public/media/jp/img/main/20082498/1080_electronics_260116_400.jpg?im=Resize%2Ctype%3Ddownsize%2Cwidth%3D3840",
@@ -44,7 +48,7 @@ export const articles = [
     subcategory: { ko: "인터페이스", en: "Interface" },
     date: "2026-05-04",
     issue: "Issue 03",
-    readTime: { ko: "7분 읽기", en: "7 min read" },
+    readTime: { ko: "9분 읽기", en: "9 min read" },
     location: { ko: "Cupertino", en: "Cupertino" },
     heroClass: "image-interface",
     heroImage: imageUrls.appleVisionHero,
@@ -94,8 +98,9 @@ export const articles = [
           {
             type: "gallery",
             images: [
-              { imageClass: "image-interface", image: imageUrls.appleVisionHero },
-              { imageClass: "image-material", image: imageUrls.appleVisionBand }
+              { imageClass: "image-material", image: imageUrls.appleVisionBand },
+              { imageClass: "image-thought", image: imageUrls.appleVisionPrivacy },
+              { imageClass: "image-library", image: imageUrls.appleVisionSensors }
             ],
             caption: {
               ko: "Apple Vision Pro와 Dual Knit Band. 이미지는 Apple 공식 제품 페이지에서 인용.",
@@ -107,6 +112,13 @@ export const articles = [
             text: {
               ko: "책상 앞에서 열리던 화면은 소파, 부엌, 비행기 좌석으로 이동한다. 시선과 손가락 제스처가 커서와 트랙패드를 대신하면서 인터페이스는 더 넓어지지만 동시에 더 사적인 물건이 된다.",
               en: "A screen once opened at a desk moves to a sofa, kitchen, or airplane seat. Gaze and finger gestures replace cursor and trackpad, making the interface broader and more private at the same time."
+            }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "이때 방은 단순한 배경이 아니라 인터페이스의 일부가 된다. 사용자는 창을 크게 만드는 대신 어느 벽 앞에서 볼지, 누구와 같은 시야를 공유할지, 배터리를 어디에 둘지 같은 사소한 결정을 계속 조정한다.",
+              en: "At that point the room is no longer a neutral background but part of the interface. Instead of simply enlarging a window, the user keeps adjusting small decisions: which wall to face, whose view to share, and where the battery should sit."
             }
           }
         ]
@@ -150,6 +162,13 @@ export const articles = [
               ko: "좋은 공간 인터페이스는 현실을 지우는 데서 끝나지 않는다. Apple Vision Pro의 설득력은 방을 극장으로 바꾸는 능력보다 방으로 다시 돌아오는 속도를 사용자가 조절할 수 있다는 데 있다.",
               en: "A good spatial interface does not end by erasing reality. Vision Pro is convincing when the user can control the speed of returning to the room, not only when the room becomes a theater."
             }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "그래서 이 제품은 몰입의 최대치보다 전환의 품질로 평가해야 한다. 헤드셋을 벗지 않고도 주변을 다시 인식할 수 있는 순간, 미래의 화면은 생활을 밀어내는 장치가 아니라 생활 사이에 들어오는 매체가 된다.",
+              en: "The product should therefore be judged by the quality of transition more than by the maximum of immersion. When surroundings can be recognized again without removing the headset, the future screen becomes a medium entering daily life rather than a device pushing it away."
+            }
           }
         ]
       }
@@ -172,10 +191,10 @@ export const articles = [
     subcategory: { ko: "헤어케어", en: "Haircare" },
     date: "2026-05-03",
     issue: "Issue 03",
-    readTime: { ko: "6분 읽기", en: "6 min read" },
+    readTime: { ko: "8분 읽기", en: "8 min read" },
     location: { ko: "London", en: "London" },
     heroClass: "image-signal",
-    heroImage: imageUrls.dysonLogo,
+    heroImage: imageUrls.dysonNuralHero,
     tags: { ko: ["Dyson", "Supersonic Nural", "헤어케어"], en: ["Dyson", "Supersonic Nural", "Haircare"] },
     excerpt: {
       ko: "좋은 헤어 도구는 더 뜨거운 바람보다 사용자의 몸에 맞춰 낮아지는 판단을 갖는다.",
@@ -222,7 +241,9 @@ export const articles = [
           {
             type: "gallery",
             images: [
-              { imageClass: "image-signal", image: imageUrls.dysonLogo }
+              { imageClass: "image-signal", image: imageUrls.dysonNuralScalp },
+              { imageClass: "image-system", image: imageUrls.dysonNuralPause },
+              { imageClass: "image-material", image: imageUrls.dysonNuralAttachments }
             ],
             caption: {
               ko: "Dyson Supersonic Nural 공식 제품 페이지를 기준으로 기능을 읽었다.",
@@ -234,6 +255,13 @@ export const articles = [
             text: {
               ko: "이 기능은 더 빠른 건조보다 더 가까운 접촉을 다룬다. 사용자는 두피에 닿는 열을 계속 의식하지 않아도 되고, 도구는 손의 미세한 거리 변화를 루틴의 일부로 받아들인다.",
               en: "The feature deals with closer contact rather than faster drying alone. The user does not have to monitor heat at the scalp constantly, and the tool accepts small distance changes as part of the routine."
+            }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "헤어 도구가 몸 가까이에 놓일수록 중요한 것은 힘의 과시가 아니라 위험을 낮추는 센스다. Nural의 센서는 사용자의 실수를 교정하는 감시 장치라기보다 반복되는 손의 거리감을 제품 안으로 옮기는 장치에 가깝다.",
+              en: "The closer a hair tool comes to the body, the more important it is to lower risk rather than display force. Nural's sensor feels less like surveillance that corrects mistakes and more like a way of moving the hand's repeated sense of distance into the product."
             }
           }
         ]
@@ -277,6 +305,13 @@ export const articles = [
               ko: "이 제품이 흥미로운 이유는 사용자가 더 많이 조작하도록 요구하지 않는다는 데 있다. 뷰티 테크의 좋은 기본값은 결과를 과장하지 않고 반복되는 손의 습관을 조용히 보조한다.",
               en: "What makes the product interesting is that it does not ask the user to operate more. A good default in beauty technology supports repeated hand habits without exaggerating the result."
             }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "결국 이 드라이어의 취향은 새 기능의 개수보다 루틴을 덜 불안하게 만드는 방식에 있다. 내려놓으면 조용해지고, 가까워지면 온도가 낮아지고, 노즐을 기억하는 도구는 사용자의 아침을 하나의 안정된 순서로 만든다.",
+              en: "The taste of this dryer lies less in the number of new features than in how it makes the routine less anxious. A tool that quiets when set down, lowers temperature when close, and remembers attachments turns the morning into a steadier sequence."
+            }
           }
         ]
       }
@@ -299,7 +334,7 @@ export const articles = [
     subcategory: { ko: "인테리어", en: "Interior" },
     date: "2026-05-02",
     issue: "Issue 03",
-    readTime: { ko: "5분 읽기", en: "5 min read" },
+    readTime: { ko: "8분 읽기", en: "8 min read" },
     location: { ko: "New York", en: "New York" },
     heroClass: "image-material",
     heroImage: imageUrls.diptyqueBleecker,
@@ -349,8 +384,9 @@ export const articles = [
           {
             type: "gallery",
             images: [
-              { imageClass: "image-material", image: imageUrls.diptyqueBleecker },
-              { imageClass: "image-atelier", image: imageUrls.diptyqueDecor }
+              { imageClass: "image-atelier", image: imageUrls.diptyqueDecor },
+              { imageClass: "image-material", image: imageUrls.diptyqueCandle },
+              { imageClass: "image-field", image: imageUrls.diptyqueFreesia }
             ],
             caption: {
               ko: "Diptyque 공식 페이지의 클래식 캔들 및 Bleecker Street 경험 이미지.",
@@ -362,6 +398,13 @@ export const articles = [
             text: {
               ko: "캔들은 선반 위 물건이지만, 동시에 방의 조도를 바꾸고 대화의 속도를 낮추는 도구다. 리테일 공간은 제품을 설명하는 대신 그 물건이 어떤 시간 안에서 쓰이는지 연습하게 한다.",
               en: "A candle is an object on a shelf, yet also a tool that changes room light and slows conversation. The retail space does not only explain the product; it rehearses the time in which the object is used."
+            }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "Bleecker Street의 장면이 설득력 있는 이유는 향을 병 안에 가두지 않기 때문이다. 계단과 목재, 낮은 조명과 촛불의 반복은 제품을 하나의 실내 풍경으로 확장하고, 방문자는 향을 사기 전에 향이 놓일 방의 속도를 먼저 체험한다.",
+              en: "The Bleecker Street scene works because it does not trap scent inside a vessel. Stairs, wood, low light, and repeated candle flames extend the product into an interior landscape, letting visitors experience the tempo of a room before buying a scent."
             }
           }
         ]
@@ -405,6 +448,13 @@ export const articles = [
               ko: "그래서 이 공간의 취향은 장식의 밀도보다 순서에 있다. 성냥, 심지, 불꽃, 유리, 향이 차례로 놓일 때 제품은 방을 점유하는 작은 시간표가 된다.",
               en: "Its taste lies in sequence rather than decorative density. When match, wick, flame, glass, and scent appear in order, the product becomes a small timetable occupying the room."
             }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "집으로 돌아온 뒤에도 같은 순서는 작게 반복된다. 포장을 풀고, 유리의 위치를 정하고, 불을 붙이고, 불꽃이 안정될 때까지 기다리는 몇 분이 브랜드 경험의 가장 오래 남는 부분이 된다.",
+              en: "The same sequence repeats quietly at home. Unwrapping, placing the glass, lighting the wick, and waiting a few minutes for the flame to settle become the most durable part of the brand experience."
+            }
           }
         ]
       }
@@ -427,7 +477,7 @@ export const articles = [
     subcategory: { ko: "이미지", en: "Images" },
     date: "2026-04-30",
     issue: "Issue 03",
-    readTime: { ko: "6분 읽기", en: "6 min read" },
+    readTime: { ko: "8분 읽기", en: "8 min read" },
     location: { ko: "Wetzlar", en: "Wetzlar" },
     heroClass: "image-atelier",
     heroImage: imageUrls.leicaQ3,
@@ -477,8 +527,8 @@ export const articles = [
           {
             type: "gallery",
             images: [
-              { imageClass: "image-atelier", image: imageUrls.leicaQ3 },
-              { imageClass: "image-thought", image: imageUrls.leicaMSystem }
+              { imageClass: "image-thought", image: imageUrls.leicaMSystem },
+              { imageClass: "image-field", image: imageUrls.leicaM11 }
             ],
             caption: {
               ko: "Leica 공식 제품 내비게이션의 Q3 Monochrom 및 M-System 이미지.",
@@ -490,6 +540,13 @@ export const articles = [
             text: {
               ko: "이 닫힘은 제약이 아니라 집중의 형식이다. 촬영자는 붉은 표지판보다 표지판이 벽에 만드는 대비를 보고, 푸른 하늘보다 하늘이 건물 위에 남기는 밝기의 차이를 읽는다.",
               en: "That closing is not a limitation but a form of focus. The photographer reads the contrast a sign makes against a wall rather than the red of the sign, and the difference in brightness above a building rather than the blue of the sky."
+            }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "이런 카메라는 촬영자에게 더 적은 정보를 주는 대신 더 많은 결정을 요구한다. 색으로 설명하던 장면을 빛의 방향, 표면의 거칠기, 가장자리의 선명도로 다시 읽게 만들기 때문이다.",
+              en: "Such a camera gives the photographer less information while asking for more decisions. It forces scenes once explained by color to be reread through light direction, surface roughness, and the sharpness of edges."
             }
           }
         ]
@@ -533,6 +590,13 @@ export const articles = [
               ko: "좋은 예술 도구는 가능한 모든 결과를 열어두지 않는다. 어떤 결과를 포기하게 함으로써 사용자가 자신의 시선을 더 정확히 알게 한다.",
               en: "A good artistic tool does not leave every possible result open. By making some results unavailable, it lets the user know their own gaze more precisely."
             }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "Q3 Monochrom의 규칙은 결과물의 색을 바꾸는 필터가 아니라 촬영자의 속도를 바꾸는 편집 방식이다. 셔터를 누르기 전 이미지를 덜어내는 이 과정에서 사진은 더 조용하지만 더 단단한 문장이 된다.",
+              en: "The rule of Q3 Monochrom is not a filter that changes the color of the result but an editing method that changes the photographer's speed. By subtracting before the shutter, the photograph becomes quieter but more firmly written."
+            }
           }
         ]
       }
@@ -555,7 +619,7 @@ export const articles = [
     subcategory: { ko: "사운드", en: "Sound" },
     date: "2026-04-28",
     issue: "Issue 03",
-    readTime: { ko: "5분 읽기", en: "5 min read" },
+    readTime: { ko: "8분 읽기", en: "8 min read" },
     location: { ko: "Struer", en: "Struer" },
     heroClass: "image-field",
     heroImage: imageUrls.beosoundHero,
@@ -605,7 +669,6 @@ export const articles = [
           {
             type: "gallery",
             images: [
-              { imageClass: "image-field", image: imageUrls.beosoundHero },
               { imageClass: "image-material", image: imageUrls.beosoundPackshot }
             ],
             caption: {
@@ -618,6 +681,13 @@ export const articles = [
             text: {
               ko: "A5의 손잡이와 직조 마감은 기술 제품의 표면을 가구의 언어로 낮춘다. 스피커는 책장, 바닥, 테라스에 놓일 때마다 같은 기능을 다른 공간의 중심으로 번역한다.",
               en: "The handle and woven finishes lower the surface of a technical product into the language of furniture. Placed on a shelf, floor, or terrace, the speaker translates the same function into a different spatial center."
+            }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "좋은 휴대용 스피커는 이동성을 작게 보이게 하지 않는다. 오히려 방 안에서 이미 하나의 물건으로 설득된 뒤에야 밖으로 옮겨질 수 있고, 그때 이동은 캠핑 장비의 편의가 아니라 분위기를 들고 나가는 방식이 된다.",
+              en: "A good portable speaker does not make mobility look small. It can move outward only after it has already become convincing as an object in a room, turning portability into a way of carrying atmosphere rather than camping convenience."
             }
           }
         ]
@@ -661,6 +731,13 @@ export const articles = [
               ko: "좋은 사운드 제품은 방 안에서 보이지 않는 배경이 되거나 조각처럼 과시되는 두 극단 사이를 찾는다. Beosound A5는 그 사이에서 음악이 놓일 자리를 만든다.",
               en: "A good sound product finds a place between invisible background and sculptural display. Beosound A5 builds a position for music between those extremes."
             }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "소리가 좋은 제품은 결국 시각적으로도 방해가 적어야 한다. A5가 가구처럼 보이려는 이유는 음악을 듣지 않는 시간에도 방 안에 남아 있어야 하기 때문이다.",
+              en: "A product for sound must finally be visually unobtrusive as well. A5 tries to look like furniture because it remains in the room even when no music is playing."
+            }
           }
         ]
       }
@@ -683,7 +760,7 @@ export const articles = [
     subcategory: { ko: "도구", en: "Tools" },
     date: "2026-04-24",
     issue: "Issue 03",
-    readTime: { ko: "6분 읽기", en: "6 min read" },
+    readTime: { ko: "8분 읽기", en: "8 min read" },
     location: { ko: "Cupertino", en: "Cupertino" },
     heroClass: "image-system",
     heroImage: imageUrls.macbookHero,
@@ -733,8 +810,8 @@ export const articles = [
           {
             type: "gallery",
             images: [
-              { imageClass: "image-system", image: imageUrls.macbookHero },
-              { imageClass: "image-interface", image: imageUrls.macbookBattery }
+              { imageClass: "image-interface", image: imageUrls.macbookBattery },
+              { imageClass: "image-system", image: imageUrls.macbookDisplay }
             ],
             caption: {
               ko: "Apple MacBook Pro 공식 페이지의 M5 제품 이미지와 배터리 하이라이트 이미지.",
@@ -746,6 +823,13 @@ export const articles = [
             text: {
               ko: "최대 24시간 배터리라는 수치는 이동 중 작업을 가능하게 하는 숫자다. 하지만 숫자가 취향이 되는 순간은 공항, 야외 테이블, 어두운 스튜디오에서 도구가 사용자의 리듬을 방해하지 않을 때다.",
               en: "Up to 24 hours of battery life is a number that enables work on the move. It becomes taste when, at an airport, outdoor table, or dark studio, the tool does not disturb the user's rhythm."
+            }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "작업 도구의 고급스러움은 충전기를 꽂는 순간보다 꽂지 않아도 되는 시간에 드러난다. 성능이 사용자의 주의를 끌지 않고 배경으로 물러날 때, 빠른 노트북은 비로소 느린 집중을 가능하게 한다.",
+              en: "The refinement of a work tool appears less when the charger is plugged in than in the time it can remain unplugged. When performance stops attracting attention and recedes into the background, a fast notebook finally makes slow focus possible."
             }
           }
         ]
@@ -792,6 +876,13 @@ export const articles = [
               ko: "좋은 노트북은 빠른 칩을 자랑하는 동시에 눈의 피로와 연결의 불안을 줄여야 한다. 도구의 현대성은 사용자가 오래 머물 수 있는 조건을 얼마나 조용히 마련하는지에 있다.",
               en: "A good notebook must boast a fast chip while reducing eye fatigue and connection anxiety. The modernity of a tool lies in how quietly it prepares conditions for staying."
             }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "그래서 화면은 결과를 보여주는 창이 아니라 작업의 기준면이다. 밝기와 콘트라스트, 색의 일관성이 안정될수록 사용자는 기계의 성능보다 자신의 판단을 더 오래 믿을 수 있다.",
+              en: "The display is therefore not merely a window for results but the reference plane of work. As brightness, contrast, and color consistency stabilize, the user can trust judgment longer than machine performance."
+            }
           }
         ]
       }
@@ -814,7 +905,7 @@ export const articles = [
     subcategory: { ko: "제품", en: "Product" },
     date: "2026-04-20",
     issue: "Issue 03",
-    readTime: { ko: "6분 읽기", en: "6 min read" },
+    readTime: { ko: "8분 읽기", en: "8 min read" },
     location: { ko: "Tokyo", en: "Tokyo" },
     heroClass: "image-material",
     heroImage: imageUrls.mujiStorage,
@@ -864,8 +955,8 @@ export const articles = [
           {
             type: "gallery",
             images: [
-              { imageClass: "image-material", image: imageUrls.mujiStorage },
-              { imageClass: "image-field", image: imageUrls.mujiDailyGoods }
+              { imageClass: "image-field", image: imageUrls.mujiDailyGoods },
+              { imageClass: "image-library", image: imageUrls.mujiInterior }
             ],
             caption: {
               ko: "MUJI 공식 스토어의 수납용품 및 생활잡화 카테고리 이미지.",
@@ -877,6 +968,13 @@ export const articles = [
             text: {
               ko: "폴리프로필렌의 반투명함은 완전한 노출과 완전한 은폐 사이에 있다. 내용물은 흐리게 보이고, 사용자는 모든 것을 라벨링하지 않아도 대략의 위치를 기억한다.",
               en: "The translucency of polypropylene sits between full exposure and full concealment. Contents appear softly, and the user can remember approximate locations without labeling everything."
+            }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "수납이 생활을 바꾸는 방식은 극적이지 않다. 같은 높이의 박스가 쌓이고, 같은 손잡이가 반복되고, 비슷한 투명도가 방 안의 소음을 낮출 때 사용자는 물건보다 자신의 규칙을 먼저 보게 된다.",
+              en: "Storage changes life without drama. When boxes of the same height stack, the same handle repeats, and similar translucency lowers visual noise, the user sees their own rule before the objects."
             }
           }
         ]
@@ -920,6 +1018,13 @@ export const articles = [
               ko: "MUJI의 디자인은 선택의 흥분보다 유지의 안정감을 선택한다. 그래서 이 제품들은 새로 산 날보다 오랫동안 쓰이는 동안 더 강하게 존재감을 갖는다.",
               en: "MUJI design chooses the stability of maintenance over the excitement of selection. These products become stronger not on the day of purchase but while being used for a long time."
             }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "좋은 표준은 사용자가 매번 디자인을 의식하지 않아도 되도록 만든다. 반복되는 치수와 조용한 표면은 방의 결정을 줄이고, 줄어든 결정은 오래 쓰는 취향의 기반이 된다.",
+              en: "A good standard lets the user stop noticing design every time. Repeated dimensions and quiet surfaces reduce decisions in the room, and fewer decisions become the ground for lasting taste."
+            }
           }
         ]
       }
@@ -942,7 +1047,7 @@ export const articles = [
     subcategory: { ko: "향", en: "Fragrance" },
     date: "2026-04-18",
     issue: "Issue 03",
-    readTime: { ko: "5분 읽기", en: "5 min read" },
+    readTime: { ko: "8분 읽기", en: "8 min read" },
     location: { ko: "Paris", en: "Paris" },
     heroClass: "image-material",
     heroImage: imageUrls.diptyqueCandle,
@@ -992,8 +1097,9 @@ export const articles = [
           {
             type: "gallery",
             images: [
-              { imageClass: "image-material", image: imageUrls.diptyqueCandle },
-              { imageClass: "image-atelier", image: imageUrls.diptyqueFreesia }
+              { imageClass: "image-atelier", image: imageUrls.diptyqueFreesia },
+              { imageClass: "image-field", image: imageUrls.diptyqueDecor },
+              { imageClass: "image-material", image: imageUrls.diptyqueBleecker }
             ],
             caption: {
               ko: "Diptyque 공식 캔들 및 Freesia 캔들 이미지.",
@@ -1005,6 +1111,13 @@ export const articles = [
             text: {
               ko: "Roses와 Baies가 함께 놓인 라커드 글라스는 향의 조합보다 색과 표면의 조합을 먼저 보이게 한다. 사용자는 향을 맡기 전 이미 어떤 방의 표정을 상상한다.",
               en: "Roses and Baies in colored lacquered glass show color and surface before a scent pairing. Before smelling, the user already imagines the expression of a room."
+            }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "라벨의 타이포그래피와 유리의 무게, 왁스가 녹는 속도는 모두 향을 설명하지 않고도 향의 시간을 만든다. Diptyque가 오래 기억되는 이유는 노트보다 그 노트가 방 안에서 켜지는 절차를 디자인하기 때문이다.",
+              en: "The label typography, the weight of glass, and the speed of melting wax create the time of scent without explaining it. Diptyque is remembered because it designs the procedure by which notes are lit inside a room."
             }
           }
         ]
@@ -1048,6 +1161,13 @@ export const articles = [
               ko: "그래서 향의 취향은 강도보다 시간대에서 드러난다. 아침에 켜는지, 손님이 오기 전인지, 책을 닫은 뒤인지에 따라 같은 향도 다른 판단이 된다.",
               en: "Taste in fragrance appears through timing more than intensity. The same scent becomes a different judgment depending on whether it is lit in the morning, before guests arrive, or after closing a book."
             }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "향을 잘 쓰는 사람은 강한 향을 고르는 사람이 아니라 향이 사라질 시간까지 계산하는 사람에 가깝다. 남는 잔향과 꺼진 심지, 비워진 유리까지 루틴에 들어올 때 캔들은 제품보다 생활의 리듬이 된다.",
+              en: "Someone who uses scent well is less a chooser of strong fragrance than a person who understands when scent should disappear. When the remaining trace, extinguished wick, and emptied glass enter the routine, the candle becomes rhythm more than product."
+            }
           }
         ]
       }
@@ -1070,7 +1190,7 @@ export const articles = [
     subcategory: { ko: "윤리", en: "Ethics" },
     date: "2026-04-12",
     issue: "Issue 03",
-    readTime: { ko: "7분 읽기", en: "7 min read" },
+    readTime: { ko: "9분 읽기", en: "9 min read" },
     location: { ko: "Ventura", en: "Ventura" },
     heroClass: "image-library",
     heroImage: imageUrls.patagoniaPlanet,
@@ -1120,7 +1240,6 @@ export const articles = [
           {
             type: "gallery",
             images: [
-              { imageClass: "image-library", image: imageUrls.patagoniaPlanet },
               { imageClass: "image-thought", image: imageUrls.patagoniaFootprint },
               { imageClass: "image-field", image: imageUrls.patagoniaWornWear }
             ],
@@ -1134,6 +1253,13 @@ export const articles = [
             text: {
               ko: "이 구조가 흥미로운 이유는 브랜드 윤리가 캠페인 문구에서 끝나지 않는다는 데 있다. 누가 이익을 받고 누가 결정을 승인하는지까지 다시 설계해야 윤리는 생활과 조직의 기본값이 된다.",
               en: "The structure is interesting because brand ethics do not end as campaign language. Ethics become organizational defaults only when who receives value and who approves decisions are redesigned."
+            }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "소유 구조를 바꾼다는 것은 브랜드의 좋은 의도를 감동적인 문장으로 남기는 일이 아니다. 미래의 경영자가 마음을 바꾸더라도 목적이 쉽게 되돌아가지 않도록 권한과 돈의 흐름을 고정하는 일이다.",
+              en: "Changing ownership is not leaving good intent as a moving sentence. It is fixing the flow of authority and money so the purpose cannot easily be reversed even if future managers change their minds."
             }
           }
         ]
@@ -1177,6 +1303,13 @@ export const articles = [
               ko: "철학은 생활에 닿을 때 테스트된다. 좋은 브랜드 윤리는 거대한 선언보다 사용자가 물건을 오래 쓰고 고쳐 쓰도록 만드는 작은 제도에서 더 강하게 드러난다.",
               en: "Philosophy is tested when it touches daily life. Good brand ethics appear more strongly in small systems that help users keep and repair objects than in large declarations."
             }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "이 관점에서 Worn Wear는 부가 서비스가 아니라 철학의 실사용 면이다. 옷을 다시 팔고 고쳐 입게 하는 시스템은 새 제품의 카피보다 더 오래 브랜드의 책임을 반복한다.",
+              en: "From this perspective, Worn Wear is not an added service but the usable face of philosophy. A system that resells and repairs clothing repeats brand responsibility longer than new-product copy can."
+            }
           }
         ]
       }
@@ -1199,7 +1332,7 @@ export const articles = [
     subcategory: { ko: "몸", en: "Body" },
     date: "2026-04-08",
     issue: "Issue 03",
-    readTime: { ko: "6분 읽기", en: "6 min read" },
+    readTime: { ko: "8분 읽기", en: "8 min read" },
     location: { ko: "Cupertino", en: "Cupertino" },
     heroClass: "image-thought",
     heroImage: imageUrls.appleVisionPrivacy,
@@ -1249,8 +1382,8 @@ export const articles = [
           {
             type: "gallery",
             images: [
-              { imageClass: "image-thought", image: imageUrls.appleVisionPrivacy },
-              { imageClass: "image-library", image: imageUrls.appleVisionSensors }
+              { imageClass: "image-library", image: imageUrls.appleVisionSensors },
+              { imageClass: "image-interface", image: imageUrls.appleVisionBand }
             ],
             caption: {
               ko: "Apple Vision Pro 가치 섹션의 eye input 및 camera sensor data 이미지.",
@@ -1262,6 +1395,13 @@ export const articles = [
             text: {
               ko: "이 설명은 기능 소개의 부록이 아니라 제품의 철학적 중심에 가깝다. 시선과 손이 입력 장치가 되는 순간, 사용자의 몸은 인터페이스이면서 동시에 보호되어야 할 내부가 된다.",
               en: "This language is not an appendix to feature description but close to the product's philosophical center. When gaze and hands become input devices, the user's body is both interface and an interior to be protected."
+            }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "공간 인터페이스에서 프라이버시는 화면 뒤의 설정 항목이 아니다. 사용자가 어디를 보는지, 무엇을 선택하지 않았는지, 잠시 머문 시선이 어떤 의미로 해석될 수 있는지가 모두 몸의 내부와 연결된다.",
+              en: "In a spatial interface, privacy is not a settings item behind the screen. Where a user looks, what they did not select, and what a lingering gaze might mean are all connected to the interior of the body."
             }
           }
         ]
@@ -1305,6 +1445,13 @@ export const articles = [
               ko: "공간 컴퓨팅의 윤리는 몰입감의 크기보다 사용자의 몸을 얼마나 적게 노출시키는지에서 판단된다. 눈이 커서가 될수록 커서 뒤의 사람은 더 조용히 보호되어야 한다.",
               en: "The ethics of spatial computing are judged less by the scale of immersion than by how little of the user's body is exposed. As the eye becomes cursor, the person behind the cursor must be protected more quietly."
             }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "좋은 기본값은 사용자를 교육하기 전에 이미 방향을 정한다. Vision Pro의 프라이버시 문장이 중요해지는 지점은 바로 여기다. 사용자가 매번 방어하지 않아도 몸의 데이터가 제품의 첫 판단 안에서 보호되어야 한다.",
+              en: "A good default decides direction before educating the user. This is where Vision Pro's privacy language becomes important: bodily data should be protected inside the product's first judgment without requiring the user to defend it each time."
+            }
           }
         ]
       }
@@ -1327,7 +1474,7 @@ export const articles = [
     subcategory: { ko: "제품", en: "Product" },
     date: "2026-04-04",
     issue: "Issue 03",
-    readTime: { ko: "6분 읽기", en: "6 min read" },
+    readTime: { ko: "8분 읽기", en: "8 min read" },
     location: { ko: "Wetzlar", en: "Wetzlar" },
     heroClass: "image-atelier",
     heroImage: imageUrls.leicaM11,
@@ -1377,8 +1524,8 @@ export const articles = [
           {
             type: "gallery",
             images: [
-              { imageClass: "image-atelier", image: imageUrls.leicaM11 },
-              { imageClass: "image-field", image: imageUrls.leicaMSystem }
+              { imageClass: "image-field", image: imageUrls.leicaMSystem },
+              { imageClass: "image-atelier", image: imageUrls.leicaQ3 }
             ],
             caption: {
               ko: "Leica 공식 내비게이션의 M11 Monochrom과 M-System 이미지.",
@@ -1390,6 +1537,13 @@ export const articles = [
             text: {
               ko: "제품 디자인에서 절제는 빈약함과 다르다. 어떤 자동화를 남겨 두지 않을지 결정하는 순간, 제품은 사용자에게 더 많은 집중을 요구하고 그 집중을 브랜드의 감각으로 만든다.",
               en: "In product design, restraint differs from poverty. When a product decides which automation not to include, it asks more focus from the user and turns that focus into brand sense."
+            }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "손으로 맞추는 거리와 셔터의 촉감은 느린 기능처럼 보이지만, 실제로는 이미지가 만들어지기 전 판단의 위치를 남겨 둔다. 사용자는 카메라가 대신 본 장면을 고르는 것이 아니라 자신이 본 장면을 확인한다.",
+              en: "Manual distance and the feel of the shutter may look like slow functions, but they preserve the place of judgment before the image is made. The user confirms the scene they saw rather than choosing a scene the camera saw for them."
             }
           }
         ]
@@ -1433,6 +1587,13 @@ export const articles = [
               ko: "제품의 취향은 새로움과 익숙함의 비율에서 나온다. M11 Monochrom은 최신 센서의 이미지 품질을 말하면서도 카메라가 손 안에서 어떤 모양이어야 하는지를 쉽게 바꾸지 않는다.",
               en: "Product taste comes from the ratio between newness and familiarity. M11 Monochrom speaks about contemporary image quality while refusing to easily change what shape a camera should have in the hand."
             }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "이 지속성은 단순한 향수가 아니다. 같은 위치에 있는 버튼과 비슷한 무게 중심은 사용자가 도구를 다시 익히는 시간을 줄이고, 줄어든 학습 시간은 사진을 찍는 태도 자체로 돌아온다.",
+              en: "This continuity is not simple nostalgia. Buttons in familiar positions and a similar center of gravity reduce the time needed to relearn the tool, and that saved time returns to the attitude of photographing itself."
+            }
           }
         ]
       }
@@ -1455,7 +1616,7 @@ export const articles = [
     subcategory: { ko: "인테리어", en: "Interior" },
     date: "2026-03-30",
     issue: "Issue 03",
-    readTime: { ko: "6분 읽기", en: "6 min read" },
+    readTime: { ko: "8분 읽기", en: "8 min read" },
     location: { ko: "Tokyo", en: "Tokyo" },
     heroClass: "image-field",
     heroImage: imageUrls.mujiInterior,
@@ -1505,7 +1666,6 @@ export const articles = [
           {
             type: "gallery",
             images: [
-              { imageClass: "image-field", image: imageUrls.mujiInterior },
               { imageClass: "image-material", image: imageUrls.mujiDailyGoods },
               { imageClass: "image-library", image: imageUrls.mujiStorage }
             ],
@@ -1519,6 +1679,13 @@ export const articles = [
             text: {
               ko: "분류가 세밀할수록 브랜드는 무엇을 중요하게 보는지 드러난다. 수납과 가전이 같은 큰 구획에 있고, 생활잡화 안에 향과 청소, 문구가 함께 놓일 때 일상의 범위가 정해진다.",
               en: "The more precise the classification, the more a brand reveals what it considers important. When storage and appliances share a section, and scent, cleaning, and stationery sit inside daily goods, the scope of everyday life is defined."
+            }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "이런 매장은 제품보다 먼저 생활의 편집 방식을 보여준다. 무엇을 가까이 두고 무엇을 멀리 둘지, 어떤 물건이 같은 선반에 놓일 수 있는지, 어떤 필요가 다음 필요를 부르는지가 동선 안에서 읽힌다.",
+              en: "Such a store shows a method of editing life before it shows products. What stays near or far, which objects can share a shelf, and which need leads to the next are read through the route."
             }
           }
         ]
@@ -1561,6 +1728,13 @@ export const articles = [
             text: {
               ko: "이때 매장은 작은 도시가 된다. 사용자는 옷에서 시작해 수납과 음식까지 이동하며 자신이 사는 생활의 크기를 다시 측정한다.",
               en: "The store becomes a small city. Moving from clothes to storage and food, the visitor remeasures the scale of the life they live."
+            }
+          },
+          {
+            type: "paragraph",
+            text: {
+              ko: "좋은 매장 경험은 오래 머무르게 하는 장치보다 다시 방문할 수 있는 기억을 남긴다. MUJI의 분류는 강한 장면 대신 생활의 길을 만들고, 그 길은 온라인 목록에서도 같은 순서로 이어진다.",
+              en: "A good store experience leaves a memory that can be revisited rather than a device that keeps people in place. MUJI's classification builds a path of daily life instead of a strong scene, and that path continues in the same order online."
             }
           }
         ]

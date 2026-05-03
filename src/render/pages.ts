@@ -161,6 +161,8 @@ const issueCoverVisual = (issue: IssueProject): string =>
 const issueCoverImage = (issue: IssueProject): string =>
   issue.coverImage || issue.features.find((feature) => feature.heroImage)?.heroImage || "";
 
+const isPhotographicImage = (imageUrl = ""): boolean => imageUrl.length > 0 && !/\.svg(?:$|[?#])/.test(imageUrl);
+
 const renderIssuePrototype = (issue: IssueProject, locale: Locale, variant: "home" | "collection" | "detail" = "detail"): string => {
   const titleWords = text(issue.title, locale).split(/\s+/).filter(Boolean);
   const coverLines = issue.features.slice(0, 3)
@@ -199,17 +201,21 @@ ${coverLines}
 };
 
 const renderIssueSpread = (issue: IssueProject, locale: Locale): string => {
-  const leadFeature = issue.features[0];
-  const spreadCopy = (leadFeature?.body[locale] ?? [text(issue.editorNote, locale)]).slice(0, 2)
+  const spreadCopy = [text(issue.deck, locale), text(issue.editorNote, locale)]
     .map((paragraph) => `                <p>${escapeHtml(paragraph)}</p>`)
     .join("\n");
-  const imageFeatures = issue.features.filter((feature) => feature.heroImage).slice(0, 4);
-  const spreadImages = imageFeatures.length > 0 ? imageFeatures : issue.features.slice(0, 4);
-  const imageGrid = spreadImages
-    .map((feature, index) => `              <span class="magazine-spread-image-slot ${index === 0 ? "is-large" : ""}">
-                ${renderImageBlock(feature.heroClass, feature.heroImage)}
-                <small>${String(index + 1).padStart(2, "0")}</small>
-              </span>`)
+  const coverFeature = issue.features.find((feature) => feature.heroImage && feature.heroImage === issue.coverImage);
+  const photographicFeatures = issue.features.filter((feature) => isPhotographicImage(feature.heroImage));
+  const spreadImages = [
+    ...(coverFeature ? [coverFeature] : []),
+    ...photographicFeatures.filter((feature) => feature !== coverFeature)
+  ].slice(0, 4);
+  const imageFeatures = spreadImages.length > 0 ? spreadImages : issue.features.slice(0, 4);
+  const imageGrid = imageFeatures
+    .map((feature, index) => `              <span class="magazine-spread-image-slot ${index === 0 ? "is-large" : ""}"${index === 0 ? " data-issue-spread-main-slot" : ""}>
+                 ${renderImageBlock(feature.heroClass, feature.heroImage, index === 0 ? "data-issue-spread-main-image" : "")}
+                 <small${index === 0 ? " data-issue-spread-main-no" : ""}>${String(issue.features.indexOf(feature) + 1).padStart(2, "0")}</small>
+               </span>`)
     .join("\n");
   const contents = issue.features.slice(0, 4)
     .map((feature, index) => `            <span>
@@ -218,7 +224,7 @@ const renderIssueSpread = (issue: IssueProject, locale: Locale): string => {
             </span>`)
     .join("\n");
 
-  return `<figure class="magazine-spread-mockup" aria-label="${escapeHtml(locale === "ko" ? `${issue.number} 펼친 잡지 목업` : `${issue.number} open magazine mockup`)}">
+  return `<figure class="magazine-spread-mockup" data-issue-spread aria-label="${escapeHtml(locale === "ko" ? `${issue.number} 펼친 잡지 목업` : `${issue.number} open magazine mockup`)}">
           <div class="magazine-spread-boundary">
             <section class="magazine-spread-page is-text-page">
               <div class="magazine-spread-masthead">
@@ -226,11 +232,11 @@ const renderIssueSpread = (issue: IssueProject, locale: Locale): string => {
                 <small>${escapeHtml(`${issue.number} / ${text(issue.date, locale)}`)}</small>
               </div>
               <div class="magazine-spread-feature">
-                <p>${escapeHtml(leadFeature ? text(leadFeature.role, locale) : "Current Issue")}</p>
-                <h2>${escapeHtml(text(issue.title, locale))}</h2>
-                <em>${escapeHtml(leadFeature ? text(leadFeature.intro, locale) : text(issue.subtitle, locale))}</em>
+                <p data-issue-spread-role>${escapeHtml(locale === "ko" ? "Current Issue" : "Current Issue")}</p>
+                <h2 data-issue-spread-title>${escapeHtml(text(issue.title, locale))}</h2>
+                <em data-issue-spread-intro>${escapeHtml(text(issue.subtitle, locale))}</em>
               </div>
-              <div class="magazine-spread-copy">
+              <div class="magazine-spread-copy" data-issue-spread-copy>
 ${spreadCopy}
               </div>
               <div class="magazine-spread-contents">
@@ -241,13 +247,13 @@ ${contents}
               <div class="magazine-spread-image-grid">
 ${imageGrid}
               </div>
-              <p>${escapeHtml(text(issue.deck, locale))}</p>
+              <p data-issue-spread-deck>${escapeHtml(text(issue.deck, locale))}</p>
             </section>
           </div>
         </figure>`;
 };
 
-const assetVersion = "20260504-home-spread-cover";
+const assetVersion = "20260504-magazine-spread-paging";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -913,14 +919,19 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
   const leadArticle = selectedArticles[0];
   const secondaryArticles = selectedArticles.slice(1, 5);
   const homeIndexRows = issueFeatures
-    .map((feature, index) => `              <a class="home-index-row" href="${issueHref(currentIssue, locale)}#issue-${escapeHtml(feature.slug)}" data-scroll-motion>
+    .map((feature, index) => {
+      const featureBody = feature.body[locale] ?? [];
+      const spreadImage = isPhotographicImage(feature.heroImage) ? feature.heroImage ?? "" : "";
+
+      return `              <a class="home-index-row" href="${issueHref(currentIssue, locale)}#issue-${escapeHtml(feature.slug)}" data-scroll-motion data-issue-spread-row data-spread-no="${String(index + 1).padStart(2, "0")}" data-spread-title="${escapeHtml(text(feature.title, locale))}" data-spread-role="${escapeHtml(text(feature.role, locale))}" data-spread-intro="${escapeHtml(text(feature.intro, locale))}" data-spread-copy-a="${escapeHtml(featureBody[0] ?? text(feature.excerpt, locale))}" data-spread-copy-b="${escapeHtml(featureBody[1] ?? text(currentIssue.editorNote, locale))}" data-spread-deck="${escapeHtml(text(feature.excerpt, locale))}" data-spread-visual="${escapeHtml(feature.heroClass)}" data-spread-image="${escapeHtml(spreadImage)}">
                 <span class="home-index-order">${String(index + 1).padStart(2, "0")}</span>
                 <span class="home-index-copy">
                   <strong>${escapeHtml(text(feature.title, locale))}</strong>
                   <span class="home-index-meta">${escapeHtml(text(feature.role, locale))}</span>
                   <em>${escapeHtml(text(feature.intro, locale))}</em>
                 </span>
-              </a>`)
+              </a>`;
+    })
     .join("\n");
   const homeRecentLead = leadArticle
     ? `          <a class="home-recent-lead" href="${articleHref(leadArticle, locale)}" data-reveal data-action-card>

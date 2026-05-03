@@ -171,6 +171,45 @@ const animateTextSwap = (elements: HTMLElement[]): void => {
   });
 };
 
+document.querySelectorAll<HTMLElement>("[data-issue-spread]").forEach((spread) => {
+  const rows = Array.from(document.querySelectorAll<HTMLElement>("[data-issue-spread-row]"));
+  const role = spread.querySelector<HTMLElement>("[data-issue-spread-role]");
+  const title = spread.querySelector<HTMLElement>("[data-issue-spread-title]");
+  const intro = spread.querySelector<HTMLElement>("[data-issue-spread-intro]");
+  const copy = spread.querySelector<HTMLElement>("[data-issue-spread-copy]");
+  const deck = spread.querySelector<HTMLElement>("[data-issue-spread-deck]");
+  const mainImage = spread.querySelector<HTMLElement>("[data-issue-spread-main-image]");
+  const mainNo = spread.querySelector<HTMLElement>("[data-issue-spread-main-no]");
+
+  if (rows.length === 0 || !role || !title || !intro || !copy || !deck || !mainImage || !mainNo) {
+    return;
+  }
+
+  const copyParagraphs = Array.from(copy.querySelectorAll<HTMLParagraphElement>("p"));
+  const setSpreadFromRow = (row: HTMLElement): void => {
+    rows.forEach((item) => item.classList.toggle("is-active", item === row));
+    role.textContent = row.dataset.spreadRole || role.textContent;
+    title.textContent = row.dataset.spreadTitle || title.textContent;
+    intro.textContent = row.dataset.spreadIntro || intro.textContent;
+    deck.textContent = row.dataset.spreadDeck || deck.textContent;
+    mainNo.textContent = row.dataset.spreadNo || mainNo.textContent;
+    setImageBlockVisual(mainImage, row.dataset.spreadVisual || "image-material", row.dataset.spreadImage || "");
+
+    copyParagraphs.forEach((paragraph, index) => {
+      const nextText = index === 0 ? row.dataset.spreadCopyA : row.dataset.spreadCopyB;
+      paragraph.textContent = nextText || "";
+    });
+
+    spread.classList.add("is-paging");
+    animateTextSwap([role, title, intro, deck, ...copyParagraphs]);
+  };
+
+  rows.forEach((row) => {
+    row.addEventListener("pointerenter", () => setSpreadFromRow(row));
+    row.addEventListener("focus", () => setSpreadFromRow(row));
+  });
+});
+
 const setMenuOpen = (isOpen: boolean): void => {
   if (!menuButton || !mobileMenu) {
     return;
