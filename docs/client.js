@@ -440,7 +440,8 @@ if (writer) {
             credit: { ...fallback.credit, ...feature.credit },
             location: { ...fallback.location, ...feature.location },
             readTime: { ...fallback.readTime, ...feature.readTime },
-            heroClass: feature.heroClass || fallback.heroClass
+            heroClass: feature.heroClass || fallback.heroClass,
+            heroImage: feature.heroImage || fallback.heroImage
         };
     };
     const normalizeIssue = (issue) => {
@@ -455,6 +456,7 @@ if (writer) {
             format: { ...fallback.format, ...issue.format },
             availability: { ...fallback.availability, ...issue.availability },
             coverCredit: { ...fallback.coverCredit, ...issue.coverCredit },
+            coverImage: issue.coverImage || fallback.coverImage,
             editorNote: { ...fallback.editorNote, ...issue.editorNote },
             credits: (issue.credits && issue.credits.length > 0 ? issue.credits : fallback.credits).map((credit) => ({
                 label: { ko: credit.label?.ko || "", en: credit.label?.en || "" },

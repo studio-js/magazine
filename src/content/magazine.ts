@@ -1700,6 +1700,7 @@ export const issueProjects: IssueProject[] = [
       ko: "커버 이미지: 조용한 도구와 방의 표면을 위한 편집부 스터디",
       en: "Cover image: an editorial study for quiet instruments and room surfaces."
     },
+    coverImage: imageUrls.appleVisionHero,
     editorNote: {
       ko: "취향은 강한 주장보다 반복되는 사용에서 더 정확히 생깁니다. 이번 호는 제품 리뷰가 아니라 실제 브랜드와 제품이 몸의 리듬을 어떻게 바꾸는지 읽는 발행본입니다.",
       en: "Taste forms more precisely through repeated use than through strong claims. This issue is not product review but a reading of how real brands and products change bodily rhythm."
@@ -1735,7 +1736,8 @@ export const issueProjects: IssueProject[] = [
         credit: { ko: "Interface / Apple official page", en: "Interface / Apple official page" },
         location: { ko: "Cupertino", en: "Cupertino" },
         readTime: { ko: "에세이", en: "Essay" },
-        heroClass: "image-interface"
+        heroClass: "image-interface",
+        heroImage: imageUrls.appleVisionHero
       },
       {
         slug: "monochrome-rule",
@@ -1762,7 +1764,8 @@ export const issueProjects: IssueProject[] = [
         credit: { ko: "Images / Leica official page", en: "Images / Leica official page" },
         location: { ko: "Wetzlar", en: "Wetzlar" },
         readTime: { ko: "파일", en: "File" },
-        heroClass: "image-atelier"
+        heroClass: "image-atelier",
+        heroImage: imageUrls.leicaQ3
       },
       {
         slug: "scented-time",
@@ -1789,7 +1792,8 @@ export const issueProjects: IssueProject[] = [
         credit: { ko: "Fragrance / Diptyque official page", en: "Fragrance / Diptyque official page" },
         location: { ko: "Paris / New York", en: "Paris / New York" },
         readTime: { ko: "노트", en: "Note" },
-        heroClass: "image-material"
+        heroClass: "image-material",
+        heroImage: imageUrls.diptyqueBleecker
       },
       {
         slug: "repair-ledger",
@@ -1816,7 +1820,8 @@ export const issueProjects: IssueProject[] = [
         credit: { ko: "Ethics / Patagonia official page", en: "Ethics / Patagonia official page" },
         location: { ko: "Ventura", en: "Ventura" },
         readTime: { ko: "파일", en: "File" },
-        heroClass: "image-library"
+        heroClass: "image-library",
+        heroImage: imageUrls.patagoniaWornWear
       },
       {
         slug: "standard-room",
@@ -1843,7 +1848,8 @@ export const issueProjects: IssueProject[] = [
         credit: { ko: "Design / MUJI official store", en: "Design / MUJI official store" },
         location: { ko: "Tokyo", en: "Tokyo" },
         readTime: { ko: "후기", en: "Afterword" },
-        heroClass: "image-field"
+        heroClass: "image-field",
+        heroImage: imageUrls.mujiStorage
       }
     ]
   },
@@ -1865,6 +1871,7 @@ export const issueProjects: IssueProject[] = [
       ko: "커버 이미지: 방, 선반, 이동하는 가방을 위한 편집부 스터디",
       en: "Cover image: an editorial study for rooms, shelves, and moving bags."
     },
+    coverImage: imageUrls.mujiInterior,
     editorNote: {
       ko: "물건의 의미는 스펙만으로 정해지지 않습니다. 손이 닿는 높이, 방의 조도, 이동하는 거리, 다시 넣는 위치가 취향을 만듭니다.",
       en: "The meaning of an object is not decided by specs alone. Reach height, room light, travel distance, and return position form taste."
@@ -1884,7 +1891,8 @@ export const issueProjects: IssueProject[] = [
         credit: { ko: "Space / Editorial Desk", en: "Space / Editorial Desk" },
         location: { ko: "Editorial", en: "Editorial" },
         readTime: { ko: "노트", en: "Note" },
-        heroClass: "image-field"
+        heroClass: "image-field",
+        heroImage: imageUrls.mujiStorage
       },
       {
         slug: "travel-bag-room",
@@ -1896,7 +1904,8 @@ export const issueProjects: IssueProject[] = [
         credit: { ko: "Object / Field notes", en: "Object / Field notes" },
         location: { ko: "Travel", en: "Travel" },
         readTime: { ko: "파일", en: "File" },
-        heroClass: "image-material"
+        heroClass: "image-material",
+        heroImage: imageUrls.mujiDailyGoods
       },
       {
         slug: "store-route",
@@ -1908,7 +1917,8 @@ export const issueProjects: IssueProject[] = [
         credit: { ko: "Space / Route study", en: "Space / Route study" },
         location: { ko: "Store", en: "Store" },
         readTime: { ko: "에세이", en: "Essay" },
-        heroClass: "image-system"
+        heroClass: "image-system",
+        heroImage: imageUrls.mujiInterior
       },
       {
         slug: "after-use",
@@ -1920,7 +1930,8 @@ export const issueProjects: IssueProject[] = [
         credit: { ko: "Afterword / Editorial Desk", en: "Afterword / Editorial Desk" },
         location: { ko: "Closing", en: "Closing" },
         readTime: { ko: "후기", en: "Afterword" },
-        heroClass: "image-thought"
+        heroClass: "image-thought",
+        heroImage: imageUrls.patagoniaWornWear
       }
     ]
   },
@@ -1942,6 +1953,7 @@ export const issueProjects: IssueProject[] = [
       ko: "커버 이미지: 선택 이전의 몸과 도구를 위한 편집부 스터디",
       en: "Cover image: an editorial study for body and tool before choice."
     },
+    coverImage: imageUrls.appleVisionPrivacy,
     editorNote: {
       ko: "Habitus의 첫 이슈는 취향을 좋아함의 목록이 아니라 반복과 경험이 만든 몸의 질서로 읽기 위해 설계되었습니다.",
       en: "The first issue of Habitus was built to read taste not as a list of likes but as bodily order shaped by repetition and experience."
@@ -1961,7 +1973,8 @@ export const issueProjects: IssueProject[] = [
         credit: { ko: "Essay / Habitus", en: "Essay / Habitus" },
         location: { ko: "Editorial", en: "Editorial" },
         readTime: { ko: "에세이", en: "Essay" },
-        heroClass: "image-thought"
+        heroClass: "image-thought",
+        heroImage: imageUrls.leicaMSystem
       },
       {
         slug: "defaults",
@@ -1973,7 +1986,8 @@ export const issueProjects: IssueProject[] = [
         credit: { ko: "Systems / Editorial Desk", en: "Systems / Editorial Desk" },
         location: { ko: "Interface", en: "Interface" },
         readTime: { ko: "노트", en: "Note" },
-        heroClass: "image-system"
+        heroClass: "image-system",
+        heroImage: imageUrls.appleVisionPrivacy
       },
       {
         slug: "memory-of-tools",
@@ -1985,7 +1999,8 @@ export const issueProjects: IssueProject[] = [
         credit: { ko: "Tools / Field notes", en: "Tools / Field notes" },
         location: { ko: "Studio", en: "Studio" },
         readTime: { ko: "파일", en: "File" },
-        heroClass: "image-material"
+        heroClass: "image-material",
+        heroImage: imageUrls.leicaM11
       },
       {
         slug: "after-choice",
@@ -1997,7 +2012,8 @@ export const issueProjects: IssueProject[] = [
         credit: { ko: "Afterword / Editorial Desk", en: "Afterword / Editorial Desk" },
         location: { ko: "Closing", en: "Closing" },
         readTime: { ko: "후기", en: "Afterword" },
-        heroClass: "image-library"
+        heroClass: "image-library",
+        heroImage: imageUrls.mujiDailyGoods
       }
     ]
   }

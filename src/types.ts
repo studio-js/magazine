@@ -139,6 +139,7 @@ export interface IssueFeature {
   location: LocalizedText;
   readTime: LocalizedText;
   heroClass: VisualClass;
+  heroImage?: string;
 }
 
 export interface IssueProject {
@@ -150,6 +151,7 @@ export interface IssueProject {
   format: LocalizedText;
   availability: LocalizedText;
   coverCredit: LocalizedText;
+  coverImage?: string;
   editorNote: LocalizedText;
   credits: IssueCredit[];
   features: IssueFeature[];

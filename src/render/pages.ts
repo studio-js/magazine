@@ -153,7 +153,56 @@ const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, l
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${attributes ? ` ${attributes}` : ""}>${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="" loading="lazy" decoding="async" data-image-source />` : ""}</span>`;
 
-const assetVersion = "20260504-write-image-placement";
+const issueCoverVisual = (issue: IssueProject): string => issue.features[0]?.heroClass ?? "image-material";
+
+const issueCoverImage = (issue: IssueProject): string =>
+  issue.coverImage || issue.features.find((feature) => feature.heroImage)?.heroImage || "";
+
+const renderIssuePrototype = (issue: IssueProject, locale: Locale, variant: "home" | "collection" | "detail" = "detail"): string => {
+  const leadFeature = issue.features[0];
+  const previewFeatures = issue.features.filter((feature) => feature.heroImage).slice(0, 4);
+  const previewImages = (previewFeatures.length > 0 ? previewFeatures : issue.features.slice(0, 4))
+    .map((feature) => `            ${renderImageBlock(feature.heroClass, feature.heroImage)}`)
+    .join("\n");
+  const coverLines = issue.features.slice(0, 3)
+    .map((feature, index) => `            <span>${String(index + 1).padStart(2, "0")} ${escapeHtml(text(feature.title, locale))}</span>`)
+    .join("\n");
+
+  return `<figure class="magazine-prototype magazine-prototype-${variant}" aria-label="${escapeHtml(locale === "ko" ? `${issue.number} 잡지 프로토타입` : `${issue.number} magazine prototype`)}">
+          <div class="magazine-prototype-stage">
+            <div class="magazine-cover-sheet">
+              ${renderImageBlock(issueCoverVisual(issue), issueCoverImage(issue))}
+              <div class="magazine-cover-type">
+                <span>Habitus</span>
+                <small>${escapeHtml(issue.number)}</small>
+                <strong>${escapeHtml(text(issue.title, locale))}</strong>
+                <em>${escapeHtml(text(issue.subtitle, locale))}</em>
+              </div>
+              <div class="magazine-cover-lines" aria-hidden="true">
+${coverLines}
+              </div>
+            </div>
+            <div class="magazine-spread-sheet" aria-hidden="true">
+              <div class="magazine-spread-page is-copy">
+                <small>Prototype Spread</small>
+                <strong>${escapeHtml(leadFeature ? text(leadFeature.title, locale) : text(issue.title, locale))}</strong>
+                <em>${escapeHtml(text(issue.date, locale))}</em>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="magazine-spread-page is-images">
+                <div class="magazine-spread-grid">
+${previewImages}
+                </div>
+              </div>
+            </div>
+          </div>
+          <figcaption>${escapeHtml(locale === "ko" ? "실제 이미지 기반 잡지형 프로토타입" : "Magazine-form prototype with sourced imagery")}</figcaption>
+        </figure>`;
+};
+
+const assetVersion = "20260504-issue-prototypes";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -850,6 +899,9 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
       "              </a>"
     ].filter(Boolean).join("\n"))
     .join("\n");
+  const homeIssuePrototype = `          <a class="home-issue-prototype" href="${issueHref(currentIssue, locale)}" data-action-card>
+${renderIssuePrototype(currentIssue, locale, "home")}
+          </a>`;
   const body = `
     <section class="cover section-pad" aria-labelledby="hero-title" data-scroll-section>
       <div class="cover-grid home-cover-grid">
@@ -870,6 +922,8 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
           <header class="home-index-headline">
             <p class="kicker" id="home-issue-index-title">Issue Index</p>
           </header>
+
+${homeIssuePrototype}
 
           <div class="home-index-list" aria-label="${escapeHtml(locale === "ko" ? "이슈 읽기 순서" : "Issue reading order")}">
 ${homeIndexRows}
@@ -970,7 +1024,6 @@ export const renderAboutPage = (site: SiteContent, locale: Locale, currentPath: 
 const renderIssueCollectionItems = (issues: IssueProject[], locale: Locale, offset = 0, selectedIssue?: IssueProject): string => issues
   .map((issue, index) => {
     const absoluteIndex = offset + index;
-    const coverVisual = issue.features[0]?.heroClass ?? "image-material";
     const isCurrent = selectedIssue ? issueSlug(issue) === issueSlug(selectedIssue) : false;
     const scenes = issue.features.slice(0, 3)
       .map((feature, featureIndex) => `          <span>
@@ -981,7 +1034,7 @@ const renderIssueCollectionItems = (issues: IssueProject[], locale: Locale, offs
 
     return `        <a class="issue-collection-item ${absoluteIndex === 0 ? "is-latest" : ""} ${isCurrent ? "is-current" : ""}" href="${issueHref(issue, locale)}"${isCurrent ? " aria-current=\"page\"" : ""} data-reveal data-action-card>
           <div class="issue-collection-cover" aria-label="${escapeHtml(locale === "ko" ? "이슈 커버" : "Issue cover")}">
-            <span class="image-block ${coverVisual}"></span>
+${renderIssuePrototype(issue, locale, "collection")}
           </div>
           <div class="issue-collection-copy">
             <p class="kicker">${escapeHtml(absoluteIndex === 0 ? (locale === "ko" ? "최신호" : "Latest issue") : (locale === "ko" ? "지난호" : "Past issue"))} / ${escapeHtml(text(issue.date, locale))}</p>
@@ -1036,7 +1089,6 @@ export const renderIssuePage = (site: SiteContent, _articleList: Article[], loca
   const issue = selectedIssue ?? latestIssue(site);
   const issueIndex = site.issueProjects.findIndex((item) => issueSlug(item) === issueSlug(issue));
   const issueIsLatest = issueIndex <= 0;
-  const coverVisual = issue.features[0]?.heroClass ?? "image-material";
   const issueRows = issue.features
     .map((feature, index) => `        <a class="issue-toc-row issue-feature-row" href="#issue-${escapeHtml(feature.slug)}" data-reveal>
           <span class="issue-toc-no">${String(index + 1).padStart(2, "0")}</span>
@@ -1046,9 +1098,12 @@ export const renderIssuePage = (site: SiteContent, _articleList: Article[], loca
         </a>`)
     .join("\n");
   const issueChapters = issue.features
-    .map((feature, index) => `        <section class="issue-chapter" id="issue-${escapeHtml(feature.slug)}" aria-labelledby="issue-chapter-${escapeHtml(feature.slug)}" data-reveal>
+    .map((feature, index) => {
+      const cycleAttributes = feature.heroImage ? "" : `data-visual-cycle role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "이슈 장면 비주얼 바꾸기" : "Cycle issue scene visual")}"`;
+
+      return `        <section class="issue-chapter" id="issue-${escapeHtml(feature.slug)}" aria-labelledby="issue-chapter-${escapeHtml(feature.slug)}" data-reveal>
           <div class="issue-chapter-media">
-            <span class="image-block ${feature.heroClass}" data-visual-cycle role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "이슈 장면 비주얼 바꾸기" : "Cycle issue scene visual")}"></span>
+            ${renderImageBlock(feature.heroClass, feature.heroImage, cycleAttributes)}
             <p>${escapeHtml(text(feature.credit, locale))} / ${escapeHtml(text(feature.location, locale))}</p>
           </div>
           <div class="issue-chapter-copy">
@@ -1057,7 +1112,8 @@ export const renderIssuePage = (site: SiteContent, _articleList: Article[], loca
             <p class="issue-chapter-intro">${escapeHtml(text(feature.intro, locale))}</p>
             ${feature.body[locale].map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("\n            ")}
           </div>
-        </section>`)
+        </section>`;
+    })
     .join("\n");
   const credits = issue.credits
     .map((credit) => `        <span>
@@ -1076,7 +1132,7 @@ export const renderIssuePage = (site: SiteContent, _articleList: Article[], loca
         </div>
 
         <aside class="issue-cover-card" aria-label="${escapeHtml(locale === "ko" ? "이슈 커버" : "Issue cover")}">
-          <span class="image-block ${coverVisual}" data-visual-cycle role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "이슈 커버 비주얼 바꾸기" : "Cycle issue cover visual")}"></span>
+${renderIssuePrototype(issue, locale, "detail")}
           <small>${escapeHtml(locale === "ko" ? "표지" : "Cover")}</small>
           <strong>${escapeHtml(issue.number)}</strong>
           <em>${escapeHtml(text(issue.coverCredit, locale))}</em>
