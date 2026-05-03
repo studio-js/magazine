@@ -10629,11 +10629,12 @@ html[lang="ko"] .admin-header h1 {
 .admin-select-control select,
 .issue-admin-picker select {
   appearance: none;
-  padding-right: 3.25rem !important;
-  background:
-    linear-gradient(45deg, transparent 50%, rgba(24, 23, 19, 0.52) 50%) calc(100% - 1.25rem) 52% / 0.38rem 0.38rem no-repeat,
-    linear-gradient(135deg, rgba(24, 23, 19, 0.52) 50%, transparent 50%) calc(100% - 0.98rem) 52% / 0.38rem 0.38rem no-repeat,
-    rgba(255, 253, 247, 0.38) !important;
+  padding-right: 3.35rem !important;
+  background-color: rgba(255, 253, 247, 0.38) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.25 6.25 8 10l3.75-3.75' fill='none' stroke='%236d685f' stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-position: right 1.08rem center !important;
+  background-repeat: no-repeat !important;
+  background-size: 0.86rem 0.86rem !important;
 }
 
 .archive-page .archive-title,
@@ -10649,24 +10650,31 @@ html[lang="en"] .archive-page .archive-title {
 .cover[data-scroll-section]::before,
 .home-stories[data-scroll-section]::before,
 .notes[data-scroll-section]::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: min(100%, 28rem);
-  height: 1px;
-  background: var(--ink);
-  opacity: 0.18;
-  transform: scaleX(0.22);
-  transform-origin: left center;
-  transition: opacity 220ms ease, transform 260ms cubic-bezier(0.2, 0.7, 0, 1);
+  content: none !important;
 }
 
-.js .cover.is-current-section::before,
-.js .home-stories.is-current-section::before,
-.js .notes.is-current-section::before {
-  opacity: 0.58;
-  transform: scaleX(1);
+.cover[data-scroll-section]::after,
+.home-stories[data-scroll-section]::after,
+.notes[data-scroll-section]::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: clamp(0.4rem, 1.8vw, 1.6rem) clamp(-1rem, -1.5vw, -0.2rem) auto auto;
+  width: min(42vw, 30rem);
+  height: min(24vw, 17rem);
+  border-radius: 999px;
+  background: radial-gradient(circle at 58% 44%, rgba(24, 23, 19, 0.085), rgba(232, 226, 214, 0.14) 44%, transparent 72%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(calc(var(--section-shift, 0) * 1rem)) scale(0.94);
+  transition: opacity 260ms ease, transform 260ms cubic-bezier(0.2, 0.7, 0, 1);
+}
+
+.js .cover.is-current-section::after,
+.js .home-stories.is-current-section::after,
+.js .notes.is-current-section::after {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .cover-art[data-scroll-motion] {
@@ -10690,5 +10698,134 @@ html[lang="en"] .archive-page .archive-title {
 
   .admin-language-tabs {
     width: min(100%, 11rem);
+  }
+}
+
+/* Issue writing width and quieter footer link pass */
+.admin-page[data-write-mode="issue"] .admin-shell {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.admin-page[data-write-mode="issue"] .issue-admin-sidebar,
+.admin-page[data-write-mode="issue"] .issue-admin-editor {
+  grid-column: 1 / -1 !important;
+  width: 100%;
+}
+
+.admin-page[data-write-mode="issue"] .issue-admin-sidebar {
+  position: static;
+  grid-template-columns: minmax(14rem, 0.22fr) minmax(16rem, 0.24fr) minmax(0, 0.54fr);
+  align-items: stretch;
+  max-height: none;
+}
+
+.admin-page[data-write-mode="issue"] .issue-admin-sidebar .admin-sidebar-head,
+.admin-page[data-write-mode="issue"] .issue-admin-picker,
+.admin-page[data-write-mode="issue"] .issue-sidebar-summary,
+.admin-page[data-write-mode="issue"] .issue-sidebar-note {
+  border-bottom: 0;
+}
+
+.admin-page[data-write-mode="issue"] .issue-sidebar-note {
+  border-top: 0;
+}
+
+.admin-page[data-write-mode="issue"] .issue-order-actions,
+.admin-page[data-write-mode="issue"] .issue-admin-sidebar .admin-sidebar-actions.is-export {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.admin-page[data-write-mode="issue"] .issue-order-actions .is-primary,
+.admin-page[data-write-mode="issue"] .issue-admin-sidebar .admin-sidebar-actions.is-export .is-primary {
+  grid-column: auto;
+}
+
+.issue-admin-single-language-grid {
+  grid-template-columns: minmax(12rem, 0.18fr) minmax(0, 0.82fr) !important;
+  width: 100%;
+}
+
+.issue-single-language-panel {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: none;
+}
+
+.cover[data-scroll-section] > *,
+.home-stories[data-scroll-section] > *,
+.notes[data-scroll-section] > * {
+  position: relative;
+  z-index: 1;
+}
+
+.cover[data-scroll-section]::after,
+.home-stories[data-scroll-section]::after,
+.notes[data-scroll-section]::after {
+  z-index: 0;
+}
+
+.archive-page .archive-date {
+  display: grid;
+  gap: 0.28rem;
+  align-self: start;
+  min-width: 0;
+  color: var(--ink) !important;
+  opacity: 1 !important;
+}
+
+.archive-page .archive-date b {
+  display: block;
+  font-size: clamp(1.05rem, 1.32vw, 1.52rem);
+  font-weight: 390;
+  letter-spacing: -0.015em;
+  line-height: 1;
+}
+
+.archive-page .archive-date small {
+  display: block;
+  color: var(--muted);
+  font-size: clamp(0.68rem, 0.76vw, 0.82rem);
+  font-weight: 520;
+  letter-spacing: 0.045em;
+  line-height: 1.2;
+}
+
+.pagination {
+  min-height: 2.2rem;
+  margin-top: clamp(0.9rem, 1.6vw, 1.45rem);
+}
+
+.pagination a {
+  border-radius: 999px;
+  color: var(--ink);
+  opacity: 0.72;
+}
+
+.pagination a.is-active {
+  opacity: 1;
+  box-shadow: inset 0 0 0 1px rgba(24, 23, 19, 0.14);
+}
+
+.site-footer .footer-links a {
+  font-size: clamp(0.9rem, 0.96vw, 1.02rem) !important;
+  font-weight: 410 !important;
+  letter-spacing: 0.015em;
+}
+
+html[lang="ko"] .site-footer .footer-links a {
+  font-weight: 390 !important;
+  font-variation-settings: "wght" 390;
+  letter-spacing: 0.025em;
+}
+
+@media (max-width: 960px) {
+  .admin-page[data-write-mode="issue"] .issue-admin-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-page[data-write-mode="issue"] .issue-order-actions,
+  .admin-page[data-write-mode="issue"] .issue-admin-sidebar .admin-sidebar-actions.is-export,
+  .issue-admin-single-language-grid {
+    grid-template-columns: 1fr !important;
   }
 }

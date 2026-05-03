@@ -137,7 +137,7 @@ const normalizedPage = (page: number | undefined, itemCount: number): number => 
   return Math.min(Math.max(pageNumber, 1), pageCount(itemCount));
 };
 
-const renderPagination = (currentPage: number, totalPages: number, hrefForPage: (page: number) => string, locale: Locale): string => totalPages <= 1 ? "" : `<nav class="pagination" aria-label="${escapeHtml(locale === "ko" ? "페이지" : "Pagination")}">
+const renderPagination = (currentPage: number, totalPages: number, hrefForPage: (page: number) => string, locale: Locale): string => `<nav class="pagination" aria-label="${escapeHtml(locale === "ko" ? "페이지" : "Pagination")}">
         <span>${escapeHtml(locale === "ko" ? "페이지" : "Page")}</span>
         <div>
           ${Array.from({ length: totalPages }, (_, index) => {
@@ -157,7 +157,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-writing-locale-toggle";
+const assetVersion = "20260503-write-panel-scroll-cue";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -277,15 +277,17 @@ const renderArchiveRows = (
   site: SiteContent,
   locale: Locale,
   selectedCategory?: PrimaryCategory,
-  selectedSubcategory?: SubcategoryKey
+  selectedSubcategory?: SubcategoryKey,
+  rowOffset = 0
 ): string => articleList
-  .map((article) => {
+  .map((article, index) => {
     const fullLabel = `${categoryLabel(site.categories, article.category, locale)} / ${text(article.subcategory, locale)}`;
     const rowLabel = selectedSubcategory
       ? categoryLabel(site.categories, article.category, locale)
       : selectedCategory
         ? text(article.subcategory, locale)
         : fullLabel;
+    const rowNo = String(rowOffset + index + 1).padStart(2, "0");
 
     return `
       <a
@@ -298,7 +300,7 @@ const renderArchiveRows = (
         data-category="${article.category}"
         data-action-card
       >
-        <span class="archive-date">${formatDate(article.date, locale)}</span>
+        <span class="archive-date"><b>${rowNo}</b><small>${formatDate(article.date, locale)}</small></span>
         <span class="archive-title">${escapeHtml(text(article.title, locale))}</span>
         <span class="archive-category"><span>${escapeHtml(rowLabel)}</span><small>${escapeHtml(text(article.location, locale))}</small></span>
         <span class="archive-info">
@@ -411,7 +413,7 @@ ${filters ? `${filters}
 ` : ""}    <div class="archive-board ${visibleArticles.length === 0 ? "is-empty" : ""}" data-archive-board data-reveal>
       <div class="archive-list" data-archive-list>
         ${pagedArticles.length > 0
-          ? renderArchiveRows(pagedArticles, site, locale, selectedCategory, selectedSubcategory)
+          ? renderArchiveRows(pagedArticles, site, locale, selectedCategory, selectedSubcategory, (currentPage - 1) * pageSize)
           : `<p class="archive-empty">${escapeHtml(locale === "ko" ? "아직 이 하위 카테고리로 묶인 글이 없습니다. 다른 하위 카테고리를 선택해 주세요." : "No articles are filed under this subcategory yet. Choose another subcategory to continue reading.")}</p>`}
       </div>
     </div>${includePagination ? renderPagination(currentPage, totalPages, (pageNumber) => archivePageHref(locale, pageNumber, selectedCategory, selectedSubcategory), locale) : ""}`;
@@ -1217,7 +1219,7 @@ export const renderArchivePage = (
         <p>${escapeHtml(archiveLead)}</p>
       </div>
 
-      ${renderArchiveBoard(site, articleList, locale, false, selectedCategory, selectedSubcategory, page)}
+      ${renderArchiveBoard(site, articleList, locale, false, selectedCategory, selectedSubcategory, page, true)}
     </section>`;
 
   return renderLayout({ title: `${archiveTitle} | ${text(site.title, locale)}`, description: archiveLead, body, locale, currentPath, site });
