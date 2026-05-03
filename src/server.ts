@@ -2,7 +2,7 @@ import express from "express";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { articles, site } from "./content/magazine";
-import { renderArchivePage, renderArticlePage, renderHomePage, renderIssuePage, renderNotFoundPage, renderWritePage } from "./render/pages";
+import { issueSlug, renderAboutPage, renderArchivePage, renderArticlePage, renderHomePage, renderIssuePage, renderNotFoundPage, renderWritePage } from "./render/pages";
 import type { Article, IssueProject, Locale, PrimaryCategory, SubcategoryKey } from "./types";
 
 const app = express();
@@ -96,6 +96,23 @@ app.get(["/", "/en", "/en/"], (request, response) => {
 app.get(["/issues", "/issues/", "/en/issues", "/en/issues/"], (request, response) => {
   const locale = getLocale(request.path, request.query.lang);
   response.send(renderIssuePage(site, articles, locale, getCurrentPath(request.originalUrl)));
+});
+
+app.get(["/issues/:issueSlug", "/en/issues/:issueSlug"], (request, response) => {
+  const locale = getLocale(request.path, request.query.lang);
+  const issue = site.issueProjects.find((item) => issueSlug(item) === request.params.issueSlug);
+
+  if (!issue) {
+    response.status(404).send(renderNotFoundPage(site, locale, getCurrentPath(request.originalUrl)));
+    return;
+  }
+
+  response.send(renderIssuePage(site, articles, locale, getCurrentPath(request.originalUrl), issue));
+});
+
+app.get(["/about", "/about/", "/en/about", "/en/about/"], (request, response) => {
+  const locale = getLocale(request.path, request.query.lang);
+  response.send(renderAboutPage(site, locale, getCurrentPath(request.originalUrl)));
 });
 
 app.get(["/write", "/write/", "/en/write", "/en/write/"], (request, response) => {
