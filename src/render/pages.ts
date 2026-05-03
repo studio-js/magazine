@@ -1,4 +1,4 @@
-import type { Article, ArticleBlockImage, ArticleSection, ArticleSectionBlock, CategoryDefinition, IssueProject, Locale, LocalizedText, Note, PrimaryCategory, SiteContent, SubcategoryKey } from "../types";
+import type { Article, ArticleBlockImage, ArticleSection, ArticleSectionBlock, CategoryDefinition, IssueFeature, IssueProject, Locale, LocalizedText, Note, PrimaryCategory, SiteContent, SubcategoryKey } from "../types";
 
 interface LayoutOptions {
   title: string;
@@ -163,6 +163,29 @@ const issueCoverImage = (issue: IssueProject): string =>
 
 const isPhotographicImage = (imageUrl = ""): boolean => imageUrl.length > 0 && !/\.svg(?:$|[?#])/.test(imageUrl);
 
+const issueFeatureImage = (feature: IssueFeature): string => isPhotographicImage(feature.heroImage) ? feature.heroImage ?? "" : "";
+
+const rotatedIssueFeatures = (features: IssueFeature[], startIndex: number, limit = 4): IssueFeature[] => {
+  if (features.length === 0) {
+    return [];
+  }
+
+  return Array.from({ length: Math.min(limit, features.length) }, (_, offset) => features[(startIndex + offset) % features.length]);
+};
+
+const spreadSlotDataAttributes = (features: IssueFeature[], startIndex: number): string => rotatedIssueFeatures(features, startIndex)
+  .map((feature, index) => {
+    const slotIndex = index + 1;
+    const featureIndex = features.indexOf(feature);
+
+    return [
+      `data-spread-slot${slotIndex}-no="${String(featureIndex + 1).padStart(2, "0")}"`,
+      `data-spread-slot${slotIndex}-visual="${escapeHtml(feature.heroClass)}"`,
+      `data-spread-slot${slotIndex}-image="${escapeHtml(issueFeatureImage(feature))}"`
+    ].join(" ");
+  })
+  .join(" ");
+
 const renderIssuePrototype = (issue: IssueProject, locale: Locale, variant: "home" | "collection" | "detail" = "detail"): string => {
   const titleWords = text(issue.title, locale).split(/\s+/).filter(Boolean);
   const coverLines = issue.features.slice(0, 3)
@@ -212,9 +235,9 @@ const renderIssueSpread = (issue: IssueProject, locale: Locale): string => {
   ].slice(0, 4);
   const imageFeatures = spreadImages.length > 0 ? spreadImages : issue.features.slice(0, 4);
   const imageGrid = imageFeatures
-    .map((feature, index) => `              <span class="magazine-spread-image-slot ${index === 0 ? "is-large" : ""}"${index === 0 ? " data-issue-spread-main-slot" : ""}>
-                 ${renderImageBlock(feature.heroClass, feature.heroImage, index === 0 ? "data-issue-spread-main-image" : "")}
-                 <small${index === 0 ? " data-issue-spread-main-no" : ""}>${String(issue.features.indexOf(feature) + 1).padStart(2, "0")}</small>
+    .map((feature, index) => `              <span class="magazine-spread-image-slot ${index === 0 ? "is-large is-current" : ""}" data-issue-spread-slot${index === 0 ? " data-issue-spread-main-slot" : ""}>
+                 ${renderImageBlock(feature.heroClass, feature.heroImage, `${index === 0 ? "data-issue-spread-main-image " : ""}data-issue-spread-slot-image`)}
+                 <small data-issue-spread-slot-no${index === 0 ? " data-issue-spread-main-no" : ""}>${String(issue.features.indexOf(feature) + 1).padStart(2, "0")}</small>
                </span>`)
     .join("\n");
   const contents = issue.features.slice(0, 4)
@@ -253,7 +276,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-spread-image-scale";
+const assetVersion = "20260504-spread-page-turn";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -921,9 +944,10 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
   const homeIndexRows = issueFeatures
     .map((feature, index) => {
       const featureBody = feature.body[locale] ?? [];
-      const spreadImage = isPhotographicImage(feature.heroImage) ? feature.heroImage ?? "" : "";
+      const spreadImage = issueFeatureImage(feature);
+      const slotAttributes = spreadSlotDataAttributes(issueFeatures, index);
 
-      return `              <a class="home-index-row" href="${issueHref(currentIssue, locale)}#issue-${escapeHtml(feature.slug)}" data-scroll-motion data-issue-spread-row data-spread-no="${String(index + 1).padStart(2, "0")}" data-spread-title="${escapeHtml(text(feature.title, locale))}" data-spread-role="${escapeHtml(text(feature.role, locale))}" data-spread-intro="${escapeHtml(text(feature.intro, locale))}" data-spread-copy-a="${escapeHtml(featureBody[0] ?? text(feature.excerpt, locale))}" data-spread-copy-b="${escapeHtml(featureBody[1] ?? text(currentIssue.editorNote, locale))}" data-spread-deck="${escapeHtml(text(feature.excerpt, locale))}" data-spread-visual="${escapeHtml(feature.heroClass)}" data-spread-image="${escapeHtml(spreadImage)}">
+      return `              <a class="home-index-row" href="${issueHref(currentIssue, locale)}#issue-${escapeHtml(feature.slug)}" data-scroll-motion data-issue-spread-row data-spread-no="${String(index + 1).padStart(2, "0")}" data-spread-title="${escapeHtml(text(feature.title, locale))}" data-spread-role="${escapeHtml(text(feature.role, locale))}" data-spread-intro="${escapeHtml(text(feature.intro, locale))}" data-spread-copy-a="${escapeHtml(featureBody[0] ?? text(feature.excerpt, locale))}" data-spread-copy-b="${escapeHtml(featureBody[1] ?? text(currentIssue.editorNote, locale))}" data-spread-deck="${escapeHtml(text(feature.excerpt, locale))}" data-spread-visual="${escapeHtml(feature.heroClass)}" data-spread-image="${escapeHtml(spreadImage)}" ${slotAttributes}>
                 <span class="home-index-order">${String(index + 1).padStart(2, "0")}</span>
                 <span class="home-index-copy">
                   <strong>${escapeHtml(text(feature.title, locale))}</strong>

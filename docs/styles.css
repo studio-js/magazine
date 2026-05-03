@@ -20163,15 +20163,18 @@ html[lang="ko"] .home-index-row strong {
 
 /* Spread image scale correction */
 .magazine-spread-page.is-image-page {
-  grid-template-rows: minmax(0, 0.82fr) auto;
+  align-content: start;
+  grid-template-rows: auto auto;
+  gap: clamp(1.15rem, 2.8vw, 3.6rem);
 }
 
 .magazine-spread-image-grid {
-  align-self: center;
+  align-self: start;
   justify-self: center;
-  width: min(82%, 24rem);
-  height: clamp(13rem, 18.5vw, 20rem);
+  width: min(74%, 21.5rem);
+  height: clamp(11.5rem, 16vw, 17.25rem);
   grid-template-rows: repeat(12, minmax(0, 1fr));
+  margin-top: clamp(0.15rem, 0.65vw, 0.65rem);
 }
 
 .magazine-spread-image-slot.is-large {
@@ -20187,7 +20190,7 @@ html[lang="ko"] .home-index-row strong {
 
 .magazine-spread-page.is-image-page > p {
   justify-self: center;
-  width: min(82%, 24rem);
+  width: min(74%, 21.5rem);
 }
 
 @media (min-width: 1181px) {

@@ -180,6 +180,7 @@ document.querySelectorAll<HTMLElement>("[data-issue-spread]").forEach((spread) =
   const deck = spread.querySelector<HTMLElement>("[data-issue-spread-deck]");
   const mainImage = spread.querySelector<HTMLElement>("[data-issue-spread-main-image]");
   const mainNo = spread.querySelector<HTMLElement>("[data-issue-spread-main-no]");
+  const imageSlots = Array.from(spread.querySelectorAll<HTMLElement>("[data-issue-spread-slot]"));
 
   if (rows.length === 0 || !role || !title || !intro || !copy || !deck || !mainImage || !mainNo) {
     return;
@@ -195,13 +196,30 @@ document.querySelectorAll<HTMLElement>("[data-issue-spread]").forEach((spread) =
     mainNo.textContent = row.dataset.spreadNo || mainNo.textContent;
     setImageBlockVisual(mainImage, row.dataset.spreadVisual || "image-material", row.dataset.spreadImage || "");
 
+    imageSlots.forEach((slot, index) => {
+      const slotKey = `spreadSlot${index + 1}`;
+      const slotImage = slot.querySelector<HTMLElement>("[data-issue-spread-slot-image]");
+      const slotNo = slot.querySelector<HTMLElement>("[data-issue-spread-slot-no]");
+      const slotVisual = row.dataset[`${slotKey}Visual`];
+
+      if (slotImage && slotVisual) {
+        setImageBlockVisual(slotImage, slotVisual, row.dataset[`${slotKey}Image`] || "");
+      }
+
+      if (slotNo && row.dataset[`${slotKey}No`]) {
+        slotNo.textContent = row.dataset[`${slotKey}No`] || slotNo.textContent;
+      }
+
+      slot.classList.toggle("is-current", index === 0);
+    });
+
     copyParagraphs.forEach((paragraph, index) => {
       const nextText = index === 0 ? row.dataset.spreadCopyA : row.dataset.spreadCopyB;
       paragraph.textContent = nextText || "";
     });
 
     spread.classList.add("is-paging");
-    animateTextSwap([role, title, intro, deck, ...copyParagraphs]);
+    animateTextSwap([role, title, intro, deck, ...copyParagraphs, ...imageSlots]);
   };
 
   rows.forEach((row) => {
