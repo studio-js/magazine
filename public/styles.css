@@ -17836,3 +17836,119 @@ html[lang="ko"] .article-section h2 {
     transition: none !important;
   }
 }
+
+/* Article column flow: stable long-form reading without divider lines. */
+.article-detail:not(.writer-article) .article-body-grid {
+  display: block;
+  width: min(100%, 72rem);
+  margin-inline: auto;
+}
+
+.article-detail:not(.writer-article) .article-side {
+  display: none;
+}
+
+.article-detail:not(.writer-article) .article-body {
+  display: block;
+  width: min(100%, 42.5rem);
+  margin-inline: auto;
+  counter-reset: article-sections;
+}
+
+.article-detail:not(.writer-article) .article-body blockquote,
+html[lang="ko"] .article-detail:not(.writer-article) .article-body blockquote {
+  width: 100%;
+  max-width: 31rem;
+  margin: 0 0 clamp(4rem, 7vw, 7.2rem);
+  padding: 0;
+  color: rgba(24, 23, 19, 0.58);
+  font-size: clamp(1.04rem, 1.25vw, 1.34rem);
+  font-weight: 430;
+  letter-spacing: -0.012em;
+  line-height: 1.72;
+}
+
+html[lang="ko"] .article-detail:not(.writer-article) .article-body blockquote {
+  line-height: 1.84;
+  word-break: keep-all;
+}
+
+.article-detail:not(.writer-article) .article-section {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 42.5rem;
+  margin: 0 0 clamp(5rem, 7.8vw, 8.6rem);
+  padding: 0;
+  border: 0 !important;
+}
+
+.article-detail:not(.writer-article) .article-section h2,
+html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
+  max-width: 18ch;
+  margin: 0 0 clamp(1.45rem, 2.4vw, 2.1rem);
+  color: rgba(24, 23, 19, 0.82);
+  font-size: clamp(1.32rem, 1.72vw, 2.05rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+}
+
+html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
+  max-width: 12ch;
+  letter-spacing: -0.012em;
+  line-height: 1.26;
+}
+
+.article-detail:not(.writer-article) .article-section h2::before {
+  content: counter(article-sections, decimal-leading-zero);
+  display: block;
+  margin: 0 0 clamp(0.75rem, 1.2vw, 1rem);
+  color: rgba(24, 23, 19, 0.24);
+  font-size: 0.68rem;
+  font-weight: 560;
+  letter-spacing: 0.12em;
+}
+
+.article-detail:not(.writer-article) .article-section p {
+  max-width: 56ch;
+  margin: 0 0 clamp(1.35rem, 2vw, 1.95rem);
+  color: rgba(55, 52, 47, 0.9);
+  font-size: clamp(1.02rem, 1.08vw, 1.14rem);
+  line-height: 1.92;
+}
+
+.article-detail:not(.writer-article) .article-section p:first-of-type {
+  color: rgba(24, 23, 19, 0.84);
+  font-size: clamp(1.08rem, 1.16vw, 1.22rem);
+  line-height: 1.88;
+}
+
+.article-detail:not(.writer-article) .article-section p:last-child {
+  margin-bottom: 0;
+}
+
+.article-detail:not(.writer-article) .article-section-figure {
+  width: min(100%, 34rem);
+  max-width: 34rem;
+  margin: 0 0 clamp(1.6rem, 2.8vw, 2.6rem);
+}
+
+.article-detail:not(.writer-article) .article-section-figure .image-block {
+  aspect-ratio: 4 / 3;
+  opacity: 0.82;
+}
+
+@media (max-width: 960px) {
+  .article-detail:not(.writer-article) .article-body,
+  .article-detail:not(.writer-article) .article-body blockquote,
+  html[lang="ko"] .article-detail:not(.writer-article) .article-body blockquote,
+  .article-detail:not(.writer-article) .article-section {
+    width: min(100%, 42rem);
+    margin-inline: auto;
+  }
+
+  .article-detail:not(.writer-article) .article-section {
+    margin-bottom: clamp(4rem, 12vw, 6.5rem);
+  }
+}

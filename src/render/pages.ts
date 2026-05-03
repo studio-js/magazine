@@ -157,7 +157,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-article-space-categories";
+const assetVersion = "20260503-article-column-taste";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -925,7 +925,7 @@ ${storyRows}
               <text x="${locale === "ko" ? 598 : 604}" y="150" class="is-repeat-label">${escapeHtml(locale === "ko" ? "반복" : "repetition")}</text>
               <text x="480" y="150" class="is-habit">${escapeHtml(locale === "ko" ? "습관" : "habit")}</text>
               <text x="480" y="376" class="is-choice">${escapeHtml(locale === "ko" ? "선택" : "choice")}</text>
-              <text x="480" y="410" class="habitus-choice-copy">${escapeHtml(locale === "ko" ? "선택은 취향이 보이는 순간." : "Choice is taste made visible.")}</text>
+              <text x="480" y="410" class="habitus-choice-copy">${escapeHtml(locale === "ko" ? "좋은 취향은 좋은 선택으로 이어집니다." : "Good taste leads to better choices.")}</text>
             </g>
           </g>
         </svg>
