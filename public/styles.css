@@ -13337,22 +13337,28 @@ html[lang="ko"] .method-item h3 {
 
 @media (min-width: 1181px) {
   .home-cover-grid {
-    grid-template-columns: minmax(20rem, 0.44fr) minmax(0, 0.56fr) !important;
+    grid-template-columns: minmax(24rem, 0.55fr) minmax(0, 0.45fr) !important;
+    gap: clamp(1.6rem, 2.8vw, 3.3rem) !important;
     width: auto;
     max-width: 100%;
     margin-inline: 0;
   }
 
+  .home-cover-grid .cover-copy {
+    justify-self: end;
+    width: min(100%, clamp(32rem, 40vw, 37rem));
+  }
+
   .home-issue-index,
   .home-issue-index[data-scroll-motion] {
-    width: min(100%, clamp(32rem, 39vw, 40rem));
+    width: min(100%, clamp(32rem, 38vw, 39rem));
     max-width: 100%;
   }
 
   .home-index-headline,
   .home-index-list {
     justify-self: end;
-    width: min(100%, clamp(18.5rem, 24vw, 26rem));
+    width: min(100%, clamp(23.5rem, 29vw, 29rem));
   }
 }
 
@@ -13423,6 +13429,11 @@ html[lang="ko"] .method-item h3 {
   display: grid;
   gap: clamp(0.3rem, 0.6vw, 0.48rem);
   min-width: 0;
+}
+
+.home-index-order {
+  position: relative;
+  top: -0.12rem;
 }
 
 .home-index-row strong {
@@ -13665,6 +13676,8 @@ html[lang="ko"] .home-recent-copy strong {
 }
 
 .home-story-line strong {
+  position: relative;
+  top: 0.06rem;
   max-width: min(100%, 38rem);
   color: currentColor;
   font-size: clamp(1rem, 1.26vw, 1.42rem);
