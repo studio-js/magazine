@@ -1140,7 +1140,7 @@ export const renderArchivePage = (
       ? text(selectedCategoryDefinition.label, locale)
       : labels.fullArchive;
   const archiveLead = selectedCategoryDefinition ? text(selectedCategoryDefinition.description, locale) : labels.archiveLead;
-  const archiveKicker = "Archive";
+  const archiveKicker = selectedCategoryDefinition ? "Archive" : "Index";
   const archiveSubnav = selectedCategoryDefinition
     ? `
           <nav class="archive-subnav" aria-label="${escapeHtml(locale === "ko" ? `${text(selectedCategoryDefinition.label, locale)} 하위 카테고리` : `${text(selectedCategoryDefinition.label, locale)} subcategories`)}">
