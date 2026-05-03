@@ -71,6 +71,7 @@ const desktopNavItems = desktopNav
     : [];
 if (desktopNav && desktopNavItems.length > 0) {
     let navCloseTimer = 0;
+    let activeSubnavItem = null;
     const clearNavCloseTimer = () => {
         if (navCloseTimer !== 0) {
             window.clearTimeout(navCloseTimer);
@@ -79,12 +80,18 @@ if (desktopNav && desktopNavItems.length > 0) {
     };
     const closeSubnav = () => {
         clearNavCloseTimer();
+        activeSubnavItem = null;
+        document.documentElement.style.setProperty("--active-nav-height", "0px");
         header?.classList.remove("is-nav-expanded");
         desktopNav.classList.remove("is-submenu-active");
         desktopNavItems.forEach((item) => item.classList.remove("is-submenu-open"));
     };
     const openSubnav = (item) => {
+        const submenu = item.querySelector(".nav-submenu");
+        const submenuHeight = submenu ? Math.ceil(submenu.getBoundingClientRect().height) : 0;
         clearNavCloseTimer();
+        activeSubnavItem = item;
+        document.documentElement.style.setProperty("--active-nav-height", `${submenuHeight}px`);
         header?.classList.add("is-nav-expanded");
         desktopNav.classList.add("is-submenu-active");
         desktopNavItems.forEach((navItem) => navItem.classList.toggle("is-submenu-open", navItem === item));
@@ -108,6 +115,15 @@ if (desktopNav && desktopNavItems.length > 0) {
         submenu?.addEventListener("pointerleave", scheduleSubnavClose);
     });
     desktopNav.addEventListener("pointerleave", scheduleSubnavClose);
+    window.addEventListener("resize", () => {
+        if (window.innerWidth <= 960) {
+            closeSubnav();
+            return;
+        }
+        if (activeSubnavItem) {
+            openSubnav(activeSubnavItem);
+        }
+    });
     window.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
             closeSubnav();

@@ -7554,18 +7554,16 @@ html[lang="ko"] .river-card-copy strong {
 /* Navigation push-down pass */
 @media (min-width: 961px) {
   .site-header {
-    --expanded-nav-height: 3rem;
     transition: background 180ms ease, box-shadow 180ms ease, min-height 180ms ease;
   }
 
-  main,
-  .site-footer {
-    transition: transform 190ms cubic-bezier(0.2, 0.7, 0, 1);
+  main {
+    margin-top: 0;
+    transition: margin-top 190ms cubic-bezier(0.2, 0.7, 0, 1);
   }
 
-  .site-header.is-nav-expanded ~ main,
-  .site-header.is-nav-expanded ~ .site-footer {
-    transform: translateY(var(--expanded-nav-height));
+  .site-header.is-nav-expanded ~ main {
+    margin-top: var(--active-nav-height, 0px);
   }
 }
 
