@@ -42,6 +42,26 @@ export type VisualClass =
 
 export type ArticleRailMode = "default" | "image" | "text";
 
+export interface ArticleBlockImage {
+  imageClass?: VisualClass;
+  image?: string;
+}
+
+export type ArticleSectionBlock =
+  | {
+    type: "paragraph";
+    text: LocalizedText;
+  }
+  | {
+    type: "quote";
+    text: LocalizedText;
+  }
+  | {
+    type: "gallery";
+    images: ArticleBlockImage[];
+    caption?: LocalizedText;
+  };
+
 export interface SubcategoryDefinition {
   key: SubcategoryKey;
   label: LocalizedText;
@@ -57,6 +77,7 @@ export interface CategoryDefinition {
 export interface ArticleSection {
   heading: LocalizedText;
   paragraphs: LocalizedList;
+  blocks?: ArticleSectionBlock[];
   railTitle?: LocalizedText;
   railText?: LocalizedText;
   railClass?: VisualClass;

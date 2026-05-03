@@ -85,6 +85,47 @@ export const articles = [
             "When revisited the next day, the gallery has another density. The work becomes quieter rather than clearer, and the viewer begins to measure distance again."
           ]
         },
+        "blocks": [
+          {
+            "type": "paragraph",
+            "text": {
+              "ko": "오프닝의 전시장은 작품보다 사람의 움직임으로 먼저 기억된다. 잔과 대화, 짧은 인사, 벽 앞에서 멈추는 몸들이 공간의 첫 이미지를 만든다.",
+              "en": "An opening is remembered first through movement rather than work: glasses, conversations, short greetings, bodies pausing before a wall."
+            }
+          },
+          {
+            "type": "quote",
+            "text": {
+              "ko": "작품은 사람이 빠져나간 뒤에야 자기 속도로 보이기 시작한다.",
+              "en": "Only after people leave does the work begin to appear at its own speed."
+            }
+          },
+          {
+            "type": "gallery",
+            "images": [
+              {
+                "imageClass": "image-atelier"
+              },
+              {
+                "imageClass": "image-field"
+              },
+              {
+                "imageClass": "image-library"
+              }
+            ],
+            "caption": {
+              "ko": "전시가 행사에서 경험으로 바뀌는 사이에 남는 시선의 층.",
+              "en": "Layers of attention that remain as the exhibition shifts from event to experience."
+            }
+          },
+          {
+            "type": "paragraph",
+            "text": {
+              "ko": "다음 날 다시 찾은 전시장에는 다른 밀도가 있다. 작품은 더 선명해지기보다 오히려 조용해지고, 관람자는 이미지와 자신의 거리감을 새로 재기 시작한다.",
+              "en": "When revisited the next day, the gallery has another density. The work becomes quieter rather than clearer, and the viewer begins to measure distance again."
+            }
+          }
+        ],
         "railClass": "image-atelier",
         "railImage": "",
         "hideRailImage": false

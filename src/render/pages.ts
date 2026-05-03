@@ -1,4 +1,4 @@
-import type { Article, ArticleSection, CategoryDefinition, IssueProject, Locale, LocalizedText, Note, PrimaryCategory, SiteContent, SubcategoryKey } from "../types";
+import type { Article, ArticleBlockImage, ArticleSection, ArticleSectionBlock, CategoryDefinition, IssueProject, Locale, LocalizedText, Note, PrimaryCategory, SiteContent, SubcategoryKey } from "../types";
 
 interface LayoutOptions {
   title: string;
@@ -157,7 +157,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-article-column-taste";
+const assetVersion = "20260504-section-block-gallery";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -638,7 +638,7 @@ ${subcategoryOptions}
               <button type="button" data-write-reset>${escapeHtml(locale === "ko" ? "로컬 변경 초기화" : "Reset Local Edits")}</button>
             </div>
           </div>
-          <p class="writer-shortcuts">${escapeHtml(locale === "ko" ? "Enter 새 문단 · 빈 문단에서 Enter 새 섹션 · /image 본문 이미지 · ⌘/Ctrl+S 파일 저장" : "Enter new paragraph · Enter on an empty paragraph creates a section · /image inline image · Cmd/Ctrl+S saves the file")}</p>
+          <p class="writer-shortcuts">${escapeHtml(locale === "ko" ? "Enter 새 문단 · 빈 문단에서 Enter 새 섹션 · /quote 인용문 · /image 본문 갤러리 · ⌘/Ctrl+S 파일 저장" : "Enter new paragraph · Enter on an empty paragraph creates a section · /quote pull quote · /image body gallery · Cmd/Ctrl+S saves the file")}</p>
 
           <article class="article-detail writer-article">
             <header class="article-hero-grid">
@@ -706,6 +706,9 @@ ${subcategoryOptions}
                   <p contenteditable="true" spellcheck="true" data-write-paragraph>의자의 비례는 가까이서보다 한 발 물러섰을 때 더 분명해진다. 등받이의 높이, 좌판의 깊이, 다리 사이의 간격이 하나의 실루엣으로 묶이기 때문이다.</p>
                   <p contenteditable="true" spellcheck="true" data-write-paragraph>잘 만든 의자는 장식을 앞세우지 않는다. 대신 방 안에서 어느 정도의 존재감을 가져야 하는지 정확히 알고 있는 물건처럼 보인다.</p>
                   <div class="writer-section-tools" contenteditable="false">
+                    <button type="button" data-write-add-paragraph>${escapeHtml(locale === "ko" ? "문단" : "Paragraph")}</button>
+                    <button type="button" data-write-add-quote>${escapeHtml(locale === "ko" ? "인용문" : "Quote")}</button>
+                    <button type="button" data-write-add-gallery>${escapeHtml(locale === "ko" ? "갤러리" : "Gallery")}</button>
                     <button type="button" data-write-add-section-after>${escapeHtml(locale === "ko" ? "다음 섹션" : "Next Section")}</button>
                     <button type="button" data-write-remove-section>${escapeHtml(locale === "ko" ? "섹션 삭제" : "Remove Section")}</button>
                   </div>
@@ -1170,18 +1173,74 @@ export const renderArticlePage = (
   const metaLabels = locale === "ko"
     ? { date: "발행", location: "장소", readTime: "읽기", tags: "태그" }
     : { date: "Published", location: "Location", readTime: "Reading", tags: "Tags" };
-  const renderSectionFigure = (section: ArticleSection): string => {
+  const renderGalleryFigure = (images: ArticleBlockImage[], caption?: LocalizedText): string => {
+    const visibleImages = images.filter((image) => image.image || image.imageClass);
+
+    if (visibleImages.length === 0) {
+      return "";
+    }
+
+    const captionText = caption ? text(caption, locale) : "";
+    const imageItems = visibleImages
+      .map((image, index) => {
+        const cycleAttributes = image.image ? "" : `data-visual-cycle role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "본문 비주얼 바꾸기" : "Cycle inline visual")}"`;
+        return `                      <span class="article-gallery-item${index === 0 ? " is-active" : ""}" data-gallery-item${index === 0 ? "" : " hidden"}>
+                        ${renderImageBlock(image.imageClass ?? article.heroClass, image.image, cycleAttributes)}
+                      </span>`;
+      })
+      .join("\n");
+
+    return `
+                  <figure class="article-section-figure article-section-gallery" data-gallery data-gallery-index="0">
+                    <div class="article-gallery-frame">
+${imageItems}
+                    </div>
+                    ${visibleImages.length > 1 ? `<div class="article-gallery-controls" aria-label="${escapeHtml(locale === "ko" ? "본문 이미지 순환" : "Body image carousel")}">
+                      <button type="button" data-gallery-prev>${escapeHtml(locale === "ko" ? "이전" : "Prev")}</button>
+                      <span data-gallery-count>1/${visibleImages.length}</span>
+                      <button type="button" data-gallery-next>${escapeHtml(locale === "ko" ? "다음" : "Next")}</button>
+                    </div>` : ""}
+                    ${captionText ? `<figcaption>${escapeHtml(captionText)}</figcaption>` : ""}
+                  </figure>`;
+  };
+
+  const legacySectionGallery = (section: ArticleSection): string => {
     if (section.hideSectionImage || (!section.sectionImage && !section.sectionImageClass)) {
       return "";
     }
 
-    const caption = section.sectionImageCaption ? text(section.sectionImageCaption, locale) : "";
-    const cycleAttributes = section.sectionImage ? "" : `data-visual-cycle role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "본문 비주얼 바꾸기" : "Cycle inline visual")}"`;
-    return `
-                  <figure class="article-section-figure">
-                    ${renderImageBlock(section.sectionImageClass ?? section.railClass ?? article.heroClass, section.sectionImage, cycleAttributes)}
-                    ${caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : ""}
-                  </figure>`;
+    return renderGalleryFigure(
+      [{ imageClass: section.sectionImageClass ?? section.railClass ?? article.heroClass, image: section.sectionImage }],
+      section.sectionImageCaption
+    );
+  };
+
+  const fallbackSectionBlocks = (section: ArticleSection): ArticleSectionBlock[] => section.paragraphs[locale].map((paragraph) => ({
+    type: "paragraph",
+    text: { ko: paragraph, en: paragraph }
+  }));
+
+  const renderSectionBlock = (block: ArticleSectionBlock): string => {
+    if (block.type === "quote") {
+      const quoteText = text(block.text, locale).trim();
+      return quoteText ? `<blockquote class="article-inline-quote" data-reveal>${escapeHtml(quoteText)}</blockquote>` : "";
+    }
+
+    if (block.type === "gallery") {
+      return renderGalleryFigure(block.images, block.caption);
+    }
+
+    const paragraphText = text(block.text, locale).trim();
+    return paragraphText ? `<p>${escapeHtml(paragraphText)}</p>` : "";
+  };
+
+  const renderSectionContent = (section: ArticleSection): string => {
+    if (section.blocks && section.blocks.length > 0) {
+      return section.blocks.map(renderSectionBlock).join("");
+    }
+
+    return `${legacySectionGallery(section)}
+                  ${fallbackSectionBlocks(section).map(renderSectionBlock).join("")}`;
   };
 
   const body = `
@@ -1215,8 +1274,7 @@ ${articleVisual}      <div class="article-body-grid">
             .map(
               (section, index) => `
                 <section class="article-section" data-reveal data-article-section data-rail-no="${String(index + 1).padStart(2, "0")}" data-rail-title="${escapeHtml(section.railTitle ? text(section.railTitle, locale) : text(section.heading, locale))}" data-rail-text="${escapeHtml(section.railText ? text(section.railText, locale) : section.paragraphs[locale][0] ?? "")}" data-rail-visual="${railVisuals[index] ?? article.heroClass}" data-rail-image="${escapeHtml(railImages[index] ?? "")}" data-rail-image-hidden="${railImageHidden[index] ? "true" : "false"}">
-                  <h2>${escapeHtml(text(section.heading, locale))}</h2>${renderSectionFigure(section)}
-                  ${section.paragraphs[locale].map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
+                  <h2>${escapeHtml(text(section.heading, locale))}</h2>${renderSectionContent(section)}
                 </section>`
             )
             .join("")}
