@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="전시장 이후에도 남는 이미지와 작업실의 물성을 따라갑니다." />
     <title>작가 | The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-issue-detail-about-nav" />
-    <script src="/magazine/client.js?v=20260503-issue-detail-about-nav" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-issue-index-about-refine" />
+    <script src="/magazine/client.js?v=20260503-issue-index-about-refine" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -18,11 +18,11 @@
 
       <nav class="nav" aria-label="Primary navigation">
         <div class="nav-item issue-nav-item ">
-          <a class="nav-link " href="/magazine/issues">
+          <a class="nav-link " href="/magazine/issues/no-03/">
             <span>이슈</span>
           </a>
           <div class="nav-submenu issue-submenu" aria-label="이슈 안내">
-            <a href="/magazine/issues"><span>No. 03 · Soft Indexes</span></a>
+            <a class="" href="/magazine/issues/no-03/"><span>No. 03 · Soft Indexes</span></a>
           </div>
         </div>
         <div class="nav-item is-active">
@@ -126,8 +126,8 @@
       </nav>
 
       <div class="header-tools">
-        <a href="/magazine/archive">아카이브</a>
-        <a href="/magazine/about">소개</a>
+        <a href="/magazine/archive">Archive</a>
+        <a class="issue-index-tool" href="/magazine/issues">Issue Index</a>
         
   <div class="language-switch" aria-label="Language switcher">
     <a class="is-active" href="/magazine/archive/art/artists/">KR</a>
@@ -141,11 +141,11 @@
 
     <div class="mobile-menu" id="mobile-menu" data-mobile-menu>
         <div class="nav-item issue-nav-item ">
-          <a class="nav-link " href="/magazine/issues">
+          <a class="nav-link " href="/magazine/issues/no-03/">
             <span>이슈</span>
           </a>
           <div class="nav-submenu issue-submenu" aria-label="이슈 안내">
-            <a href="/magazine/issues"><span>No. 03 · Soft Indexes</span></a>
+            <a class="" href="/magazine/issues/no-03/"><span>No. 03 · Soft Indexes</span></a>
           </div>
         </div>
         <div class="nav-item is-active">
@@ -246,7 +246,8 @@
                   </a>
           </div>
         </div>
-      <a href="/magazine/archive">아카이브</a>
+      <a href="/magazine/archive">Archive</a>
+      <a href="/magazine/issues">Issue Index</a>
       <a href="/magazine/#notes">노트</a>
       <a href="/magazine/about">소개</a>
       
@@ -260,11 +261,11 @@
     <section class="archive archive-page section-pad" aria-labelledby="archive-title">
       <div class="archive-heading" data-reveal>
         <div>
-          <p class="kicker">Subcategory Archive</p>
+          <p class="kicker">Archive</p>
           <h1 id="archive-title">작가</h1>
           <nav class="archive-subnav" aria-label="예술 하위 카테고리">
-            <a class="" href="/magazine/archive/art/">전체<small>3</small></a>
-            <a class="" href="/magazine/archive/art/exhibitions/">전시<small>2</small></a><a class="is-active" href="/magazine/archive/art/artists/" aria-current="page">작가<small>1</small></a><a class="" href="/magazine/archive/art/images/">이미지<small>0</small></a><a class="" href="/magazine/archive/art/sound/">사운드<small>0</small></a><a class="" href="/magazine/archive/art/architecture/">건축<small>0</small></a>
+            <a class="" href="/magazine/archive/art/">Index<small>2</small></a>
+            <a class="" href="/magazine/archive/art/exhibitions/">전시<small>1</small></a><a class="is-active" href="/magazine/archive/art/artists/" aria-current="page">작가<small>1</small></a><a class="" href="/magazine/archive/art/images/">이미지<small>0</small></a><a class="" href="/magazine/archive/art/sound/">사운드<small>0</small></a><a class="" href="/magazine/archive/art/architecture/">건축<small>0</small></a>
           </nav>
         </div>
         <p>전시장 이후에도 남는 이미지와 작업실의 물성을 따라갑니다.</p>
@@ -293,11 +294,19 @@
         <span class="archive-summary">스튜디오의 중심은 완성작이 아니라 매일 손이 닿는 작업대일 때가 많다. 그 표면은 생각이 이동한 흔적을 담는다.</span>
       </a>
       </div>
-    </div>
+    </div><nav class="pagination" aria-label="페이지">
+        <span>페이지</span>
+        <div>
+          <a class="is-active" href="/magazine/archive/art/artists/" aria-current="page">1</a>
+        </div>
+      </nav>
     </section></main>
 
     <footer class="site-footer">
       <p>The Thing</p>
+      <nav class="footer-links" aria-label="보조 탐색">
+        <a href="/magazine/about">소개</a>
+      </nav>
       <p>예술, 기술, 디자인, 뷰티, 사유를 위한 편집 표면</p>
     </footer>
   </body>

@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { articles, site } from "./content/magazine";
-import { issueSlug, renderAboutPage, renderArchivePage, renderArticlePage, renderHomePage, renderIssuePage, renderNotFoundPage, renderWritePage } from "./render/pages";
+import { issueSlug, renderAboutPage, renderArchivePage, renderArticlePage, renderHomePage, renderIssueCollectionPage, renderIssuePage, renderNotFoundPage, renderWritePage } from "./render/pages";
 import type { Locale } from "./types";
 
 const projectRoot = path.resolve(__dirname, "..");
@@ -9,6 +9,9 @@ const outputDir = path.join(projectRoot, "docs");
 const publicDir = path.join(projectRoot, "public");
 const distClient = path.join(projectRoot, "dist", "client.js");
 const basePath = process.env.BASE_PATH ?? "/magazine";
+const pageSize = 5;
+
+const pageCount = (itemCount: number): number => Math.max(1, Math.ceil(itemCount / pageSize));
 
 const ensureDir = async (dirPath: string): Promise<void> => {
   await fs.mkdir(dirPath, { recursive: true });
@@ -32,10 +35,22 @@ const writeLocalizedPages = async (locale: Locale): Promise<void> => {
   const prefix = locale === "en" ? "en/" : "";
 
   await writeHtml(`${prefix}index.html`, renderHomePage(site, articles, locale, "/"));
-  await writeHtml(`${prefix}issues/index.html`, renderIssuePage(site, articles, locale, "/issues"));
+  await writeHtml(`${prefix}issues/index.html`, renderIssueCollectionPage(site, locale, "/issues"));
   await writeHtml(`${prefix}about/index.html`, renderAboutPage(site, locale, "/about"));
   await writeHtml(`${prefix}write/index.html`, renderWritePage(site, articles, locale, "/write"));
   await writeHtml(`${prefix}archive/index.html`, renderArchivePage(site, articles, locale, "/archive"));
+
+  await Promise.all(
+    Array.from({ length: pageCount(site.issueProjects.length) - 1 }, (_, index) => index + 2).map((page) =>
+      writeHtml(`${prefix}issues/page/${page}/index.html`, renderIssueCollectionPage(site, locale, `/issues/page/${page}/`, page))
+    )
+  );
+
+  await Promise.all(
+    Array.from({ length: pageCount(articles.length) - 1 }, (_, index) => index + 2).map((page) =>
+      writeHtml(`${prefix}archive/page/${page}/index.html`, renderArchivePage(site, articles, locale, `/archive/page/${page}/`, undefined, undefined, page))
+    )
+  );
 
   await Promise.all(
     site.issueProjects.map((issue) =>
@@ -56,6 +71,18 @@ const writeLocalizedPages = async (locale: Locale): Promise<void> => {
   );
 
   await Promise.all(
+    site.categories.flatMap((category) => {
+      const count = articles.filter((article) => article.category === category.key).length;
+      return Array.from({ length: pageCount(count) - 1 }, (_, index) => index + 2).map((page) =>
+        writeHtml(
+          `${prefix}archive/${category.key}/page/${page}/index.html`,
+          renderArchivePage(site, articles, locale, `/archive/${category.key}/page/${page}/`, category.key, undefined, page)
+        )
+      );
+    })
+  );
+
+  await Promise.all(
     site.categories.flatMap((category) =>
       category.subcategories.map((subcategory) =>
         writeHtml(
@@ -63,6 +90,20 @@ const writeLocalizedPages = async (locale: Locale): Promise<void> => {
           renderArchivePage(site, articles, locale, `/archive/${category.key}/${subcategory.key}/`, category.key, subcategory.key)
         )
       )
+    )
+  );
+
+  await Promise.all(
+    site.categories.flatMap((category) =>
+      category.subcategories.flatMap((subcategory) => {
+        const count = articles.filter((article) => article.category === category.key && article.subcategoryKeys.some((key) => key === subcategory.key)).length;
+        return Array.from({ length: pageCount(count) - 1 }, (_, index) => index + 2).map((page) =>
+          writeHtml(
+            `${prefix}archive/${category.key}/${subcategory.key}/page/${page}/index.html`,
+            renderArchivePage(site, articles, locale, `/archive/${category.key}/${subcategory.key}/page/${page}/`, category.key, subcategory.key, page)
+          )
+        );
+      })
     )
   );
 

@@ -2,7 +2,7 @@ import express from "express";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { articles, site } from "./content/magazine";
-import { issueSlug, renderAboutPage, renderArchivePage, renderArticlePage, renderHomePage, renderIssuePage, renderNotFoundPage, renderWritePage } from "./render/pages";
+import { issueSlug, renderAboutPage, renderArchivePage, renderArticlePage, renderHomePage, renderIssueCollectionPage, renderIssuePage, renderNotFoundPage, renderWritePage } from "./render/pages";
 import type { Article, IssueProject, Locale, PrimaryCategory, SubcategoryKey } from "./types";
 
 const app = express();
@@ -33,6 +33,11 @@ const isPrimaryCategory = (value: unknown): value is PrimaryCategory =>
 
 const isSubcategory = (categoryKey: PrimaryCategory | undefined, value: unknown): value is SubcategoryKey =>
   typeof value === "string" && Boolean(site.categories.find((category) => category.key === categoryKey)?.subcategories.some((subcategory) => subcategory.key === value));
+
+const pageFromParam = (value: unknown): number => {
+  const page = Number(value);
+  return Number.isInteger(page) && page > 0 ? page : 1;
+};
 
 const isArticleArray = (value: unknown): value is Article[] =>
   Array.isArray(value) && value.every((article) => typeof article === "object" && article !== null && typeof (article as { slug?: unknown }).slug === "string");
@@ -95,7 +100,12 @@ app.get(["/", "/en", "/en/"], (request, response) => {
 
 app.get(["/issues", "/issues/", "/en/issues", "/en/issues/"], (request, response) => {
   const locale = getLocale(request.path, request.query.lang);
-  response.send(renderIssuePage(site, articles, locale, getCurrentPath(request.originalUrl)));
+  response.send(renderIssueCollectionPage(site, locale, getCurrentPath(request.originalUrl)));
+});
+
+app.get(["/issues/page/:page", "/en/issues/page/:page"], (request, response) => {
+  const locale = getLocale(request.path, request.query.lang);
+  response.send(renderIssueCollectionPage(site, locale, getCurrentPath(request.originalUrl), pageFromParam(request.params.page)));
 });
 
 app.get(["/issues/:issueSlug", "/en/issues/:issueSlug"], (request, response) => {
@@ -118,6 +128,28 @@ app.get(["/about", "/about/", "/en/about", "/en/about/"], (request, response) =>
 app.get(["/write", "/write/", "/en/write", "/en/write/"], (request, response) => {
   const locale = getLocale(request.path, request.query.lang);
   response.send(renderWritePage(site, articles, locale, getCurrentPath(request.originalUrl)));
+});
+
+app.get([
+  "/archive/page/:page",
+  "/archive/:category/page/:page",
+  "/archive/:category/:subcategory/page/:page",
+  "/en/archive/page/:page",
+  "/en/archive/:category/page/:page",
+  "/en/archive/:category/:subcategory/page/:page"
+], (request, response) => {
+  const locale = getLocale(request.path, request.query.lang);
+  const pathCategory = request.params.category;
+  const pathSubcategory = request.params.subcategory;
+  const selectedCategory = isPrimaryCategory(pathCategory) ? pathCategory : undefined;
+  const selectedSubcategory = isSubcategory(selectedCategory, pathSubcategory) ? pathSubcategory : undefined;
+
+  if ((pathCategory && !selectedCategory) || (pathSubcategory && !selectedSubcategory)) {
+    response.status(404).send(renderNotFoundPage(site, locale, getCurrentPath(request.originalUrl)));
+    return;
+  }
+
+  response.send(renderArchivePage(site, articles, locale, getCurrentPath(request.originalUrl), selectedCategory, selectedSubcategory, pageFromParam(request.params.page)));
 });
 
 app.get(["/archive", "/archive/:category", "/archive/:category/:subcategory", "/en/archive", "/en/archive/:category", "/en/archive/:category/:subcategory"], (request, response) => {
