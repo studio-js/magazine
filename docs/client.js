@@ -81,6 +81,7 @@ document.addEventListener("keydown", (event) => {
 document.querySelectorAll("[data-gallery]").forEach((gallery) => {
     const items = Array.from(gallery.querySelectorAll("[data-gallery-item]"));
     const count = gallery.querySelector("[data-gallery-count]");
+    const frame = gallery.querySelector(".article-gallery-frame");
     if (items.length <= 1) {
         return;
     }
@@ -100,6 +101,23 @@ document.querySelectorAll("[data-gallery]").forEach((gallery) => {
         setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) - 1);
     });
     gallery.querySelector("[data-gallery-next]")?.addEventListener("click", () => {
+        setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
+    });
+    gallery.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement) || target.closest("[data-gallery-prev], [data-gallery-next]") || !target.closest(".article-gallery-frame")) {
+            return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
+    });
+    frame?.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") {
+            return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
         setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
     });
 });
@@ -258,10 +276,27 @@ if (writer) {
     let currentIssueIndex = 0;
     let activeCategoryFilter = "all";
     let activeArticleSearch = "";
+    let activeWriteBlock = null;
     const storedWriteLocale = window.localStorage.getItem(localeStorageKey);
     let activeWriteLocale = storedWriteLocale === "ko" || storedWriteLocale === "en"
         ? storedWriteLocale
         : document.documentElement.lang === "en" ? "en" : "ko";
+    const activeBlockTools = document.createElement("div");
+    activeBlockTools.className = "writer-block-tools";
+    activeBlockTools.contentEditable = "false";
+    [
+        ["문단", "writeAddParagraph"],
+        ["인용문", "writeAddQuote"],
+        ["갤러리", "writeAddGallery"],
+        ["다음 섹션", "writeAddSectionAfter"],
+        ["섹션 삭제", "writeRemoveSection"]
+    ].forEach(([label, key]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset[key] = "";
+        button.textContent = label;
+        activeBlockTools.append(button);
+    });
     const quoteTs = (value) => JSON.stringify(value.trim());
     const splitTags = (value) => value.split(",").map((tag) => tag.trim()).filter(Boolean);
     const toSlug = (value) => value
@@ -538,7 +573,7 @@ if (writer) {
                     railClass: section.railClass || article.railClass || article.heroClass || fallback.railClass,
                     railImage: section.railImage || "",
                     hideRailImage: Boolean(section.hideRailImage),
-                    sectionImageClass: section.sectionImageClass || "",
+                    sectionImageClass: section.sectionImageClass || undefined,
                     sectionImage: section.sectionImage || "",
                     sectionImageCaption,
                     hideSectionImage: section.hideSectionImage === true || (!section.sectionImage && !section.sectionImageClass)
@@ -998,31 +1033,6 @@ if (writer) {
         section.append(title);
         blockElementsForSection(paragraphs, railClass, sectionImageClass, sectionImage, hideSectionImage, sectionImageCaption, blocks)
             .forEach((block) => section.append(block));
-        const tools = document.createElement("div");
-        tools.className = "writer-section-tools";
-        tools.contentEditable = "false";
-        const addSection = document.createElement("button");
-        addSection.type = "button";
-        addSection.dataset.writeAddSectionAfter = "";
-        addSection.textContent = "다음 섹션";
-        const addParagraph = document.createElement("button");
-        addParagraph.type = "button";
-        addParagraph.dataset.writeAddParagraph = "";
-        addParagraph.textContent = "문단";
-        const addQuote = document.createElement("button");
-        addQuote.type = "button";
-        addQuote.dataset.writeAddQuote = "";
-        addQuote.textContent = "인용문";
-        const addGallery = document.createElement("button");
-        addGallery.type = "button";
-        addGallery.dataset.writeAddGallery = "";
-        addGallery.textContent = "갤러리";
-        const removeSection = document.createElement("button");
-        removeSection.type = "button";
-        removeSection.dataset.writeRemoveSection = "";
-        removeSection.textContent = "섹션 삭제";
-        tools.append(addParagraph, addQuote, addGallery, addSection, removeSection);
-        section.append(tools);
         return section;
     };
     const focusEditableEnd = (element) => {
@@ -1043,9 +1053,36 @@ if (writer) {
         let paragraph = section.querySelector("[data-write-paragraph]");
         if (!paragraph) {
             paragraph = createParagraph("");
-            section.querySelector(".writer-section-tools")?.before(paragraph);
+            section.append(paragraph);
         }
         focusEditableEnd(paragraph);
+    };
+    const setActiveWriteBlock = (block) => {
+        activeWriteBlock?.classList.remove("is-write-insertion-target");
+        activeBlockTools.remove();
+        activeWriteBlock = block && writer.contains(block) ? block : null;
+        if (!activeWriteBlock) {
+            return;
+        }
+        activeWriteBlock.classList.add("is-write-insertion-target");
+        activeWriteBlock.after(activeBlockTools);
+    };
+    const rememberWriteBlock = (target) => {
+        const block = target instanceof HTMLElement ? target.closest("[data-write-block]") : null;
+        if (block && !block.closest("[data-write-issue-editor]")) {
+            setActiveWriteBlock(block);
+        }
+    };
+    const insertionBlockForSection = (section) => activeWriteBlock && document.contains(activeWriteBlock) && section.contains(activeWriteBlock) ? activeWriteBlock : null;
+    const insertBlockAtSelection = (section, block) => {
+        const insertionBlock = insertionBlockForSection(section);
+        if (insertionBlock) {
+            insertionBlock.after(block);
+        }
+        else {
+            section.append(block);
+        }
+        setActiveWriteBlock(block);
     };
     const addSectionAfter = (section) => {
         const nextSection = createSection();
@@ -1088,6 +1125,7 @@ if (writer) {
         const quote = createSectionQuote(text || (activeWriteLocale === "ko" ? "인용문을 입력하세요." : "Write the pull quote."));
         target.after(quote);
         target.remove();
+        setActiveWriteBlock(quote);
         focusEditableEnd(quote);
         return quote;
     };
@@ -1097,6 +1135,7 @@ if (writer) {
         const gallery = createGalleryBlock([{ imageClass: visualClass, image }], "");
         target.after(gallery);
         target.remove();
+        setActiveWriteBlock(gallery);
         return gallery;
     };
     const sectionsContainer = () => writer.querySelector("[data-write-body]");
@@ -1509,14 +1548,13 @@ if (writer) {
             listDragStartY = event.clientY;
             listDragStartScroll = adminList.scrollTop;
             listDragMoved = false;
-            adminList.setPointerCapture(event.pointerId);
         });
         adminList.addEventListener("pointermove", (event) => {
             if (listDragPointerId !== event.pointerId) {
                 return;
             }
             const deltaY = event.clientY - listDragStartY;
-            if (Math.abs(deltaY) > 3) {
+            if (Math.abs(deltaY) > 8) {
                 listDragMoved = true;
                 adminList.classList.add("is-dragging");
                 adminList.scrollTop = listDragStartScroll - deltaY;
@@ -1638,6 +1676,7 @@ if (writer) {
     };
     const applyArticle = (index) => {
         currentIndex = Math.max(0, Math.min(index, adminArticles.length - 1));
+        setActiveWriteBlock(null);
         const article = currentBase();
         writeMeta("slug", article.slug);
         writeMeta("date", article.date);
@@ -1749,6 +1788,7 @@ if (writer) {
                 event.preventDefault();
                 const paragraph = createParagraph("");
                 target.after(paragraph);
+                setActiveWriteBlock(paragraph);
                 focusEditableEnd(paragraph);
                 scheduleSave();
             }
@@ -1784,6 +1824,7 @@ if (writer) {
         event.preventDefault();
         const paragraph = createParagraph("");
         target.after(paragraph);
+        setActiveWriteBlock(paragraph);
         focusEditableEnd(paragraph);
         scheduleSave();
     };
@@ -1868,6 +1909,12 @@ if (writer) {
     applyArticle(0);
     writer.addEventListener("keydown", (event) => {
         void handleEditorKeydown(event);
+    });
+    writer.addEventListener("focusin", (event) => {
+        rememberWriteBlock(event.target);
+    });
+    writer.addEventListener("pointerdown", (event) => {
+        rememberWriteBlock(event.target);
     });
     writer.addEventListener("input", (event) => {
         const target = event.target;
@@ -2238,20 +2285,22 @@ if (writer) {
             return;
         }
         if (target.closest("[data-write-add-paragraph]") && section) {
-            section.querySelector(".writer-section-tools")?.before(createParagraph("새 문단을 입력하세요."));
+            const paragraph = createParagraph("새 문단을 입력하세요.");
+            insertBlockAtSelection(section, paragraph);
+            focusEditableEnd(paragraph);
             scheduleSave();
             return;
         }
         if (target.closest("[data-write-add-quote]") && section) {
             const quote = createSectionQuote(activeWriteLocale === "ko" ? "인용문을 입력하세요." : "Write the pull quote.");
-            section.querySelector(".writer-section-tools")?.before(quote);
+            insertBlockAtSelection(section, quote);
             focusEditableEnd(quote);
             scheduleSave();
             return;
         }
         if (target.closest("[data-write-add-gallery]") && section) {
             const visualClass = section.querySelector("[data-write-section-rail-class]")?.value || metaValue("heroClass") || "image-material";
-            section.querySelector(".writer-section-tools")?.before(createGalleryBlock([{ imageClass: visualClass, image: "" }], ""));
+            insertBlockAtSelection(section, createGalleryBlock([{ imageClass: visualClass, image: "" }], ""));
             scheduleSave();
             return;
         }

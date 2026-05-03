@@ -83,7 +83,7 @@ export interface ArticleSection {
   railClass?: VisualClass;
   railImage?: string;
   hideRailImage?: boolean;
-  sectionImageClass?: VisualClass;
+  sectionImageClass?: VisualClass | "";
   sectionImage?: string;
   sectionImageCaption?: LocalizedText;
   hideSectionImage?: boolean;

@@ -2406,6 +2406,7 @@ html[lang="ko"] .article-body blockquote {
   .writer-article .writer-section h2,
   .writer-article .writer-section [data-write-paragraph],
   .writer-article .writer-section .writer-section-media,
+  .writer-article .writer-block-tools,
   .writer-article .writer-section .writer-section-tools {
     grid-column: 1;
   }
@@ -18005,6 +18006,15 @@ html[lang="ko"] .article-detail:not(.writer-article) .article-section .article-i
   background: rgba(232, 226, 214, 0.34);
 }
 
+.article-gallery-frame[data-gallery-frame] {
+  cursor: pointer;
+}
+
+.article-gallery-frame[data-gallery-frame]:focus-visible {
+  outline: 1px solid rgba(24, 23, 19, 0.34);
+  outline-offset: 0.35rem;
+}
+
 .article-gallery-item {
   display: block;
 }
@@ -18037,6 +18047,7 @@ html[lang="ko"] .article-detail:not(.writer-article) .article-section .article-i
   padding: 0;
   background: transparent;
   color: inherit;
+  cursor: pointer;
   font: inherit;
   letter-spacing: inherit;
   text-transform: inherit;
@@ -18267,6 +18278,49 @@ html[lang="ko"] .writer-article .writer-section h2 {
   color: rgba(24, 23, 19, 0.84);
   font-size: clamp(1.08rem, 1.16vw, 1.22rem);
   line-height: 1.88;
+}
+
+.writer-article [data-write-block] {
+  position: relative;
+}
+
+.writer-article [data-write-block].is-write-insertion-target::before {
+  content: "";
+  position: absolute;
+  top: 0.18rem;
+  bottom: 0.18rem;
+  left: clamp(-1.2rem, -2vw, -0.7rem);
+  width: 2px;
+  background: rgba(24, 23, 19, 0.2);
+}
+
+.writer-article .writer-section-gallery.is-write-insertion-target {
+  outline: 1px solid rgba(24, 23, 19, 0.18);
+  outline-offset: 0.5rem;
+}
+
+.writer-article .writer-block-tools {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  width: min(100%, 42.5rem);
+  margin: clamp(-0.7rem, -1vw, -0.35rem) 0 clamp(1.2rem, 2.4vw, 2.2rem);
+}
+
+.writer-article .writer-block-tools button {
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 0.58rem 0.86rem;
+  background: rgba(var(--paper-rgb), 0.82);
+  color: rgba(24, 23, 19, 0.78);
+  font-size: 0.8rem;
+}
+
+.writer-article .writer-block-tools button:hover,
+.writer-article .writer-block-tools button:focus-visible {
+  border-color: rgba(24, 23, 19, 0.24);
+  color: var(--ink);
 }
 
 .writer-article .writer-section .writer-section-media,

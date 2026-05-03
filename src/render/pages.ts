@@ -153,7 +153,7 @@ const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, l
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${attributes ? ` ${attributes}` : ""}>${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="" loading="lazy" decoding="async" data-image-source />` : ""}</span>`;
 
-const assetVersion = "20260504-write-local-save";
+const assetVersion = "20260504-write-image-placement";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -312,8 +312,7 @@ const renderArchiveRows = (
         : fullLabel;
     const rowNo = String(rowOffset + index + 1).padStart(2, "0");
 
-    return `
-      <a
+    return `      <a
         href="${articleHref(article, locale)}"
         class="archive-row"
         data-preview-class="${article.heroClass}"
@@ -332,7 +331,7 @@ const renderArchiveRows = (
         <span class="archive-summary">${escapeHtml(text(article.excerpt, locale))}</span>
       </a>`;
   })
-  .join("");
+  .join("\n");
 
 const articleHasSubcategory = (article: Article, subcategory: SubcategoryKey): boolean =>
   article.subcategoryKeys.includes(subcategory);
@@ -638,7 +637,7 @@ ${subcategoryOptions}
               <button type="button" data-write-reset>${escapeHtml(locale === "ko" ? "로컬 변경 초기화" : "Reset Local Edits")}</button>
             </div>
           </div>
-          <p class="writer-shortcuts">${escapeHtml(locale === "ko" ? "Enter 새 문단 · 빈 문단에서 Enter 새 섹션 · /quote 인용문 · /image 본문 갤러리 · ⌘/Ctrl+S 파일 저장" : "Enter new paragraph · Enter on an empty paragraph creates a section · /quote pull quote · /image body gallery · Cmd/Ctrl+S saves the file")}</p>
+          <p class="writer-shortcuts">${escapeHtml(locale === "ko" ? "Enter 새 문단 · 문단/인용문/갤러리는 선택한 위치 뒤에 삽입 · /quote 인용문 · /image 본문 갤러리 · ⌘/Ctrl+S 파일 저장" : "Enter new paragraph · Paragraph/quote/gallery insert after the selected block · /quote pull quote · /image body gallery · Cmd/Ctrl+S saves the file")}</p>
 
           <article class="article-detail writer-article">
             <header class="article-hero-grid">
@@ -707,13 +706,6 @@ ${subcategoryOptions}
                   </figure>
                   <p contenteditable="true" spellcheck="true" data-write-paragraph>의자의 비례는 가까이서보다 한 발 물러섰을 때 더 분명해진다. 등받이의 높이, 좌판의 깊이, 다리 사이의 간격이 하나의 실루엣으로 묶이기 때문이다.</p>
                   <p contenteditable="true" spellcheck="true" data-write-paragraph>잘 만든 의자는 장식을 앞세우지 않는다. 대신 방 안에서 어느 정도의 존재감을 가져야 하는지 정확히 알고 있는 물건처럼 보인다.</p>
-                  <div class="writer-section-tools" contenteditable="false">
-                    <button type="button" data-write-add-paragraph>${escapeHtml(locale === "ko" ? "문단" : "Paragraph")}</button>
-                    <button type="button" data-write-add-quote>${escapeHtml(locale === "ko" ? "인용문" : "Quote")}</button>
-                    <button type="button" data-write-add-gallery>${escapeHtml(locale === "ko" ? "갤러리" : "Gallery")}</button>
-                    <button type="button" data-write-add-section-after>${escapeHtml(locale === "ko" ? "다음 섹션" : "Next Section")}</button>
-                    <button type="button" data-write-remove-section>${escapeHtml(locale === "ko" ? "섹션 삭제" : "Remove Section")}</button>
-                  </div>
                 </section>
               </div>
             </div>
@@ -1187,22 +1179,24 @@ export const renderArticlePage = (
       .map((image, index) => {
         const cycleAttributes = image.image ? "" : `data-visual-cycle role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "본문 비주얼 바꾸기" : "Cycle inline visual")}"`;
         return `                      <span class="article-gallery-item${index === 0 ? " is-active" : ""}" data-gallery-item${index === 0 ? "" : " hidden"}>
-                        ${renderImageBlock(image.imageClass ?? article.heroClass, image.image, cycleAttributes)}
+                        ${renderImageBlock(image.imageClass || article.heroClass, image.image, cycleAttributes)}
                       </span>`;
       })
       .join("\n");
-
-    return `
-                  <figure class="article-section-figure article-section-gallery" data-gallery data-gallery-index="0">
-                    <div class="article-gallery-frame">
-${imageItems}
-                    </div>
-                    ${visibleImages.length > 1 ? `<div class="article-gallery-controls" aria-label="${escapeHtml(locale === "ko" ? "본문 이미지 순환" : "Body image carousel")}">
+    const controlsMarkup = visibleImages.length > 1 ? `
+                    <div class="article-gallery-controls" aria-label="${escapeHtml(locale === "ko" ? "본문 이미지 순환" : "Body image carousel")}">
                       <button type="button" data-gallery-prev>${escapeHtml(locale === "ko" ? "이전" : "Prev")}</button>
                       <span data-gallery-count>1/${visibleImages.length}</span>
                       <button type="button" data-gallery-next>${escapeHtml(locale === "ko" ? "다음" : "Next")}</button>
-                    </div>` : ""}
-                    ${captionText ? `<figcaption>${escapeHtml(captionText)}</figcaption>` : ""}
+                    </div>` : "";
+    const captionMarkup = captionText ? `
+                    <figcaption>${escapeHtml(captionText)}</figcaption>` : "";
+
+    return `
+                  <figure class="article-section-figure article-section-gallery" data-gallery data-gallery-index="0">
+                    <div class="article-gallery-frame"${visibleImages.length > 1 ? ` data-gallery-frame role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "본문 이미지 다음으로 보기" : "Show next body image")}"` : ""}>
+${imageItems}
+                    </div>${controlsMarkup}${captionMarkup}
                   </figure>`;
   };
 
@@ -1212,7 +1206,7 @@ ${imageItems}
     }
 
     return renderGalleryFigure(
-      [{ imageClass: section.sectionImageClass ?? section.railClass ?? article.heroClass, image: section.sectionImage }],
+      [{ imageClass: section.sectionImageClass || section.railClass || article.heroClass, image: section.sectionImage }],
       section.sectionImageCaption
     );
   };
