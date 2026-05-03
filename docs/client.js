@@ -1188,7 +1188,7 @@ if (writer) {
             const count = filter === "all" ? adminArticles.length : adminArticles.filter((article) => article.category === filter).length;
             button.classList.toggle("is-active", isActive);
             button.setAttribute("aria-pressed", String(isActive));
-            const countElement = button.querySelector("small");
+            const countElement = button.querySelector(".filter-count, small");
             if (countElement) {
                 countElement.textContent = String(count);
             }

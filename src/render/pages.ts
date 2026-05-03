@@ -29,7 +29,7 @@ const ui = {
       "예술의 이미지, 테크의 시스템, 디자인의 구조, 철학의 질문을 한 화면 안에서 연결합니다. 빠른 피드보다 분류의 밀도와 읽는 순서를 먼저 설계합니다.",
     subscribe: "새 글 알림 받기",
     subscribeSuccess: "구독 신청이 기록되었습니다.",
-    fullArchive: "Archive",
+    fullArchive: "All Articles",
     archiveLead: "날짜, 제목, 분야만 먼저 남겨 읽는 순서를 만드는 목록입니다.",
     related: "이어 읽기",
     back: "아카이브로 돌아가기",
@@ -55,7 +55,7 @@ const ui = {
       "It links images from art, systems from tech, structures from design, and questions from philosophy on one surface. It is shaped around density, order, and slower reading rather than the speed of a feed.",
     subscribe: "Get New Notes",
     subscribeSuccess: "Subscription request noted.",
-    fullArchive: "Archive",
+    fullArchive: "All Articles",
     archiveLead: "A compact index ordered by date, title, and department.",
     related: "Related Reading",
     back: "Back to Archive",
@@ -157,7 +157,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-archive-home-flow-fix";
+const assetVersion = "20260503-archive-token-row-fix";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -344,8 +344,8 @@ const renderArchiveBoard = (
                 const count = articleList.filter((article) => article.category === category.key).length;
                 const label = text(category.label, locale);
                 return `<a class="filter-button" href="${archiveHref(locale, category.key)}">
-                  <span>${escapeHtml(label)}</span>
-                  <small>${count}</small>
+                  <span class="filter-label">${escapeHtml(label)}</span>
+                  <span class="filter-count">${count}</span>
                 </a>`;
               })
               .join("")}
@@ -402,10 +402,10 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
     .map((category) => `<option value="${category.key}"${category.key === initialCategory.key ? " selected" : ""}>${escapeHtml(text(category.label, locale))}</option>`)
     .join("");
   const categoryFilters = [
-    `<button type="button" class="is-active" data-admin-filter="all" aria-pressed="true"><span>All</span><small>${articleList.length}</small></button>`,
+    `<button type="button" class="is-active" data-admin-filter="all" aria-pressed="true"><span class="filter-label">All</span><span class="filter-count">${articleList.length}</span></button>`,
     ...site.categories.map((category) => {
       const count = articleList.filter((article) => article.category === category.key).length;
-      return `<button type="button" data-admin-filter="${category.key}" aria-pressed="false"><span>${escapeHtml(text(category.label, locale))}</span><small>${count}</small></button>`;
+      return `<button type="button" data-admin-filter="${category.key}" aria-pressed="false"><span class="filter-label">${escapeHtml(text(category.label, locale))}</span><span class="filter-count">${count}</span></button>`;
     })
   ].join("");
   const subcategoryOptions = site.categories
@@ -1143,16 +1143,16 @@ export const renderArchivePage = (
       ? text(selectedCategoryDefinition.label, locale)
       : labels.fullArchive;
   const archiveLead = selectedCategoryDefinition ? text(selectedCategoryDefinition.description, locale) : labels.archiveLead;
-  const archiveKicker = selectedCategoryDefinition ? "Archive" : "All Articles";
+  const archiveKicker = "Archive";
   const archiveSubnav = selectedCategoryDefinition
     ? `
           <nav class="archive-subnav" aria-label="${escapeHtml(locale === "ko" ? `${text(selectedCategoryDefinition.label, locale)} 하위 카테고리` : `${text(selectedCategoryDefinition.label, locale)} subcategories`)}">
-            <a class="${selectedSubcategoryDefinition ? "" : "is-active"}" href="${archiveHref(locale, selectedCategoryDefinition.key)}"${selectedSubcategoryDefinition ? "" : " aria-current=\"page\""}>All<small>${articleList.filter((article) => article.category === selectedCategoryDefinition.key).length}</small></a>
+            <a class="${selectedSubcategoryDefinition ? "" : "is-active"}" href="${archiveHref(locale, selectedCategoryDefinition.key)}"${selectedSubcategoryDefinition ? "" : " aria-current=\"page\""}><span class="filter-label">All</span><span class="filter-count">${articleList.filter((article) => article.category === selectedCategoryDefinition.key).length}</span></a>
             ${selectedCategoryDefinition.subcategories
               .map((subcategory) => {
                 const count = articleList.filter((article) => article.category === selectedCategoryDefinition.key && articleHasSubcategory(article, subcategory.key)).length;
                 const isActive = selectedSubcategoryDefinition?.key === subcategory.key;
-                return `<a class="${isActive ? "is-active" : ""}" href="${archiveHref(locale, selectedCategoryDefinition.key, subcategory.key)}"${isActive ? " aria-current=\"page\"" : ""}>${escapeHtml(text(subcategory.label, locale))}<small>${count}</small></a>`;
+                return `<a class="${isActive ? "is-active" : ""}" href="${archiveHref(locale, selectedCategoryDefinition.key, subcategory.key)}"${isActive ? " aria-current=\"page\"" : ""}><span class="filter-label">${escapeHtml(text(subcategory.label, locale))}</span><span class="filter-count">${count}</span></a>`;
               })
               .join("")}
           </nav>`
