@@ -13358,7 +13358,7 @@ html[lang="ko"] .method-item h3 {
   .home-index-headline,
   .home-index-list {
     justify-self: end;
-    width: min(100%, clamp(26rem, 32.5vw, 32.5rem));
+    width: min(100%, clamp(27rem, 35vw, 35rem));
   }
 }
 
@@ -13433,7 +13433,7 @@ html[lang="ko"] .method-item h3 {
 
 .home-index-order {
   position: relative;
-  top: 0.24rem;
+  top: clamp(0.34rem, 0.5vw, 0.64rem);
 }
 
 .home-index-row strong {
@@ -13673,7 +13673,7 @@ html[lang="ko"] .home-recent-copy strong {
 
 .home-story-line span {
   position: relative;
-  top: 0.18rem;
+  top: 0.23rem;
   padding-left: 0.85rem;
 }
 
