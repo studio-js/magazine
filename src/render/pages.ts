@@ -13,9 +13,9 @@ const ui = {
   ko: {
     issue: "이슈",
     features: "주요 글",
-    notes: "노트",
+    notes: "Archive Map",
     archive: "Archive",
-    about: "소개",
+    about: "About",
     menu: "메뉴",
     all: "전체",
     read: "읽기",
@@ -39,7 +39,7 @@ const ui = {
   en: {
     issue: "Issue",
     features: "Features",
-    notes: "Notes",
+    notes: "Archive Map",
     archive: "Archive",
     about: "About",
     menu: "Menu",
@@ -157,7 +157,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-home-geometry-scroll";
+const assetVersion = "20260503-home-archive-map-mobile-5";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -229,6 +229,7 @@ ${categoryLinks}
       </nav>
 
       <div class="header-tools">
+        <a class="about-tool" href="${withLocale("/about", locale)}">${escapeHtml(labels.about)}</a>
         <a href="${archiveHref(locale)}">${escapeHtml(labels.archive)}</a>
         <a class="issue-index-tool" href="${issueIndexHref(locale)}">Issue Index</a>
         ${renderLanguageSwitch(currentPath, locale)}
@@ -241,10 +242,10 @@ ${categoryLinks}
     <div class="mobile-menu" id="mobile-menu" data-mobile-menu>
 ${issueNavItem}
 ${categoryLinks}
+      <a href="${withLocale("/about", locale)}">${escapeHtml(labels.about)}</a>
       <a href="${archiveHref(locale)}">${escapeHtml(labels.archive)}</a>
       <a href="${issueIndexHref(locale)}">Issue Index</a>
       <a href="${withLocale("/#notes", locale)}">${escapeHtml(labels.notes)}</a>
-      <a href="${withLocale("/about", locale)}">${escapeHtml(labels.about)}</a>
       ${renderLanguageSwitch(currentPath, locale)}
     </div>
 
@@ -252,9 +253,6 @@ ${categoryLinks}
 
     <footer class="site-footer">
       <p>${escapeHtml(text(site.title, locale))}</p>
-      <nav class="footer-links" aria-label="${escapeHtml(locale === "ko" ? "보조 탐색" : "Secondary navigation")}">
-        <a href="${withLocale("/about", locale)}">${escapeHtml(labels.about)}</a>
-      </nav>
       <p>${escapeHtml(locale === "ko" ? "예술, 기술, 디자인, 뷰티, 사유를 위한 편집 표면" : "An editorial surface for art, technology, design, beauty, and thought")}</p>
     </footer>
   </body>
@@ -263,14 +261,43 @@ ${categoryLinks}
 
 const renderNotes = (notes: Note[], locale: Locale): string => notes
   .map(
-    (note) => `
-      <article class="note-item" data-reveal>
-        <span>${escapeHtml(note.date)}</span>
-        <h3>${escapeHtml(text(note.title, locale))}</h3>
-        <p>${escapeHtml(text(note.body, locale))}</p>
+    (note, index) => `
+      <article class="method-item" data-reveal data-scroll-motion>
+        <span class="method-no">${String(index + 1).padStart(2, "0")}</span>
+        <div>
+          <h3>${escapeHtml(text(note.title, locale))}</h3>
+          <p>${escapeHtml(text(note.body, locale))}</p>
+        </div>
       </article>`
   )
   .join("");
+
+const renderHomeArchiveMap = (site: SiteContent, articleList: Article[], locale: Locale): string => site.categories
+  .map((category, index) => {
+    const categoryArticles = articleList.filter((article) => article.category === category.key);
+    const latestArticle = categoryArticles[0];
+    const latestLabel = latestArticle
+      ? `${locale === "ko" ? "최근 글" : "Latest"} · ${text(latestArticle.title, locale)}`
+      : locale === "ko"
+        ? "아직 발행된 글이 없습니다"
+        : "No entries yet";
+
+    return `              <a class="archive-map-row" href="${archiveHref(locale, category.key)}" data-reveal data-action-card data-scroll-motion>
+                <span class="archive-map-no">${String(index + 1).padStart(2, "0")}</span>
+                <span class="archive-map-main">
+                  <strong>${escapeHtml(text(category.label, locale))}</strong>
+                  <em>${escapeHtml(text(category.description, locale))}</em>
+                </span>
+                <span class="archive-map-meta">
+                  <small>${escapeHtml(locale === "ko" ? `${categoryArticles.length}개의 글` : `${categoryArticles.length} articles`)}</small>
+                  <b>${escapeHtml(latestLabel)}</b>
+                </span>
+                <span class="archive-map-subjects">
+                  ${category.subcategories.map((subcategory) => `<span>${escapeHtml(text(subcategory.label, locale))}</span>`).join("\n                  ")}
+                </span>
+              </a>`;
+  })
+  .join("\n");
 
 const renderArchiveRows = (
   articleList: Article[],
@@ -791,11 +818,42 @@ ${issueField(locale === "ko" ? "에디터 노트" : "Editor Note", "editorNote",
 export const renderHomePage = (site: SiteContent, articleList: Article[], locale: Locale, currentPath: string): string => {
   const labels = ui[locale];
   const currentIssue = latestIssue(site);
-  const issueCoverClass = currentIssue.features[0]?.heroClass ?? "image-material";
-  const issueFeatures = currentIssue.features.slice(0, 4);
+  const issueFeatures = currentIssue.features;
   const selectedArticles = articleList.slice(0, 5);
-  const geometryLine = locale === "ko" ? "Reading / Index" : "Reading / Index";
-  const geometrySignal = locale === "ko" ? "Better Reading" : "Better Reading";
+  const leadArticle = selectedArticles[0];
+  const secondaryArticles = selectedArticles.slice(1, 5);
+  const homeIndexRows = issueFeatures
+    .map((feature, index) => `              <a class="home-index-row" href="${issueHref(currentIssue, locale)}#issue-${escapeHtml(feature.slug)}" data-scroll-motion>
+                <span class="home-index-order">${String(index + 1).padStart(2, "0")}</span>
+                <span class="home-index-copy">
+                  <strong>${escapeHtml(text(feature.title, locale))}</strong>
+                  <span class="home-index-meta">${escapeHtml(text(feature.role, locale))}</span>
+                  <em>${escapeHtml(text(feature.intro, locale))}</em>
+                </span>
+              </a>`)
+    .join("\n");
+  const homeRecentLead = leadArticle
+    ? `          <a class="home-recent-lead" href="${articleHref(leadArticle, locale)}" data-reveal data-action-card data-scroll-motion>
+            <span class="home-recent-visual" aria-hidden="true">
+              ${renderImageBlock(leadArticle.heroClass, leadArticle.heroImage)}
+            </span>
+            <span class="home-recent-copy">
+              <small>${escapeHtml(categoryLabel(site.categories, leadArticle.category, locale))} / ${escapeHtml(formatDate(leadArticle.date, locale))}</small>
+              <strong>${escapeHtml(text(leadArticle.title, locale))}</strong>
+              <em>${escapeHtml(text(leadArticle.excerpt, locale))}</em>
+            </span>
+          </a>`
+    : "";
+  const storyRows = secondaryArticles
+    .map((article, index) => [
+      `              <a class="home-story-line" href="${articleHref(article, locale)}" data-reveal data-action-card data-scroll-motion>`,
+      `                <span>${String(index + 2).padStart(2, "0")}</span>`,
+      `                <strong>${escapeHtml(text(article.title, locale))}</strong>`,
+      `                <small>${escapeHtml(categoryLabel(site.categories, article.category, locale))} / ${escapeHtml(formatDate(article.date, locale))}</small>`,
+      `                <em>${escapeHtml(text(article.excerpt, locale))}</em>`,
+      "              </a>"
+    ].filter(Boolean).join("\n"))
+    .join("\n");
 
   const body = `
     <section class="cover section-pad" aria-labelledby="hero-title" data-scroll-section>
@@ -813,38 +871,15 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
           </a>
         </div>
 
-        <div class="home-geometry" aria-hidden="true" data-reveal>
-          <span class="home-geo-circle home-geo-readers" data-scroll-motion><em>Readers</em></span>
-          <span class="home-geo-circle home-geo-issue" data-scroll-motion><em>Issue</em></span>
-          <span class="home-geo-lens" data-scroll-motion></span>
-          <span class="home-geo-vector" data-scroll-motion></span>
-          <span class="home-geo-pin" data-scroll-motion></span>
-          <span class="home-geo-signal" data-scroll-motion>${escapeHtml(geometrySignal)}</span>
-        </div>
+        <section class="home-issue-index" aria-labelledby="home-issue-index-title" data-reveal data-scroll-motion>
+          <header class="home-index-headline">
+            <p class="kicker" id="home-issue-index-title">Issue Index</p>
+          </header>
 
-        <a class="cover-art" href="${issueHref(currentIssue, locale)}" aria-label="${escapeHtml(locale === "ko" ? "현재 이슈 읽기" : "Read current issue")}" data-reveal data-action-card data-scroll-motion>
-          ${renderImageBlock(issueCoverClass, undefined, "data-feature-image")}
-          <span class="cover-caption">
-            <small>${escapeHtml(text(currentIssue.format, locale))}</small>
-            <strong>${escapeHtml(text(currentIssue.subtitle, locale))}</strong>
-          </span>
-        </a>
-
-        <aside class="cover-sidebar" data-reveal>
-          <p>${escapeHtml(locale === "ko" ? "Issue Contents" : "Issue Contents")}</p>
-          <div class="cover-links" aria-label="Issue contents">
-            ${issueFeatures
-              .map(
-                (feature, index) => `
-                  <a href="${issueHref(currentIssue, locale)}#issue-${escapeHtml(feature.slug)}" data-scroll-motion>
-                    <span>${String(index + 1).padStart(2, "0")}</span>
-                    <small>${escapeHtml(text(feature.role, locale))}</small>
-                    <strong>${escapeHtml(text(feature.title, locale))}</strong>
-                  </a>`
-              )
-              .join("")}
+          <div class="home-index-list" aria-label="${escapeHtml(locale === "ko" ? "이슈 읽기 순서" : "Issue reading order")}">
+${homeIndexRows}
           </div>
-        </aside>
+        </section>
       </div>
     </section>
 
@@ -854,39 +889,27 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
         <h2 id="features-title">${locale === "ko" ? "최근 글" : "Recent Stories"}</h2>
       </div>
 
-      <div class="home-story-stage">
-        <div class="home-story-map" aria-hidden="true" data-reveal>
-          <span class="home-map-circle home-map-primary" data-scroll-motion><em>Archive</em></span>
-          <span class="home-map-circle home-map-secondary" data-scroll-motion><em>Stories</em></span>
-          <span class="home-map-lens" data-scroll-motion></span>
-          <span class="home-map-marker" data-scroll-motion></span>
-          <span class="home-map-label" data-scroll-motion>${escapeHtml(geometryLine)}</span>
-        </div>
-
-        <div class="home-story-list">
-${selectedArticles
-          .map(
-            (article, index) => `
-              <a class="home-story-row" href="${articleHref(article, locale)}" data-reveal data-action-card data-scroll-motion>
-                <span class="river-no">${String(index + 1).padStart(2, "0")}</span>
-                <span class="home-story-meta">${escapeHtml(categoryLabel(site.categories, article.category, locale))} / ${escapeHtml(formatDate(article.date, locale))}</span>
-                <strong>${escapeHtml(text(article.title, locale))}</strong>
-                <em>${escapeHtml(text(article.excerpt, locale))}</em>
-              </a>`
-          )
-          .join("")}
+      <div class="home-recent-spread">
+${homeRecentLead}
+        <div class="home-story-index-list">
+${storyRows}
+          <a class="home-story-more" href="${archiveHref(locale)}" data-reveal data-scroll-motion>
+            <span>${escapeHtml(locale === "ko" ? "전체 보기" : "View all")}</span>
+            <strong>${escapeHtml(labels.fullArchive)}</strong>
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="notes section-pad" id="notes" aria-labelledby="notes-title" data-scroll-section>
-      <div class="notes-intro" data-reveal>
-        <p class="kicker">${escapeHtml(labels.editorNotes)}</p>
-        <h2 id="notes-title">${locale === "ko" ? "편집면을 지나가는 세 개의 관찰." : "Three observations moving through the edit."}</h2>
+    <section class="home-archive-map section-pad" id="notes" aria-labelledby="notes-title" data-scroll-section>
+      <div class="archive-map-head" data-reveal>
+        <p class="kicker">Archive Map</p>
+        <h2 id="notes-title">${locale === "ko" ? "분야별로 바로 들어가는 지도." : "Departments, latest entries, and smaller subjects."}</h2>
+        <p>${escapeHtml(locale === "ko" ? "각 분야의 최신 글, 글 수, 세부 주제를 한 번에 확인합니다." : "Use this index to jump by department, count, recent story, or subject.")}</p>
       </div>
 
-      <div class="note-list">
-        ${renderNotes(site.notes, locale)}
+      <div class="archive-map-list">
+${renderHomeArchiveMap(site, articleList, locale)}
       </div>
     </section>
 

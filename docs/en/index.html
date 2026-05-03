@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="A digital journal connecting art, tech, design, beauty, and philosophy through a quiet editorial lens." />
     <title>The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-home-geometry-scroll" />
-    <script src="/magazine/client.js?v=20260503-home-geometry-scroll" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-home-archive-map-mobile-5" />
+    <script src="/magazine/client.js?v=20260503-home-archive-map-mobile-5" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -126,6 +126,7 @@
       </nav>
 
       <div class="header-tools">
+        <a class="about-tool" href="/magazine/en/about">About</a>
         <a href="/magazine/en/archive">Archive</a>
         <a class="issue-index-tool" href="/magazine/en/issues">Issue Index</a>
         
@@ -246,10 +247,10 @@
                   </a>
           </div>
         </div>
+      <a href="/magazine/en/about">About</a>
       <a href="/magazine/en/archive">Archive</a>
       <a href="/magazine/en/issues">Issue Index</a>
-      <a href="/magazine/en/#notes">Notes</a>
-      <a href="/magazine/en/about">About</a>
+      <a href="/magazine/en/#notes">Archive Map</a>
       
   <div class="language-switch" aria-label="Language switcher">
     <a class="" href="/magazine/">KR</a>
@@ -273,49 +274,54 @@
           </a>
         </div>
 
-        <div class="home-geometry" aria-hidden="true" data-reveal>
-          <span class="home-geo-circle home-geo-readers" data-scroll-motion><em>Readers</em></span>
-          <span class="home-geo-circle home-geo-issue" data-scroll-motion><em>Issue</em></span>
-          <span class="home-geo-lens" data-scroll-motion></span>
-          <span class="home-geo-vector" data-scroll-motion></span>
-          <span class="home-geo-pin" data-scroll-motion></span>
-          <span class="home-geo-signal" data-scroll-motion>Better Reading</span>
-        </div>
+        <section class="home-issue-index" aria-labelledby="home-issue-index-title" data-reveal data-scroll-motion>
+          <header class="home-index-headline">
+            <p class="kicker" id="home-issue-index-title">Issue Index</p>
+          </header>
 
-        <a class="cover-art" href="/magazine/en/issues/no-03/" aria-label="Read current issue" data-reveal data-action-card data-scroll-motion>
-          <span class="image-block image-library" data-feature-image></span>
-          <span class="cover-caption">
-            <small>Online edition / 5 features</small>
-            <strong>A third digital edition where lists and covers learn to read one another.</strong>
-          </span>
-        </a>
-
-        <aside class="cover-sidebar" data-reveal>
-          <p>Issue Contents</p>
-          <div class="cover-links" aria-label="Issue contents">
-            
-                  <a href="/magazine/en/issues/no-03/#issue-cover-as-index" data-scroll-motion>
-                    <span>01</span>
-                    <small>Cover Essay</small>
-                    <strong>A Cover Is the Smallest Contents Page</strong>
-                  </a>
-                  <a href="/magazine/en/issues/no-03/#issue-search-without-hurry" data-scroll-motion>
-                    <span>02</span>
-                    <small>Interface Note</small>
-                    <strong>The Search Bar That Does Not Hurry</strong>
-                  </a>
-                  <a href="/magazine/en/issues/no-03/#issue-ledger-of-images" data-scroll-motion>
-                    <span>03</span>
-                    <small>Portfolio</small>
-                    <strong>Ledger of Images</strong>
-                  </a>
-                  <a href="/magazine/en/issues/no-03/#issue-caption-temperature" data-scroll-motion>
-                    <span>04</span>
-                    <small>Dossier</small>
-                    <strong>The Temperature of Captions</strong>
-                  </a>
+          <div class="home-index-list" aria-label="Issue reading order">
+              <a class="home-index-row" href="/magazine/en/issues/no-03/#issue-cover-as-index" data-scroll-motion>
+                <span class="home-index-order">01</span>
+                <span class="home-index-copy">
+                  <strong>A Cover Is the Smallest Contents Page</strong>
+                  <span class="home-index-meta">Cover Essay</span>
+                  <em>The cover is treated as a device for ordering reading, not a representative image.</em>
+                </span>
+              </a>
+              <a class="home-index-row" href="/magazine/en/issues/no-03/#issue-search-without-hurry" data-scroll-motion>
+                <span class="home-index-order">02</span>
+                <span class="home-index-copy">
+                  <strong>The Search Bar That Does Not Hurry</strong>
+                  <span class="home-index-meta">Interface Note</span>
+                  <em>Search is closer to an editorial surface for refining questions than a function that pulls answers.</em>
+                </span>
+              </a>
+              <a class="home-index-row" href="/magazine/en/issues/no-03/#issue-ledger-of-images" data-scroll-motion>
+                <span class="home-index-order">03</span>
+                <span class="home-index-copy">
+                  <strong>Ledger of Images</strong>
+                  <span class="home-index-meta">Portfolio</span>
+                  <em>Images are arranged like a repeated ledger rather than isolated cards.</em>
+                </span>
+              </a>
+              <a class="home-index-row" href="/magazine/en/issues/no-03/#issue-caption-temperature" data-scroll-motion>
+                <span class="home-index-order">04</span>
+                <span class="home-index-copy">
+                  <strong>The Temperature of Captions</strong>
+                  <span class="home-index-meta">Dossier</span>
+                  <em>A record of how captions adjust the direction of an image and the reader&#39;s distance.</em>
+                </span>
+              </a>
+              <a class="home-index-row" href="/magazine/en/issues/no-03/#issue-after-index" data-scroll-motion>
+                <span class="home-index-order">05</span>
+                <span class="home-index-copy">
+                  <strong>The Reader After the Index</strong>
+                  <span class="home-index-meta">Afterword</span>
+                  <em>A well-made index does not help readers finish quickly; it makes them return.</em>
+                </span>
+              </a>
           </div>
-        </aside>
+        </section>
       </div>
     </section>
 
@@ -325,74 +331,144 @@
         <h2 id="features-title">Recent Stories</h2>
       </div>
 
-      <div class="home-story-stage">
-        <div class="home-story-map" aria-hidden="true" data-reveal>
-          <span class="home-map-circle home-map-primary" data-scroll-motion><em>Archive</em></span>
-          <span class="home-map-circle home-map-secondary" data-scroll-motion><em>Stories</em></span>
-          <span class="home-map-lens" data-scroll-motion></span>
-          <span class="home-map-marker" data-scroll-motion></span>
-          <span class="home-map-label" data-scroll-motion>Reading / Index</span>
-        </div>
-
-        <div class="home-story-list">
-
-              <a class="home-story-row" href="/magazine/en/articles/quiet-images-after-the-opening" data-reveal data-action-card data-scroll-motion>
-                <span class="river-no">01</span>
-                <span class="home-story-meta">Art / May 02, 2026</span>
-                <strong>How Images Remain After the Opening</strong>
-                <em>Seeing a show is closer to remembering the work afterward than standing in front of it.</em>
-              </a>
-              <a class="home-story-row" href="/magazine/en/articles/artist-desk-as-studio-map" data-reveal data-action-card data-scroll-motion>
-                <span class="river-no">02</span>
-                <span class="home-story-meta">Art / Apr 26, 2026</span>
+      <div class="home-recent-spread">
+          <a class="home-recent-lead" href="/magazine/en/articles/quiet-images-after-the-opening" data-reveal data-action-card data-scroll-motion>
+            <span class="home-recent-visual" aria-hidden="true">
+              <span class="image-block image-atelier"></span>
+            </span>
+            <span class="home-recent-copy">
+              <small>Art / May 02, 2026</small>
+              <strong>How Images Remain After the Opening</strong>
+              <em>Seeing a show is closer to remembering the work afterward than standing in front of it.</em>
+            </span>
+          </a>
+        <div class="home-story-index-list">
+              <a class="home-story-line" href="/magazine/en/articles/artist-desk-as-studio-map" data-reveal data-action-card data-scroll-motion>
+                <span>02</span>
                 <strong>The Desk Is the Artist&#39;s Smallest Map</strong>
+                <small>Art / Apr 26, 2026</small>
                 <em>The arrangement of a desk shows what an artist holds onto and what they postpone.</em>
               </a>
-              <a class="home-story-row" href="/magazine/en/articles/ai-interface-without-performance" data-reveal data-action-card data-scroll-motion>
-                <span class="river-no">03</span>
-                <span class="home-story-meta">Tech / Apr 18, 2026</span>
+              <a class="home-story-line" href="/magazine/en/articles/ai-interface-without-performance" data-reveal data-action-card data-scroll-motion>
+                <span>03</span>
                 <strong>An AI Interface Without Performance</strong>
+                <small>Tech / Apr 18, 2026</small>
                 <em>A good AI interface shortens the time users spend noticing the technology.</em>
               </a>
-              <a class="home-story-row" href="/magazine/en/articles/data-dashboard-as-reading-room" data-reveal data-action-card data-scroll-motion>
-                <span class="river-no">04</span>
-                <span class="home-story-meta">Tech / Apr 08, 2026</span>
+              <a class="home-story-line" href="/magazine/en/articles/data-dashboard-as-reading-room" data-reveal data-action-card data-scroll-motion>
+                <span>04</span>
                 <strong>Making a Data Dashboard Feel Like a Reading Room</strong>
+                <small>Tech / Apr 08, 2026</small>
                 <em>The point of a dashboard is not to show every metric at once, but to move the viewer toward the next question.</em>
               </a>
-              <a class="home-story-row" href="/magazine/en/articles/brand-system-with-room-to-breathe" data-reveal data-action-card data-scroll-motion>
-                <span class="river-no">05</span>
-                <span class="home-story-meta">Design / Mar 30, 2026</span>
+              <a class="home-story-line" href="/magazine/en/articles/brand-system-with-room-to-breathe" data-reveal data-action-card data-scroll-motion>
+                <span>05</span>
                 <strong>A Brand System With Room to Breathe</strong>
+                <small>Design / Mar 30, 2026</small>
                 <em>A brand system is less a set of rules than a repeatable attitude.</em>
               </a>
+          <a class="home-story-more" href="/magazine/en/archive" data-reveal data-scroll-motion>
+            <span>View all</span>
+            <strong>All Articles</strong>
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="notes section-pad" id="notes" aria-labelledby="notes-title" data-scroll-section>
-      <div class="notes-intro" data-reveal>
-        <p class="kicker">Editor&#39;s Notes</p>
-        <h2 id="notes-title">Three observations moving through the edit.</h2>
+    <section class="home-archive-map section-pad" id="notes" aria-labelledby="notes-title" data-scroll-section>
+      <div class="archive-map-head" data-reveal>
+        <p class="kicker">Archive Map</p>
+        <h2 id="notes-title">Departments, latest entries, and smaller subjects.</h2>
+        <p>Use this index to jump by department, count, recent story, or subject.</p>
       </div>
 
-      <div class="note-list">
-        
-      <article class="note-item" data-reveal>
-        <span>May 02</span>
-        <h3>An edit that begins on the studio surface</h3>
-        <p>This edit looks at surfaces before completion: desks, dashboards, chair shadows, and defaults before thought hardens.</p>
-      </article>
-      <article class="note-item" data-reveal>
-        <span>Apr 26</span>
-        <h3>The lower voice of a good interface</h3>
-        <p>Precise intervals last longer than strong gestures. The technology essays ask for screens that reduce burden before proving capability.</p>
-      </article>
-      <article class="note-item" data-reveal>
-        <span>Apr 18</span>
-        <h3>A list is the quietest image</h3>
-        <p>An index is not only navigation. Title length, date spacing, and repeated rules create the speed of reading.</p>
-      </article>
+      <div class="archive-map-list">
+              <a class="archive-map-row" href="/magazine/en/archive/art/" data-reveal data-action-card data-scroll-motion>
+                <span class="archive-map-no">01</span>
+                <span class="archive-map-main">
+                  <strong>Art</strong>
+                  <em>Images that remain after the gallery and the material traces of studio practice.</em>
+                </span>
+                <span class="archive-map-meta">
+                  <small>2 articles</small>
+                  <b>Latest · How Images Remain After the Opening</b>
+                </span>
+                <span class="archive-map-subjects">
+                  <span>Exhibitions</span>
+                  <span>Artists</span>
+                  <span>Images</span>
+                  <span>Sound</span>
+                  <span>Architecture</span>
+                </span>
+              </a>
+              <a class="archive-map-row" href="/magazine/en/archive/tech/" data-reveal data-action-card data-scroll-motion>
+                <span class="archive-map-no">02</span>
+                <span class="archive-map-main">
+                  <strong>Tech</strong>
+                  <em>Less interested in smart performance than in structures that interrupt less.</em>
+                </span>
+                <span class="archive-map-meta">
+                  <small>2 articles</small>
+                  <b>Latest · An AI Interface Without Performance</b>
+                </span>
+                <span class="archive-map-subjects">
+                  <span>AI</span>
+                  <span>Interface</span>
+                  <span>Tools</span>
+                  <span>Systems</span>
+                </span>
+              </a>
+              <a class="archive-map-row" href="/magazine/en/archive/design/" data-reveal data-action-card data-scroll-motion>
+                <span class="archive-map-no">03</span>
+                <span class="archive-map-main">
+                  <strong>Design</strong>
+                  <em>Forms at work, from the shadow of a product to the margins of a brand system.</em>
+                </span>
+                <span class="archive-map-meta">
+                  <small>2 articles</small>
+                  <b>Latest · A Brand System With Room to Breathe</b>
+                </span>
+                <span class="archive-map-subjects">
+                  <span>Graphic</span>
+                  <span>Product</span>
+                  <span>Space</span>
+                  <span>Brand</span>
+                </span>
+              </a>
+              <a class="archive-map-row" href="/magazine/en/archive/beauty/" data-reveal data-action-card data-scroll-motion>
+                <span class="archive-map-no">04</span>
+                <span class="archive-map-main">
+                  <strong>Beauty</strong>
+                  <em>Skin, color, scent, and routines as surfaces of daily perception.</em>
+                </span>
+                <span class="archive-map-meta">
+                  <small>0 articles</small>
+                  <b>No entries yet</b>
+                </span>
+                <span class="archive-map-subjects">
+                  <span>Skincare</span>
+                  <span>Makeup</span>
+                  <span>Fragrance</span>
+                  <span>Haircare</span>
+                </span>
+              </a>
+              <a class="archive-map-row" href="/magazine/en/archive/philosophy/" data-reveal data-action-card data-scroll-motion>
+                <span class="archive-map-no">05</span>
+                <span class="archive-map-main">
+                  <strong>Philosophy</strong>
+                  <em>Judgments hidden behind screens: speed, defaults, ethics, and time.</em>
+                </span>
+                <span class="archive-map-meta">
+                  <small>2 articles</small>
+                  <b>Latest · Thinking Slowly Inside Fast Tools</b>
+                </span>
+                <span class="archive-map-subjects">
+                  <span>Thought</span>
+                  <span>Ethics</span>
+                  <span>Time</span>
+                  <span>Body</span>
+                </span>
+              </a>
       </div>
     </section>
 
@@ -400,9 +476,6 @@
 
     <footer class="site-footer">
       <p>The Thing</p>
-      <nav class="footer-links" aria-label="Secondary navigation">
-        <a href="/magazine/en/about">About</a>
-      </nav>
       <p>An editorial surface for art, technology, design, beauty, and thought</p>
     </footer>
   </body>

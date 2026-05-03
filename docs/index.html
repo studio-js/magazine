@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="예술, 테크, 디자인, 뷰티, 철학을 하나의 감각적 편집면으로 엮는 디지털 저널" />
     <title>The Thing</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-home-geometry-scroll" />
-    <script src="/magazine/client.js?v=20260503-home-geometry-scroll" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260503-home-archive-map-mobile-5" />
+    <script src="/magazine/client.js?v=20260503-home-archive-map-mobile-5" defer></script>
   </head>
   <body>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -126,6 +126,7 @@
       </nav>
 
       <div class="header-tools">
+        <a class="about-tool" href="/magazine/about">About</a>
         <a href="/magazine/archive">Archive</a>
         <a class="issue-index-tool" href="/magazine/issues">Issue Index</a>
         
@@ -246,10 +247,10 @@
                   </a>
           </div>
         </div>
+      <a href="/magazine/about">About</a>
       <a href="/magazine/archive">Archive</a>
       <a href="/magazine/issues">Issue Index</a>
-      <a href="/magazine/#notes">노트</a>
-      <a href="/magazine/about">소개</a>
+      <a href="/magazine/#notes">Archive Map</a>
       
   <div class="language-switch" aria-label="Language switcher">
     <a class="is-active" href="/magazine/">KR</a>
@@ -273,49 +274,54 @@
           </a>
         </div>
 
-        <div class="home-geometry" aria-hidden="true" data-reveal>
-          <span class="home-geo-circle home-geo-readers" data-scroll-motion><em>Readers</em></span>
-          <span class="home-geo-circle home-geo-issue" data-scroll-motion><em>Issue</em></span>
-          <span class="home-geo-lens" data-scroll-motion></span>
-          <span class="home-geo-vector" data-scroll-motion></span>
-          <span class="home-geo-pin" data-scroll-motion></span>
-          <span class="home-geo-signal" data-scroll-motion>Better Reading</span>
-        </div>
+        <section class="home-issue-index" aria-labelledby="home-issue-index-title" data-reveal data-scroll-motion>
+          <header class="home-index-headline">
+            <p class="kicker" id="home-issue-index-title">Issue Index</p>
+          </header>
 
-        <a class="cover-art" href="/magazine/issues/no-03/" aria-label="현재 이슈 읽기" data-reveal data-action-card data-scroll-motion>
-          <span class="image-block image-library" data-feature-image></span>
-          <span class="cover-caption">
-            <small>온라인 에디션 / 5개 피처</small>
-            <strong>목록과 표지가 서로를 읽게 만드는 세 번째 디지털 에디션</strong>
-          </span>
-        </a>
-
-        <aside class="cover-sidebar" data-reveal>
-          <p>Issue Contents</p>
-          <div class="cover-links" aria-label="Issue contents">
-            
-                  <a href="/magazine/issues/no-03/#issue-cover-as-index" data-scroll-motion>
-                    <span>01</span>
-                    <small>Cover Essay</small>
-                    <strong>표지는 가장 작은 목차다</strong>
-                  </a>
-                  <a href="/magazine/issues/no-03/#issue-search-without-hurry" data-scroll-motion>
-                    <span>02</span>
-                    <small>Interface Note</small>
-                    <strong>서두르지 않는 검색창</strong>
-                  </a>
-                  <a href="/magazine/issues/no-03/#issue-ledger-of-images" data-scroll-motion>
-                    <span>03</span>
-                    <small>Portfolio</small>
-                    <strong>이미지 장부</strong>
-                  </a>
-                  <a href="/magazine/issues/no-03/#issue-caption-temperature" data-scroll-motion>
-                    <span>04</span>
-                    <small>Dossier</small>
-                    <strong>캡션의 온도</strong>
-                  </a>
+          <div class="home-index-list" aria-label="이슈 읽기 순서">
+              <a class="home-index-row" href="/magazine/issues/no-03/#issue-cover-as-index" data-scroll-motion>
+                <span class="home-index-order">01</span>
+                <span class="home-index-copy">
+                  <strong>표지는 가장 작은 목차다</strong>
+                  <span class="home-index-meta">Cover Essay</span>
+                  <em>표지를 대표 이미지가 아니라 읽기 순서를 정하는 장치로 봅니다.</em>
+                </span>
+              </a>
+              <a class="home-index-row" href="/magazine/issues/no-03/#issue-search-without-hurry" data-scroll-motion>
+                <span class="home-index-order">02</span>
+                <span class="home-index-copy">
+                  <strong>서두르지 않는 검색창</strong>
+                  <span class="home-index-meta">Interface Note</span>
+                  <em>검색은 답을 당기는 기능보다 질문을 다듬는 편집면에 가깝습니다.</em>
+                </span>
+              </a>
+              <a class="home-index-row" href="/magazine/issues/no-03/#issue-ledger-of-images" data-scroll-motion>
+                <span class="home-index-order">03</span>
+                <span class="home-index-copy">
+                  <strong>이미지 장부</strong>
+                  <span class="home-index-meta">Portfolio</span>
+                  <em>이미지를 카드가 아니라 반복되는 회계 장부처럼 배열합니다.</em>
+                </span>
+              </a>
+              <a class="home-index-row" href="/magazine/issues/no-03/#issue-caption-temperature" data-scroll-motion>
+                <span class="home-index-order">04</span>
+                <span class="home-index-copy">
+                  <strong>캡션의 온도</strong>
+                  <span class="home-index-meta">Dossier</span>
+                  <em>캡션이 이미지의 방향과 독자의 거리를 조절하는 방식을 기록합니다.</em>
+                </span>
+              </a>
+              <a class="home-index-row" href="/magazine/issues/no-03/#issue-after-index" data-scroll-motion>
+                <span class="home-index-order">05</span>
+                <span class="home-index-copy">
+                  <strong>색인 이후의 독자</strong>
+                  <span class="home-index-meta">Afterword</span>
+                  <em>잘 만든 색인은 독자를 빠르게 끝내게 하지 않고 다시 돌아오게 합니다.</em>
+                </span>
+              </a>
           </div>
-        </aside>
+        </section>
       </div>
     </section>
 
@@ -325,74 +331,144 @@
         <h2 id="features-title">최근 글</h2>
       </div>
 
-      <div class="home-story-stage">
-        <div class="home-story-map" aria-hidden="true" data-reveal>
-          <span class="home-map-circle home-map-primary" data-scroll-motion><em>Archive</em></span>
-          <span class="home-map-circle home-map-secondary" data-scroll-motion><em>Stories</em></span>
-          <span class="home-map-lens" data-scroll-motion></span>
-          <span class="home-map-marker" data-scroll-motion></span>
-          <span class="home-map-label" data-scroll-motion>Reading / Index</span>
-        </div>
-
-        <div class="home-story-list">
-
-              <a class="home-story-row" href="/magazine/articles/quiet-images-after-the-opening" data-reveal data-action-card data-scroll-motion>
-                <span class="river-no">01</span>
-                <span class="home-story-meta">예술 / 2026.05.02</span>
-                <strong>오프닝이 끝난 뒤 이미지가 남는 방식</strong>
-                <em>사람들이 빠져나간 뒤 작품은 더 낮은 목소리로 보인다. 이 글은 전시가 이벤트에서 경험으로 바뀌는 순간을 따라간다.</em>
-              </a>
-              <a class="home-story-row" href="/magazine/articles/artist-desk-as-studio-map" data-reveal data-action-card data-scroll-motion>
-                <span class="river-no">02</span>
-                <span class="home-story-meta">예술 / 2026.04.26</span>
+      <div class="home-recent-spread">
+          <a class="home-recent-lead" href="/magazine/articles/quiet-images-after-the-opening" data-reveal data-action-card data-scroll-motion>
+            <span class="home-recent-visual" aria-hidden="true">
+              <span class="image-block image-atelier"></span>
+            </span>
+            <span class="home-recent-copy">
+              <small>예술 / 2026.05.02</small>
+              <strong>오프닝이 끝난 뒤 이미지가 남는 방식</strong>
+              <em>사람들이 빠져나간 뒤 작품은 더 낮은 목소리로 보인다. 이 글은 전시가 이벤트에서 경험으로 바뀌는 순간을 따라간다.</em>
+            </span>
+          </a>
+        <div class="home-story-index-list">
+              <a class="home-story-line" href="/magazine/articles/artist-desk-as-studio-map" data-reveal data-action-card data-scroll-motion>
+                <span>02</span>
                 <strong>작업대는 작가의 가장 작은 지도다</strong>
+                <small>예술 / 2026.04.26</small>
                 <em>스튜디오의 중심은 완성작이 아니라 매일 손이 닿는 작업대일 때가 많다. 그 표면은 생각이 이동한 흔적을 담는다.</em>
               </a>
-              <a class="home-story-row" href="/magazine/articles/ai-interface-without-performance" data-reveal data-action-card data-scroll-motion>
-                <span class="river-no">03</span>
-                <span class="home-story-meta">테크 / 2026.04.18</span>
+              <a class="home-story-line" href="/magazine/articles/ai-interface-without-performance" data-reveal data-action-card data-scroll-motion>
+                <span>03</span>
                 <strong>과시하지 않는 AI 인터페이스</strong>
+                <small>테크 / 2026.04.18</small>
                 <em>AI 제품은 종종 능력을 보여주기 위해 너무 많은 표정을 짓는다. 그러나 사용자가 다시 찾는 인터페이스는 결과보다 과정의 부담을 줄여준다.</em>
               </a>
-              <a class="home-story-row" href="/magazine/articles/data-dashboard-as-reading-room" data-reveal data-action-card data-scroll-motion>
-                <span class="river-no">04</span>
-                <span class="home-story-meta">테크 / 2026.04.08</span>
+              <a class="home-story-line" href="/magazine/articles/data-dashboard-as-reading-room" data-reveal data-action-card data-scroll-motion>
+                <span>04</span>
                 <strong>데이터 대시보드를 읽는 방처럼 만들기</strong>
+                <small>테크 / 2026.04.08</small>
                 <em>좋은 대시보드는 정보의 양보다 시선의 순서를 먼저 설계한다. 데이터는 화면에서 문장처럼 읽힐 수 있어야 한다.</em>
               </a>
-              <a class="home-story-row" href="/magazine/articles/brand-system-with-room-to-breathe" data-reveal data-action-card data-scroll-motion>
-                <span class="river-no">05</span>
-                <span class="home-story-meta">디자인 / 2026.03.30</span>
+              <a class="home-story-line" href="/magazine/articles/brand-system-with-room-to-breathe" data-reveal data-action-card data-scroll-motion>
+                <span>05</span>
                 <strong>숨 쉴 공간이 있는 브랜드 시스템</strong>
+                <small>디자인 / 2026.03.30</small>
                 <em>브랜드 시스템은 모든 것을 통제하기 위해 존재하지 않는다. 좋은 시스템은 상황이 달라져도 같은 태도를 유지하게 한다.</em>
               </a>
+          <a class="home-story-more" href="/magazine/archive" data-reveal data-scroll-motion>
+            <span>전체 보기</span>
+            <strong>All Articles</strong>
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="notes section-pad" id="notes" aria-labelledby="notes-title" data-scroll-section>
-      <div class="notes-intro" data-reveal>
-        <p class="kicker">EDITOR&#39;S NOTES</p>
-        <h2 id="notes-title">편집면을 지나가는 세 개의 관찰.</h2>
+    <section class="home-archive-map section-pad" id="notes" aria-labelledby="notes-title" data-scroll-section>
+      <div class="archive-map-head" data-reveal>
+        <p class="kicker">Archive Map</p>
+        <h2 id="notes-title">분야별로 바로 들어가는 지도.</h2>
+        <p>각 분야의 최신 글, 글 수, 세부 주제를 한 번에 확인합니다.</p>
       </div>
 
-      <div class="note-list">
-        
-      <article class="note-item" data-reveal>
-        <span>May 02</span>
-        <h3>작업실의 표면에서 시작한 편집</h3>
-        <p>완성된 작품보다 그 앞의 표면을 봅니다. 책상, 대시보드, 의자의 그림자, 기본값처럼 생각이 아직 굳기 전의 장면들입니다.</p>
-      </article>
-      <article class="note-item" data-reveal>
-        <span>Apr 26</span>
-        <h3>좋은 인터페이스의 낮은 목소리</h3>
-        <p>강한 제스처보다 오래 남는 것은 정확한 간격입니다. 기술 글들은 능력보다 부담을 덜어내는 화면을 먼저 묻습니다.</p>
-      </article>
-      <article class="note-item" data-reveal>
-        <span>Apr 18</span>
-        <h3>목록은 가장 조용한 이미지다</h3>
-        <p>색인은 단순히 이동을 돕는 장치가 아닙니다. 제목의 길이, 날짜의 간격, 반복되는 선이 읽는 속도를 만듭니다.</p>
-      </article>
+      <div class="archive-map-list">
+              <a class="archive-map-row" href="/magazine/archive/art/" data-reveal data-action-card data-scroll-motion>
+                <span class="archive-map-no">01</span>
+                <span class="archive-map-main">
+                  <strong>예술</strong>
+                  <em>전시장 이후에도 남는 이미지와 작업실의 물성을 따라갑니다.</em>
+                </span>
+                <span class="archive-map-meta">
+                  <small>2개의 글</small>
+                  <b>최근 글 · 오프닝이 끝난 뒤 이미지가 남는 방식</b>
+                </span>
+                <span class="archive-map-subjects">
+                  <span>전시</span>
+                  <span>작가</span>
+                  <span>이미지</span>
+                  <span>사운드</span>
+                  <span>건축</span>
+                </span>
+              </a>
+              <a class="archive-map-row" href="/magazine/archive/tech/" data-reveal data-action-card data-scroll-motion>
+                <span class="archive-map-no">02</span>
+                <span class="archive-map-main">
+                  <strong>테크</strong>
+                  <em>기술이 똑똑해 보이는 순간보다 덜 방해하는 구조를 봅니다.</em>
+                </span>
+                <span class="archive-map-meta">
+                  <small>2개의 글</small>
+                  <b>최근 글 · 과시하지 않는 AI 인터페이스</b>
+                </span>
+                <span class="archive-map-subjects">
+                  <span>AI</span>
+                  <span>인터페이스</span>
+                  <span>도구</span>
+                  <span>시스템</span>
+                </span>
+              </a>
+              <a class="archive-map-row" href="/magazine/archive/design/" data-reveal data-action-card data-scroll-motion>
+                <span class="archive-map-no">03</span>
+                <span class="archive-map-main">
+                  <strong>디자인</strong>
+                  <em>제품의 그림자와 브랜드 시스템의 여백처럼 작동하는 형태를 읽습니다.</em>
+                </span>
+                <span class="archive-map-meta">
+                  <small>2개의 글</small>
+                  <b>최근 글 · 숨 쉴 공간이 있는 브랜드 시스템</b>
+                </span>
+                <span class="archive-map-subjects">
+                  <span>그래픽</span>
+                  <span>제품</span>
+                  <span>공간</span>
+                  <span>브랜드</span>
+                </span>
+              </a>
+              <a class="archive-map-row" href="/magazine/archive/beauty/" data-reveal data-action-card data-scroll-motion>
+                <span class="archive-map-no">04</span>
+                <span class="archive-map-main">
+                  <strong>뷰티</strong>
+                  <em>피부, 색, 향, 루틴이 만드는 감각의 표면을 읽습니다.</em>
+                </span>
+                <span class="archive-map-meta">
+                  <small>0개의 글</small>
+                  <b>아직 발행된 글이 없습니다</b>
+                </span>
+                <span class="archive-map-subjects">
+                  <span>스킨케어</span>
+                  <span>메이크업</span>
+                  <span>향</span>
+                  <span>헤어케어</span>
+                </span>
+              </a>
+              <a class="archive-map-row" href="/magazine/archive/philosophy/" data-reveal data-action-card data-scroll-motion>
+                <span class="archive-map-no">05</span>
+                <span class="archive-map-main">
+                  <strong>철학</strong>
+                  <em>속도, 기본값, 윤리처럼 화면 뒤에 숨어 있는 판단을 묻습니다.</em>
+                </span>
+                <span class="archive-map-meta">
+                  <small>2개의 글</small>
+                  <b>최근 글 · 빠른 도구 안에서 느리게 생각하기</b>
+                </span>
+                <span class="archive-map-subjects">
+                  <span>사유</span>
+                  <span>윤리</span>
+                  <span>시간</span>
+                  <span>몸</span>
+                </span>
+              </a>
       </div>
     </section>
 
@@ -400,9 +476,6 @@
 
     <footer class="site-footer">
       <p>The Thing</p>
-      <nav class="footer-links" aria-label="보조 탐색">
-        <a href="/magazine/about">소개</a>
-      </nav>
       <p>예술, 기술, 디자인, 뷰티, 사유를 위한 편집 표면</p>
     </footer>
   </body>
