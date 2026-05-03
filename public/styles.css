@@ -13509,8 +13509,8 @@ html[lang="ko"] .home-index-row strong {
 .home-recent-visual .image-block {
   aspect-ratio: 4 / 5;
   clip-path: inset(0 14% 0 0);
-  transform: scale(1.01);
-  transition: clip-path 220ms cubic-bezier(0.2, 0.7, 0, 1), filter 180ms ease, transform 220ms cubic-bezier(0.2, 0.7, 0, 1);
+  transform: none;
+  transition: clip-path 260ms cubic-bezier(0.2, 0.7, 0, 1), filter 180ms ease;
 }
 
 .home-recent-visual::after {
@@ -13581,7 +13581,6 @@ html[lang="ko"] .home-recent-copy strong {
 .home-recent-lead:focus-visible .image-block {
   clip-path: inset(0);
   filter: contrast(1.03) saturate(0.94);
-  transform: scale(1);
 }
 
 .home-recent-lead:hover .home-recent-visual::after,
@@ -13616,11 +13615,11 @@ html[lang="ko"] .home-recent-copy strong {
   position: absolute;
   left: 0.08rem;
   top: 50%;
-  width: 0.36rem;
-  height: 0.36rem;
+  width: 0.42rem;
+  height: 1px;
   background: rgba(24, 23, 19, 0.12);
-  transform: translateY(-50%) scale(0.72);
-  transition: background 160ms ease, transform 180ms ease;
+  transform: translateY(-50%);
+  transition: background 160ms ease, width 240ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .home-story-line span {
@@ -13665,7 +13664,7 @@ html[lang="ko"] .home-story-line strong {
 .home-story-line:hover::before,
 .home-story-line:focus-visible::before {
   background: rgba(123, 91, 66, 0.42);
-  transform: translateY(-50%) scale(1);
+  width: 0.92rem;
 }
 
 .home-story-more,
@@ -13843,6 +13842,121 @@ html[lang="ko"] .archive-map-head h2 {
   backdrop-filter: none;
 }
 
+/* Keep the draft surface on the same measure as published article pages. */
+.admin-page[data-write-mode="article"] .admin-shell {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar,
+.admin-page[data-write-mode="article"] .article-admin-editor {
+  grid-column: 1 / -1 !important;
+  width: 100%;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar {
+  position: static;
+  grid-template-columns: minmax(12rem, 0.16fr) minmax(12rem, 0.18fr) minmax(18rem, 0.42fr) minmax(10rem, 0.12fr) minmax(10rem, 0.12fr);
+  align-items: start;
+  gap: 0;
+  max-height: none;
+  overflow: visible;
+  background: rgba(250, 248, 241, 0.34);
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-head,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-select-control,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions {
+  border-bottom: 0;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-list {
+  max-height: 10.5rem;
+  border-inline: 1px solid var(--hairline);
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 0.42rem;
+  padding: 0.82rem;
+  border-top: 0;
+  background: transparent;
+}
+
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions button,
+.admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export button {
+  flex: 0 1 auto;
+  min-height: 2.35rem;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 0.5rem 0.72rem;
+  background: transparent;
+  text-align: center;
+}
+
+.writer-article {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+.writer-article .writer-body-grid {
+  grid-template-columns: minmax(13rem, 0.22fr) minmax(0, 0.78fr);
+  gap: clamp(2rem, 5vw, 5.8rem);
+  align-items: start;
+}
+
+.writer-article .article-body {
+  grid-column: 2;
+}
+
+.writer-article .writer-section {
+  grid-template-columns: minmax(10rem, 0.24fr) minmax(0, 0.76fr);
+  column-gap: clamp(1.6rem, 4vw, 4rem);
+}
+
+.writer-article .writer-section [data-write-paragraph] {
+  max-width: 68ch;
+}
+
+.writer-article .writer-section .writer-section-media {
+  grid-column: 1 / -1;
+  justify-self: end;
+}
+
+@media (max-width: 1180px) {
+  .admin-page[data-write-mode="article"] .article-admin-sidebar {
+    grid-template-columns: minmax(12rem, 0.22fr) minmax(12rem, 0.24fr) minmax(0, 0.54fr);
+  }
+
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions,
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export {
+    grid-column: span 3;
+  }
+}
+
+@media (max-width: 960px) {
+  .admin-page[data-write-mode="article"] .article-admin-sidebar,
+  .writer-article .writer-body-grid,
+  .writer-article .writer-section {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions,
+  .admin-page[data-write-mode="article"] .article-admin-sidebar .admin-sidebar-actions.is-export,
+  .writer-article .article-body,
+  .writer-section-rail-card,
+  .writer-article .writer-section h2,
+  .writer-article .writer-section [data-write-paragraph],
+  .writer-article .writer-section .writer-section-media,
+  .writer-article .writer-section .writer-section-tools {
+    grid-column: 1;
+  }
+}
+
 .js .cover [data-reveal],
 .js .home-stories [data-reveal],
 .js .home-archive-map [data-reveal] {
@@ -14016,5 +14130,492 @@ html[lang="ko"] .archive-map-head h2 {
   .js .home-archive-map [data-reveal] {
     transform: none !important;
     transition: none !important;
+  }
+}
+
+/* Habitus identity surface: taste as an assembled field. */
+.home-habitus[data-scroll-section]::after {
+  content: none !important;
+}
+
+.home-habitus {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.34fr) minmax(0, 0.66fr);
+  gap: clamp(2rem, 5.6vw, 7.4rem);
+  align-items: start;
+}
+
+.habitus-copy {
+  position: sticky;
+  top: clamp(5rem, 8vw, 7rem);
+  display: grid;
+  gap: clamp(0.9rem, 1.6vw, 1.35rem);
+  align-self: start;
+}
+
+.habitus-copy h2 {
+  max-width: 9.6ch;
+  margin: 0;
+  font-size: clamp(2.4rem, 5.3vw, 6.8rem);
+  font-weight: 430;
+  letter-spacing: -0.055em;
+  line-height: 0.96;
+  text-wrap: balance;
+}
+
+html[lang="ko"] .habitus-copy h2 {
+  max-width: 8.4ch;
+  font-weight: 430;
+  font-variation-settings: "wght" 430;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  word-break: keep-all;
+}
+
+.habitus-copy p:not(.kicker) {
+  max-width: 28rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.1vw, 1.16rem);
+  line-height: 1.76;
+  word-break: keep-all;
+}
+
+.habitus-link {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: baseline;
+  width: min(100%, 24rem);
+  margin-top: clamp(0.35rem, 1vw, 0.9rem);
+  padding: 0.8rem 0;
+  box-shadow: inset 0 1px 0 rgba(24, 23, 19, 0.16), inset 0 -1px 0 rgba(24, 23, 19, 0.16);
+  transition: color 180ms ease, box-shadow 180ms ease;
+}
+
+.habitus-link span {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 520;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+}
+
+.habitus-link strong {
+  font-size: clamp(0.98rem, 1.08vw, 1.14rem);
+  font-weight: 430;
+  letter-spacing: -0.008em;
+}
+
+.habitus-link:hover,
+.habitus-link:focus-visible {
+  color: var(--clay);
+  box-shadow: inset 0 1px 0 rgba(24, 23, 19, 0.28), inset 0 -1px 0 rgba(24, 23, 19, 0.28);
+}
+
+.habitus-board,
+.habitus-board[data-scroll-motion] {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.44fr) minmax(0, 0.56fr);
+  gap: clamp(1.2rem, 2.8vw, 3.4rem);
+  min-height: clamp(34rem, 50vw, 48rem);
+  overflow: hidden;
+  padding: clamp(1rem, 2.2vw, 1.8rem);
+  background:
+    linear-gradient(135deg, rgba(24, 23, 19, 0.045), transparent 39%),
+    rgba(250, 248, 241, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(24, 23, 19, 0.12);
+  opacity: calc(0.9 + (var(--scroll-visibility, 0) * 0.1));
+  transform: translate3d(0, calc(var(--scroll-shift, 0) * 0.12rem), 0);
+  will-change: opacity, transform;
+}
+
+.habitus-board::before {
+  content: "";
+  position: absolute;
+  inset: clamp(1rem, 2vw, 1.6rem);
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(24, 23, 19, 0.055) 1px, transparent 1px) 0 0 / 25% 100%,
+    linear-gradient(180deg, rgba(24, 23, 19, 0.045) 1px, transparent 1px) 0 0 / 100% 25%;
+  opacity: 0.8;
+}
+
+.habitus-plate {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  align-content: start;
+  gap: clamp(0.65rem, 1.3vw, 1rem);
+  min-width: 0;
+  padding-bottom: clamp(1rem, 2vw, 1.8rem);
+  border-bottom: 1px solid rgba(24, 23, 19, 0.18);
+}
+
+.habitus-plate span {
+  color: rgba(24, 23, 19, 0.92);
+  font-size: clamp(3.4rem, 8.2vw, 9.4rem);
+  font-weight: 360;
+  letter-spacing: -0.075em;
+  line-height: 0.84;
+  word-break: keep-all;
+}
+
+html[lang="ko"] .habitus-plate span {
+  font-size: clamp(3.1rem, 7.4vw, 8.4rem);
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+}
+
+.habitus-plate strong {
+  max-width: 12ch;
+  color: var(--ink);
+  font-size: clamp(1.35rem, 2.3vw, 3rem);
+  font-weight: 430;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.habitus-plate em,
+.habitus-field,
+.habitus-card span {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-style: normal;
+  font-weight: 520;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+}
+
+.habitus-geometry {
+  position: absolute;
+  inset: clamp(1rem, 2vw, 1.6rem);
+  pointer-events: none;
+}
+
+.habitus-axis {
+  position: absolute;
+  display: block;
+  background: rgba(24, 23, 19, 0.24);
+  transform-origin: center;
+}
+
+.habitus-axis.is-horizontal {
+  right: 5%;
+  left: 38%;
+  top: 45%;
+  height: 1px;
+}
+
+.habitus-axis.is-vertical {
+  top: 11%;
+  bottom: 10%;
+  left: 63%;
+  width: 1px;
+}
+
+.habitus-field {
+  position: absolute;
+  padding: 0.36rem 0.5rem;
+  background: rgba(var(--paper-rgb), 0.78);
+  box-shadow: inset 0 0 0 1px rgba(24, 23, 19, 0.08);
+}
+
+.habitus-field.is-body {
+  left: 43%;
+  top: 14%;
+}
+
+.habitus-field.is-world {
+  right: 6%;
+  bottom: 14%;
+}
+
+.habitus-point {
+  position: absolute;
+  display: block;
+  width: clamp(2.8rem, 5.8vw, 6.2rem);
+  height: clamp(2.8rem, 5.8vw, 6.2rem);
+  border: 1px solid rgba(24, 23, 19, 0.18);
+  background: rgba(24, 23, 19, 0.045);
+}
+
+.habitus-point.is-one {
+  left: 44%;
+  top: 27%;
+}
+
+.habitus-point.is-two {
+  right: 12%;
+  top: 35%;
+  width: clamp(4.4rem, 8.4vw, 9rem);
+}
+
+.habitus-point.is-three {
+  left: 56%;
+  bottom: 18%;
+  height: clamp(4.4rem, 8.4vw, 9rem);
+}
+
+.habitus-cards {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.7rem, 1.3vw, 1rem);
+  align-self: end;
+}
+
+.habitus-card,
+.habitus-card[data-scroll-motion] {
+  display: grid;
+  gap: clamp(0.55rem, 1vw, 0.8rem);
+  min-height: clamp(10rem, 13vw, 14rem);
+  padding: clamp(0.8rem, 1.45vw, 1.1rem) 0;
+  border-top: 1px solid rgba(24, 23, 19, 0.16);
+  color: var(--ink);
+  opacity: calc(0.88 + (var(--scroll-visibility, 0) * 0.12));
+  transform: translate3d(0, calc(var(--scroll-shift, 0) * -0.08rem), 0);
+}
+
+.habitus-card strong {
+  max-width: 13ch;
+  color: currentColor;
+  font-size: clamp(1.08rem, 1.6vw, 1.95rem);
+  font-weight: 430;
+  letter-spacing: -0.014em;
+  line-height: 1.14;
+  text-wrap: balance;
+}
+
+html[lang="ko"] .habitus-card strong {
+  max-width: 9ch;
+  line-height: 1.24;
+  word-break: keep-all;
+}
+
+.habitus-card p {
+  max-width: 20rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(0.92rem, 1vw, 1.04rem);
+  line-height: 1.66;
+  word-break: keep-all;
+}
+
+@keyframes home-assemble-piece {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    translate: var(--assemble-x, 0) var(--assemble-y, 0.85rem);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    translate: 0 0;
+  }
+}
+
+@keyframes home-assemble-rail-y {
+  from {
+    transform: scaleY(0.12);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes home-assemble-rail-x {
+  from {
+    transform: scaleX(0.08);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes home-assemble-node {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.42) rotate(-12deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scale(0.82) rotate(0deg);
+  }
+}
+
+@keyframes habitus-point-settle {
+  from {
+    opacity: 0;
+    rotate: -8deg;
+    scale: 0.72;
+    translate: var(--assemble-x, 0.8rem) var(--assemble-y, 0.8rem);
+  }
+
+  to {
+    opacity: 1;
+    rotate: 0deg;
+    scale: 1;
+    translate: 0 0;
+  }
+}
+
+.js .cover-copy.is-visible .cover-edition,
+.js .cover-copy.is-visible .kicker,
+.js .cover-copy.is-visible h1,
+.js .cover-copy.is-visible .cover-deck,
+.js .cover-copy.is-visible .home-issue-link,
+.js .home-issue-index.is-visible .home-index-headline,
+.js .home-issue-index.is-visible .home-index-row,
+.js .home-recent-lead.is-visible,
+.js .home-story-line.is-visible,
+.js .home-story-more.is-visible,
+.js .habitus-copy.is-visible .kicker,
+.js .habitus-copy.is-visible h2,
+.js .habitus-copy.is-visible p,
+.js .habitus-copy.is-visible .habitus-link,
+.js .habitus-board.is-visible .habitus-plate,
+.js .habitus-board.is-visible .habitus-card {
+  animation: home-assemble-piece 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.js .cover-copy.is-visible .cover-edition { animation-delay: 40ms; --assemble-y: 0.45rem; }
+.js .cover-copy.is-visible .kicker { animation-delay: 90ms; --assemble-y: 0.5rem; }
+.js .cover-copy.is-visible h1 { animation-delay: 150ms; --assemble-y: 0.62rem; }
+.js .cover-copy.is-visible .cover-deck { animation-delay: 220ms; --assemble-y: 0.72rem; }
+.js .cover-copy.is-visible .home-issue-link { animation-delay: 300ms; --assemble-y: 0.55rem; }
+.js .home-issue-index.is-visible .home-index-headline { animation-delay: 110ms; --assemble-x: -0.35rem; }
+.js .home-issue-index.is-visible .home-index-row:nth-child(1) { animation-delay: 180ms; --assemble-x: -0.55rem; }
+.js .home-issue-index.is-visible .home-index-row:nth-child(2) { animation-delay: 235ms; --assemble-x: -0.48rem; }
+.js .home-issue-index.is-visible .home-index-row:nth-child(3) { animation-delay: 290ms; --assemble-x: -0.4rem; }
+.js .home-issue-index.is-visible .home-index-row:nth-child(4) { animation-delay: 345ms; --assemble-x: -0.32rem; }
+.js .home-issue-index.is-visible .home-index-row:nth-child(5) { animation-delay: 400ms; --assemble-x: -0.25rem; }
+.js .home-recent-lead.is-visible { animation-delay: 90ms; --assemble-x: -0.45rem; }
+.js .home-story-line.is-visible:nth-child(1) { animation-delay: 130ms; --assemble-x: 0.42rem; }
+.js .home-story-line.is-visible:nth-child(2) { animation-delay: 185ms; --assemble-x: 0.36rem; }
+.js .home-story-line.is-visible:nth-child(3) { animation-delay: 240ms; --assemble-x: 0.3rem; }
+.js .home-story-line.is-visible:nth-child(4) { animation-delay: 295ms; --assemble-x: 0.24rem; }
+.js .habitus-copy.is-visible .kicker { animation-delay: 60ms; }
+.js .habitus-copy.is-visible h2 { animation-delay: 125ms; --assemble-y: 0.7rem; }
+.js .habitus-copy.is-visible p { animation-delay: 205ms; --assemble-y: 0.62rem; }
+.js .habitus-copy.is-visible .habitus-link { animation-delay: 290ms; --assemble-y: 0.45rem; }
+.js .habitus-board.is-visible .habitus-plate { animation-delay: 120ms; --assemble-x: -0.7rem; --assemble-y: 0.25rem; }
+.js .habitus-board.is-visible .habitus-card:nth-child(1) { animation-delay: 230ms; --assemble-y: 0.7rem; }
+.js .habitus-board.is-visible .habitus-card:nth-child(2) { animation-delay: 285ms; --assemble-y: 0.7rem; }
+.js .habitus-board.is-visible .habitus-card:nth-child(3) { animation-delay: 340ms; --assemble-y: 0.7rem; }
+.js .habitus-board.is-visible .habitus-card:nth-child(4) { animation-delay: 395ms; --assemble-y: 0.7rem; }
+
+.js .home-issue-index.is-visible .home-index-list::before,
+.js .habitus-board.is-visible .habitus-axis.is-vertical {
+  animation: home-assemble-rail-y 860ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: top center;
+}
+
+.js .habitus-board.is-visible .habitus-axis.is-horizontal {
+  animation: home-assemble-rail-x 860ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+  transform-origin: left center;
+}
+
+.js .home-issue-index.is-visible .home-index-row::before {
+  animation: home-assemble-node 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.js .home-issue-index.is-visible .home-index-row:nth-child(1)::before { animation-delay: 230ms; }
+.js .home-issue-index.is-visible .home-index-row:nth-child(2)::before { animation-delay: 285ms; }
+.js .home-issue-index.is-visible .home-index-row:nth-child(3)::before { animation-delay: 340ms; }
+.js .home-issue-index.is-visible .home-index-row:nth-child(4)::before { animation-delay: 395ms; }
+.js .home-issue-index.is-visible .home-index-row:nth-child(5)::before { animation-delay: 450ms; }
+
+.js .habitus-board.is-visible .habitus-point,
+.js .habitus-board.is-visible .habitus-field {
+  animation: habitus-point-settle 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.js .habitus-board.is-visible .habitus-field.is-body { animation-delay: 230ms; --assemble-x: -0.8rem; }
+.js .habitus-board.is-visible .habitus-field.is-world { animation-delay: 310ms; --assemble-x: 0.8rem; }
+.js .habitus-board.is-visible .habitus-point.is-one { animation-delay: 320ms; --assemble-x: -0.9rem; --assemble-y: -0.4rem; }
+.js .habitus-board.is-visible .habitus-point.is-two { animation-delay: 390ms; --assemble-x: 0.9rem; --assemble-y: -0.2rem; }
+.js .habitus-board.is-visible .habitus-point.is-three { animation-delay: 460ms; --assemble-x: 0.2rem; --assemble-y: 0.9rem; }
+
+@media (max-width: 1180px) {
+  .home-habitus {
+    grid-template-columns: 1fr;
+  }
+
+  .habitus-copy {
+    position: relative;
+    top: auto;
+  }
+}
+
+@media (max-width: 860px) {
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .habitus-geometry {
+    inset: auto clamp(1rem, 2vw, 1.6rem) clamp(1rem, 2vw, 1.6rem);
+    height: clamp(12rem, 34vw, 16rem);
+  }
+
+  .habitus-cards {
+    grid-template-columns: 1fr;
+    padding-top: clamp(11rem, 34vw, 15rem);
+  }
+
+  .habitus-card,
+  .habitus-card[data-scroll-motion] {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 680px) {
+  .habitus-copy h2 {
+    font-size: clamp(2.2rem, 13vw, 4.1rem);
+  }
+
+  .habitus-plate span,
+  html[lang="ko"] .habitus-plate span {
+    font-size: clamp(2.85rem, 15vw, 4.9rem);
+  }
+
+  .habitus-board,
+  .habitus-board[data-scroll-motion] {
+    padding: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .cover-copy.is-visible .cover-edition,
+  .js .cover-copy.is-visible .kicker,
+  .js .cover-copy.is-visible h1,
+  .js .cover-copy.is-visible .cover-deck,
+  .js .cover-copy.is-visible .home-issue-link,
+  .js .home-issue-index.is-visible .home-index-headline,
+  .js .home-issue-index.is-visible .home-index-row,
+  .js .home-recent-lead.is-visible,
+  .js .home-story-line.is-visible,
+  .js .home-story-more.is-visible,
+  .js .habitus-copy.is-visible .kicker,
+  .js .habitus-copy.is-visible h2,
+  .js .habitus-copy.is-visible p,
+  .js .habitus-copy.is-visible .habitus-link,
+  .js .habitus-board.is-visible .habitus-plate,
+  .js .habitus-board.is-visible .habitus-card,
+  .js .home-issue-index.is-visible .home-index-list::before,
+  .js .home-issue-index.is-visible .home-index-row::before,
+  .js .habitus-board.is-visible .habitus-axis,
+  .js .habitus-board.is-visible .habitus-point,
+  .js .habitus-board.is-visible .habitus-field {
+    animation: none !important;
   }
 }

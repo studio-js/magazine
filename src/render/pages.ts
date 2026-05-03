@@ -13,7 +13,7 @@ const ui = {
   ko: {
     issue: "이슈",
     features: "주요 글",
-    notes: "Archive Map",
+    notes: "Habitus",
     archive: "Archive",
     about: "About",
     menu: "메뉴",
@@ -24,9 +24,9 @@ const ui = {
     categoryIndex: "카테고리 인덱스",
     latest: "최근 발행",
     editorNotes: "EDITOR'S NOTES",
-    aboutTitle: "The Thing은 서로 다른 분야를 하나의 편집 리듬으로 묶는 디지털 저널입니다.",
+    aboutTitle: "아비투스는 취향의 조건과 감각의 출처를 읽는 디지털 매거진입니다.",
     aboutBody:
-      "예술의 이미지, 테크의 시스템, 디자인의 구조, 철학의 질문을 한 화면 안에서 연결합니다. 빠른 피드보다 분류의 밀도와 읽는 순서를 먼저 설계합니다.",
+      "예술의 이미지, 테크의 시스템, 디자인의 구조, 뷰티의 감각, 철학의 질문을 통해 취향이 어떻게 만들어지고 구별되는지 살핍니다.",
     subscribe: "새 글 알림 받기",
     subscribeSuccess: "구독 신청이 기록되었습니다.",
     fullArchive: "All Articles",
@@ -39,7 +39,7 @@ const ui = {
   en: {
     issue: "Issue",
     features: "Features",
-    notes: "Archive Map",
+    notes: "Habitus",
     archive: "Archive",
     about: "About",
     menu: "Menu",
@@ -50,9 +50,9 @@ const ui = {
     categoryIndex: "Category Index",
     latest: "Latest Entries",
     editorNotes: "Editor's Notes",
-    aboutTitle: "The Thing is a digital journal that connects different fields through one editorial rhythm.",
+    aboutTitle: "Habitus is a digital magazine about the conditions and origins of taste.",
     aboutBody:
-      "It links images from art, systems from tech, structures from design, and questions from philosophy on one surface. It is shaped around density, order, and slower reading rather than the speed of a feed.",
+      "It reads images from art, systems from technology, structures from design, senses from beauty, and questions from philosophy as ways taste is formed and distinguished.",
     subscribe: "Get New Notes",
     subscribeSuccess: "Subscription request noted.",
     fullArchive: "All Articles",
@@ -157,7 +157,7 @@ const imageStyle = (imageUrl?: string): string => imageUrl
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${imageStyle(imageUrl)}${attributes ? ` ${attributes}` : ""}></span>`;
 
-const assetVersion = "20260503-home-archive-map-mobile-5";
+const assetVersion = "20260503-habitus-motion-width-2";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -219,8 +219,8 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
 
     <header class="site-header" data-header>
-      <a class="brand" href="${withLocale("/", locale)}" aria-label="The Thing home">
-        <span class="brand-text">The Thing</span>
+      <a class="brand" href="${withLocale("/", locale)}" aria-label="${escapeHtml(text(site.title, locale))} home">
+        <span class="brand-text">${escapeHtml(text(site.title, locale))}</span>
       </a>
 
       <nav class="nav" aria-label="Primary navigation">
@@ -253,7 +253,7 @@ ${categoryLinks}
 
     <footer class="site-footer">
       <p>${escapeHtml(text(site.title, locale))}</p>
-      <p>${escapeHtml(locale === "ko" ? "예술, 기술, 디자인, 뷰티, 사유를 위한 편집 표면" : "An editorial surface for art, technology, design, beauty, and thought")}</p>
+      <p>${escapeHtml(locale === "ko" ? "취향에 관하여" : "On Taste")}</p>
     </footer>
   </body>
 </html>`;
@@ -854,6 +854,47 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
       "              </a>"
     ].filter(Boolean).join("\n"))
     .join("\n");
+  const habitusFields = [
+    {
+      no: "01",
+      title: { ko: "몸에 밴 감각", en: "Embodied Sense" },
+      body: {
+        ko: "취향은 머릿속 의견보다 먼저 몸의 속도, 익숙한 재료, 반복된 장면으로 남습니다.",
+        en: "Taste stays in bodily speed, familiar materials, and repeated scenes before it becomes an opinion."
+      }
+    },
+    {
+      no: "02",
+      title: { ko: "사회적 조건", en: "Social Conditions" },
+      body: {
+        ko: "무엇을 자연스럽다고 느끼는지는 개인의 선택만이 아니라 환경과 학습의 층위에서 생깁니다.",
+        en: "What feels natural is shaped not only by choice but by layers of environment and learning."
+      }
+    },
+    {
+      no: "03",
+      title: { ko: "선택의 언어", en: "The Language of Choice" },
+      body: {
+        ko: "좋아한다는 말 뒤에는 가격, 이미지, 기술, 윤리, 분위기를 구별하는 문장이 숨어 있습니다.",
+        en: "Behind liking something are sentences that distinguish price, image, technology, ethics, and mood."
+      }
+    },
+    {
+      no: "04",
+      title: { ko: "취향의 기록", en: "A Record of Taste" },
+      body: {
+        ko: "아비투스는 그 문장을 기사, 이슈, 이미지, 목록의 형태로 천천히 기록합니다.",
+        en: "Habitus records those sentences slowly through articles, issues, images, and lists."
+      }
+    }
+  ];
+  const habitusCards = habitusFields
+    .map((field) => `              <article class="habitus-card" data-scroll-motion>
+                <span>${escapeHtml(field.no)}</span>
+                <strong>${escapeHtml(text(field.title, locale))}</strong>
+                <p>${escapeHtml(text(field.body, locale))}</p>
+              </article>`)
+    .join("\n");
 
   const body = `
     <section class="cover section-pad" aria-labelledby="hero-title" data-scroll-section>
@@ -901,15 +942,35 @@ ${storyRows}
       </div>
     </section>
 
-    <section class="home-archive-map section-pad" id="notes" aria-labelledby="notes-title" data-scroll-section>
-      <div class="archive-map-head" data-reveal>
-        <p class="kicker">Archive Map</p>
-        <h2 id="notes-title">${locale === "ko" ? "분야별로 바로 들어가는 지도." : "Departments, latest entries, and smaller subjects."}</h2>
-        <p>${escapeHtml(locale === "ko" ? "각 분야의 최신 글, 글 수, 세부 주제를 한 번에 확인합니다." : "Use this index to jump by department, count, recent story, or subject.")}</p>
+    <section class="home-habitus section-pad" id="notes" aria-labelledby="notes-title" data-scroll-section>
+      <div class="habitus-copy" data-reveal>
+        <p class="kicker">Habitus</p>
+        <h2 id="notes-title">${locale === "ko" ? "Habitus, 취향에 관하여." : "Habitus, on taste."}</h2>
+        <p>${escapeHtml(locale === "ko" ? "부르디외가 말한 아비투스처럼 취향은 단순한 선호가 아니라 몸에 밴 감각, 사회적 조건, 반복된 선택이 만나는 자리입니다." : "Following Bourdieu's habitus, taste is not a simple preference. It is where embodied sense, social conditions, and repeated choices meet.")}</p>
+        <a class="habitus-link" href="${withLocale("/about", locale)}">
+          <span>${escapeHtml(labels.about)}</span>
+          <strong>${escapeHtml(locale === "ko" ? "취향의 편집 방향 보기" : "Read the editorial direction")}</strong>
+        </a>
       </div>
 
-      <div class="archive-map-list">
-${renderHomeArchiveMap(site, articleList, locale)}
+      <div class="habitus-board" data-reveal data-scroll-motion>
+        <div class="habitus-plate" aria-label="${escapeHtml(locale === "ko" ? "Habitus 취향 좌표" : "Habitus taste coordinates")}">
+          <span>${escapeHtml(text(site.title, locale))}</span>
+          <strong>${escapeHtml(locale === "ko" ? "취향에 관하여" : "On Taste")}</strong>
+          <em>${escapeHtml(locale === "ko" ? "몸 / 조건 / 선택 / 기록" : "Body / Conditions / Choice / Record")}</em>
+        </div>
+        <div class="habitus-geometry" aria-hidden="true">
+          <span class="habitus-axis is-horizontal"></span>
+          <span class="habitus-axis is-vertical"></span>
+          <span class="habitus-field is-body">Body</span>
+          <span class="habitus-field is-world">World</span>
+          <span class="habitus-point is-one"></span>
+          <span class="habitus-point is-two"></span>
+          <span class="habitus-point is-three"></span>
+        </div>
+        <div class="habitus-cards">
+${habitusCards}
+        </div>
       </div>
     </section>
 
@@ -924,26 +985,26 @@ export const renderAboutPage = (site: SiteContent, locale: Locale, currentPath: 
   const body = `
     <section class="about-page section-pad" aria-labelledby="about-page-title">
       <header class="about-page-hero" data-reveal>
-        <p class="kicker">About The Thing</p>
-        <h1 id="about-page-title">${escapeHtml(locale === "ko" ? "분류보다 리듬, 뉴스보다 편집면." : "Rhythm before categories, surfaces before news.")}</h1>
-        <p>${escapeHtml(locale === "ko" ? "The Thing은 예술, 테크, 디자인, 뷰티, 철학을 같은 속도로 읽기 위한 디지털 매거진입니다. 빠른 업데이트보다 오래 남는 배열, 이미지와 문장의 간격, 다시 돌아올 수 있는 발행 구조를 먼저 설계합니다." : "The Thing is a digital magazine for reading art, technology, design, beauty, and philosophy at one considered speed. It designs durable arrangements, intervals between image and text, and editions worth returning to before chasing fast updates.")}</p>
+        <p class="kicker">About ${escapeHtml(text(site.title, locale))}</p>
+        <h1 id="about-page-title">${escapeHtml(locale === "ko" ? "취향은 선택이 아니라 몸에 밴 질서입니다." : "Taste is not only choice. It is an embodied order.")}</h1>
+        <p>${escapeHtml(locale === "ko" ? "아비투스는 예술, 테크, 디자인, 뷰티, 철학을 통해 취향이 만들어지는 조건을 읽는 디지털 매거진입니다. 빠른 추천보다 오래 남는 감각의 출처, 좋아한다는 말 뒤의 사회적 배치, 반복되는 선택의 문장을 먼저 봅니다." : "Habitus is a digital magazine that reads the conditions that form taste through art, technology, design, beauty, and philosophy. It looks past quick recommendations toward the origins of lasting sense, the social arrangements behind liking, and the language of repeated choices.")}</p>
       </header>
 
       <div class="about-page-grid">
         <article data-reveal>
           <span>01</span>
-          <h2>${escapeHtml(locale === "ko" ? "이슈는 독립 발행본입니다" : "Issues Are Editions")}</h2>
-          <p>${escapeHtml(locale === "ko" ? `최신호는 ${latest.number} · ${text(latest.title, locale)}입니다. 각 호는 카테고리 묶음이 아니라 하나의 질문과 장면으로 구성된 프로젝트입니다.` : `The latest edition is ${latest.number} · ${text(latest.title, locale)}. Each issue is a project built around one question and a sequence of scenes, not a category bundle.`)}</p>
+          <h2>${escapeHtml(locale === "ko" ? "이슈는 취향의 장면입니다" : "Issues Are Scenes of Taste")}</h2>
+          <p>${escapeHtml(locale === "ko" ? `최신호는 ${latest.number} · ${text(latest.title, locale)}입니다. 각 호는 분야 묶음이 아니라 취향을 만드는 하나의 조건을 따라가는 발행본입니다.` : `The latest edition is ${latest.number} · ${text(latest.title, locale)}. Each issue follows one condition that forms taste instead of simply grouping categories.`)}</p>
         </article>
         <article data-reveal>
           <span>02</span>
-          <h2>${escapeHtml(locale === "ko" ? "목록도 이미지처럼 다룹니다" : "Lists Are Images")}</h2>
-          <p>${escapeHtml(locale === "ko" ? "날짜, 제목, 여백, 반복되는 선은 모두 읽는 속도를 만듭니다. 아카이브는 검색 도구이기 전에 편집된 표면입니다." : "Dates, titles, space, and repeated rules all shape reading speed. The archive is an edited surface before it is a search tool.")}</p>
+          <h2>${escapeHtml(locale === "ko" ? "목록은 구별의 방식입니다" : "Lists Are Ways of Distinction")}</h2>
+          <p>${escapeHtml(locale === "ko" ? "날짜, 제목, 여백, 반복되는 선은 무엇을 가까이 두고 무엇을 멀리 둘지 정합니다. 아카이브는 취향의 질서를 드러내는 편집면입니다." : "Dates, titles, space, and repeated rules decide what stays close and what moves away. The archive is an edited surface where the order of taste appears.")}</p>
         </article>
         <article data-reveal>
           <span>03</span>
-          <h2>${escapeHtml(locale === "ko" ? "조용한 인터페이스를 선호합니다" : "Quiet Interfaces Matter")}</h2>
-          <p>${escapeHtml(locale === "ko" ? "움직임과 장식은 판단을 방해하지 않는 만큼만 둡니다. 화면은 과시보다 정확한 간격으로 오래 남아야 합니다." : "Motion and decoration are used only when they do not interrupt judgment. A screen should last through precise intervals rather than performance.")}</p>
+          <h2>${escapeHtml(locale === "ko" ? "움직임은 의미를 가져야 합니다" : "Motion Must Carry Meaning")}</h2>
+          <p>${escapeHtml(locale === "ko" ? "기하학과 움직임은 장식이 아니라 감각이 조립되는 과정을 보여줄 때 사용합니다. 화면은 과시보다 정확한 간격으로 오래 남아야 합니다." : "Geometry and motion are used when they show how sense is assembled, not as decoration. A screen should last through precise intervals rather than performance.")}</p>
         </article>
       </div>
     </section>`;
@@ -1008,7 +1069,7 @@ ${renderIssueCollectionItems(issues, locale, (currentPage - 1) * pageSize)}
 
   return renderLayout({
     title: `Issue Index | ${text(site.title, locale)}`,
-    description: locale === "ko" ? "The Thing의 모든 이슈를 모아둔 발행 인덱스입니다." : "An index of every edition published by The Thing.",
+    description: locale === "ko" ? "아비투스의 모든 이슈를 모아둔 발행 인덱스입니다." : "An index of every edition published by Habitus.",
     body,
     locale,
     currentPath,

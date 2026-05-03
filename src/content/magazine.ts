@@ -1004,7 +1004,7 @@ export const issueProjects: IssueProject[] = [
       en: "This issue imagines an index that keeps readers in place with greater precision instead of moving them faster. Lists, search bars, covers, and captions are not accessories but devices that set the edition's speed."
     },
     credits: [
-      { label: { ko: "편집", en: "Editor" }, value: { ko: "The Thing Editorial Desk", en: "The Thing Editorial Desk" } },
+      { label: { ko: "편집", en: "Editor" }, value: { ko: "아비투스 편집부", en: "Habitus Editorial Desk" } },
       { label: { ko: "이미지 시스템", en: "Image System" }, value: { ko: "Index Surface Unit", en: "Index Surface Unit" } },
       { label: { ko: "리서치", en: "Research" }, value: { ko: "서울 / 코펜하겐 원격 노트", en: "Seoul / Copenhagen remote notes" } }
     ],
@@ -1169,7 +1169,7 @@ export const issueProjects: IssueProject[] = [
       en: "A default looks like a neutral starting point, but it is a direction someone set in advance. This issue follows how that direction changes bodily habits and trust in screens."
     },
     credits: [
-      { label: { ko: "편집", en: "Editor" }, value: { ko: "The Thing Editorial Desk", en: "The Thing Editorial Desk" } },
+      { label: { ko: "편집", en: "Editor" }, value: { ko: "아비투스 편집부", en: "Habitus Editorial Desk" } },
       { label: { ko: "시스템 노트", en: "Systems Notes" }, value: { ko: "Default Rooms", en: "Default Rooms" } },
       { label: { ko: "리서치", en: "Research" }, value: { ko: "서울 / 도쿄 원격 노트", en: "Seoul / Tokyo remote notes" } }
     ],
@@ -1307,7 +1307,7 @@ export const issueProjects: IssueProject[] = [
     en: "This issue is built as five scenes: cover image, portfolio, conversation, research file, and afterword. Each carries the same question differently: what turns the sense of objects into screens, and which screens return to alter judgment?"
   },
   credits: [
-    { label: { ko: "편집", en: "Editor" }, value: { ko: "The Thing Editorial Desk", en: "The Thing Editorial Desk" } },
+    { label: { ko: "편집", en: "Editor" }, value: { ko: "아비투스 편집부", en: "Habitus Editorial Desk" } },
     { label: { ko: "아트 디렉션", en: "Art Direction" }, value: { ko: "Surface Studies", en: "Surface Studies" } },
     { label: { ko: "리서치", en: "Research" }, value: { ko: "서울 / 베를린 원격 노트", en: "Seoul / Berlin remote notes" } }
   ],
@@ -1452,10 +1452,10 @@ export const issueProjects: IssueProject[] = [
 ];
 
 export const site: SiteContent = {
-  title: { ko: "The Thing", en: "The Thing" },
+  title: { ko: "Habitus", en: "Habitus" },
   description: {
-    ko: "예술, 테크, 디자인, 뷰티, 철학을 하나의 감각적 편집면으로 엮는 디지털 저널",
-    en: "A digital journal connecting art, tech, design, beauty, and philosophy through a quiet editorial lens."
+    ko: "취향에 관하여. 예술, 기술, 디자인, 뷰티, 사유를 통해 취향의 조건과 감각의 출처를 읽는 디지털 매거진",
+    en: "On taste. A digital magazine reading the conditions of taste through art, technology, design, beauty, and thought."
   },
   issueProjects,
   month: { ko: "2026년 7월", en: "July 2026" },
@@ -1469,8 +1469,8 @@ export const site: SiteContent = {
     en: "It begins on the studio surface and moves through interfaces, data screens, brand systems, beauty routines, and the ethics of defaults. Different subjects are read in one slower rhythm."
   },
   keywords: {
-    ko: ["표면", "간격", "반복", "그림자", "기본값", "느린 판단"],
-    en: ["Surface", "Interval", "Repetition", "Shadow", "Defaults", "Slow Judgment"]
+    ko: ["아비투스", "취향", "감각", "구별짓기", "몸", "문화"],
+    en: ["Habitus", "Taste", "Sense", "Distinction", "Body", "Culture"]
   },
   categories,
   notes

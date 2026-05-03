@@ -348,7 +348,7 @@ if (writer) {
         availability: { ko: "오픈 액세스", en: "Open access" },
         coverCredit: { ko: "커버 크레딧", en: "Cover credit" },
         editorNote: { ko: "에디터 노트를 작성합니다.", en: "Write the editor's note." },
-        credits: [{ label: { ko: "편집", en: "Editor" }, value: { ko: "The Thing Editorial Desk", en: "The Thing Editorial Desk" } }],
+        credits: [{ label: { ko: "편집", en: "Editor" }, value: { ko: "아비투스 편집부", en: "Habitus Editorial Desk" } }],
         features: [fallbackIssueFeature()]
     });
     const normalizeIssueFeature = (feature) => {

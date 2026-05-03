@@ -255,5 +255,5 @@ app.use((request, response) => {
 });
 
 app.listen(port, () => {
-  console.log(`The Thing running at http://localhost:${port}`);
+  console.log(`Habitus running at http://localhost:${port}`);
 });
