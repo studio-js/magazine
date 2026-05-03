@@ -13345,7 +13345,7 @@ html[lang="ko"] .method-item h3 {
 
   .home-issue-index,
   .home-issue-index[data-scroll-motion] {
-    width: min(100%, clamp(24rem, 29vw, 31.5rem));
+    width: min(100%, clamp(32rem, 39vw, 40rem));
     max-width: 100%;
   }
 }
@@ -13633,7 +13633,7 @@ html[lang="ko"] .home-recent-copy strong {
   display: grid;
   grid-template-columns: 2.25rem minmax(0, 1fr) minmax(8rem, 0.24fr);
   gap: clamp(0.75rem, 1.6vw, 1.5rem);
-  align-items: baseline;
+  align-items: start;
   min-width: 0;
   padding-block: clamp(0.42rem, 0.8vw, 0.68rem);
   color: var(--ink);
