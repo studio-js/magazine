@@ -20462,3 +20462,90 @@ html[lang="ko"] .home-index-row strong {
     padding-bottom: 0.9rem;
   }
 }
+
+/* Minimal reference audit: keep editorial content visible and flatten product-like covers. */
+.home-index-copy em,
+.home-story-line em,
+.home-recent-copy em {
+  max-height: none !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.home-index-row,
+.home-index-row[data-scroll-motion],
+.home-story-line,
+.home-story-line[data-scroll-motion],
+.home-recent-lead,
+.home-recent-lead[data-scroll-motion] {
+  transition: color 160ms ease, border-color 160ms ease !important;
+}
+
+.home-index-row:hover,
+.home-index-row:focus-visible {
+  padding-bottom: clamp(0.9rem, 1.35vw, 1.25rem) !important;
+}
+
+.home-story-line:hover,
+.home-story-line:focus-visible {
+  padding-bottom: clamp(0.42rem, 0.8vw, 0.68rem) !important;
+}
+
+.home-recent-lead:hover,
+.home-recent-lead:focus-visible {
+  padding-bottom: 0 !important;
+}
+
+.home-index-row::before,
+.home-index-row::after,
+.home-index-list::before,
+.home-story-line::before,
+.home-story-line::after {
+  content: none !important;
+  display: none !important;
+}
+
+.home-index-list,
+.home-story-index-list {
+  border-top: 1px solid rgba(24, 23, 19, 0.16);
+}
+
+.home-index-row,
+.home-index-row[data-scroll-motion],
+.home-story-line,
+.home-story-line[data-scroll-motion] {
+  border-bottom: 1px solid rgba(24, 23, 19, 0.12);
+}
+
+.home-story-line span {
+  top: 0;
+  padding-left: 0;
+}
+
+.home-recent-visual .image-block,
+.home-recent-lead:hover .image-block,
+.home-recent-lead:focus-visible .image-block {
+  clip-path: inset(0) !important;
+  filter: none !important;
+}
+
+.home-recent-lead::before,
+.home-recent-visual::after {
+  content: none !important;
+  display: none !important;
+}
+
+.issue-editorial-note {
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.issue-cover-card .magazine-cover-stack {
+  filter: none !important;
+}
+
+.issue-cover-card .magazine-cover-sheet {
+  box-shadow: 0 0 0 1px rgba(24, 23, 19, 0.1) !important;
+}
