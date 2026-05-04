@@ -278,7 +278,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-stable-runtime";
+const assetVersion = "20260504-stable-venn";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
@@ -1055,15 +1055,10 @@ ${storyRows}
 
       <div class="habitus-board" data-reveal data-habitus-board tabindex="0" role="img" aria-label="${escapeHtml(locale === "ko" ? "경험과 반복의 교집합에서 습관이 생기고 선택으로 이어지는 아비투스 도식" : "A habitus diagram where the overlap of experience and repetition forms habit and leads to choice")}">
         <svg class="habitus-system" viewBox="0 0 960 430" aria-hidden="true" focusable="false">
-          <defs>
-            <clipPath id="habitus-venn-overlap">
-              <circle cx="430" cy="150" r="126" />
-            </clipPath>
-          </defs>
           <g class="habitus-venn-flow">
             <circle class="habitus-venn-circle is-experience" cx="430" cy="150" r="126" />
             <circle class="habitus-venn-circle is-repeat" cx="530" cy="150" r="126" />
-            <circle class="habitus-venn-lens" cx="530" cy="150" r="126" clip-path="url(#habitus-venn-overlap)" />
+            <path class="habitus-venn-lens" d="M480 34.35 A126 126 0 0 1 480 265.65 A126 126 0 0 1 480 34.35 Z" />
             <circle class="habitus-venn-ring is-experience" cx="430" cy="150" r="126" />
             <circle class="habitus-venn-ring is-repeat" cx="530" cy="150" r="126" />
             <path class="habitus-choice-arrow" d="M480 292 V338" />

@@ -22662,6 +22662,17 @@ html[lang="ko"] .home-recent-copy small {
   }
 }
 
+/* Habitus Venn stability guard: fixed geometry avoids Chrome SVG clip/transform drift while scrolling. */
+.habitus-board[data-habitus-board] .habitus-venn-circle,
+.habitus-board[data-habitus-board] .habitus-venn-ring,
+.habitus-board[data-habitus-board] .habitus-venn-lens,
+.habitus-board[data-habitus-board] .habitus-strand-labels .is-experience-label,
+.habitus-board[data-habitus-board] .habitus-strand-labels .is-repeat-label,
+.habitus-board[data-habitus-board] .habitus-strand-labels .is-habit {
+  transform: none !important;
+  will-change: opacity, fill, stroke;
+}
+
 /* Editorial row expansion guard: keep row actions while preventing short clamps. */
 .archive-row:hover .archive-summary,
 .archive-row:focus-visible .archive-summary,
