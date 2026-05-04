@@ -3492,7 +3492,6 @@ if (writer) {
         }
     });
 }
-void hydrateRuntimeContent();
 let scrollFrame = 0;
 function updateScrollState() {
     scrollFrame = 0;
@@ -4001,4 +4000,5 @@ if (subscribeForm) {
         }
     });
 }
+void hydrateRuntimeContent();
 //# sourceMappingURL=client.js.map

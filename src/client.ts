@@ -4396,8 +4396,6 @@ if (writer) {
   });
 }
 
-void hydrateRuntimeContent();
-
 let scrollFrame = 0;
 
 function updateScrollState(): void {
@@ -5043,3 +5041,5 @@ if (subscribeForm) {
     }
   });
 }
+
+void hydrateRuntimeContent();
