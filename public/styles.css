@@ -20675,3 +20675,68 @@ html[lang="ko"] .home-index-row strong {
     transition: none !important;
   }
 }
+
+/* Home action tuning: keep recent rows quiet, make issue rows feel deliberate. */
+.home-story-line::after,
+.home-story-line:hover::after,
+.home-story-line:focus-visible::after {
+  content: none !important;
+  display: none !important;
+}
+
+.home-story-line strong {
+  background: none !important;
+}
+
+.home-story-line:hover strong,
+.home-story-line:focus-visible strong {
+  transform: none !important;
+  background-size: 0 0 !important;
+}
+
+.home-story-line:hover span,
+.home-story-line:focus-visible span {
+  color: var(--muted);
+}
+
+.home-index-row,
+.home-index-row[data-scroll-motion] {
+  overflow: hidden;
+  background: linear-gradient(90deg, rgba(24, 23, 19, 0.045), rgba(24, 23, 19, 0.018) 72%, transparent) no-repeat 0 0 / 0 100%;
+  transition: color 160ms ease, background-size 260ms cubic-bezier(0.2, 0.7, 0, 1), border-color 160ms ease !important;
+}
+
+.home-index-row::after {
+  left: 0;
+  right: auto;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  height: auto;
+  background: rgba(123, 91, 66, 0.52);
+  opacity: 0;
+  transform: scaleY(0.38);
+  transform-origin: top center;
+}
+
+.home-index-row:hover,
+.home-index-row:focus-visible {
+  background-size: 100% 100%;
+}
+
+.home-index-row:hover::after,
+.home-index-row:focus-visible::after {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.home-index-row:hover .home-index-copy,
+.home-index-row:focus-visible .home-index-copy {
+  transform: translateX(0.18rem);
+}
+
+.home-index-row:hover .home-index-order,
+.home-index-row:focus-visible .home-index-order {
+  color: rgba(24, 23, 19, 0.86);
+  transform: translateX(0.08rem);
+}
