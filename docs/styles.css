@@ -20909,7 +20909,7 @@ html[lang="ko"] .home-index-row strong {
 
 .home-index-order {
   position: relative !important;
-  top: 0.18em !important;
+  top: 0.04em !important;
   align-self: start !important;
   padding: 0 !important;
   color: rgba(24, 23, 19, 0.52) !important;
@@ -21154,7 +21154,7 @@ html[lang="ko"] .home-story-line strong {
 .home-story-line span,
 .home-story-line small {
   position: relative !important;
-  top: 0.18em !important;
+  top: 0.04em !important;
   align-self: start !important;
   padding-left: 0 !important;
   color: rgba(24, 23, 19, 0.48) !important;
