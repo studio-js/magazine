@@ -22595,3 +22595,25 @@ html[lang="ko"] .home-recent-copy small {
 .home-story-line:focus-visible em {
   margin-top: clamp(0.28rem, 0.48vw, 0.5rem) !important;
 }
+
+/* Standard galleries are centered; only wide variants intentionally break out. */
+.article-detail:not(.writer-article) .article-section-gallery.article-gallery-standard {
+  grid-column: 1 / -1 !important;
+  justify-self: center !important;
+  width: min(100%, 58rem) !important;
+  max-width: 58rem !important;
+  margin-inline: auto !important;
+}
+
+.article-detail:not(.writer-article) .article-gallery-standard figcaption {
+  width: min(100%, 42.5rem);
+  max-width: 42.5rem;
+  margin-inline: auto;
+}
+
+.writer-article .writer-section-gallery.writer-gallery-standard {
+  justify-self: center !important;
+  width: min(100%, 52rem) !important;
+  max-width: 52rem !important;
+  margin-inline: auto !important;
+}
