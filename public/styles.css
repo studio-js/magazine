@@ -20507,9 +20507,12 @@ html[lang="ko"] .home-index-row strong {
   display: none !important;
 }
 
-.home-index-list,
 .home-story-index-list {
   border-top: 1px solid rgba(24, 23, 19, 0.16);
+}
+
+.home-index-list {
+  border-top: 0 !important;
 }
 
 .home-index-row,
