@@ -21973,3 +21973,156 @@ html[lang="ko"] .article-detail .article-section .article-inline-quote {
     font-size: clamp(1.9rem, 9vw, 3.35rem) !important;
   }
 }
+
+/* Geometric information accent: keep display/body restraint, sharpen structure only. */
+:root {
+  --info: var(--latin), "Pretendard Local", "Pretendard", "IBM Plex Sans KR Local", sans-serif;
+}
+
+.nav span,
+.nav-submenu a span,
+.header-tools > a,
+.menu-button,
+.language-switch a,
+.site-footer,
+.kicker,
+.cover-edition,
+.cover-masthead,
+.home-index-order,
+.home-index-meta,
+.home-story-line span,
+.home-story-line small,
+.home-recent-copy small,
+.home-story-more span,
+.home-issue-link small,
+.archive-date,
+.archive-category,
+.archive-info,
+.archive-control label > span,
+.archive-control select,
+.filter-button,
+.filter-button small,
+.filter-status,
+.subcategory-filter a,
+.subcategory-filter small,
+.article-meta-card,
+.article-meta-card small,
+.article-rail-no,
+.back-link,
+.text-link,
+.issue-project-no,
+.issue-project-ledger small,
+.issue-credit-grid small,
+.issue-collection-title span,
+.issue-collection-meta,
+.issue-cover-card small,
+.issue-cover-card em,
+.issue-feature-meta,
+.issue-ledger small,
+.issue-route span,
+.issue-route small,
+.issue-index-tool,
+.issue-index-latest,
+.issue-project-actions a,
+.about-page-grid article > span {
+  font-family: var(--info) !important;
+  font-feature-settings: "tnum" 1, "lnum" 1 !important;
+  font-variant-numeric: tabular-nums lining-nums !important;
+}
+
+.nav span,
+.nav-submenu a span,
+.header-tools > a,
+.menu-button,
+.language-switch a,
+.site-footer,
+.kicker,
+.cover-edition,
+.cover-masthead,
+.home-index-meta,
+.home-story-line span,
+.home-story-line small,
+.home-recent-copy small,
+.home-story-more span,
+.home-issue-link small,
+.archive-date,
+.archive-category,
+.archive-info,
+.archive-control label > span,
+.filter-status,
+.article-meta-card small,
+.article-rail-no,
+.back-link,
+.text-link,
+.issue-project-ledger small,
+.issue-credit-grid small,
+.issue-collection-meta,
+.issue-cover-card small,
+.issue-cover-card em,
+.issue-feature-meta,
+.issue-ledger small,
+.issue-route span,
+.issue-route small,
+.issue-index-tool,
+.issue-index-latest,
+.issue-project-actions a,
+.about-page-grid article > span {
+  font-weight: 500 !important;
+  letter-spacing: 0.08em !important;
+}
+
+.home-index-order,
+.filter-button small,
+.subcategory-filter small,
+.issue-project-no,
+.issue-collection-title span {
+  letter-spacing: 0.04em !important;
+}
+
+.filter-button,
+.subcategory-filter a,
+.archive-control select,
+.article-meta-card strong,
+.issue-project-ledger strong,
+.issue-credit-grid strong {
+  font-family: var(--info) !important;
+  font-feature-settings: "tnum" 1, "lnum" 1 !important;
+  font-variant-numeric: tabular-nums lining-nums !important;
+  letter-spacing: 0.01em !important;
+}
+
+html[lang="ko"] .nav span,
+html[lang="ko"] .nav-submenu a span,
+html[lang="ko"] .kicker,
+html[lang="ko"] .cover-edition,
+html[lang="ko"] .home-index-meta,
+html[lang="ko"] .home-story-line span,
+html[lang="ko"] .home-story-line small,
+html[lang="ko"] .home-recent-copy small,
+html[lang="ko"] .archive-date,
+html[lang="ko"] .archive-category,
+html[lang="ko"] .archive-info,
+html[lang="ko"] .article-meta-card small,
+html[lang="ko"] .article-rail-no,
+html[lang="ko"] .back-link,
+html[lang="ko"] .text-link {
+  letter-spacing: 0.06em !important;
+}
+
+html[lang="ko"] .home-index-order,
+html[lang="ko"] .home-story-line span,
+html[lang="ko"] .article-rail-no,
+html[lang="ko"] .issue-project-no {
+  font-family: var(--latin), var(--info) !important;
+}
+
+html[lang="ko"] .archive-control select,
+html[lang="ko"] .article-meta-card strong,
+html[lang="ko"] .issue-project-ledger strong,
+html[lang="ko"] .issue-credit-grid strong,
+html[lang="ko"] .subcategory-filter a,
+html[lang="ko"] .filter-button {
+  font-family: var(--info) !important;
+  font-weight: 450 !important;
+  letter-spacing: 0.006em !important;
+}
