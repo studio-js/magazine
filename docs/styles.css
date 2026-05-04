@@ -111,6 +111,7 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -123,6 +124,7 @@ body {
   font-synthesis: none;
   line-height: 1.58;
   overflow-x: hidden;
+  overflow-x: clip;
   text-rendering: optimizeLegibility;
 }
 
