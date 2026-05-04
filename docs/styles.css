@@ -20328,7 +20328,7 @@ html[lang="ko"] .home-cover-grid .cover-copy h1 {
 }
 
 .home-cover-grid .home-issue-link {
-  margin-top: clamp(2.4rem, 4vw, 4.2rem);
+  margin-top: clamp(1.25rem, 2vw, 2.2rem);
 }
 
 .home-issue-index,
