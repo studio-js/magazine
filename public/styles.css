@@ -33,6 +33,49 @@
   font-weight: 45 920;
 }
 
+@font-face {
+  font-family: "IBM Plex Sans KR Local";
+  src: url("/fonts/IBMPlexSansKR-300.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 300;
+  unicode-range: U+AC00-D7A3, U+1100-11FF, U+3130-318F, U+3000-303F, U+FF00-FFEF;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans KR Local";
+  src: url("/fonts/IBMPlexSansKR-400.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+  unicode-range: U+AC00-D7A3, U+1100-11FF, U+3130-318F, U+3000-303F, U+FF00-FFEF;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans KR Local";
+  src: url("/fonts/IBMPlexSansKR-500.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+  unicode-range: U+AC00-D7A3, U+1100-11FF, U+3130-318F, U+3000-303F, U+FF00-FFEF;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans KR Mixed Local";
+  src: url("/fonts/IBMPlexSansKR-400.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans KR Mixed Local";
+  src: url("/fonts/IBMPlexSansKR-500.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+}
+
 :root {
   --ink: #181713;
   --body-ink: #343128;
@@ -53,7 +96,8 @@
   --max: 1520px;
   --side: clamp(1rem, 3vw, 3.8rem);
   --latin: "Jost Local", "Avenir Next", "Futura";
-  --kr: "Pretendard Local", "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic";
+  --kr: "IBM Plex Sans KR Local", "Pretendard Local", "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic";
+  --kr-display: "IBM Plex Sans KR Local", var(--latin), var(--kr);
   --body: var(--latin), var(--kr), sans-serif;
   --accent: #181713;
   --accent-soft: rgba(24, 23, 19, 0.055);
@@ -10201,6 +10245,44 @@ html[lang="ko"] .archive-page .archive-title {
     opacity: 1 !important;
     transform: none !important;
   }
+}
+
+/* Korean display type: use IBM Plex Sans KR for quieter Korean titles. */
+html[lang="ko"] .article-title-block h1,
+html[lang="ko"] .article-section h2,
+html[lang="ko"] .home-index-row strong,
+html[lang="ko"] .home-recent-copy strong,
+html[lang="ko"] .home-story-line strong,
+html[lang="ko"] .habitus-copy h2,
+html[lang="ko"] .habitus-card strong,
+html[lang="ko"] .archive-heading h1,
+html[lang="ko"] .archive-heading h2,
+html[lang="ko"] .archive-title,
+html[lang="ko"] .section-head h2,
+html[lang="ko"] .section-heading h2,
+html[lang="ko"] .story-card h3,
+html[lang="ko"] .issue-project-title h1,
+html[lang="ko"] .issue-index-hero h1,
+html[lang="ko"] .issue-collection-title h2,
+html[lang="ko"] .issue-chapter h2,
+html[lang="ko"] .issue-feature-row strong,
+html[lang="ko"] .about-page-hero h1 {
+  font-family: var(--kr-display);
+  font-weight: 400;
+  font-variation-settings: normal;
+  letter-spacing: -0.035em;
+  line-height: 1.18;
+}
+
+html[lang="ko"] .article-title-block h1 {
+  max-width: 14.5ch;
+  letter-spacing: -0.056em;
+  line-height: 1.16;
+}
+
+html[lang="ko"] .home-cover-grid .cover-copy h1 {
+  letter-spacing: -0.064em;
+  line-height: 0.96;
 }
 
 /* Scalable archive and admin control pass */
@@ -21450,5 +21532,444 @@ html[lang="ko"] .home-story-line strong {
   .home-story-line em,
   .home-recent-visual .image-block {
     transition: none !important;
+  }
+}
+
+/* Final Korean display override. Keep this after all layout passes. */
+html[lang="ko"] .article-title-block h1,
+html[lang="ko"] .article-section h2,
+html[lang="ko"] .home-index-row strong,
+html[lang="ko"] .home-recent-copy strong,
+html[lang="ko"] .home-story-line strong,
+html[lang="ko"] .habitus-copy h2,
+html[lang="ko"] .habitus-card strong,
+html[lang="ko"] .archive-heading h1,
+html[lang="ko"] .archive-heading h2,
+html[lang="ko"] .archive-title,
+html[lang="ko"] .section-head h2,
+html[lang="ko"] .section-heading h2,
+html[lang="ko"] .story-card h3,
+html[lang="ko"] .issue-project-title h1,
+html[lang="ko"] .issue-index-hero h1,
+html[lang="ko"] .issue-collection-title h2,
+html[lang="ko"] .issue-chapter h2,
+html[lang="ko"] .issue-feature-row strong,
+html[lang="ko"] .about-page-hero h1 {
+  font-family: var(--kr-display) !important;
+  font-weight: 400 !important;
+  font-variation-settings: normal !important;
+  letter-spacing: -0.018em !important;
+  line-height: 1.2 !important;
+}
+
+/* Aesop-inspired restraint: quieter Korean hierarchy, lower weight, more air. */
+html[lang="ko"] body {
+  letter-spacing: -0.002em;
+}
+
+html[lang="ko"] .kicker,
+html[lang="ko"] .cover-edition,
+html[lang="ko"] .article-meta-card,
+html[lang="ko"] .home-index-meta,
+html[lang="ko"] .archive-date,
+html[lang="ko"] .archive-category,
+html[lang="ko"] .archive-info,
+html[lang="ko"] .home-story-line small,
+html[lang="ko"] .home-recent-copy small {
+  font-family: var(--body) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.045em !important;
+}
+
+html[lang="ko"] .article-title-block h1,
+html[lang="ko"] .article-section h2,
+html[lang="ko"] .home-index-row strong,
+html[lang="ko"] .home-recent-copy strong,
+html[lang="ko"] .home-story-line strong,
+html[lang="ko"] .habitus-copy h2,
+html[lang="ko"] .habitus-card strong,
+html[lang="ko"] .archive-heading h1,
+html[lang="ko"] .archive-heading h2,
+html[lang="ko"] .archive-title,
+html[lang="ko"] .section-head h2,
+html[lang="ko"] .section-heading h2,
+html[lang="ko"] .story-card h3,
+html[lang="ko"] .issue-project-title h1,
+html[lang="ko"] .issue-index-hero h1,
+html[lang="ko"] .issue-collection-title h2,
+html[lang="ko"] .issue-chapter h2,
+html[lang="ko"] .issue-feature-row strong,
+html[lang="ko"] .about-page-hero h1 {
+  font-family: var(--kr-display) !important;
+  font-weight: 400 !important;
+  font-variation-settings: normal !important;
+  letter-spacing: -0.014em !important;
+  line-height: 1.24 !important;
+}
+
+html[lang="ko"] .article-title-block h1 {
+  max-width: 16.5ch !important;
+  font-size: clamp(2.25rem, 3.35vw, 4.45rem) !important;
+}
+
+html[lang="ko"] .home-recent-copy strong {
+  font-size: clamp(2.05rem, 3.2vw, 4.05rem) !important;
+  line-height: 1.2 !important;
+}
+
+html[lang="ko"] .home-index-row strong,
+html[lang="ko"] .archive-title {
+  font-size: clamp(1.08rem, 1.36vw, 1.78rem) !important;
+  line-height: 1.34 !important;
+}
+
+html[lang="ko"] .home-story-line strong,
+html[lang="ko"] .story-card h3 {
+  font-size: clamp(1.18rem, 1.62vw, 2rem) !important;
+  line-height: 1.32 !important;
+}
+
+html[lang="ko"] .section-head h2,
+html[lang="ko"] .section-heading h2,
+html[lang="ko"] .archive-heading h1,
+html[lang="ko"] .archive-heading h2,
+html[lang="ko"] .habitus-copy h2,
+html[lang="ko"] .about-page-hero h1,
+html[lang="ko"] .issue-index-hero h1,
+html[lang="ko"] .issue-project-title h1 {
+  font-size: clamp(1.85rem, 2.85vw, 3.8rem) !important;
+  line-height: 1.24 !important;
+}
+
+html[lang="ko"] .article-section h2,
+html[lang="ko"] .issue-chapter h2,
+html[lang="ko"] .issue-feature-row strong,
+html[lang="ko"] .habitus-card strong {
+  font-size: clamp(1.08rem, 1.28vw, 1.55rem) !important;
+  line-height: 1.38 !important;
+}
+
+html[lang="ko"] .article-title-block p:not(.kicker),
+html[lang="ko"] .article-section p,
+html[lang="ko"] .cover-deck,
+html[lang="ko"] .home-recent-copy em,
+html[lang="ko"] .home-story-line em,
+html[lang="ko"] .home-index-copy em,
+html[lang="ko"] .habitus-copy p:not(.kicker),
+html[lang="ko"] .about-page-hero p:not(.kicker),
+html[lang="ko"] .archive-heading p,
+html[lang="ko"] .archive-summary,
+html[lang="ko"] .story-card p:not(.kicker) {
+  font-weight: 300 !important;
+  letter-spacing: -0.004em !important;
+  line-height: 1.76 !important;
+}
+
+@media (max-width: 680px) {
+  html[lang="ko"] .article-title-block h1,
+  html[lang="ko"] .home-recent-copy strong,
+  html[lang="ko"] .section-head h2,
+  html[lang="ko"] .section-heading h2,
+  html[lang="ko"] .habitus-copy h2,
+  html[lang="ko"] .about-page-hero h1 {
+    font-size: clamp(1.8rem, 8.5vw, 3rem) !important;
+  }
+}
+
+/* Home stories: keep the existing placement, only lower Korean type scale. */
+html[lang="ko"] .home-stories .section-head h2 {
+  font-size: clamp(1.12rem, 1.42vw, 1.78rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.004em !important;
+  line-height: 1.44 !important;
+}
+
+html[lang="ko"] .home-recent-copy strong {
+  font-size: clamp(1.18rem, 1.72vw, 2.28rem) !important;
+  letter-spacing: -0.006em !important;
+  line-height: 1.36 !important;
+}
+
+html[lang="ko"] .home-recent-copy em {
+  color: rgba(52, 49, 40, 0.76) !important;
+  font-size: clamp(0.9rem, 0.98vw, 1.02rem) !important;
+  font-weight: 400 !important;
+  line-height: 1.78 !important;
+}
+
+html[lang="ko"] .home-story-line span,
+html[lang="ko"] .home-story-line small,
+html[lang="ko"] .home-recent-copy small,
+html[lang="ko"] .home-story-more span {
+  font-size: 0.64rem !important;
+  letter-spacing: 0.052em !important;
+}
+
+html[lang="ko"] .home-story-line strong {
+  font-size: clamp(0.9rem, 0.98vw, 1.12rem) !important;
+  letter-spacing: -0.004em !important;
+  line-height: 1.54 !important;
+}
+
+html[lang="ko"] .home-story-line em {
+  color: rgba(52, 49, 40, 0.74) !important;
+  font-size: clamp(0.84rem, 0.9vw, 0.94rem) !important;
+  font-weight: 400 !important;
+  line-height: 1.78 !important;
+}
+
+html[lang="ko"] .home-story-more span {
+  color: rgba(52, 49, 40, 0.68) !important;
+  font-size: 0.64rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.04em !important;
+}
+
+html[lang="ko"] .home-story-more strong {
+  color: rgba(24, 23, 19, 0.78) !important;
+  font-family: var(--body) !important;
+  position: relative !important;
+  display: inline-block !important;
+  padding-bottom: 0.08rem !important;
+  font-size: clamp(0.94rem, 1vw, 1.08rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.006em !important;
+  line-height: 1.36 !important;
+}
+
+html[lang="ko"] .home-story-more::after,
+html[lang="ko"] .home-story-more:hover::after,
+html[lang="ko"] .home-story-more:focus-visible::after {
+  content: none !important;
+  display: none !important;
+}
+
+html[lang="ko"] .home-story-more strong::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: rgba(123, 91, 66, 0.42);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: opacity 160ms ease, transform 220ms cubic-bezier(0.2, 0.7, 0, 1);
+}
+
+html[lang="ko"] .home-story-more:hover strong::after,
+html[lang="ko"] .home-story-more:focus-visible strong::after {
+  opacity: 1;
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+@media (max-width: 680px) {
+  html[lang="ko"] .home-stories .section-head h2 {
+    font-size: clamp(1.18rem, 6vw, 1.78rem) !important;
+  }
+
+  html[lang="ko"] .home-recent-copy strong {
+    font-size: clamp(1.12rem, 5.5vw, 1.82rem) !important;
+  }
+
+  html[lang="ko"] .home-story-line strong {
+    font-size: clamp(0.96rem, 4.3vw, 1.18rem) !important;
+  }
+}
+
+/* Habitus: reduce the statement scale so it reads as a closing note, not a second hero. */
+html[lang="ko"] .home-habitus .habitus-copy h2 {
+  font-family: "IBM Plex Sans KR Mixed Local", var(--kr), sans-serif !important;
+  font-size: clamp(1.62rem, 2.35vw, 3.05rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.014em !important;
+  line-height: 1.26 !important;
+}
+
+html[lang="ko"] .home-habitus .habitus-copy p:not(.kicker) {
+  color: rgba(52, 49, 40, 0.64) !important;
+  font-size: clamp(0.92rem, 1vw, 1.04rem) !important;
+  line-height: 1.86 !important;
+}
+
+html[lang="ko"] .home-habitus .habitus-strand-labels text {
+  font-family: "IBM Plex Sans KR Mixed Local", var(--kr), sans-serif !important;
+  fill: rgba(52, 49, 40, 0.66) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.006em !important;
+}
+
+html[lang="ko"] .home-habitus .habitus-strand-labels .is-habit,
+html[lang="ko"] .home-habitus .habitus-strand-labels .is-choice {
+  fill: rgba(71, 46, 31, 0.78) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.01em !important;
+}
+
+html[lang="ko"] .home-habitus .habitus-choice-copy {
+  fill: rgba(52, 49, 40, 0.56) !important;
+  font-family: "IBM Plex Sans KR Mixed Local", var(--kr), sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.004em !important;
+}
+
+html[lang="ko"] .home-habitus .habitus-strand-labels .is-habit {
+  font-size: 26px !important;
+}
+
+html[lang="ko"] .home-habitus .habitus-strand-labels .is-choice {
+  font-size: 27px !important;
+}
+
+html[lang="ko"] .home-habitus .habitus-choice-copy {
+  font-size: 14px !important;
+}
+
+@media (max-width: 680px) {
+  html[lang="ko"] .home-habitus .habitus-strand-labels .is-habit,
+  html[lang="ko"] .home-habitus .habitus-strand-labels .is-choice {
+    font-size: 26px !important;
+  }
+
+  html[lang="ko"] .home-habitus .habitus-choice-copy {
+    font-size: 17px !important;
+  }
+}
+
+@media (max-width: 680px) {
+  html[lang="ko"] .home-habitus .habitus-copy h2 {
+    font-size: clamp(1.7rem, 8.4vw, 2.8rem) !important;
+  }
+}
+
+/* Editorial pages: apply the same restrained Korean system beyond the home page. */
+html[lang="ko"] .archive-page .archive-heading h1,
+html[lang="ko"] .archive-page .archive-heading h2,
+html[lang="ko"] .archive-page .archive-title,
+html[lang="ko"] .archive-page .archive-preview h3,
+html[lang="ko"] .article-detail .article-title-block h1,
+html[lang="ko"] .article-detail .article-section h2,
+html[lang="ko"] .article-detail .article-side strong {
+  font-family: "IBM Plex Sans KR Mixed Local", var(--kr), sans-serif !important;
+  font-weight: 400 !important;
+  font-variation-settings: normal !important;
+  letter-spacing: -0.01em !important;
+}
+
+html[lang="ko"] .archive-page .archive-heading h1,
+html[lang="ko"] .archive-page .archive-heading h2 {
+  font-size: clamp(2.2rem, 3.7vw, 4.9rem) !important;
+  line-height: 1.18 !important;
+}
+
+html[lang="ko"] .archive-page .archive-heading p,
+html[lang="ko"] .archive-page .archive-summary,
+html[lang="ko"] .archive-page .archive-control,
+html[lang="ko"] .archive-page .archive-control select,
+html[lang="ko"] .article-detail .article-title-block p:not(.kicker),
+html[lang="ko"] .article-detail .article-section p,
+html[lang="ko"] .article-detail .article-side p,
+html[lang="ko"] .article-detail .article-meta-card,
+html[lang="ko"] .article-detail .article-inline-quote,
+html[lang="ko"] .article-detail .article-body blockquote {
+  font-family: "IBM Plex Sans KR Mixed Local", var(--kr), sans-serif !important;
+  font-weight: 400 !important;
+  font-variation-settings: normal !important;
+}
+
+html[lang="ko"] .archive-page .archive-heading p {
+  color: rgba(52, 49, 40, 0.72) !important;
+  font-size: clamp(0.98rem, 1.08vw, 1.14rem) !important;
+  line-height: 1.78 !important;
+}
+
+html[lang="ko"] .archive-page .archive-control label > span,
+html[lang="ko"] .archive-page .archive-date,
+html[lang="ko"] .archive-page .archive-category,
+html[lang="ko"] .archive-page .archive-info,
+html[lang="ko"] .article-detail .article-meta-card small,
+html[lang="ko"] .article-detail .back-link,
+html[lang="ko"] .article-detail .kicker,
+html[lang="ko"] .article-detail .article-rail-no {
+  color: rgba(52, 49, 40, 0.62) !important;
+  font-family: "IBM Plex Sans KR Mixed Local", var(--kr), sans-serif !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.035em !important;
+}
+
+html[lang="ko"] .archive-page .archive-control select {
+  color: rgba(24, 23, 19, 0.86) !important;
+  font-size: clamp(0.96rem, 1.04vw, 1.08rem) !important;
+  line-height: 1.5 !important;
+}
+
+html[lang="ko"] .archive-page .archive-title {
+  font-size: clamp(1.18rem, 1.55vw, 1.9rem) !important;
+  line-height: 1.34 !important;
+}
+
+html[lang="ko"] .archive-page .archive-summary {
+  color: rgba(52, 49, 40, 0.72) !important;
+  font-size: clamp(0.86rem, 0.94vw, 0.98rem) !important;
+  line-height: 1.72 !important;
+}
+
+html[lang="ko"] .article-detail .article-title-block h1 {
+  max-width: 15.5ch !important;
+  font-size: clamp(2.05rem, 3.35vw, 4.35rem) !important;
+  line-height: 1.22 !important;
+}
+
+html[lang="ko"] .article-detail .article-title-block p:not(.kicker) {
+  color: rgba(52, 49, 40, 0.74) !important;
+  font-size: clamp(0.98rem, 1.08vw, 1.12rem) !important;
+  line-height: 1.82 !important;
+}
+
+html[lang="ko"] .article-detail .article-meta-card strong {
+  color: rgba(24, 23, 19, 0.86) !important;
+  font-family: "IBM Plex Sans KR Mixed Local", var(--kr), sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.004em !important;
+}
+
+html[lang="ko"] .article-detail .article-side strong,
+html[lang="ko"] .article-detail .article-section h2 {
+  color: rgba(24, 23, 19, 0.86) !important;
+  font-size: clamp(1.08rem, 1.24vw, 1.42rem) !important;
+  line-height: 1.48 !important;
+}
+
+html[lang="ko"] .article-detail .article-side p,
+html[lang="ko"] .article-detail .article-section p {
+  color: rgba(52, 49, 40, 0.82) !important;
+  font-size: clamp(0.98rem, 1.06vw, 1.1rem) !important;
+  letter-spacing: -0.003em !important;
+  line-height: 1.92 !important;
+}
+
+html[lang="ko"] .article-detail .article-body > blockquote:not(.article-inline-quote),
+html[lang="ko"] .article-detail .article-section .article-inline-quote {
+  color: rgba(52, 49, 40, 0.68) !important;
+  font-style: normal !important;
+  font-size: clamp(1.08rem, 1.42vw, 1.58rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.006em !important;
+  line-height: 1.7 !important;
+}
+
+html[lang="ko"] .article-detail .article-section .article-inline-quote {
+  color: rgba(52, 49, 40, 0.64) !important;
+  font-size: clamp(1.02rem, 1.22vw, 1.36rem) !important;
+  line-height: 1.82 !important;
+}
+
+@media (max-width: 680px) {
+  html[lang="ko"] .archive-page .archive-heading h1,
+  html[lang="ko"] .archive-page .archive-heading h2,
+  html[lang="ko"] .article-detail .article-title-block h1 {
+    font-size: clamp(1.9rem, 9vw, 3.35rem) !important;
   }
 }
