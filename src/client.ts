@@ -140,6 +140,13 @@ const contentHashClient = (value: string): string => {
   return (hash >>> 0).toString(36);
 };
 
+const runtimeContentVersion = (data: RuntimeContentData, path: string): string => {
+  const normalizedPath = path.replace(/\/$/, "") || "/";
+  const articleSensitive = normalizedPath === "/" || normalizedPath.startsWith("/archive") || normalizedPath.startsWith("/articles");
+
+  return contentHashClient(`${articleSensitive ? JSON.stringify(data.articles) : ""}|${JSON.stringify(data.issueProjects)}`);
+};
+
 const fetchSupabaseSnapshot = async (): Promise<RuntimeContentSnapshot | null> => {
   if (!supabaseUrl || !supabaseAnonKey) {
     return null;
@@ -1021,7 +1028,7 @@ const runtimeInitArticleRail = (root: ParentNode): void => {
 };
 
 const runtimeAfterRender = (data: RuntimeContentData, root: HTMLElement, locale: RuntimeLocale): void => {
-  root.querySelectorAll<HTMLElement>("[data-reveal]").forEach((element) => element.classList.add("is-visible"));
+  initRevealItems(root, true);
   runtimeInitGalleries(root);
   runtimeInitArticleRail(root);
   initActionSurfaces(root);
@@ -1068,14 +1075,27 @@ const hydrateRuntimeContent = async (): Promise<void> => {
   }
 
   const locale = runtimeLocale();
-  const renderedBody = runtimeRenderForPath(data, runtimePath(), locale);
+  const path = runtimePath();
+  const renderedBody = runtimeRenderForPath(data, path, locale);
   const main = document.querySelector<HTMLElement>("main");
 
   if (!renderedBody || !main) {
     return;
   }
 
+  const nextContentVersion = runtimeContentVersion(data, path);
+  const nextBodyVersion = contentHashClient(renderedBody);
+
+  if (main.dataset.runtimeContentVersion === nextContentVersion || main.dataset.runtimeBodyVersion === nextBodyVersion) {
+    document.documentElement.dataset.runtimeContent = "supabase";
+    main.dataset.runtimeContentVersion = nextContentVersion;
+    main.dataset.runtimeBodyVersion = nextBodyVersion;
+    return;
+  }
+
   main.innerHTML = renderedBody;
+  main.dataset.runtimeContentVersion = nextContentVersion;
+  main.dataset.runtimeBodyVersion = nextBodyVersion;
   document.documentElement.dataset.runtimeContent = "supabase";
   runtimeAfterRender(data, main, locale);
 };
@@ -4429,31 +4449,61 @@ function requestScrollState(): void {
   }
 }
 
-updateScrollState();
-window.addEventListener("scroll", requestScrollState, { passive: true });
-window.addEventListener("resize", requestScrollState);
+let revealObserver: IntersectionObserver | null = null;
 
-const revealItems = document.querySelectorAll<HTMLElement>("[data-reveal]");
+function initRevealItems(root: ParentNode, reset = false): void {
+  if (reset && revealObserver) {
+    revealObserver.disconnect();
+    revealObserver = null;
+  }
 
-if (revealItems.length > 0) {
-  if ("IntersectionObserver" in window && !reduceMotion) {
-    const revealObserver = new IntersectionObserver(
+  const revealItems = Array.from(root.querySelectorAll<HTMLElement>("[data-reveal]"));
+
+  if (revealItems.length === 0) {
+    return;
+  }
+
+  if (!("IntersectionObserver" in window) || reduceMotion) {
+    revealItems.forEach((item) => {
+      item.dataset.revealReady = "true";
+      item.classList.add("is-visible");
+    });
+    return;
+  }
+
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            revealObserver.unobserve(entry.target);
+          if (!entry.isIntersecting) {
+            return;
           }
+
+          const target = entry.target as HTMLElement;
+          target.classList.add("is-visible");
+          revealObserver?.unobserve(target);
         });
       },
       { rootMargin: "0px 0px -12%" }
     );
-
-    revealItems.forEach((item) => revealObserver.observe(item));
-  } else {
-    revealItems.forEach((item) => item.classList.add("is-visible"));
   }
+
+  revealItems.forEach((item) => {
+    if (item.dataset.revealReady === "true" || item.classList.contains("is-visible")) {
+      item.dataset.revealReady = "true";
+      return;
+    }
+
+    item.dataset.revealReady = "true";
+    revealObserver?.observe(item);
+  });
 }
+
+updateScrollState();
+window.addEventListener("scroll", requestScrollState, { passive: true });
+window.addEventListener("resize", requestScrollState);
+
+initRevealItems(document);
 
 function initActionSurfaces(root: ParentNode): void {
   root.querySelectorAll<HTMLElement>(

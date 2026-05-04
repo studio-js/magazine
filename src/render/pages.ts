@@ -8,6 +8,7 @@ interface LayoutOptions {
   locale: Locale;
   currentPath: string;
   site: SiteContent;
+  contentVersion?: string;
 }
 
 const ui = {
@@ -277,7 +278,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-sticky-header";
+const assetVersion = "20260504-stable-runtime";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
@@ -295,16 +296,21 @@ const contentVersionHash = (value: string): string => {
   return (hash >>> 0).toString(36);
 };
 
+const contentDataVersion = (site: SiteContent, articleList?: Article[]): string =>
+  contentVersionHash(`${articleList ? JSON.stringify(articleList) : ""}|${JSON.stringify(site.issueProjects)}`);
+
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
     <a class="${locale === "ko" ? "is-active" : ""}" href="${withLocale(currentPath, "ko")}">KR</a>
     <a class="${locale === "en" ? "is-active" : ""}" href="${withLocale(currentPath, "en")}">EN</a>
   </div>`;
 
-const renderLayout = ({ title, description, body, locale, currentPath, site }: LayoutOptions): string => {
+const renderLayout = ({ title, description, body, locale, currentPath, site, contentVersion }: LayoutOptions): string => {
   const labels = ui[locale];
   const currentIssue = latestIssue(site);
   const currentPathname = currentPath.split(/[?#]/)[0].replace(/\/$/, "") || "/";
+  const bodyVersion = contentVersionHash(body);
+  const contentVersionAttribute = contentVersion ? ` data-runtime-content-version="${escapeHtml(contentVersion)}"` : "";
   const supabaseAttributes = supabasePublicConfig.enabled
     ? ` data-supabase-url="${escapeHtml(supabasePublicConfig.url)}" data-supabase-anon-key="${escapeHtml(supabasePublicConfig.anonKey)}" data-supabase-functions-url="${escapeHtml(supabasePublicConfig.functionsUrl)}"`
     : "";
@@ -388,7 +394,7 @@ ${categoryLinks}
       ${renderLanguageSwitch(currentPath, locale)}
     </div>
 
-    <main id="top">${body}</main>
+    <main id="top"${contentVersionAttribute} data-runtime-body-version="${bodyVersion}">${body}</main>
 
     <footer class="site-footer">
       <p>${escapeHtml(text(site.title, locale))}</p>
@@ -952,7 +958,7 @@ ${issueField(locale === "ko" ? "에디터 노트" : "Editor Note", "editorNote",
       <script type="application/json" data-write-issue>${issueJson}</script>
     </section>`;
 
-  return renderLayout({ title: `Write | ${text(site.title, locale)}`, description: text(site.description, locale), body, locale, currentPath, site });
+  return renderLayout({ title: `Write | ${text(site.title, locale)}`, description: text(site.description, locale), body, locale, currentPath, site, contentVersion: contentDataVersion(site, articleList) });
 };
 
 export const renderHomePage = (site: SiteContent, articleList: Article[], locale: Locale, currentPath: string): string => {
@@ -1076,7 +1082,7 @@ ${storyRows}
 
     `;
 
-  return renderLayout({ title: text(site.title, locale), description: text(site.description, locale), body, locale, currentPath, site });
+  return renderLayout({ title: text(site.title, locale), description: text(site.description, locale), body, locale, currentPath, site, contentVersion: contentDataVersion(site, articleList) });
 };
 
 export const renderAboutPage = (site: SiteContent, locale: Locale, currentPath: string): string => {
@@ -1109,7 +1115,7 @@ export const renderAboutPage = (site: SiteContent, locale: Locale, currentPath: 
       </div>
     </section>`;
 
-  return renderLayout({ title: `${labels.about} | ${text(site.title, locale)}`, description: labels.aboutBody, body, locale, currentPath, site });
+  return renderLayout({ title: `${labels.about} | ${text(site.title, locale)}`, description: labels.aboutBody, body, locale, currentPath, site, contentVersion: contentDataVersion(site) });
 };
 
 const renderIssueCollectionItems = (issues: IssueProject[], locale: Locale, offset = 0, selectedIssue?: IssueProject): string => issues
@@ -1172,7 +1178,8 @@ ${renderIssueCollectionItems(issues, locale, (currentPage - 1) * pageSize)}
     body,
     locale,
     currentPath,
-    site
+    site,
+    contentVersion: contentDataVersion(site)
   });
 };
 
@@ -1267,7 +1274,7 @@ ${credits}
       </nav>
     </section>`;
 
-  return renderLayout({ title: `${issue.number} · ${text(issue.title, locale)} | ${text(site.title, locale)}`, description: text(issue.deck, locale), body, locale, currentPath, site });
+  return renderLayout({ title: `${issue.number} · ${text(issue.title, locale)} | ${text(site.title, locale)}`, description: text(issue.deck, locale), body, locale, currentPath, site, contentVersion: contentDataVersion(site) });
 };
 
 export const renderArticlePage = (
@@ -1275,7 +1282,8 @@ export const renderArticlePage = (
   article: Article,
   relatedArticles: Article[],
   locale: Locale,
-  currentPath: string
+  currentPath: string,
+  articleList: Article[] = [article, ...relatedArticles]
 ): string => {
   const labels = ui[locale];
   const category = categoryLabel(site.categories, article.category, locale);
@@ -1452,7 +1460,8 @@ ${articleVisual}      <div class="article-body-grid">
     body,
     locale,
     currentPath,
-    site
+    site,
+    contentVersion: contentDataVersion(site, articleList)
   });
 };
 
@@ -1489,7 +1498,7 @@ export const renderArchivePage = (
       ${renderArchiveBoard(site, articleList, locale, false, selectedCategory, selectedSubcategory, page, true)}
     </section>`;
 
-  return renderLayout({ title: `${archiveTitle} | ${text(site.title, locale)}`, description: archiveLead, body, locale, currentPath, site });
+  return renderLayout({ title: `${archiveTitle} | ${text(site.title, locale)}`, description: archiveLead, body, locale, currentPath, site, contentVersion: contentDataVersion(site, articleList) });
 };
 
 export const renderNotFoundPage = (site: SiteContent, locale: Locale, currentPath: string): string => {
@@ -1502,5 +1511,5 @@ export const renderNotFoundPage = (site: SiteContent, locale: Locale, currentPat
       <a class="text-link" href="${withLocale("/", locale)}">Return home</a>
     </section>`;
 
-  return renderLayout({ title: `Not Found | ${text(site.title, locale)}`, description: text(site.description, locale), body, locale, currentPath, site });
+  return renderLayout({ title: `Not Found | ${text(site.title, locale)}`, description: text(site.description, locale), body, locale, currentPath, site, contentVersion: contentDataVersion(site) });
 };

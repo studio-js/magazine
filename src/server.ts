@@ -199,7 +199,7 @@ app.get(["/articles/:slug", "/en/articles/:slug"], (request, response) => {
   }
 
   const relatedArticles = publishedArticles.filter((item) => item.slug !== article.slug).slice(0, 3);
-  response.send(renderArticlePage(publishedSite, article, relatedArticles, locale, getCurrentPath(request.originalUrl)));
+  response.send(renderArticlePage(publishedSite, article, relatedArticles, locale, getCurrentPath(request.originalUrl), publishedArticles));
 });
 
 app.get("/api/articles", (request, response) => {

@@ -113,7 +113,7 @@ const writeLocalizedPages = async (locale: Locale): Promise<void> => {
   for (const article of exportArticles) {
     await writeHtml(
       `${prefix}articles/${article.slug}/index.html`,
-      renderArticlePage(exportSite, article, exportArticles.filter((item) => item.slug !== article.slug).slice(0, 3), locale, `/articles/${article.slug}`)
+      renderArticlePage(exportSite, article, exportArticles.filter((item) => item.slug !== article.slug).slice(0, 3), locale, `/articles/${article.slug}`, exportArticles)
     );
   }
 };
