@@ -22551,3 +22551,47 @@ html[lang="ko"] .home-recent-copy small {
     grid-template-columns: 1fr;
   }
 }
+
+/* Editorial row expansion guard: expanded summaries must grow with content. */
+.archive-row:hover,
+.archive-row:focus-visible,
+.archive-row.is-active,
+.home-index-row:hover,
+.home-index-row:focus-visible,
+.home-story-line:hover,
+.home-story-line:focus-visible {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.archive-row:hover .archive-summary,
+.archive-row:focus-visible .archive-summary,
+.archive-row.is-active .archive-summary,
+.home-index-row:hover .home-index-copy em,
+.home-index-row:focus-visible .home-index-copy em,
+.home-story-line:hover em,
+.home-story-line:focus-visible em {
+  display: block !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  clip-path: inset(0) !important;
+  transform: none !important;
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+}
+
+.archive-row:hover .archive-summary,
+.archive-row:focus-visible .archive-summary,
+.archive-row.is-active .archive-summary {
+  margin-top: 0.65rem !important;
+}
+
+.home-index-row:hover .home-index-copy em,
+.home-index-row:focus-visible .home-index-copy em,
+.home-story-line:hover em,
+.home-story-line:focus-visible em {
+  margin-top: clamp(0.28rem, 0.48vw, 0.5rem) !important;
+}

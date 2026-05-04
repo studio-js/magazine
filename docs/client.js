@@ -453,6 +453,31 @@ const renderRuntimeIssuePrototype = (issue, locale, variant = "detail") => {
           </div>
         </figure>`;
 };
+const renderRuntimeHabitusBoard = (locale) => `      <div class="habitus-board" data-reveal>
+        <svg class="habitus-system" viewBox="0 0 960 430" role="img" aria-label="${runtimeEscapeHtml(locale === "ko" ? "경험과 반복의 교집합에서 습관이 생기고 선택으로 이어지는 아비투스 도식" : "A habitus diagram where the overlap of experience and repetition forms habit and leads to choice")}">
+          <defs>
+            <clipPath id="habitus-venn-overlap">
+              <circle cx="430" cy="150" r="126" />
+            </clipPath>
+          </defs>
+          <g class="habitus-venn-flow">
+            <circle class="habitus-venn-circle is-experience" cx="430" cy="150" r="126" />
+            <circle class="habitus-venn-circle is-repeat" cx="530" cy="150" r="126" />
+            <circle class="habitus-venn-lens" cx="530" cy="150" r="126" clip-path="url(#habitus-venn-overlap)" />
+            <circle class="habitus-venn-ring is-experience" cx="430" cy="150" r="126" />
+            <circle class="habitus-venn-ring is-repeat" cx="530" cy="150" r="126" />
+            <path class="habitus-choice-arrow" d="M480 292 V338" />
+            <path class="habitus-choice-head" d="M470 327 L480 339 L490 327" />
+            <g class="habitus-strand-labels">
+              <text x="${locale === "ko" ? 362 : 356}" y="150" class="is-experience-label">${runtimeEscapeHtml(locale === "ko" ? "경험" : "experience")}</text>
+              <text x="${locale === "ko" ? 598 : 604}" y="150" class="is-repeat-label">${runtimeEscapeHtml(locale === "ko" ? "반복" : "repetition")}</text>
+              <text x="480" y="150" class="is-habit">${runtimeEscapeHtml(locale === "ko" ? "습관" : "habit")}</text>
+              <text x="480" y="376" class="is-choice">${runtimeEscapeHtml(locale === "ko" ? "선택" : "choice")}</text>
+              <text x="480" y="410" class="habitus-choice-copy">${runtimeEscapeHtml(locale === "ko" ? "좋은 취향은 좋은 선택으로 이어집니다." : "Good taste leads to better choices.")}</text>
+            </g>
+          </g>
+        </svg>
+      </div>`;
 const renderRuntimeHomePage = (data, locale) => {
     const currentIssue = data.issueProjects[0];
     const selectedArticles = data.articles.slice(0, 5);
@@ -523,6 +548,7 @@ ${storyRows}
         <h2 id="notes-title">${runtimeEscapeHtml(locale === "ko" ? "Habitus, 취향에 관하여." : "Habitus, on taste.")}</h2>
         <p>${runtimeEscapeHtml(locale === "ko" ? "취향은 결과가 아니라 거르는 방식입니다. 경험과 반복이 만든 기준을 알면 무엇을 고를지보다 왜 고르는지가 먼저 보입니다." : "Taste is not the result but the way things are filtered. When the criteria shaped by experience and repetition are visible, the reason behind a choice becomes clearer.")}</p>
       </div>
+${renderRuntimeHabitusBoard(locale)}
     </section>`;
 };
 const renderRuntimeIssueCollectionItems = (issues, locale, offset = 0, selectedIssue) => issues

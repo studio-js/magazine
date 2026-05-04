@@ -277,7 +277,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-image-layouts-auto";
+const assetVersion = "20260504-home-flow-restore";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
