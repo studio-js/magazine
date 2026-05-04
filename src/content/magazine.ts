@@ -3,11 +3,18 @@ import type { Article, ArticleBlockImage, ArticleSection, ArticleSectionBlock, C
 const imageUrls = {
   appleVisionHero: "https://www.apple.com/v/apple-vision-pro/k/images/overview/hero/hero__cvgr5aj1ttsi_large_2x.jpg",
   appleVisionBand: "https://www.apple.com/v/apple-vision-pro/k/images/overview/design/drawer/dual_knit_band__cuhpalc1t9ea_large.jpg",
+  appleVisionCrown: "https://www.apple.com/v/apple-vision-pro/k/images/overview/design/drawer/digital_crown__glqazz7c6qeu_large.jpg",
+  appleVisionBattery: "https://www.apple.com/v/apple-vision-pro/k/images/overview/design/drawer/battery__cjkato9jqdjm_large.jpg",
+  appleVisionEyeSight: "https://www.apple.com/v/apple-vision-pro/k/images/overview/visionos/drawer/eyesight__fpk4mmfeztme_large.jpg",
+  appleVisionGuest: "https://www.apple.com/v/apple-vision-pro/k/images/overview/visionos/drawer/guest_user__b4tnut5kxieu_large.jpg",
   appleVisionPrivacy: "https://www.apple.com/v/apple-vision-pro/k/images/overview/values/drawer/eye_input_startframe__csxoocg1wu82_large.jpg",
   appleVisionSensors: "https://www.apple.com/v/apple-vision-pro/k/images/overview/values/drawer/camera_sensor_data__ed5zeclvc7qu_large.jpg",
   macbookHero: "https://www.apple.com/v/macbook-pro/ax/images/overview/welcome/hero_endframe__fwev9ebh42mq_xlarge.jpg",
   macbookDisplay: "https://www.apple.com/v/macbook-pro/ax/images/overview/display/display_hero__c32k5z50p94y_large.jpg",
   macbookDisplayNano: "https://www.apple.com/v/macbook-pro/ax/images/overview/display/display_nano_texture__d52wr5hrzcae_large.jpg",
+  macbookDisplayMultiple: "https://www.apple.com/v/macbook-pro/ax/images/overview/display/display_multiple__e043gpvss7gy_large.jpg",
+  macbookAi: "https://www.apple.com/v/macbook-pro/ax/images/overview/highlights/highlights_ai__c1tao33ompea_large.jpg",
+  macbookCoding: "https://www.apple.com/v/macbook-pro/ax/images/overview/apps/apps_coding__c9v42iv3gioi_large.jpg",
   macbookBattery: "https://www.apple.com/v/macbook-pro/ax/images/overview/highlights/highlights_battery__d7riytopt742_large.jpg",
   beosoundHero: "https://images.ctfassets.net/8cd2csgvqd3m/7IOuIgkRITVOiBQgPn2any/7454d371d0439cff17d7f52430623ba5/BeosoundA5_ProductHeader_Desktop.jpg?q=90&w=3840&fit=fill&fm=webp",
   beosoundPackshot: "https://images.ctfassets.net/8cd2csgvqd3m/31bz5LC1MvzvvXnsbwORZ6/e4bd014296328816ccc23c1424a14cc4/beosound-a5-centennial-packshot-202509-01-1x1.webp?q=85&fm=jpg&w=1200&h=1200&fit=fill",
@@ -15,7 +22,6 @@ const imageUrls = {
   diptyqueBleecker: "https://images.ctfassets.net/4sg0zck18nfj/162FzuKdcilohTaIeAz0K3/7adf3c428e75a428afa548fa9948f203/CLASSIC-CANDLE-REVAMP_2026_VISUEL_COMPLEMENTAIRE_INSTALLATION-BOUGIES-CLASSIQUES_sRGB_72DPI_2025x1518px_DIPTYQUE-1-.jpg?fm=avif&w=2400&q=95",
   diptyqueFreesia: "https://images.ctfassets.net/4sg0zck18nfj/5ntZhWP04wzZUWw1TUqZ1s/3170e206e72f2e5711cdd53f0c98919e/HERBIER_CTM_VISUEL_FREESIA-190G_2026_RVB_BD_2025x1518px.jpg?fm=avif&w=1920&q=90",
   diptyqueDecor: "https://images.ctfassets.net/4sg0zck18nfj/76bz8fXgPdqUxRlHQbevC/fde0739b37dfff44642aaf14c9b997c3/CLASSIC_CANDLE_REVAMP_2026_VISUEL_COMPLEMENTAIRE_COLLECTION_NOUVEAUTES_DECORATION_RVB_2025x1518px_DIPTYQUE__1_.jpg?fm=avif&w=1920&q=90",
-  dysonLogo: "https://www.dyson.com/etc.clientlibs/dyson/clientlibs/clientlib-main/resources/images/dyson-logo.svg",
   dysonNuralHero: "https://dyson-h.assetsadobe2.com/is/image/content/dam/dyson/images/products/hero-locale/en_US/598973-01.png?fmt=png-alpha&wid=1600",
   dysonNuralScalp: "https://dyson-h.assetsadobe2.com/is/image/content/dam/dyson/products/hair-care/2025-colorways/ceramic-pink/605M_Ceramic-Pink_Enhanced_COM_5.jpg?fmt=pjpeg&wid=1920",
   dysonNuralPause: "https://dyson-h.assetsadobe2.com/is/image/content/dam/dyson/products/hair-care/2025-colorways/ceramic-pink/605M_Ceramic-Pink_Enhanced_COM_4.jpg?fmt=pjpeg&wid=1920",
@@ -23,12 +29,16 @@ const imageUrls = {
   leicaQ3: "https://leica-camera.com/sites/default/files/2025-11/cameraproduct_Q3_Mono.png",
   leicaM11: "https://leica-camera.com/sites/default/files/2024-07/cameraproduct_m11_monochrom.png",
   leicaMSystem: "https://leica-camera.com/sites/default/files/2024-07/cameraportfolio_m_system.png",
+  leicaMonochromeScene: "https://leica-camera.com/sites/default/files/styles/menu_thumbnail_desktop/public/2024-07/photostyles_monochrome_2.jpg.webp?itok=CKlcy13S",
+  leicaStreetScene: "https://leica-camera.com/sites/default/files/styles/menu_thumbnail_desktop/public/2024-07/photostyles_street_1.jpg.webp?itok=rhekUmtK",
+  leicaQAccessories: "https://leica-camera.com/sites/default/files/styles/menu_thumbnail_desktop/public/2024-07/accessories_q_1.jpg.webp?itok=Ke2wxau9",
   mujiStorage: "https://www.muji.com/public/media/img/item/4547315980925_08_org.jpg?im=Resize%2Ctype%3Ddownsize%2Cwidth%3D3840",
   mujiDailyGoods: "https://www.muji.com/public/media/img/item/4550344144688_04_org.jpg?im=Resize%2Ctype%3Ddownsize%2Cwidth%3D3840",
   mujiInterior: "https://www.muji.com/public/media/jp/img/main/20082498/1080_electronics_260116_400.jpg?im=Resize%2Ctype%3Ddownsize%2Cwidth%3D3840",
-  patagoniaPlanet: "https://www.patagonia.com/on/demandware.static/-/Library-Sites-PatagoniaShared/default/dwb8fd66a8/quality/S24-Brand-Evergreen-Icons-planet.svg",
-  patagoniaWornWear: "https://www.patagonia.com/on/demandware.static/-/Library-Sites-PatagoniaShared/default/dwf7f0aa48/quality/S24-Brand-Evergreen-Icons-wornwear.svg",
-  patagoniaFootprint: "https://www.patagonia.com/on/demandware.static/-/Library-Sites-PatagoniaShared/default/dwe85d63c6/quality/S24-Brand-Evergreen-Icons-footprint.svg"
+  patagoniaPlanet: "https://wornwear.patagonia.com/cdn/shop/files/WornWear_Summer_SplitHero_schaefer_mikey_01285_cc_WEB.jpg?v=1777494922&width=1420",
+  patagoniaWornWear: "https://wornwear.patagonia.com/cdn/shop/files/WORN_WEAR_77_cc_WEB.jpg?v=1777488043&width=1420",
+  patagoniaFootprint: "https://images-paw.patagonia.com/eMedia/images/2023/0623-YSP-trinca_m_0012_cc_WEB_1200.jpg",
+  patagoniaTradeIn: "https://wornwear.patagonia.com/cdn/shop/files/martin_jq_0549_cc_WEB-5000x2000.jpg?v=1709064189&width=3840"
 };
 
 // Base articles keep routing, taxonomy, and hero metadata stable; long-form copy is applied by slug below.
@@ -2993,9 +3003,1004 @@ const articleRewrites: Partial<Record<string, ArticleRewrite>> = {
   }
 };
 
+const refreshedArticleRewrites: Partial<Record<string, ArticleRewrite>> = {
+  ['apple-vision-pro-spatial-habit']: {
+    readTime: localized('15분 읽기', '15 min read'),
+    deck: localized(
+      'Apple Vision Pro를 다시 읽는 출발점은 더 큰 디스플레이가 아니라 방 안에서 생기는 새로운 좌표계다. 화면은 손에 들린 물건에서 벽, 무릎, 식탁, 사람 사이의 거리로 이동하고, 사용자는 창의 크기보다 창이 머무는 자리를 더 많이 판단한다.',
+      'The starting point for reading Apple Vision Pro again is not a larger display, but a new coordinate system inside the room. The screen moves from an object held in the hand to walls, laps, tables, and distances between people, and the user judges where a window stays more often than how large it is.'
+    ),
+    excerpt: localized(
+      '공간 컴퓨팅의 새로움은 미래의 장면보다 방 안에서 화면의 주소를 정하는 반복에서 온다.',
+      'The newness of spatial computing comes from repeatedly assigning screens an address in the room more than from a future scene.'
+    ),
+    quote: localized(
+      '화면이 방으로 들어오면 인터페이스는 기능표가 아니라 생활의 배치도가 된다.',
+      'When the screen enters the room, the interface becomes a floor plan of living rather than a list of features.'
+    ),
+    sections: [
+      articleSection(
+        localized('창의 좌표계', 'The Coordinates Of Windows'),
+        'image-interface',
+        localized('Vision Pro의 화면은 고정된 사각형이 아니라 매번 다시 놓이는 가구에 가깝다.', 'The Vision Pro screen is closer to furniture placed again each time than to a fixed rectangle.'),
+        [
+          paragraphBlock(
+            'Vision Pro를 쓰면 사용자는 앱을 여는 순간 동시에 방을 편집한다. 메시지는 시야의 한쪽으로 물러나고, 영상은 벽에 가까워지며, 작업 창은 무릎 높이와 눈높이 사이에서 적당한 자리를 찾는다. 화면은 하나의 장치가 아니라 방 안에 놓이는 여러 표면이 된다.',
+            'With Vision Pro, opening an app also means editing a room. Messages move to one side of vision, video approaches a wall, and a work window searches for a place between lap height and eye level. The screen is no longer one device, but several surfaces placed inside a room.'
+          ),
+          paragraphBlock(
+            '이 변화는 기술 데모보다 사용자의 자세에서 먼저 보인다. 고개를 얼마나 들지, 손을 어디에 둘지, 옆 사람과 어느 정도 같은 장면을 공유할지 같은 사소한 판단이 인터페이스의 일부가 된다. 공간 컴퓨팅은 결국 화면의 미래가 아니라 자세의 미래다.',
+            'The change appears first in posture rather than in a technology demo. How high the head is lifted, where the hands rest, and how much of the scene is shared with someone nearby all become part of the interface. Spatial computing is ultimately a future of posture more than a future of screens.'
+          ),
+          galleryBlock(
+            [
+              { imageClass: 'image-material', image: imageUrls.appleVisionCrown },
+              { imageClass: 'image-system', image: imageUrls.appleVisionBattery },
+              { imageClass: 'image-interface', image: imageUrls.appleVisionBand }
+            ],
+            'Digital Crown, 외장 배터리, Dual Knit Band는 공간형 화면이 물리적 조절과 함께 설계된다는 점을 보여준다. 이미지는 Apple 공식 제품 페이지에서 인용.',
+            'Digital Crown, external battery, and Dual Knit Band show that a spatial screen is designed together with physical adjustment. Images referenced from Apple official product pages.'
+          ),
+          paragraphBlock(
+            '그래서 좋은 공간형 화면은 많은 것을 띄우는 능력보다 제자리를 찾는 능력으로 평가해야 한다. 방의 조도, 가구의 높이, 대화의 가능성, 배터리 케이블의 방향까지 모두 사용감을 결정한다. 화면은 커졌지만 판단은 더 작고 구체적인 곳으로 내려온다.',
+            'A good spatial screen should therefore be judged by its ability to find the right place more than by its ability to display many things. Light level, furniture height, possibility of conversation, and the direction of the battery cable all decide the experience. The screen grows, while judgment moves down into smaller and more specific details.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('착용감의 사회성', 'The Sociality Of Wearing'),
+        'image-thought',
+        localized('머리에 쓰는 화면은 개인적 몰입과 같은 방의 관계를 동시에 만든다.', 'A worn screen creates private immersion and room relationships at the same time.'),
+        [
+          paragraphBlock(
+            '헤드셋은 개인적인 물건이지만 방 안에서는 사회적인 사물이 된다. 사용자는 자신만 보는 창을 갖고, 주변 사람은 그 창을 보지 못한다. 이 비대칭은 보호가 되기도 하고 거리감이 되기도 한다.',
+            'A headset is a personal object, but inside a room it becomes a social object. The user has windows only they can see, while people nearby cannot see those windows. This asymmetry can protect, and it can also create distance.'
+          ),
+          quoteBlock(
+            '몰입은 깊이보다 출입구가 중요하다. 좋은 장치는 빠져드는 순간만큼 돌아오는 순간을 설계한다.',
+            'Immersion depends on exits as much as depth. A good device designs the moment of return as carefully as the moment of entry.'
+          ),
+          paragraphBlock(
+            'EyeSight와 몰입 조절은 이 긴장을 완전히 해결하지는 못하지만 중요한 방향을 제시한다. 미래적인 장치일수록 사용자가 방과의 관계를 끊지 않았다는 신호가 필요하다. 기술은 사라지는 것이 아니라 예절을 배워야 한다.',
+            'EyeSight and immersion control do not fully solve this tension, but they point in an important direction. The more futuristic a device becomes, the more it needs signals that the user has not cut ties with the room. Technology does not need to disappear; it needs to learn manners.'
+          ),
+          paragraphBlock(
+            'Vision Pro의 취향은 그래서 매끄러운 그래픽보다 전환의 품질에서 드러난다. 영화에서 대화로, 업무에서 식사로, 개인 화면에서 공유된 방으로 넘어가는 속도가 자연스러울 때 이 제품은 단순한 신기함을 넘어 생활의 도구가 된다.',
+            'The taste of Vision Pro therefore appears in the quality of transition more than in smooth graphics. When the move from film to conversation, work to meal, or private screen to shared room feels natural, the product moves beyond novelty and becomes a tool of living.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('방이 남기는 기준', 'The Standard Left By The Room'),
+        'image-library',
+        localized('공간 인터페이스는 방을 지우지 않고 방이 이미 가진 질서와 협상해야 한다.', 'A spatial interface must negotiate with the order a room already has instead of erasing it.'),
+        [
+          paragraphBlock(
+            '공간 컴퓨팅은 방을 무대로 삼지만 방을 마음대로 지울 수는 없다. 식탁은 식탁의 높이를 갖고, 소파는 소파의 거리감을 갖고, 거실은 가족이 지나가는 동선을 갖는다. 화면은 그 조건을 무시하면 바로 어색해진다.',
+            'Spatial computing uses the room as a stage, but it cannot erase the room at will. A dining table has its height, a sofa has its distance, and a living room has routes that family members cross. A screen becomes awkward as soon as it ignores those conditions.'
+          ),
+          paragraphBlock(
+            '그래서 Vision Pro는 방을 정복하는 제품보다 방과 협상하는 제품으로 읽어야 한다. 사용자가 매일 창의 높이를 조금씩 바꾸고, 몰입을 낮추고, 배터리를 다른 주머니에 넣는 동안 새로운 기준은 천천히 만들어진다.',
+            'Vision Pro should therefore be read as a product that negotiates with the room rather than conquers it. A new standard forms slowly while the user changes window height, lowers immersion, and moves the battery to another pocket day after day.'
+          )
+        ]
+      )
+    ]
+  },
+  ['dyson-supersonic-nural-scalp-sensor']: {
+    readTime: localized('14분 읽기', '14 min read'),
+    deck: localized(
+      'Dyson Supersonic Nural은 헤어 드라이어를 강한 출력의 기계에서 거리와 멈춤을 읽는 루틴 장치로 옮긴다. 센서는 눈에 띄는 장식이 아니라 두피 가까이에서 낮아지고 내려놓는 순간 조용해지는 태도로 작동한다.',
+      'Dyson Supersonic Nural moves the hair dryer from a machine of strong output to a routine device that reads distance and pause. Its sensors work not as visible decoration, but as an attitude that lowers near the scalp and quiets when set down.'
+    ),
+    excerpt: localized(
+      '뷰티 테크의 지능은 더 강한 결과보다 몸 가까이에서 조심스러워지는 판단에 있다.',
+      'The intelligence of beauty technology lies in judgment that becomes careful near the body more than in a stronger result.'
+    ),
+    quote: localized(
+      '좋은 헤어 도구는 사용자의 손보다 앞서가지 않고 위험한 거리에서 한 박자 늦춘다.',
+      'A good hair tool does not outrun the hand; it slows down at the risky distance.'
+    ),
+    sections: [
+      articleSection(
+        localized('열의 거리', 'The Distance Of Heat'),
+        'image-signal',
+        localized('Scalp protect mode는 열을 세게 만드는 기술보다 열을 덜어내는 기술의 취향을 보여준다.', 'Scalp protect mode shows the taste of technology that removes heat rather than making heat stronger.'),
+        [
+          paragraphBlock(
+            '헤어 드라이어의 경쟁은 오랫동안 풍량과 속도였다. 얼마나 빨리 말리는지, 얼마나 강한 바람을 내는지가 제품의 언어가 되었다. Supersonic Nural은 같은 장소에 다른 질문을 놓는다. 머리 가까이에서 얼마나 조심스러워지는가.',
+            'The competition around hair dryers has long been airflow and speed. How fast it dries and how strong the air feels became the language of the product. Supersonic Nural places another question in the same scene: how careful does it become near the head.'
+          ),
+          paragraphBlock(
+            'Time of Flight 센서가 거리를 읽고 가까워질수록 온도를 낮추는 구조는 뷰티 도구의 지능을 새롭게 정의한다. 지능은 복잡한 화면이 아니라 사용자가 불안해지는 위치에서 스스로 물러나는 능력이다.',
+            'A structure that reads distance through a Time of Flight sensor and lowers temperature as it approaches the scalp redefines intelligence in a beauty tool. Intelligence is not a complicated display, but the ability to step back at the point where the user becomes anxious.'
+          ),
+          galleryBlock(
+            [
+              { imageClass: 'image-signal', image: imageUrls.dysonNuralScalp },
+              { imageClass: 'image-system', image: imageUrls.dysonNuralPause },
+              { imageClass: 'image-material', image: imageUrls.dysonNuralAttachments }
+            ],
+            '두피 보호, 정지 감지, 어태치먼트 학습은 모두 사용자의 손동작을 읽는 실제 제품 이미지로 확인된다. 이미지는 Dyson 공식 제품 자료에서 인용.',
+            'Scalp protection, pause detection, and attachment learning are shown through real product images that read the motion of the hand. Images referenced from Dyson official product materials.'
+          ),
+          paragraphBlock(
+            '이런 조심스러움은 약한 성능과 다르다. 오히려 강한 출력을 언제 낮출지 아는 제어에 가깝다. 좋은 루틴은 매번 사용자가 주의를 과하게 기울이지 않아도 같은 안정감으로 반복될 때 만들어진다.',
+            'This carefulness is different from weak performance. It is closer to control that knows when to lower strong output. A good routine is formed when repetition can remain stable without demanding excessive attention from the user every time.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('멈춤이 루틴이 될 때', 'When Pausing Becomes Routine'),
+        'image-system',
+        localized('Pause detect는 작동하지 않아도 되는 순간을 제품 경험의 일부로 인정한다.', 'Pause detect recognizes the moment when operation is unnecessary as part of the product experience.'),
+        [
+          paragraphBlock(
+            '아침의 스타일링은 연속 동작이 아니다. 머리를 나누고, 브러시를 찾고, 거울을 확인하고, 잠시 내려놓는 시간이 계속 끼어든다. Pause detect는 이 중단을 예외가 아니라 루틴의 구조로 본다.',
+            'Morning styling is not a continuous motion. Parting hair, finding a brush, checking the mirror, and setting the dryer down keep interrupting the sequence. Pause detect treats this interruption as the structure of the routine rather than an exception.'
+          ),
+          quoteBlock(
+            '사용하지 않는 순간까지 제품이 예의를 갖출 때 루틴은 덜 피곤해진다.',
+            'A routine becomes less tiring when a product has manners even in the moments it is not being used.'
+          ),
+          paragraphBlock(
+            'Attachment learning도 같은 방향에 있다. 노즐을 바꿀 때마다 처음부터 다시 설정하지 않아도 되는 경험은 작은 일이지만, 반복 속에서는 큰 차이가 된다. 사용자는 매번 기계를 설득하지 않고 자신의 리듬을 이어간다.',
+            'Attachment learning points in the same direction. Not having to set everything again each time a nozzle changes is small, but inside repetition it becomes significant. The user continues their own rhythm instead of persuading the machine again and again.'
+          ),
+          paragraphBlock(
+            'Supersonic Nural의 취향은 그래서 센서의 존재보다 센서가 만들어 내는 침착함에 있다. 제품은 더 많은 기능을 외치지 않고, 손이 바뀌는 순간마다 바람과 열을 조금씩 다시 맞춘다.',
+            'The taste of Supersonic Nural therefore lies less in the existence of sensors than in the calm they create. The product does not shout about more functions; it retunes air and heat little by little whenever the hand changes.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('건강한 두피라는 기준', 'The Standard Of A Healthy Scalp'),
+        'image-material',
+        localized('뷰티 제품의 결과는 머리카락의 표면뿐 아니라 루틴 뒤에 남는 몸의 감각으로 평가된다.', 'The result of a beauty product is judged by the feeling left in the body after the routine, not only by the surface of hair.'),
+        [
+          paragraphBlock(
+            '두피를 말하는 순간 헤어 도구는 스타일링의 표면을 넘어선다. 모발의 광택과 형태만이 아니라 열이 닿는 피부, 손목의 각도, 소리의 지속 시간이 모두 제품 평가에 들어온다.',
+            'Once the scalp is mentioned, a hair tool moves beyond the surface of styling. Not only shine and shape, but skin touched by heat, wrist angle, and duration of sound all enter the evaluation of the product.'
+          ),
+          paragraphBlock(
+            'Nural이 설득력을 갖는 이유는 이 기준을 과장하지 않기 때문이다. 제품은 치료를 약속하지 않는다. 대신 매일 반복되는 뜨거운 바람의 순간을 조금 더 낮고, 조용하고, 예측 가능하게 만든다.',
+            'Nural is persuasive because it does not exaggerate this standard. The product does not promise treatment. It makes the repeated moment of hot air slightly lower, quieter, and more predictable.'
+          )
+        ]
+      )
+    ]
+  },
+  ['diptyque-bleecker-candle-room']: {
+    readTime: localized('13분 읽기', '13 min read'),
+    deck: localized(
+      'Diptyque의 Bleecker Street 장면은 향을 향료의 조합보다 방 안에 놓이는 기억으로 다룬다. 향초는 도시의 이름을 빌려 오지만, 실제로 남기는 것은 여행의 재현이 아니라 집 안에 생기는 작은 거리감이다.',
+      'Diptyque Bleecker Street treats scent as a memory placed inside a room more than as a combination of notes. The candle borrows the name of a city street, but what remains is not a reproduction of travel; it is a small distance created inside the home.'
+    ),
+    excerpt: localized(
+      '향의 취향은 냄새의 강도보다 방이 다른 시간처럼 느껴지는 순간에서 생긴다.',
+      'Taste in scent comes from the moment a room feels like another time more than from the strength of smell.'
+    ),
+    quote: localized(
+      '캔들은 방을 장식하기 전에 방의 시간을 조금 늦추는 장치다.',
+      'A candle slows the time of a room before it decorates the room.'
+    ),
+    sections: [
+      articleSection(
+        localized('주소가 향이 될 때', 'When An Address Becomes Scent'),
+        'image-atelier',
+        localized('Bleecker라는 이름은 제품을 향료 목록이 아니라 도시와 방 사이의 표식으로 만든다.', 'The name Bleecker turns the product into a mark between city and room rather than a list of notes.'),
+        [
+          paragraphBlock(
+            '향은 보이지 않지만 이름을 갖는 순간 장소를 얻는다. Bleecker라는 단어는 실제 거리의 좌표를 부르면서도 사용자의 방으로 들어와 전혀 다른 장면을 만든다. 향초는 여행을 복제하지 않고 방 안에 다른 공기를 상상하게 한다.',
+            'Scent is invisible, but once it has a name, it gains a place. The word Bleecker calls up the coordinate of a real street while entering the user room to create a different scene. The candle does not copy travel; it lets another air be imagined inside the room.'
+          ),
+          paragraphBlock(
+            '이때 중요한 것은 강한 향이 아니다. 향이 방의 어디에서 시작되는지, 어떤 빛과 만나는지, 어느 시간 이후에 잔향으로 바뀌는지가 경험을 만든다. Diptyque는 향을 단독 효과보다 배치의 감각으로 보여준다.',
+            'The important point is not a strong fragrance. The experience is made by where the scent begins in the room, what light it meets, and when it changes into after-scent. Diptyque presents scent as a sense of placement more than an isolated effect.'
+          ),
+          galleryBlock(
+            [
+              { imageClass: 'image-atelier', image: imageUrls.diptyqueDecor },
+              { imageClass: 'image-material', image: imageUrls.diptyqueCandle },
+              { imageClass: 'image-field', image: imageUrls.diptyqueFreesia }
+            ],
+            'Diptyque 공식 이미지들은 향초를 제품 단독보다 식물, 유리, 포장, 진열의 관계 안에서 보여준다.',
+            'Diptyque official images show candles through relationships among plants, glass, packaging, and display rather than as isolated products.'
+          ),
+          paragraphBlock(
+            'Bleecker의 장면은 집 안에서 바깥의 이름을 사용하는 방식이다. 사용자는 같은 방에 있으면서도 창밖의 도시, 다른 계절, 다른 오후를 떠올린다. 향은 공간을 떠나지 않고 공간을 조금 어긋나게 한다.',
+            'The Bleecker scene is a way of using an outside name inside the home. The user remains in the same room while imagining a city beyond the window, another season, or another afternoon. Scent does not leave space; it makes space slightly misalign with itself.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('불꽃과 진열', 'Flame And Display'),
+        'image-material',
+        localized('향초는 타는 동안 사라지지만, 진열된 시간과 사용된 시간이 함께 기억된다.', 'A candle disappears while burning, but the time of display and the time of use are remembered together.'),
+        [
+          paragraphBlock(
+            '캔들은 상품 진열에서 아름답게 보이는 물건이지만, 실제 가치는 불을 붙인 뒤에야 시작된다. 유리병의 두께, 라벨의 크기, 왁스의 표면, 심지의 위치는 모두 불꽃을 기다리는 시간을 만든다.',
+            'A candle is an object that looks beautiful in display, but its real value begins only after it is lit. The thickness of glass, the size of the label, the surface of wax, and the position of the wick all create the time of waiting for flame.'
+          ),
+          quoteBlock(
+            '향초의 고급스러움은 강하게 퍼지는 순간보다 천천히 방을 설득하는 시간에 있다.',
+            'The refinement of a candle lies in the time it takes to persuade a room slowly more than in the moment it spreads strongly.'
+          ),
+          paragraphBlock(
+            'Diptyque의 이미지는 이 시간을 잘 안다. 제품은 향료의 설명보다 물건이 놓인 표면과 주변의 여백으로 기억된다. 향은 공기 속에서 움직이지만 취향은 테이블 위의 거리감으로 먼저 보인다.',
+            'Diptyque imagery understands this time. The product is remembered through the surface it rests on and the space around it more than through descriptions of notes. Scent moves through air, but taste appears first as distance on a table.'
+          ),
+          paragraphBlock(
+            '그래서 향초는 실내 장식과 루틴 사이에 있다. 보이는 동안은 방의 물건이고, 타는 동안은 방의 시간이며, 꺼진 뒤에는 방의 기억이 된다.',
+            'A scented candle therefore sits between interior decoration and routine. While visible it is an object of the room, while burning it is the time of the room, and after it is out it becomes the memory of the room.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('선물 이후의 방', 'The Room After A Gift'),
+        'image-field',
+        localized('향초는 선물로 건네진 뒤 사용자의 방에서 전혀 다른 사적인 시간표를 얻는다.', 'After being given as a gift, a candle gains an entirely private timetable in the user room.'),
+        [
+          paragraphBlock(
+            '향초는 선물하기 쉬운 물건이지만, 좋은 향초는 선물의 순간에 머물지 않는다. 받은 사람의 방에서 몇 번의 저녁과 오후를 통과하며 전혀 다른 물건이 된다.',
+            'A candle is easy to gift, but a good candle does not remain in the moment of gifting. It passes through several evenings and afternoons in the recipient room and becomes a different object.'
+          ),
+          paragraphBlock(
+            'Bleecker의 이름도 결국 그 방의 시간에 흡수된다. 처음에는 브랜드와 거리의 이름이 보이지만, 시간이 지나면 언제 켰는지, 누구와 있었는지, 어떤 계절에 어울렸는지가 더 오래 남는다.',
+            'The Bleecker name is eventually absorbed into the time of that room. At first the brand and street name are visible, but over time what remains longer is when it was lit, who was there, and which season it suited.'
+          )
+        ]
+      )
+    ]
+  },
+  ['leica-q3-monochrom-image-discipline']: {
+    readTime: localized('14분 읽기', '14 min read'),
+    deck: localized(
+      'Leica Q3 Monochrom은 흑백을 후보 효과가 아니라 촬영 전의 약속으로 만든다. 컬러 파일을 나중에 비우는 대신 처음부터 색을 받지 않는 카메라는 장면을 고르는 기준과 기다리는 시간을 바꾼다.',
+      'Leica Q3 Monochrom turns black and white into a promise before shooting rather than a candidate effect. A camera that never receives color instead of emptying a color file later changes the standard for choosing a scene and the time spent waiting.'
+    ),
+    excerpt: localized(
+      '흑백 전용 카메라는 분위기를 쉽게 만드는 도구가 아니라 무엇을 포기할지 먼저 정하는 규율이다.',
+      'A dedicated monochrome camera is not a tool for easily making mood, but a discipline that decides what to give up first.'
+    ),
+    quote: localized(
+      '색이 없다는 사실은 이미지를 고상하게 만들지 않는다. 관찰을 더 엄격하게 만들 뿐이다.',
+      'The absence of color does not make an image noble. It only makes observation stricter.'
+    ),
+    sections: [
+      articleSection(
+        localized('컬러를 받지 않는 약속', 'The Promise Not To Receive Color'),
+        'image-thought',
+        localized('Monochrom의 핵심은 결과의 룩보다 입력 단계에서 이미 닫힌 선택지다.', 'The point of Monochrom is a choice already closed at input, more than the look of the result.'),
+        [
+          paragraphBlock(
+            '흑백 이미지는 누구나 만들 수 있다. 컬러 사진에서 채도를 낮추면 즉시 차분한 분위기가 생긴다. Q3 Monochrom의 차이는 그 후처리의 편리함을 거부하는 데 있다. 이 카메라는 색을 받은 뒤 버리지 않고, 처음부터 받지 않는다.',
+            'Anyone can make a black and white image. Lowering saturation in a color photograph immediately creates a calm mood. The difference of Q3 Monochrom lies in refusing that convenience of post processing. The camera does not receive color and discard it later; it never receives it at all.'
+          ),
+          paragraphBlock(
+            '그 결정은 촬영자의 하루를 바꾼다. 색의 매력으로 붙잡히던 장면은 통과되고, 빛의 방향과 표면의 농도, 그림자의 두께가 더 중요해진다. 카메라의 제한이 보는 법을 다시 훈련한다.',
+            'That decision changes the photographer day. Scenes once held by the attraction of color are passed by, while direction of light, density of surface, and thickness of shadow become more important. The limitation of the camera trains seeing again.'
+          ),
+          galleryBlock(
+            [
+              { imageClass: 'image-field', image: imageUrls.leicaMonochromeScene },
+              { imageClass: 'image-material', image: imageUrls.leicaQAccessories },
+              { imageClass: 'image-library', image: imageUrls.leicaMSystem }
+            ],
+            'Leica 공식 페이지의 실제 이미지들은 흑백 사진의 분위기보다 카메라 시스템과 촬영 환경의 관계를 함께 보여준다.',
+            'Real images from Leica official pages show the relationship between camera system and shooting environment together with the atmosphere of monochrome photography.'
+          ),
+          paragraphBlock(
+            'Q3 Monochrom은 그래서 과거풍을 재현하는 물건이 아니다. 디지털 시대에 선택지를 일부러 닫아 이미지의 책임을 촬영 전으로 앞당기는 장치다.',
+            'Q3 Monochrom is therefore not an object that reproduces a retro mood. In the digital era it deliberately closes options and moves the responsibility of the image before the exposure.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('고정 렌즈의 거리', 'The Distance Of A Fixed Lens'),
+        'image-interface',
+        localized('고정 렌즈는 부족함이 아니라 장면에 다가가는 몸의 속도를 정하는 장치다.', 'A fixed lens is not a lack, but a device that sets the speed of the body approaching a scene.'),
+        [
+          paragraphBlock(
+            'Q 시리즈의 렌즈는 교체되지 않는다. 이 사실은 스펙표에서는 제한처럼 보이지만 거리에서는 태도가 된다. 사용자는 렌즈를 바꾸는 대신 한 걸음 움직이고, 장면이 맞지 않으면 포기한다.',
+            'The lens of the Q series does not change. On a specification sheet this looks like limitation, but on the street it becomes an attitude. The user moves a step instead of changing lenses, and gives up if the scene does not fit.'
+          ),
+          quoteBlock(
+            '좋은 제한은 가능성을 줄이는 대신 망설임의 품질을 높인다.',
+            'A good limitation reduces possibilities while improving the quality of hesitation.'
+          ),
+          paragraphBlock(
+            '흑백 센서와 고정 렌즈가 만나면 사진은 더 빠르게 단순해진다. 단순해진다는 것은 쉬워진다는 뜻이 아니다. 오히려 장면이 충분히 말하지 못하면 변명할 장식이 줄어든다.',
+            'When a monochrome sensor meets a fixed lens, the photograph becomes simple more quickly. Simpler does not mean easier. If a scene cannot speak enough, there are fewer decorations left for excuse.'
+          ),
+          paragraphBlock(
+            '이 카메라의 취향은 결과물의 고전적 인상보다 촬영 전의 몇 초에 있다. 빛을 기다리고, 거리감을 조정하고, 색 없이도 남을 장면인지 묻는 그 시간이 카메라를 카메라답게 만든다.',
+            'The taste of the camera lies more in the seconds before shooting than in the classic impression of the result. Waiting for light, adjusting distance, and asking whether the scene will remain without color make the camera feel like a camera.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('흑백 이후의 책임', 'Responsibility After Monochrome'),
+        'image-library',
+        localized('흑백은 좋은 사진의 증거가 아니라 더 적은 정보로 말해야 하는 책임이다.', 'Monochrome is not proof of a good photograph, but the responsibility to speak with less information.'),
+        [
+          paragraphBlock(
+            '흑백은 너무 쉽게 취향처럼 보인다. 장면이 차분해지고, 거리 사진은 기록처럼 보이며, 평범한 사물도 조금 더 조용한 표정을 얻는다. 그러나 그 쉬움은 위험하다.',
+            'Black and white too easily looks like taste. A scene becomes calm, street photographs look like records, and ordinary objects gain a quieter expression. Yet that ease is dangerous.'
+          ),
+          paragraphBlock(
+            'Q3 Monochrom은 분위기를 자동으로 보증하지 않는다. 선, 질감, 표정, 날씨가 충분히 강하지 않으면 이미지는 단지 색이 없는 사진으로 남는다. 이 카메라가 요구하는 것은 향수가 아니라 관찰의 책임이다.',
+            'Q3 Monochrom does not automatically guarantee atmosphere. If line, texture, expression, and weather are not strong enough, the image remains merely a photograph without color. What the camera asks for is responsibility of observation rather than nostalgia.'
+          )
+        ]
+      )
+    ]
+  },
+  ['beosound-a5-sound-as-furniture']: {
+    readTime: localized('12분 읽기', '12 min read'),
+    deck: localized(
+      'Bang & Olufsen Beosound A5는 소리를 전자제품의 전면 출력이 아니라 방 안에서 옮겨지는 가구의 성격으로 다룬다. 손잡이와 소재, 배터리, 교체 가능한 외장은 음악을 듣는 시간이 아닐 때도 방에 남을 수 있는 이유를 만든다.',
+      'Bang & Olufsen Beosound A5 treats sound as the character of furniture moved through a room rather than as front facing output from an electronic product. Handle, material, battery, and replaceable exterior create a reason for it to remain in the room even when music is not playing.'
+    ),
+    excerpt: localized(
+      '좋은 스피커는 음악을 재생하는 시간뿐 아니라 음악이 꺼진 방에서도 어색하지 않아야 한다.',
+      'A good speaker must not feel awkward in the room after music stops, as much as while it plays.'
+    ),
+    quote: localized(
+      '소리는 보이지 않지만 스피커는 늘 보인다. 음향의 취향은 결국 배치의 취향이다.',
+      'Sound is invisible, but the speaker is always visible. Taste in audio is ultimately taste in placement.'
+    ),
+    sections: [
+      articleSection(
+        localized('손잡이의 음향', 'The Acoustics Of A Handle'),
+        'image-material',
+        localized('A5의 손잡이는 야외 이동성보다 집 안에서 소리의 위치를 다시 정하는 제스처다.', 'The handle of A5 is a gesture for repositioning sound inside the home more than a sign of outdoor portability.'),
+        [
+          paragraphBlock(
+            '휴대용 스피커는 대개 밖으로 나가는 물건으로 설명된다. Beosound A5는 오히려 집 안에서 더 흥미롭다. 거실에서 주방으로, 책상에서 발코니로, 식탁 옆에서 침대 가까이로 소리의 중심을 옮기는 행동이 디자인의 핵심이 된다.',
+            'Portable speakers are usually explained as objects going outside. Beosound A5 is more interesting inside the home. Moving the center of sound from living room to kitchen, desk to balcony, or dining table to bedside becomes the core of the design.'
+          ),
+          paragraphBlock(
+            '손잡이는 단순한 운반 장치가 아니라 소리를 배치할 권한을 준다. 음악은 같은 곡이어도 어디에서 울리는지에 따라 방의 표정을 다르게 만든다. A5는 이 위치 조정을 무겁지 않은 일상 동작으로 바꾼다.',
+            'The handle is not only a carrying device; it gives permission to place sound. The same song changes the expression of a room depending on where it plays. A5 turns this adjustment of location into a light daily action.'
+          ),
+          galleryBlock(
+            [
+              { imageClass: 'image-material', image: imageUrls.beosoundPackshot }
+            ],
+            'Beosound A5의 공식 제품 이미지는 스피커를 음향 장치이면서 동시에 방 안에 놓이는 사물로 보여준다.',
+            'The official product image of Beosound A5 presents the speaker as both an audio device and an object placed in the room.'
+          ),
+          paragraphBlock(
+            '이런 이동성은 속도의 문제가 아니다. 사용자가 소리를 어느 방에 초대할지 정하는 문제다. 좋은 스피커는 공간을 채우기 전에 공간에 머무는 법을 알아야 한다.',
+            'This mobility is not a question of speed. It is a question of deciding which room sound will be invited into. A good speaker must know how to stay in a space before filling it.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('소리가 놓이는 면', 'The Surface Where Sound Rests'),
+        'image-field',
+        localized('소재와 비례는 스피커가 전자제품보다 가구처럼 받아들여지는 조건을 만든다.', 'Material and proportion create the condition for a speaker to be accepted like furniture rather than electronics.'),
+        [
+          paragraphBlock(
+            '스피커는 음악을 틀지 않을 때도 방 안에 남아 있다. 그래서 음질만큼 중요한 것은 무음의 시간이다. 테이블 위, 선반 아래, 창가 옆에 놓였을 때 이 물건이 방의 다른 표면과 충돌하지 않아야 한다.',
+            'A speaker remains in the room even when music is not playing. Silent time is therefore as important as sound quality. On a table, below a shelf, or beside a window, the object must not collide with the other surfaces of the room.'
+          ),
+          quoteBlock(
+            '음향 기기의 디자인은 재생 버튼을 누르기 전과 후에 더 오래 검증된다.',
+            'The design of audio equipment is tested longer before and after the play button is pressed.'
+          ),
+          paragraphBlock(
+            'Bang & Olufsen의 장점은 기술을 숨기기보다 방의 재료와 대화하게 만드는 데 있다. 목재, 패브릭, 금속의 이미지는 소리가 어떤 성격으로 들릴지 미리 예고한다. 듣기 전부터 사용자는 차갑지 않은 기술을 예상한다.',
+            'The strength of Bang & Olufsen lies in making technology converse with room materials rather than hiding it. Wood, fabric, and metal preview the character of the sound before it is heard. Before listening, the user expects technology that does not feel cold.'
+          ),
+          paragraphBlock(
+            'A5의 취향은 거실을 장악하지 않는 데 있다. 크게 울릴 수 있지만 크게 보이려 하지 않는다. 이 절제가 스피커를 오래 두고 싶은 물건으로 만든다.',
+            'The taste of A5 lies in not taking over the living room. It can play loudly, but it does not try to look loud. That restraint makes the speaker an object one wants to keep around.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('오래 남는 업데이트', 'Updates That Remain'),
+        'image-system',
+        localized('오디오 제품의 오래감은 변하지 않는 외형과 갱신되는 내부 사이에서 결정된다.', 'The longevity of an audio product is decided between an exterior that remains and an interior that updates.'),
+        [
+          paragraphBlock(
+            '오디오 제품은 오래 쓰고 싶지만 연결 규격은 빨리 변한다. 좋은 스피커는 이 모순을 견뎌야 한다. 외형은 방에 계속 남을 수 있어야 하고, 내부 시스템은 새로운 청취 환경을 따라가야 한다.',
+            'Audio products are objects people want to keep, while connection standards change quickly. A good speaker has to endure this contradiction. The exterior must remain in the room, and the internal system must follow new listening environments.'
+          ),
+          paragraphBlock(
+            'Beosound A5는 이 균형을 가구적인 몸과 업데이트 가능한 시스템으로 제안한다. 음악을 듣지 않는 시간까지 견디는 외형과 앞으로의 연결을 받아들이는 내부가 만날 때 스피커는 소모품이 아니라 생활의 일부가 된다.',
+            'Beosound A5 proposes this balance through a furniture like body and an updateable system. When an exterior that endures silent time meets an interior that accepts future connections, the speaker becomes part of living rather than a consumable.'
+          )
+        ]
+      )
+    ]
+  },
+  ['macbook-pro-m5-working-screen']: {
+    readTime: localized('14분 읽기', '14 min read'),
+    deck: localized(
+      'MacBook Pro M5는 빠른 칩의 발표보다 오래 끊기지 않는 작업 화면의 조건으로 읽을 때 더 선명해진다. 성능은 순간의 숫자보다 지연, 발열, 밝기, 배터리 불안을 줄이는 평균 상태에서 체감된다.',
+      'MacBook Pro M5 becomes clearer when read through the conditions of an uninterrupted working screen rather than through the announcement of a fast chip. Performance is felt in an average state that reduces delay, heat, brightness friction, and battery anxiety more than in momentary numbers.'
+    ),
+    excerpt: localized(
+      '작업 기계의 고급스러움은 감탄보다 변명하지 않아도 되는 오후에 있다.',
+      'The refinement of a work machine lies in an afternoon without excuses more than in admiration.'
+    ),
+    quote: localized(
+      '좋은 노트북은 사용자를 놀라게 하는 시간보다 사용자가 노트북을 잊는 시간을 길게 만든다.',
+      'A good notebook lengthens the time in which the user forgets it more than the time in which it surprises the user.'
+    ),
+    sections: [
+      articleSection(
+        localized('책상에서 사라지는 지연', 'Delay Disappearing From The Desk'),
+        'image-system',
+        localized('M5의 성능은 빠르다는 말보다 작업의 호흡을 끊지 않는 상태로 읽힌다.', 'The performance of M5 reads less as the word fast and more as a state that does not break the breath of work.'),
+        [
+          paragraphBlock(
+            '작업자는 노트북의 최고 속도를 매분 느끼지 않는다. 더 자주 느끼는 것은 지연이 없는 상태다. 미리보기가 늦지 않고, 빌드가 배경에서 끝나며, 영상 타임라인이 손의 리듬을 따라올 때 기계는 눈앞에서 사라진다.',
+            'A worker does not feel the peak speed of a notebook every minute. What is felt more often is the absence of delay. When previews do not lag, builds finish in the background, and a video timeline follows the rhythm of the hand, the machine disappears from attention.'
+          ),
+          paragraphBlock(
+            'MacBook Pro M5의 설득력은 바로 이 사라짐에 있다. 성능이 클수록 사용자는 기계를 의식하지 않아도 된다. 빠른 칩은 과시의 대상이 아니라 집중을 방해하지 않는 배경 조건이 된다.',
+            'The persuasiveness of MacBook Pro M5 lies in this disappearance. The greater the performance, the less the user has to notice the machine. A fast chip becomes not an object of display, but a background condition that does not disturb attention.'
+          ),
+          galleryBlock(
+            [
+              { imageClass: 'image-interface', image: imageUrls.macbookAi },
+              { imageClass: 'image-system', image: imageUrls.macbookCoding },
+              { imageClass: 'image-material', image: imageUrls.macbookDisplayMultiple }
+            ],
+            'Apple 공식 MacBook Pro 이미지는 AI 작업, 코딩, 다중 디스플레이 환경이 모두 같은 작업 화면의 조건임을 보여준다.',
+            'Official MacBook Pro images from Apple show AI work, coding, and multi display setups as conditions of the same working screen.'
+          ),
+          paragraphBlock(
+            '프로용 노트북의 취향은 그래서 숫자를 읽는 능력보다 방해를 덜 느끼는 경험에 있다. 좋은 장비는 사용자를 능숙하게 보이게 하지 않고, 사용자가 이미 가진 능력을 덜 끊기게 만든다.',
+            'Taste in a professional notebook therefore lies in feeling fewer interruptions more than in reading numbers. Good equipment does not make the user look capable; it lets the capability the user already has continue with less interruption.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('밝기를 다루는 태도', 'An Attitude Toward Brightness'),
+        'image-interface',
+        localized('좋은 디스플레이는 더 밝아지는 힘과 덜 눈부시게 머무는 절제를 함께 가져야 한다.', 'A good display needs both the power to become brighter and the restraint to remain less glaring.'),
+        [
+          paragraphBlock(
+            '매장에서 밝은 화면은 쉽게 설득한다. 그러나 작업 화면은 오래 봐야 한다. 강한 밝기가 눈부심이 되지 않고, 선명함이 피로가 되지 않으며, 주변 조명과 싸우지 않아야 한다.',
+            'A bright display persuades easily in a store. But a working display has to be looked at for a long time. Strong brightness must not become glare, sharpness must not become fatigue, and the screen must not fight surrounding light.'
+          ),
+          quoteBlock(
+            '작업 화면의 품질은 가장 밝은 순간이 아니라 가장 오래 보는 시간에서 결정된다.',
+            'The quality of a working display is decided not in its brightest moment, but in the time it is watched the longest.'
+          ),
+          paragraphBlock(
+            '나노 텍스처 옵션은 이 문제를 구체적으로 드러낸다. 모든 사람을 위한 장식이 아니라 밝은 공간에서 오래 일하는 사람을 위한 조건이다. 고급 옵션은 화려할 때보다 특정한 불편을 정확히 줄일 때 의미가 있다.',
+            'The nano texture option reveals this question concretely. It is not decoration for everyone, but a condition for people who work for long hours in bright spaces. A premium option matters when it reduces a specific discomfort precisely more than when it looks luxurious.'
+          ),
+          paragraphBlock(
+            '화면은 작업자의 하루를 보관한다. 창의 위치, 글자의 밀도, 사진의 대비, 알림의 작은 움직임이 모두 누적된다. 좋은 디스플레이는 이 누적을 선명하게 하면서도 부담스럽지 않게 만든다.',
+            'The screen stores the worker day. Window position, text density, image contrast, and small movements of notifications all accumulate. A good display makes that accumulation clear without making it burdensome.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('전원선 밖의 작업', 'Work Outside The Power Cable'),
+        'image-library',
+        localized('배터리와 열 관리는 장소가 바뀌어도 같은 작업 질서를 유지하게 하는 조용한 조건이다.', 'Battery and thermal management are quiet conditions that keep the same order of work as place changes.'),
+        [
+          paragraphBlock(
+            '노트북은 책상을 떠날 때 진짜 노트북이 된다. 카페, 회의실, 기차, 공항에서 사용자는 충전기를 찾지 않고도 같은 밀도의 작업을 이어가고 싶어 한다.',
+            'A notebook truly becomes a notebook when it leaves the desk. In cafes, meeting rooms, trains, and airports, the user wants to continue work at the same density without searching for a charger.'
+          ),
+          paragraphBlock(
+            'MacBook Pro의 가치는 이 이동 속에서도 작업의 질서가 무너지지 않는 데 있다. 전원선 밖에서 성능이 급격히 낮아지지 않고, 팬과 열이 집중을 방해하지 않을 때 사용자는 도구를 믿는다.',
+            'The value of MacBook Pro lies in keeping the order of work from collapsing during this movement. When performance does not drop sharply outside the power cable, and fan and heat do not disturb attention, the user trusts the tool.'
+          )
+        ]
+      )
+    ]
+  },
+  ['muji-polypropylene-storage-standard']: {
+    readTime: localized('13분 읽기', '13 min read'),
+    deck: localized(
+      'MUJI의 폴리프로필렌 수납은 방을 꾸미는 물건이라기보다 생활의 분류 규칙이다. 반투명한 표면과 반복 가능한 규격은 물건을 완전히 숨기지 않고, 너무 많이 드러내지도 않으며, 매일 돌아갈 자리를 만든다.',
+      'MUJI polypropylene storage is less an object that decorates a room than a rule for classifying living. Its translucent surface and repeatable dimensions do not hide objects completely or reveal too much; they create a place to return every day.'
+    ),
+    excerpt: localized(
+      '수납의 취향은 물건을 감추는 능력보다 물건이 다시 돌아갈 규칙을 만드는 데 있다.',
+      'Taste in storage lies in making rules for objects to return more than in the ability to hide them.'
+    ),
+    quote: localized(
+      '정돈된 방은 물건이 적은 방이 아니라 물건의 귀가가 쉬운 방이다.',
+      'An orderly room is not a room with few objects, but a room where objects return easily.'
+    ),
+    sections: [
+      articleSection(
+        localized('표준의 낮은 목소리', 'The Low Voice Of A Standard'),
+        'image-library',
+        localized('MUJI의 수납은 강한 스타일보다 오래 반복되는 규격으로 방의 리듬을 만든다.', 'MUJI storage creates room rhythm through dimensions repeated over time more than through a strong style.'),
+        [
+          paragraphBlock(
+            '폴리프로필렌 수납은 눈에 띄려고 하지 않는다. 색은 낮고, 표면은 반투명하며, 형태는 가능한 한 단순하다. 이 조용함은 무성격이 아니라 여러 방에 들어가기 위한 조건이다.',
+            'Polypropylene storage does not try to stand out. The color is low, the surface is translucent, and the form is as simple as possible. This quietness is not lack of character, but a condition for entering many rooms.'
+          ),
+          paragraphBlock(
+            '표준은 한 번의 선택보다 반복에서 힘을 얻는다. 같은 폭과 높이가 책상 아래, 옷장 안, 욕실 선반에서 다시 등장할 때 사용자는 제품이 아니라 규칙을 산다.',
+            'A standard gains strength through repetition more than through a single choice. When the same width and height reappear under a desk, inside a closet, and on a bathroom shelf, the user buys a rule rather than a product.'
+          ),
+          galleryBlock(
+            [
+              { imageClass: 'image-field', image: imageUrls.mujiDailyGoods },
+              { imageClass: 'image-material', image: imageUrls.mujiInterior }
+            ],
+            'MUJI 공식 이미지는 수납과 생활용품이 같은 낮은 정보량 안에서 반복되는 방식을 보여준다.',
+            'MUJI official images show storage and daily goods repeating within the same low level of visual information.'
+          ),
+          paragraphBlock(
+            '방은 이 규칙을 통해 조금씩 가벼워진다. 물건이 사라지기 때문이 아니라 물건이 어느 문장 안에 놓이는지 알 수 있기 때문이다. 좋은 수납은 생활의 문법을 만든다.',
+            'The room becomes lighter through this rule. Not because objects disappear, but because it becomes clear which sentence they belong in. Good storage creates the grammar of living.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('반투명의 정보량', 'The Information Level Of Translucency'),
+        'image-system',
+        localized('완전히 숨기지 않고 흐리게 남기는 표면은 수납을 기억과 시각 소음 사이에 놓는다.', 'A surface that blurs instead of fully hiding places storage between memory and visual noise.'),
+        [
+          paragraphBlock(
+            '완전히 불투명한 수납은 깔끔하지만 기억을 끊는다. 완전히 투명한 수납은 편리하지만 방을 창고처럼 만든다. MUJI의 반투명함은 그 사이에서 적당한 정보량을 남긴다.',
+            'Fully opaque storage is clean, but it cuts memory. Fully transparent storage is convenient, but it makes the room feel like a warehouse. MUJI translucency leaves an appropriate amount of information between the two.'
+          ),
+          quoteBlock(
+            '좋은 수납은 물건을 숨기는 것이 아니라 물건의 윤곽만 남겨 방의 긴장을 낮춘다.',
+            'Good storage does not hide objects; it leaves only their outline and lowers the tension of the room.'
+          ),
+          paragraphBlock(
+            '사용자는 무엇이 들어 있는지 대략 알고, 방은 세부를 모두 드러내지 않는다. 이 흐린 균형이 일상의 유지 보수를 쉽게 만든다. 정리는 완벽한 상태가 아니라 다시 돌아갈 수 있는 상태가 된다.',
+            'The user roughly knows what is inside, while the room does not reveal every detail. This blurred balance makes daily maintenance easier. Tidying becomes not a perfect state, but a state one can return to.'
+          ),
+          paragraphBlock(
+            '폴리프로필렌의 취향은 소재의 저렴함을 감추는 데 있지 않다. 오히려 그 솔직한 가벼움으로 방 안의 위계를 낮춘다. 수납장은 주인공이 되지 않고 물건들이 서로 덜 싸우게 한다.',
+            'The taste of polypropylene does not lie in hiding the modest material. Its honest lightness lowers the hierarchy inside the room. The storage does not become the subject; it helps objects fight less with one another.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('계속 쌓이는 규칙', 'A Rule That Keeps Stacking'),
+        'image-material',
+        localized('필요가 바뀔 때 같은 규격이 다른 역할을 맡을 수 있어야 생활의 표준이 된다.', 'A dimension becomes a standard of living when it can take another role as needs change.'),
+        [
+          paragraphBlock(
+            '수납의 진짜 시험은 구매 직후가 아니라 이사, 계절 변화, 취미의 증가 이후에 온다. 같은 서랍이 옷장에서 문구함으로, 욕실에서 케이블 박스로 이동할 수 있을 때 제품은 오래 살아남는다.',
+            'The real test of storage comes not right after purchase, but after moving, seasonal change, or the growth of a hobby. When the same drawer can move from closet to stationery, from bathroom to cable box, the product survives.'
+          ),
+          paragraphBlock(
+            'MUJI의 표준은 그렇게 방을 완성하지 않고 계속 수정하게 한다. 생활은 고정된 인테리어가 아니라 변경되는 목록이고, 좋은 수납은 그 목록을 견디는 구조다.',
+            'The MUJI standard does not complete the room; it keeps allowing revision. Life is not a fixed interior, but a changing list, and good storage is the structure that endures that list.'
+          )
+        ]
+      )
+    ]
+  },
+  ['diptyque-classic-candle-gesture']: {
+    readTime: localized('13분 읽기', '13 min read'),
+    deck: localized(
+      'Diptyque의 클래식 캔들은 향을 소유하는 물건보다 시간을 켜는 제스처에 가깝다. 불을 붙이고 기다리고 끄고 남은 왁스를 보는 순서는 향의 이름보다 오래 방에 남는다.',
+      'The Diptyque classic candle is closer to a gesture that lights time than to an object that owns scent. Lighting, waiting, extinguishing, and looking at remaining wax stay in the room longer than the name of the fragrance.'
+    ),
+    excerpt: localized(
+      '캔들의 취향은 향료 목록보다 불을 붙이기로 결정하는 순간의 속도에서 드러난다.',
+      'The taste of a candle appears in the speed of deciding to light it more than in the list of notes.'
+    ),
+    quote: localized(
+      '향은 공기에서 사라지지만 향을 다루는 순서는 방의 표면에 남는다.',
+      'Scent disappears from air, but the sequence of handling scent remains on the surface of the room.'
+    ),
+    sections: [
+      articleSection(
+        localized('불을 켜는 문턱', 'The Threshold Of Lighting'),
+        'image-atelier',
+        localized('캔들을 켜는 일은 방의 분위기를 자동이 아니라 손으로 바꾸겠다는 선언이다.', 'Lighting a candle is a declaration that the room atmosphere will be changed by hand rather than automatically.'),
+        [
+          paragraphBlock(
+            '캔들은 스위치보다 느리다. 방을 밝히기 위해서라면 조명이 더 빠르고 안전하다. 그런데도 캔들을 켜는 이유는 그 느림 자체가 방의 시작을 바꾸기 때문이다.',
+            'A candle is slower than a switch. If the goal is brightness, a lamp is faster and safer. Yet the reason to light a candle is that this slowness changes the beginning of the room.'
+          ),
+          paragraphBlock(
+            '성냥이나 라이터를 들고, 심지를 찾고, 불꽃이 안정되기를 기다리는 시간은 기능보다 의식에 가깝다. Diptyque의 클래식 캔들은 이 작은 지연을 브랜드의 핵심 경험으로 만든다.',
+            'Holding a match or lighter, finding the wick, and waiting for the flame to settle are closer to ritual than function. The Diptyque classic candle turns this small delay into a core brand experience.'
+          ),
+          galleryBlock(
+            [
+              { imageClass: 'image-field', image: imageUrls.diptyqueFreesia },
+              { imageClass: 'image-atelier', image: imageUrls.diptyqueDecor },
+              { imageClass: 'image-material', image: imageUrls.diptyqueBleecker }
+            ],
+            'Diptyque 공식 이미지는 향초를 향료가 아니라 식물, 유리, 포장, 계절의 제스처로 보여준다.',
+            'Diptyque official images present the candle as a gesture of plants, glass, packaging, and season rather than notes alone.'
+          ),
+          paragraphBlock(
+            '좋은 향초는 방을 점령하지 않는다. 천천히 퍼지며 사용자가 방의 속도를 낮췄다는 사실을 확인하게 한다. 향은 강한 효과가 아니라 시간을 바꾸는 신호다.',
+            'A good candle does not occupy the room. It spreads slowly and confirms that the user has lowered the speed of the room. Scent is not a strong effect, but a signal that time has changed.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('왁스가 기록하는 시간', 'Time Recorded By Wax'),
+        'image-material',
+        localized('캔들은 타면서 사라지지만 남은 왁스는 사용된 저녁의 길이를 보여준다.', 'A candle disappears while burning, but remaining wax shows the length of evenings used.'),
+        [
+          paragraphBlock(
+            '캔들의 경험은 꺼진 뒤에도 이어진다. 유리잔은 아직 따뜻하고, 심지는 짧아졌고, 방에는 향과 연기의 얇은 층이 남는다. 이 사후의 시간이 캔들을 단순 소모품이 아니라 기억의 물건으로 만든다.',
+            'The candle experience continues after it is out. The glass is still warm, the wick is shorter, and a thin layer of scent and smoke remains in the room. This after time turns the candle from a consumable into an object of memory.'
+          ),
+          quoteBlock(
+            '캔들의 진짜 기억은 불꽃보다 꺼진 뒤 방이 천천히 돌아오는 속도에 있다.',
+            'The real memory of a candle lies less in the flame than in the speed at which the room slowly returns after it is out.'
+          ),
+          paragraphBlock(
+            '남은 왁스의 높이는 사용자의 시간을 조용히 기록한다. 특별한 저녁, 혼자 보낸 오후, 손님이 오기 전의 준비가 조금씩 같은 유리 안에 쌓인다.',
+            'The height of remaining wax quietly records the user time. A special evening, an afternoon alone, and preparation before guests arrive accumulate little by little inside the same glass.'
+          ),
+          paragraphBlock(
+            'Diptyque가 오래 기억되는 이유는 향의 이름보다 이 기록성이 강하기 때문이다. 사용자는 향초를 다 태우는 것이 아니라 시간을 나누어 쓴다.',
+            'Diptyque is remembered for a long time because this record is stronger than the name of the scent. The user does not simply burn a candle down; they portion time through it.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('반복되는 선물', 'A Gift That Repeats'),
+        'image-field',
+        localized('클래식 캔들은 선물의 순간보다 같은 제스처가 다시 가능하다는 사실로 브랜드가 된다.', 'The classic candle becomes a brand through the possibility of repeating the same gesture more than through the moment of gifting.'),
+        [
+          paragraphBlock(
+            '향초는 선물하기 좋다. 하지만 좋은 향초는 선물 포장을 여는 순간보다 그 뒤의 반복에서 진짜 의미를 얻는다. 같은 라벨을 다시 꺼내고 같은 시간에 불을 붙이는 일이 브랜드의 기억을 만든다.',
+            'A candle is easy to gift. But a good candle gains its real meaning in repetition after the wrapping is opened. Taking out the same label again and lighting it at the same time creates the memory of the brand.'
+          ),
+          paragraphBlock(
+            '클래식함은 변하지 않는 외형만으로 만들어지지 않는다. 생활 속에서 같은 행동이 다시 설득력을 가질 때 생긴다. Diptyque의 캔들은 그래서 향의 물건이면서 동시에 반복 가능한 시간의 도구다.',
+            'Classic quality is not made only by an unchanged appearance. It appears when the same action becomes persuasive again in daily life. A Diptyque candle is therefore an object of scent and also a tool for repeatable time.'
+          )
+        ]
+      )
+    ]
+  },
+  ['patagonia-ownership-purpose']: {
+    readTime: localized('14분 읽기', '14 min read'),
+    deck: localized(
+      'Patagonia의 목적은 캠페인 문구보다 소유권이 어디로 향하는지에서 더 강하게 읽힌다. 지구를 유일한 주주로 두겠다는 선언은 아름다운 문장이 아니라 이익, 수선, 제품 수명을 같은 방향으로 묶는 구조의 실험이다.',
+      'Patagonia purpose reads more strongly through where ownership points than through campaign copy. The declaration that Earth is the only shareholder is not just a beautiful sentence, but a structural experiment tying profit, repair, and product life in the same direction.'
+    ),
+    excerpt: localized(
+      '목적을 말하는 브랜드는 많지만 목적이 돈의 흐름과 제품 수명까지 바꾸는 경우는 드물다.',
+      'Many brands speak about purpose, but few let purpose change the flow of money and the lifespan of products.'
+    ),
+    quote: localized(
+      '브랜드의 윤리는 광고가 끝난 뒤에도 같은 방향으로 돈과 책임이 흐를 때 검증된다.',
+      'A brand ethic is tested when money and responsibility keep flowing in the same direction after advertising ends.'
+    ),
+    sections: [
+      articleSection(
+        localized('소유권이 말하는 방향', 'The Direction Spoken By Ownership'),
+        'image-thought',
+        localized('Patagonia의 목적은 누가 회사를 소유하는가보다 회사의 초과 가치가 어디로 가는가에서 구체화된다.', 'Patagonia purpose becomes concrete less through who owns the company than through where its excess value goes.'),
+        [
+          paragraphBlock(
+            '브랜드 목적은 흔한 말이 되었다. 지속 가능성, 책임, 커뮤니티, 순환은 거의 모든 기업 문서에 등장한다. Patagonia가 다르게 읽히는 이유는 이 말을 소유권의 구조 안으로 밀어 넣었기 때문이다.',
+            'Brand purpose has become common language. Sustainability, responsibility, community, and circularity appear in almost every company document. Patagonia reads differently because it pushed this language into the structure of ownership.'
+          ),
+          paragraphBlock(
+            'Patagonia Purpose Trust와 Holdfast Collective로 이어지는 구조는 회사의 방향을 다음 캠페인이 아니라 다음 세대의 의사결정 문제로 만든다. 목적이 오래 남으려면 선의가 아니라 바꾸기 어려운 장치가 필요하다.',
+            'The structure involving the Patagonia Purpose Trust and Holdfast Collective turns company direction into a question of next generation decision making rather than the next campaign. For purpose to remain, it needs a device that is difficult to reverse, not only goodwill.'
+          ),
+          galleryBlock(
+            [
+              { imageClass: 'image-field', image: imageUrls.patagoniaWornWear },
+              { imageClass: 'image-thought', image: imageUrls.patagoniaFootprint },
+              { imageClass: 'image-library', image: imageUrls.patagoniaTradeIn }
+            ],
+            'Patagonia와 Worn Wear 공식 이미지들은 책임을 아이콘이 아니라 실제 사용, 수선, 재사용의 장면으로 보여준다.',
+            'Official Patagonia and Worn Wear images show responsibility as scenes of use, repair, and reuse rather than icons.'
+          ),
+          paragraphBlock(
+            '이 구조가 모든 모순을 해결하지는 않는다. Patagonia는 여전히 제품을 만들고 판다. 그러나 중요한 점은 그 모순을 이미지 관리가 아니라 회사 설계의 문제로 다루려 한다는 데 있다.',
+            'This structure does not solve every contradiction. Patagonia still makes and sells products. What matters is that it attempts to treat those contradictions as questions of company design rather than image management.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('수선이라는 회계', 'Repair As Accounting'),
+        'image-field',
+        localized('Worn Wear는 제품의 끝을 구매 시점보다 훨씬 뒤로 미루는 브랜드 경험이다.', 'Worn Wear is a brand experience that pushes the end of a product far beyond the purchase moment.'),
+        [
+          paragraphBlock(
+            '수선은 감성적인 이야기이기 전에 회계에 가깝다. 이미 만들어진 옷의 시간을 더 쓰고, 새 제품이 필요한 순간을 늦추며, 사용 흔적을 결함이 아니라 기록으로 바꾼다.',
+            'Repair is closer to accounting before it is an emotional story. It uses more of the time already embedded in a garment, delays the moment a new product is needed, and turns signs of use from defects into records.'
+          ),
+          quoteBlock(
+            '수선은 소비를 완전히 멈추는 답이 아니라 소비 이후의 책임을 보이게 하는 방법이다.',
+            'Repair is not an answer that stops consumption completely, but a way to make responsibility after consumption visible.'
+          ),
+          paragraphBlock(
+            'Worn Wear의 힘은 새 제품의 욕망을 모른 척하지 않는 데 있다. 브랜드는 여전히 제품을 판매하지만, 제품의 생애를 구매 이후까지 길게 말한다. 소유는 순간의 선택이 아니라 관리의 기간이 된다.',
+            'The strength of Worn Wear lies in not pretending that the desire for new products does not exist. The brand still sells products, but it speaks of product life long after purchase. Ownership becomes a period of care rather than a moment of choice.'
+          ),
+          paragraphBlock(
+            '이 언어는 제품 디자인에도 압력을 준다. 오래 입을 수 있어야 하고, 수선할 수 있어야 하며, 낡아도 부끄럽지 않아야 한다. 목적은 광고 문장이 아니라 지퍼, 원단, 서비스 정책의 세부로 내려와야 한다.',
+            'This language pressures product design as well. A product must be wearable for a long time, repairable, and not shameful when aged. Purpose has to descend from advertising copy into zippers, fabrics, and service policy.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('목적의 장기 검증', 'The Long Test Of Purpose'),
+        'image-library',
+        localized('목적은 위기와 반복 속에서도 같은 방향으로 작동할 때 브랜드의 성격이 된다.', 'Purpose becomes brand character only when it keeps operating in the same direction through crisis and repetition.'),
+        [
+          paragraphBlock(
+            '목적은 선언될 때보다 시간이 지난 뒤 더 엄격하게 평가된다. 매출이 줄어도 같은 기준을 유지할 수 있는가. 공급망이 복잡해져도 같은 책임을 요구할 수 있는가. 새로운 고객을 얻기 위해 언어를 흐리지 않을 수 있는가.',
+            'Purpose is judged more strictly after time has passed than when it is declared. Can the same standard be kept when revenue falls? Can the same responsibility be demanded when supply chains become complex? Can the language remain clear while seeking new customers?'
+          ),
+          paragraphBlock(
+            'Patagonia의 취향은 자연 이미지보다 이 반복되는 검증에서 나온다. 아름다운 풍경은 많은 브랜드가 사용할 수 있지만, 그 풍경을 위해 돈의 흐름과 제품 수명의 기준을 바꾸는 일은 훨씬 어렵다.',
+            'Patagonia taste comes from this repeated testing more than from images of nature. Many brands can use beautiful landscapes, but changing the flow of money and the standard of product life for those landscapes is much harder.'
+          )
+        ]
+      )
+    ]
+  },
+  ['apple-vision-pro-privacy-defaults']: {
+    readTime: localized('14분 읽기', '14 min read'),
+    deck: localized(
+      'Apple Vision Pro의 프라이버시는 설정 메뉴의 설명보다 보이지 않는 입력을 어디까지 기본적으로 감추는가에서 시작된다. 시선, 손동작, 방의 구조가 인터페이스가 되는 순간 좋은 기본값은 사용자를 전문가로 만들지 않고 보호해야 한다.',
+      'Privacy in Apple Vision Pro begins with how far invisible input is hidden by default more than with explanations in settings. Once gaze, hand movement, and room structure become interface, good defaults must protect the user without making the user an expert.'
+    ),
+    excerpt: localized(
+      '공간형 프라이버시는 데이터 보호 이전에 같은 방에 있는 사람과의 경계를 다루는 문제다.',
+      'Spatial privacy is a question of boundaries with people in the same room before it is a question of data protection.'
+    ),
+    quote: localized(
+      '입력이 보이지 않을수록 인터페이스는 더 많은 것을 기본적으로 말하지 않아야 한다.',
+      'The less visible input becomes, the more an interface must leave unsaid by default.'
+    ),
+    sections: [
+      articleSection(
+        localized('보이지 않는 입력의 계약', 'The Contract Of Invisible Input'),
+        'image-library',
+        localized('시선과 손동작은 자연스러운 입력이지만 동시에 가장 사적인 몸의 신호다.', 'Gaze and hand movement are natural inputs, but also deeply private bodily signals.'),
+        [
+          paragraphBlock(
+            'Vision Pro의 입력은 조용하다. 사용자는 바라보고 손가락을 맞부딪히며 선택한다. 이 자연스러움은 인터페이스를 부드럽게 만들지만, 무엇이 입력되고 무엇이 저장되지 않는지에 대한 신뢰를 더 중요하게 만든다.',
+            'Vision Pro input is quiet. The user looks and taps fingers together to select. This naturalness makes the interface smooth, but it makes trust in what is entered and what is not stored even more important.'
+          ),
+          paragraphBlock(
+            '터치스크린의 명령은 손가락이 화면에 닿는 장면으로 보인다. 공간 인터페이스의 명령은 눈과 작은 손동작 사이에 숨어 있다. 입력이 사라질수록 기본값은 더 보수적이어야 한다.',
+            'A touchscreen command is visible when a finger touches glass. A spatial interface command hides between the eye and a small hand movement. As input disappears from view, defaults must become more conservative.'
+          ),
+          galleryBlock(
+            [
+              { imageClass: 'image-library', image: imageUrls.appleVisionSensors },
+              { imageClass: 'image-thought', image: imageUrls.appleVisionEyeSight },
+              { imageClass: 'image-interface', image: imageUrls.appleVisionGuest }
+            ],
+            '센서, EyeSight, Guest User 이미지는 프라이버시가 설정 문구가 아니라 물리적 인터페이스와 공유 상황의 문제임을 보여준다. 이미지는 Apple 공식 제품 페이지에서 인용.',
+            'Images of sensors, EyeSight, and Guest User show privacy as a matter of physical interface and sharing situations rather than setting copy. Images referenced from Apple official product pages.'
+          ),
+          paragraphBlock(
+            '좋은 프라이버시는 사용자가 매번 의심하지 않아도 되는 상태다. 눈이 무엇을 보았는지, 방이 어떻게 스캔되었는지, 앱이 무엇을 알 수 있는지가 복잡한 설명 없이도 적절히 제한되어야 한다.',
+            'Good privacy is a state in which the user does not need to doubt every moment. What the eyes saw, how the room was scanned, and what an app can know must be appropriately limited without requiring complicated explanation.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('공유되는 방의 경계', 'The Boundary Of A Shared Room'),
+        'image-interface',
+        localized('공간형 화면은 혼자 보는 화면과 함께 있는 방 사이의 선을 계속 다시 긋는다.', 'A spatial screen keeps redrawing the line between a screen watched alone and a room occupied together.'),
+        [
+          paragraphBlock(
+            '프라이버시는 혼자 있을 때보다 함께 있을 때 더 어렵다. 같은 소파의 사람, 회의실의 동료, 비행기 옆자리 승객은 사용자의 화면을 볼 수 없다. 보호와 단절이 같은 구조에서 생긴다.',
+            'Privacy is more difficult when together than when alone. A person on the same sofa, a colleague in a meeting room, or a passenger in the next airplane seat cannot see the user screen. Protection and separation arise from the same structure.'
+          ),
+          quoteBlock(
+            '프라이버시가 좋은 제품은 벽만 높이지 않는다. 언제 문이 열리는지도 분명히 보여준다.',
+            'A product with good privacy does not only raise walls. It also shows clearly when a door opens.'
+          ),
+          paragraphBlock(
+            '공유 기능은 그래서 단순 부가 기능이 아니다. 어떤 창을 외부로 보낼지, 어떤 알림을 숨길지, 어떤 앱을 게스트에게 허용할지 사용자가 쉽게 판단할 수 있어야 한다. 프라이버시는 차단이 아니라 상황별 전환의 언어다.',
+            'Sharing features are therefore not minor additions. The user must be able to judge easily which window is sent outward, which notification is hidden, and which app is allowed for a guest. Privacy is a language of situational transition rather than only blocking.'
+          ),
+          paragraphBlock(
+            'Vision Pro가 일상 기기가 되려면 몰입의 깊이만큼 경계의 표시가 중요해진다. 사용자가 방에 돌아왔는지, 무엇이 공유 중인지, 어떤 입력이 기기 안에 머무는지 명확해야 한다.',
+            'For Vision Pro to become an everyday device, signs of boundary become as important as depth of immersion. It must be clear whether the user has returned to the room, what is being shared, and which input remains on the device.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('기본값의 미감', 'The Aesthetic Of Defaults'),
+        'image-thought',
+        localized('좋은 기본값은 사용자가 조심하지 않아도 안전한 쪽으로 기울어져 있는 상태다.', 'A good default is a state tilted toward safety even when the user is not being careful.'),
+        [
+          paragraphBlock(
+            '프라이버시는 보통 보안 기능처럼 설명된다. 그러나 사용자는 매번 암호화와 권한 구조를 읽고 싶어 하지 않는다. 실제 신뢰는 설명을 읽지 않아도 불필요한 노출이 일어나지 않는다는 느낌에서 생긴다.',
+            'Privacy is usually explained like a security feature. But users do not want to read encryption and permission structures every time. Real trust comes from the feeling that unnecessary exposure does not happen even without reading the explanation.'
+          ),
+          paragraphBlock(
+            '공간 컴퓨팅에서 이 느낌은 더 중요하다. 입력은 몸에 가까워지고, 화면은 남에게 보이지 않으며, 방은 데이터와 경험의 일부가 된다. 좋은 기본값은 기능이 아니라 제품의 감각 자체가 된다.',
+            'In spatial computing, this feeling becomes more important. Input moves closer to the body, the screen is invisible to others, and the room becomes part of data and experience. Good defaults become the feeling of the product itself rather than a feature.'
+          )
+        ]
+      )
+    ]
+  },
+  ['leica-m11-monochrom-hand-control']: {
+    readTime: localized('13분 읽기', '13 min read'),
+    deck: localized(
+      'Leica M11 Monochrom은 흑백 센서보다 손의 속도로 먼저 이해되는 카메라다. 거리계식 조작과 제한된 선택지는 촬영자를 장면 앞에 더 오래 세우고, 셔터 전의 망설임을 이미지의 일부로 만든다.',
+      'Leica M11 Monochrom is understood first through the speed of the hand more than through its monochrome sensor. Rangefinder operation and limited choices keep the photographer in front of the scene longer and make pre shutter hesitation part of the image.'
+    ),
+    excerpt: localized(
+      'M11 Monochrom의 취향은 느린 외형이 아니라 셔터 전 손끝에 남는 판단의 저항이다.',
+      'The taste of M11 Monochrom is not a slow appearance, but the resistance of judgment left at the fingertips before the shutter.'
+    ),
+    quote: localized(
+      '느린 카메라는 좋은 사진을 보장하지 않는다. 다만 빠른 사진을 의심하게 만든다.',
+      'A slow camera does not guarantee a good photograph. It makes the user question a fast one.'
+    ),
+    sections: [
+      articleSection(
+        localized('몸이 초점을 맞추는 시간', 'The Time In Which The Body Focuses'),
+        'image-field',
+        localized('거리계식 조작은 자동화된 정확도보다 촬영자가 장면과 맞춰지는 시간을 남긴다.', 'Rangefinder operation leaves time for the photographer to align with a scene more than automated accuracy.'),
+        [
+          paragraphBlock(
+            'M11 Monochrom을 들면 사진은 화면을 탭하는 일이 아니라 몸을 맞추는 일이 된다. 뷰파인더를 보고, 초점 링을 돌리고, 프레임 라인을 확인하는 과정은 장면 앞에서 몇 초의 지연을 만든다.',
+            'Holding M11 Monochrom turns photography from tapping a screen into aligning the body. Looking through the viewfinder, turning the focus ring, and checking frame lines create a delay of a few seconds in front of the scene.'
+          ),
+          paragraphBlock(
+            '그 지연은 불편이 아니다. 장면을 더 정확히 받아들이기 위한 저항이다. 카메라가 모든 것을 대신하지 않을 때 사용자는 자신이 어디 서 있는지, 무엇을 놓칠 준비가 되어 있는지 더 선명하게 느낀다.',
+            'That delay is not inconvenience. It is resistance that helps accept the scene more precisely. When the camera does not do everything on behalf of the user, the user feels more clearly where they stand and what they are ready to miss.'
+          ),
+          galleryBlock(
+            [
+              { imageClass: 'image-field', image: imageUrls.leicaStreetScene },
+              { imageClass: 'image-thought', image: imageUrls.leicaQ3 },
+              { imageClass: 'image-library', image: imageUrls.leicaMSystem }
+            ],
+            'Leica 공식 이미지들은 카메라의 물성, 거리 사진의 장면, M 시스템의 연속성을 함께 보여준다.',
+            'Official Leica images show the material presence of cameras, the scene of street photography, and the continuity of the M system together.'
+          ),
+          paragraphBlock(
+            '흑백 전용이라는 사실은 이 저항을 더 강하게 만든다. 색으로 구제할 수 없는 이미지는 촬영 전부터 더 엄격한 선택을 요구한다. 셔터는 빠르지만 판단은 느려진다.',
+            'The dedicated monochrome condition makes this resistance stronger. An image that cannot be rescued by color demands stricter choice before shooting. The shutter is fast, but judgment slows down.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('메뉴 밖의 사진', 'Photography Outside The Menu'),
+        'image-interface',
+        localized('적은 기능은 부족함이 아니라 촬영자가 장면에서 빠져나가는 시간을 줄이는 설계다.', 'Fewer functions are not lack, but design that reduces the time the photographer leaves the scene.'),
+        [
+          paragraphBlock(
+            '현대 카메라는 메뉴 안에 수많은 가능성을 넣는다. 유용하지만 촬영 순간에는 장면보다 설정을 보게 만들 수 있다. M11 Monochrom은 가능성을 줄여 시선을 다시 밖으로 보낸다.',
+            'Modern cameras place many possibilities inside menus. They are useful, but during shooting they can make the user look at settings more than the scene. M11 Monochrom reduces possibilities and sends the eye outward again.'
+          ),
+          quoteBlock(
+            '기능을 줄인 도구는 가난한 도구가 아니라 오늘의 판단을 분명히 하는 도구일 수 있다.',
+            'A tool with fewer functions can be not a poor tool, but a tool that clarifies today judgment.'
+          ),
+          paragraphBlock(
+            '흑백 전용 카메라는 색 조정의 후보를 남기지 않는다. 촬영자는 결과를 나중에 다양하게 바꿀 수 있다는 위안을 줄이고, 지금 이 빛과 거리로 충분한지 묻는다.',
+            'A dedicated monochrome camera leaves no candidate for later color adjustment. The photographer reduces the comfort of changing the result many ways afterward and asks whether this light and distance are enough now.'
+          ),
+          paragraphBlock(
+            '이 단순함은 과거로 돌아가는 태도가 아니다. 선택이 너무 많은 디지털 환경에서 선택의 비용을 정직하게 인정하는 방식이다.',
+            'This simplicity is not an attitude of returning to the past. It is a way to honestly acknowledge the cost of choice in a digital environment with too many choices.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('흑백의 손', 'The Hand Of Monochrome'),
+        'image-library',
+        localized('흑백은 눈의 스타일이 아니라 손의 속도와 실패를 받아들이는 방식이다.', 'Monochrome is not a style of the eye, but a speed of the hand and a way of accepting failure.'),
+        [
+          paragraphBlock(
+            'M11 Monochrom은 이미지를 자동으로 깊게 만들지 않는다. 색이 사라지면 장면은 쉽게 차분해지지만, 충분히 본 장면과 그렇지 않은 장면의 차이도 더 빨리 드러난다.',
+            'M11 Monochrom does not automatically make images deep. When color disappears, a scene easily becomes calm, but the difference between a scene truly observed and one not observed enough appears more quickly.'
+          ),
+          paragraphBlock(
+            '이 카메라의 취향은 그래서 결과보다 태도에 있다. 적게 찍고, 더 오래 보고, 실패를 분위기로 덮지 않는 일. 흑백은 낭만이 아니라 손끝에서 시작되는 책임이다.',
+            'The taste of this camera therefore lies in attitude more than result: shooting less, looking longer, and not covering failure with atmosphere. Monochrome is not romance, but responsibility beginning at the fingertips.'
+          )
+        ]
+      )
+    ]
+  },
+  ['muji-store-grid-daily-space']: {
+    readTime: localized('13분 읽기', '13 min read'),
+    deck: localized(
+      'MUJI의 매장은 강한 장면으로 기억되기보다 몸이 걸어서 익히는 분류 체계로 남는다. 선반과 통로, 낮은 색의 포장, 반복되는 생활 카테고리는 사용자가 제품을 보기 전에 자신의 생활을 다시 분류하게 한다.',
+      'A MUJI store remains less as a strong scene than as a classification system learned by walking. Shelves, aisles, low color packaging, and repeated living categories make the user classify their own life again before looking at products.'
+    ),
+    excerpt: localized(
+      '좋은 매장은 오래 바라보게 하는 장면보다 다시 걸을 수 있는 순서를 남긴다.',
+      'A good store leaves an order one can walk again more than a scene one stares at.'
+    ),
+    quote: localized(
+      'MUJI의 매장은 물건을 파는 장소이기 전에 생활의 분류법을 걷게 하는 지도다.',
+      'A MUJI store is a map for walking a classification of living before it is a place that sells objects.'
+    ),
+    sections: [
+      articleSection(
+        localized('분류가 먼저 보이는 매장', 'A Store Where Classification Appears First'),
+        'image-library',
+        localized('MUJI의 매장 그리드는 제품보다 먼저 생활 카테고리의 순서를 보여준다.', 'The MUJI store grid shows the order of living categories before products.'),
+        [
+          paragraphBlock(
+            'MUJI 매장에 들어서면 큰 장면보다 분류가 먼저 보인다. 의류, 수납, 문구, 식품, 생활가전은 서로 다른 목소리를 내기보다 같은 낮은 톤으로 이어진다. 사용자는 물건을 고르기 전에 생활의 목차를 걷는다.',
+            'Entering a MUJI store, classification appears before a large scene. Clothing, storage, stationery, food, and daily electronics continue in the same low tone rather than speaking in different voices. The user walks a table of contents of living before choosing an object.'
+          ),
+          paragraphBlock(
+            '이 목차는 방 안의 문제를 조용히 떠올리게 한다. 어느 물건이 자리를 잃었는지, 어떤 카테고리가 너무 많아졌는지, 무엇을 표준화하면 생활이 가벼워질지 매장의 순서가 질문을 만든다.',
+            'This table of contents quietly recalls problems inside the home: which object lost its place, which category became too large, and what could be standardized to make living lighter. The order of the store creates questions.'
+          ),
+          galleryBlock(
+            [
+              { imageClass: 'image-material', image: imageUrls.mujiDailyGoods },
+              { imageClass: 'image-library', image: imageUrls.mujiStorage }
+            ],
+            'MUJI 공식 이미지는 매장 분류가 집 안의 수납과 생활용품 분류로 이어지는 방식을 보여준다.',
+            'MUJI official images show how store classification continues into storage and daily goods classification at home.'
+          ),
+          paragraphBlock(
+            '좋은 리테일 공간은 사용자를 길 잃게 하지 않는다. 대신 이미 아는 생활을 다른 순서로 다시 걷게 한다. MUJI의 그리드는 구매 동선이면서 동시에 자기 점검의 동선이다.',
+            'A good retail space does not make the user lost. It lets them walk familiar life again in another order. The MUJI grid is a purchase route and also a route for self inspection.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('작은 도시의 통로', 'Aisles Of A Small City'),
+        'image-field',
+        localized('선반과 통로는 구매를 재촉하기보다 생활의 이동 순서를 예행연습하게 한다.', 'Shelves and aisles rehearse the movement order of life rather than rushing purchase.'),
+        [
+          paragraphBlock(
+            'MUJI의 매장은 작은 도시처럼 작동한다. 큰길과 골목, 멈추는 코너, 다시 돌아오는 표지판이 있다. 사용자는 빠르게 소비하기보다 자신의 속도로 길을 확인한다.',
+            'A MUJI store works like a small city. It has main roads and alleys, corners for stopping, and signs that return. The user checks the route at their own speed rather than consuming quickly.'
+          ),
+          quoteBlock(
+            '공간의 취향은 한 번 찍고 지나가는 장면보다 다시 찾아갈 수 있는 길에서 생긴다.',
+            'Taste in space comes from a path one can find again more than from a scene photographed once and passed.'
+          ),
+          paragraphBlock(
+            '수납에서 주방으로, 주방에서 식품으로, 식품에서 문구로 이동하는 동안 제품은 독립된 욕망이 아니라 생활을 조정하는 부품처럼 보인다. 매장의 힘은 강한 연출보다 이 조용한 연결에 있다.',
+            'Moving from storage to kitchen, kitchen to food, and food to stationery, products appear less as independent desires than as parts that adjust living. The strength of the store lies in this quiet connection more than in strong staging.'
+          ),
+          paragraphBlock(
+            '그래서 MUJI의 공간은 로고보다 높이와 간격으로 기억된다. 선반의 낮은 압력, 포장의 낮은 채도, 카테고리의 반복이 브랜드의 목소리가 된다.',
+            'MUJI space is therefore remembered through height and interval more than logo. The low pressure of shelves, low saturation of packaging, and repetition of categories become the brand voice.'
+          )
+        ]
+      ),
+      articleSection(
+        localized('온라인으로 남는 지도', 'The Map That Remains Online'),
+        'image-system',
+        localized('매장에서 익힌 분류가 온라인 목록에서도 반복될 때 브랜드 공간은 기억 속 인터페이스가 된다.', 'When classification learned in store repeats in online lists, brand space becomes an interface in memory.'),
+        [
+          paragraphBlock(
+            '방문이 끝난 뒤에도 좋은 매장은 계속 작동한다. 사용자가 온라인에서 같은 카테고리와 같은 이름을 만날 때 화면의 목록은 이미 걸었던 통로를 떠올리게 한다.',
+            'A good store keeps working after the visit. When the user meets the same categories and names online, the list on screen recalls aisles already walked.'
+          ),
+          paragraphBlock(
+            '이 연결은 단순한 판매 채널의 문제가 아니다. 매장에서 몸으로 익힌 분류가 집과 화면에서 반복될 때 브랜드는 물리적 주소를 넘어 습관이 된다. MUJI의 공간은 그렇게 조용히 생활의 운영 방식으로 남는다.',
+            'This connection is not only a matter of sales channels. When classification learned by the body in store repeats at home and on screen, the brand becomes a habit beyond physical address. MUJI space remains quietly as a way of operating life.'
+          )
+        ]
+      )
+    ]
+  }
+};
+
 export const articles: Article[] = baseArticles.map((article): Article => ({
   ...article,
-  ...(articleRewrites[article.slug] ?? {})
+  ...(refreshedArticleRewrites[article.slug] ?? articleRewrites[article.slug] ?? {})
 }));
 
 export const categories: CategoryDefinition[] = [
