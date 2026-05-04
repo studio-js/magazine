@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="취향에 관하여. 실제 브랜드와 제품, 공간, 루틴을 통해 취향의 조건과 감각의 출처를 읽는 디지털 매거진" />
     <title>Write | Habitus</title>
-    <link rel="stylesheet" href="/magazine/styles.css?v=20260504-write-sync" />
-    <script src="/magazine/client.js?v=20260504-write-sync" defer></script>
+    <link rel="stylesheet" href="/magazine/styles.css?v=20260504-supabase-content" />
+    <script src="/magazine/client.js?v=20260504-supabase-content" defer></script>
   </head>
-  <body>
+  <body data-supabase-url="https://suszwslmjdhbbvxhipej.supabase.co" data-supabase-anon-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1c3p3c2xtamRoYmJ2eGhpcGVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3ODc2NDMsImV4cCI6MjA5MzM2MzY0M30.83ivb3FUYehjNMbZL-7U9Sn_QgcZcxRGStQ9gMdBApM" data-supabase-functions-url="https://suszwslmjdhbbvxhipej.supabase.co/functions/v1">
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
 
     <header class="site-header" data-header>
@@ -300,7 +300,7 @@
           <h1>기사 / 이슈 데스크</h1>
         </div>
         <div class="admin-header-copy">
-          <p>기존 기사와 이슈를 실제 페이지 폭에 맞춰 편집합니다. 글쓰기 화면은 공개 기사 폭과 리듬을 기준으로 맞췄고, 로컬 서버에서는 파일 저장이 src/content/magazine.ts를 직접 수정합니다.</p>
+          <p>기존 기사와 이슈를 실제 페이지 폭에 맞춰 편집합니다. Supabase가 연결된 Pages에서는 저장 버튼이 공개 콘텐츠 DB에 저장되고, 로컬 서버 fallback은 src/content/magazine.ts를 직접 수정합니다.</p>
           <div class="admin-mode-tabs" aria-label="편집 종류">
             <button type="button" class="is-active" data-write-mode-button="article" aria-pressed="true">기사</button>
             <button type="button" data-write-mode-button="issue" aria-pressed="false">이슈</button>
@@ -539,7 +539,7 @@
             <button type="button" data-write-issue-download>다운로드</button>
             <button type="button" data-write-issue-reset>초기화</button>
           </div>
-          <p class="issue-sidebar-note">목록의 첫 번째 이슈가 공개 페이지와 상단 메뉴의 최신호가 됩니다. 로컬 서버에서는 issueProjects에 바로 저장됩니다.</p>
+          <p class="issue-sidebar-note">목록의 첫 번째 이슈가 공개 페이지와 상단 메뉴의 최신호가 됩니다. Supabase 연결 시 저장 버튼은 published snapshot을 갱신합니다.</p>
         </aside>
 
         <section class="admin-editor issue-admin-editor" aria-label="이슈 편집" data-write-issue-panel data-write-issue-editor>

@@ -2,8 +2,9 @@ import express from "express";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { articles, site } from "./content/magazine";
+import { loadPublishedContent } from "./content/runtime";
 import { issueSlug, renderAboutPage, renderArchivePage, renderArticlePage, renderHomePage, renderIssueCollectionPage, renderIssuePage, renderNotFoundPage, renderWritePage } from "./render/pages";
-import type { Article, IssueProject, Locale, PrimaryCategory, SubcategoryKey } from "./types";
+import type { Article, IssueProject, Locale, PrimaryCategory, SiteContent, SubcategoryKey } from "./types";
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
@@ -11,6 +12,8 @@ const projectRoot = path.resolve(__dirname, "..");
 const contentFilePath = path.join(projectRoot, "src", "content", "magazine.ts");
 const uploadsDir = path.join(projectRoot, "public", "uploads");
 const localBasePath = "/magazine";
+let publishedSite: SiteContent = site;
+let publishedArticles: Article[] = articles;
 const uploadExtensions: Record<string, string> = {
   "image/gif": "gif",
   "image/jpeg": "jpg",
@@ -35,6 +38,14 @@ const isPrimaryCategory = (value: unknown): value is PrimaryCategory =>
 
 const isSubcategory = (categoryKey: PrimaryCategory | undefined, value: unknown): value is SubcategoryKey =>
   typeof value === "string" && Boolean(site.categories.find((category) => category.key === categoryKey)?.subcategories.some((subcategory) => subcategory.key === value));
+
+void loadPublishedContent(site, articles).then((content) => {
+  publishedSite = content.site;
+  publishedArticles = content.articles;
+  if (content.source === "supabase") {
+    console.log(`Using Supabase content snapshot${content.updatedAt ? ` updated at ${content.updatedAt}` : ""}`);
+  }
+});
 
 const pageFromParam = (value: unknown): number => {
   const page = Number(value);
@@ -105,39 +116,39 @@ app.use("/client.js", express.static(path.join(projectRoot, "dist", "client.js")
 
 app.get(["/", "/en", "/en/"], (request, response) => {
   const locale = getLocale(request.path, request.query.lang);
-  response.send(renderHomePage(site, articles, locale, getCurrentPath(request.originalUrl)));
+  response.send(renderHomePage(publishedSite, publishedArticles, locale, getCurrentPath(request.originalUrl)));
 });
 
 app.get(["/issues", "/issues/", "/en/issues", "/en/issues/"], (request, response) => {
   const locale = getLocale(request.path, request.query.lang);
-  response.send(renderIssueCollectionPage(site, locale, getCurrentPath(request.originalUrl)));
+  response.send(renderIssueCollectionPage(publishedSite, locale, getCurrentPath(request.originalUrl)));
 });
 
 app.get(["/issues/page/:page", "/en/issues/page/:page"], (request, response) => {
   const locale = getLocale(request.path, request.query.lang);
-  response.send(renderIssueCollectionPage(site, locale, getCurrentPath(request.originalUrl), pageFromParam(request.params.page)));
+  response.send(renderIssueCollectionPage(publishedSite, locale, getCurrentPath(request.originalUrl), pageFromParam(request.params.page)));
 });
 
 app.get(["/issues/:issueSlug", "/en/issues/:issueSlug"], (request, response) => {
   const locale = getLocale(request.path, request.query.lang);
-  const issue = site.issueProjects.find((item) => issueSlug(item) === request.params.issueSlug);
+  const issue = publishedSite.issueProjects.find((item) => issueSlug(item) === request.params.issueSlug);
 
   if (!issue) {
-    response.status(404).send(renderNotFoundPage(site, locale, getCurrentPath(request.originalUrl)));
+    response.status(404).send(renderNotFoundPage(publishedSite, locale, getCurrentPath(request.originalUrl)));
     return;
   }
 
-  response.send(renderIssuePage(site, articles, locale, getCurrentPath(request.originalUrl), issue));
+  response.send(renderIssuePage(publishedSite, publishedArticles, locale, getCurrentPath(request.originalUrl), issue));
 });
 
 app.get(["/about", "/about/", "/en/about", "/en/about/"], (request, response) => {
   const locale = getLocale(request.path, request.query.lang);
-  response.send(renderAboutPage(site, locale, getCurrentPath(request.originalUrl)));
+  response.send(renderAboutPage(publishedSite, locale, getCurrentPath(request.originalUrl)));
 });
 
 app.get(["/write", "/write/", "/en/write", "/en/write/"], (request, response) => {
   const locale = getLocale(request.path, request.query.lang);
-  response.send(renderWritePage(site, articles, locale, getCurrentPath(request.originalUrl)));
+  response.send(renderWritePage(publishedSite, publishedArticles, locale, getCurrentPath(request.originalUrl)));
 });
 
 app.get([
@@ -155,11 +166,11 @@ app.get([
   const selectedSubcategory = isSubcategory(selectedCategory, pathSubcategory) ? pathSubcategory : undefined;
 
   if ((pathCategory && !selectedCategory) || (pathSubcategory && !selectedSubcategory)) {
-    response.status(404).send(renderNotFoundPage(site, locale, getCurrentPath(request.originalUrl)));
+    response.status(404).send(renderNotFoundPage(publishedSite, locale, getCurrentPath(request.originalUrl)));
     return;
   }
 
-  response.send(renderArchivePage(site, articles, locale, getCurrentPath(request.originalUrl), selectedCategory, selectedSubcategory, pageFromParam(request.params.page)));
+  response.send(renderArchivePage(publishedSite, publishedArticles, locale, getCurrentPath(request.originalUrl), selectedCategory, selectedSubcategory, pageFromParam(request.params.page)));
 });
 
 app.get(["/archive", "/archive/:category", "/archive/:category/:subcategory", "/en/archive", "/en/archive/:category", "/en/archive/:category/:subcategory"], (request, response) => {
@@ -171,29 +182,29 @@ app.get(["/archive", "/archive/:category", "/archive/:category/:subcategory", "/
   const selectedSubcategory = isSubcategory(selectedCategory, pathSubcategory) ? pathSubcategory : undefined;
 
   if ((pathCategory && !selectedCategory) || (pathSubcategory && !selectedSubcategory)) {
-    response.status(404).send(renderNotFoundPage(site, locale, getCurrentPath(request.originalUrl)));
+    response.status(404).send(renderNotFoundPage(publishedSite, locale, getCurrentPath(request.originalUrl)));
     return;
   }
 
-  response.send(renderArchivePage(site, articles, locale, getCurrentPath(request.originalUrl), selectedCategory, selectedSubcategory));
+  response.send(renderArchivePage(publishedSite, publishedArticles, locale, getCurrentPath(request.originalUrl), selectedCategory, selectedSubcategory));
 });
 
 app.get(["/articles/:slug", "/en/articles/:slug"], (request, response) => {
   const locale = getLocale(request.path, request.query.lang);
-  const article = articles.find((item) => item.slug === request.params.slug);
+  const article = publishedArticles.find((item) => item.slug === request.params.slug);
 
   if (!article) {
-    response.status(404).send(renderNotFoundPage(site, locale, getCurrentPath(request.originalUrl)));
+    response.status(404).send(renderNotFoundPage(publishedSite, locale, getCurrentPath(request.originalUrl)));
     return;
   }
 
-  const relatedArticles = articles.filter((item) => item.slug !== article.slug).slice(0, 3);
-  response.send(renderArticlePage(site, article, relatedArticles, locale, getCurrentPath(request.originalUrl)));
+  const relatedArticles = publishedArticles.filter((item) => item.slug !== article.slug).slice(0, 3);
+  response.send(renderArticlePage(publishedSite, article, relatedArticles, locale, getCurrentPath(request.originalUrl)));
 });
 
 app.get("/api/articles", (request, response) => {
   const locale = getLocale(request.path, request.query.lang);
-  response.json({ locale, articles });
+  response.json({ locale, articles: publishedArticles });
 });
 
 app.post("/api/admin/uploads", async (request, response) => {
@@ -236,6 +247,7 @@ app.post("/api/admin/articles", async (request, response) => {
   try {
     await writeArticlesToContentFile(nextArticles);
     (articles as Article[]).splice(0, articles.length, ...nextArticles);
+    publishedArticles = nextArticles;
     response.json({ ok: true, path: contentFilePath, count: nextArticles.length });
   } catch (error) {
     response.status(500).json({ ok: false, message: error instanceof Error ? error.message : "Save failed" });
@@ -253,6 +265,7 @@ app.post("/api/admin/issue", async (request, response) => {
   try {
     await writeIssueProjectsToContentFile(nextIssues);
     site.issueProjects.splice(0, site.issueProjects.length, ...nextIssues);
+    publishedSite = { ...publishedSite, issueProjects: nextIssues };
     response.json({ ok: true, path: contentFilePath, count: nextIssues.length, latest: nextIssues[0].number });
   } catch (error) {
     response.status(500).json({ ok: false, message: error instanceof Error ? error.message : "Save failed" });
@@ -261,7 +274,7 @@ app.post("/api/admin/issue", async (request, response) => {
 
 app.use((request, response) => {
   const locale = getLocale(request.path, request.query.lang);
-  response.status(404).send(renderNotFoundPage(site, locale, getCurrentPath(request.originalUrl)));
+  response.status(404).send(renderNotFoundPage(publishedSite, locale, getCurrentPath(request.originalUrl)));
 });
 
 app.listen(port, () => {

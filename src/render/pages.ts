@@ -1,3 +1,4 @@
+import { supabasePublicConfig } from "../config/supabase";
 import type { Article, ArticleBlockImage, ArticleSection, ArticleSectionBlock, CategoryDefinition, IssueFeature, IssueProject, Locale, LocalizedText, Note, PrimaryCategory, SiteContent, SubcategoryKey } from "../types";
 
 interface LayoutOptions {
@@ -276,7 +277,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-write-sync";
+const assetVersion = "20260504-supabase-content";
 
 const contentVersionHash = (value: string): string => {
   let hash = 5381;
@@ -298,6 +299,9 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
   const labels = ui[locale];
   const currentIssue = latestIssue(site);
   const currentPathname = currentPath.split(/[?#]/)[0].replace(/\/$/, "") || "/";
+  const supabaseAttributes = supabasePublicConfig.enabled
+    ? ` data-supabase-url="${escapeHtml(supabasePublicConfig.url)}" data-supabase-anon-key="${escapeHtml(supabasePublicConfig.anonKey)}" data-supabase-functions-url="${escapeHtml(supabasePublicConfig.functionsUrl)}"`
+    : "";
   const isIssueActive = currentPathname === "/issues" || currentPathname.startsWith("/issues/");
   const isLatestIssuePage = currentPathname === `/issues/${issueSlug(currentIssue)}`;
   const issueNavItem = `        <div class="nav-item issue-nav-item ${isIssueActive ? "is-active" : ""}">
@@ -344,7 +348,7 @@ const renderLayout = ({ title, description, body, locale, currentPath, site }: L
     <link rel="stylesheet" href="/styles.css?v=${assetVersion}" />
     <script src="/client.js?v=${assetVersion}" defer></script>
   </head>
-  <body>
+  <body${supabaseAttributes}>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
 
     <header class="site-header" data-header>
@@ -661,7 +665,7 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
           <h1>${escapeHtml(locale === "ko" ? "기사 / 이슈 데스크" : "Article / Issue Desk")}</h1>
         </div>
         <div class="admin-header-copy">
-          <p>${escapeHtml(locale === "ko" ? "기존 기사와 이슈를 실제 페이지 폭에 맞춰 편집합니다. 글쓰기 화면은 공개 기사 폭과 리듬을 기준으로 맞췄고, 로컬 서버에서는 파일 저장이 src/content/magazine.ts를 직접 수정합니다." : "Edit existing articles and issue pages at live page scale. The writing surface follows the published article width and rhythm; on the local server, Save File writes directly to src/content/magazine.ts.")}</p>
+          <p>${escapeHtml(locale === "ko" ? "기존 기사와 이슈를 실제 페이지 폭에 맞춰 편집합니다. Supabase가 연결된 Pages에서는 저장 버튼이 공개 콘텐츠 DB에 저장되고, 로컬 서버 fallback은 src/content/magazine.ts를 직접 수정합니다." : "Edit existing articles and issue pages at live page scale. When Supabase is connected on Pages, Save writes to the published content DB; the local server fallback still writes directly to src/content/magazine.ts.")}</p>
           <div class="admin-mode-tabs" aria-label="${escapeHtml(locale === "ko" ? "편집 종류" : "Editor type")}">
             <button type="button" class="is-active" data-write-mode-button="article" aria-pressed="true">${escapeHtml(locale === "ko" ? "기사" : "Article")}</button>
             <button type="button" data-write-mode-button="issue" aria-pressed="false">${escapeHtml(locale === "ko" ? "이슈" : "Issue")}</button>
@@ -879,7 +883,7 @@ ${subcategoryOptions}
             <button type="button" data-write-issue-download>${escapeHtml(locale === "ko" ? "다운로드" : "Download")}</button>
             <button type="button" data-write-issue-reset>${escapeHtml(locale === "ko" ? "초기화" : "Reset")}</button>
           </div>
-          <p class="issue-sidebar-note">${escapeHtml(locale === "ko" ? "목록의 첫 번째 이슈가 공개 페이지와 상단 메뉴의 최신호가 됩니다. 로컬 서버에서는 issueProjects에 바로 저장됩니다." : "The first issue in this list becomes the public latest issue and top-menu issue. On the local server this writes directly to issueProjects.")}</p>
+          <p class="issue-sidebar-note">${escapeHtml(locale === "ko" ? "목록의 첫 번째 이슈가 공개 페이지와 상단 메뉴의 최신호가 됩니다. Supabase 연결 시 저장 버튼은 published snapshot을 갱신합니다." : "The first issue in this list becomes the public latest issue and top-menu issue. With Supabase connected, Save updates the published snapshot.")}</p>
         </aside>
 
         <section class="admin-editor issue-admin-editor" aria-label="${escapeHtml(locale === "ko" ? "이슈 편집" : "Issue editor")}" data-write-issue-panel data-write-issue-editor>

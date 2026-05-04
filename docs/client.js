@@ -19,6 +19,40 @@ const imageClasses = [
 const clientScriptSrc = document.querySelector('script[src*="client.js"]')?.getAttribute("src") || "/client.js";
 const clientBasePath = new URL(clientScriptSrc, window.location.href).pathname.replace(/\/client\.js$/, "");
 const apiPath = (path) => `${clientBasePath}${path}`;
+const supabaseUrl = document.body.dataset.supabaseUrl || "";
+const supabaseAnonKey = document.body.dataset.supabaseAnonKey || "";
+const supabaseFunctionsUrl = document.body.dataset.supabaseFunctionsUrl || (supabaseUrl ? `${supabaseUrl}/functions/v1` : "");
+const contentHashClient = (value) => {
+    let hash = 5381;
+    for (let index = 0; index < value.length; index += 1) {
+        hash = ((hash << 5) + hash) ^ value.charCodeAt(index);
+    }
+    return (hash >>> 0).toString(36);
+};
+const fetchSupabaseSnapshot = async () => {
+    if (!supabaseUrl || !supabaseAnonKey) {
+        return null;
+    }
+    const response = await fetch(`${supabaseUrl}/rest/v1/content_snapshots?id=eq.published&select=data,updated_at&limit=1`, {
+        headers: {
+            apikey: supabaseAnonKey,
+            Authorization: `Bearer ${supabaseAnonKey}`
+        }
+    });
+    if (!response.ok) {
+        return null;
+    }
+    const rows = await response.json();
+    const row = rows[0];
+    if (!row?.data) {
+        return null;
+    }
+    return {
+        articles: row.data.articles,
+        issueProjects: row.data.issueProjects,
+        updatedAt: row.updated_at
+    };
+};
 const setImageBlockVisual = (element, visualClass, imageUrl = "") => {
     const existingImage = element.querySelector("[data-image-source]");
     element.classList.remove(...imageClasses);
@@ -276,12 +310,13 @@ const writer = document.querySelector("[data-write-editor]");
 if (writer) {
     const storageKey = writer.dataset.writeStorageKey || "the-thing-admin-articles";
     const issueStorageKey = `${storageKey}-issue`;
-    const sourceVersion = writer.dataset.writeContentVersion || "";
+    let sourceVersion = writer.dataset.writeContentVersion || "";
     const articleSourceVersionKey = `${storageKey}-source-version`;
     const issueSourceVersionKey = `${issueStorageKey}-source-version`;
     const modeStorageKey = `${storageKey}-mode`;
     const localeStorageKey = `${storageKey}-locale`;
     const authKey = `${storageKey}-auth`;
+    const authPasswordKey = `${storageKey}-auth-password`;
     const adminPassword = writer.dataset.adminPassword || "promise";
     const lock = writer.querySelector("[data-admin-lock]");
     const loginForm = writer.querySelector("[data-admin-login]");
@@ -700,10 +735,13 @@ if (writer) {
         adminIssues = [fallbackIssue()];
         adminIssue = adminIssues[0];
     }
-    const unlockAdmin = () => {
+    const unlockAdmin = (password) => {
         writer.classList.add("is-admin-unlocked");
         lock?.setAttribute("hidden", "true");
         window.sessionStorage.setItem(authKey, "true");
+        if (password) {
+            window.sessionStorage.setItem(authPasswordKey, password);
+        }
     };
     if (window.sessionStorage.getItem(authKey) === "true") {
         unlockAdmin();
@@ -715,7 +753,7 @@ if (writer) {
     loginForm?.addEventListener("submit", (event) => {
         event.preventDefault();
         if (loginInput?.value === adminPassword) {
-            unlockAdmin();
+            unlockAdmin(loginInput.value);
             setStatus("관리자 잠금이 해제되었습니다.");
             return;
         }
@@ -1541,9 +1579,57 @@ if (writer) {
             imageInput.value = imageUrl;
         }
     };
+    const adminPasswordForRequest = () => {
+        const storedPassword = window.sessionStorage.getItem(authPasswordKey);
+        if (storedPassword) {
+            return storedPassword;
+        }
+        const password = loginInput?.value || window.prompt("Supabase 저장 비밀번호를 입력하세요.", "") || "";
+        if (password) {
+            window.sessionStorage.setItem(authPasswordKey, password);
+        }
+        return password;
+    };
+    const saveContentToSupabase = async (payload) => {
+        if (!supabaseFunctionsUrl) {
+            throw new Error("Supabase function URL missing");
+        }
+        const password = adminPasswordForRequest();
+        if (!password) {
+            throw new Error("Supabase password missing");
+        }
+        const response = await fetch(`${supabaseFunctionsUrl}/admin-content`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                ...(supabaseAnonKey
+                    ? {
+                        apikey: supabaseAnonKey,
+                        Authorization: `Bearer ${supabaseAnonKey}`
+                    }
+                    : {})
+            },
+            body: JSON.stringify({ password, ...payload })
+        });
+        const result = await response.json().catch(() => null);
+        if (!response.ok) {
+            throw new Error(result?.message || `Supabase save failed: ${response.status}`);
+        }
+        return result || {};
+    };
     const saveArticlesToProject = async () => {
         adminArticles[currentIndex] = formArticle();
         saveCollection("저장 중...");
+        if (supabaseFunctionsUrl) {
+            try {
+                const result = await saveContentToSupabase({ articles: adminArticles, issueProjects: adminIssues });
+                setStatus(`Supabase published snapshot에 저장했습니다.${result.articleCount ? ` (${result.articleCount}개)` : ""}`);
+                return;
+            }
+            catch (error) {
+                setStatus(error instanceof Error ? `Supabase 저장 실패: ${error.message}` : "Supabase 저장에 실패했습니다.");
+            }
+        }
         try {
             const response = await fetch(apiPath("/api/admin/articles"), {
                 method: "POST",
@@ -1571,6 +1657,16 @@ if (writer) {
     };
     const saveIssueToProject = async () => {
         saveIssueCollection("이슈 저장 중...");
+        if (supabaseFunctionsUrl) {
+            try {
+                const result = await saveContentToSupabase({ articles: adminArticles, issueProjects: adminIssues });
+                setIssueStatus(`Supabase published snapshot에 저장했습니다.${result.issueCount ? ` (${result.issueCount}개 이슈)` : ""}`);
+                return;
+            }
+            catch (error) {
+                setIssueStatus(error instanceof Error ? `Supabase 저장 실패: ${error.message}` : "Supabase 저장에 실패했습니다.");
+            }
+        }
         try {
             const response = await fetch(apiPath("/api/admin/issue"), {
                 method: "POST",
@@ -1976,9 +2072,44 @@ if (writer) {
         saveCollection(`${languageName(activeWriteLocale)} 입력란으로 전환했습니다.`);
         saveIssueCollection(`${languageName(activeWriteLocale)} 이슈 입력란으로 전환했습니다.`);
     };
+    const loadSupabaseContent = async () => {
+        const snapshot = await fetchSupabaseSnapshot().catch(() => null);
+        if (!snapshot || !Array.isArray(snapshot.articles) || !Array.isArray(snapshot.issueProjects)) {
+            return;
+        }
+        const nextArticles = snapshot.articles.map((article) => normalizeArticle(article));
+        const nextIssues = normalizeIssueCollection(snapshot.issueProjects);
+        if (nextArticles.length === 0 || nextIssues.length === 0) {
+            return;
+        }
+        const nextVersion = contentHashClient(`${JSON.stringify(nextArticles)}|${JSON.stringify(nextIssues)}`);
+        const hasLocalDraft = window.localStorage.getItem(storageKey) !== null || window.localStorage.getItem(issueStorageKey) !== null;
+        const draftVersion = window.localStorage.getItem(articleSourceVersionKey) || window.localStorage.getItem(issueSourceVersionKey) || "";
+        if (hasLocalDraft && draftVersion && draftVersion !== nextVersion && !window.confirm("Supabase에 더 최신 콘텐츠가 있습니다. 브라우저 임시 저장을 덮어쓰고 불러올까요?")) {
+            setStatus("Supabase 콘텐츠를 발견했지만 브라우저 임시 저장을 유지했습니다.");
+            setIssueStatus("Supabase 콘텐츠를 발견했지만 브라우저 임시 저장을 유지했습니다.");
+            return;
+        }
+        adminArticles = nextArticles;
+        adminIssues = nextIssues;
+        adminIssue = adminIssues[0] || fallbackIssue();
+        currentIndex = 0;
+        currentIssueIndex = 0;
+        sourceVersion = nextVersion;
+        writer.dataset.writeContentVersion = nextVersion;
+        window.localStorage.removeItem(storageKey);
+        window.localStorage.removeItem(issueStorageKey);
+        window.localStorage.setItem(articleSourceVersionKey, nextVersion);
+        window.localStorage.setItem(issueSourceVersionKey, nextVersion);
+        applyIssue(0);
+        applyArticle(0);
+        setStatus(`Supabase 최신 콘텐츠를 불러왔습니다.${snapshot.updatedAt ? ` (${new Date(snapshot.updatedAt).toLocaleString()})` : ""}`);
+        setIssueStatus("Supabase published snapshot을 기준으로 이슈를 불러왔습니다.");
+    };
     updateLocaleControls();
     applyIssue(0);
     applyArticle(0);
+    void loadSupabaseContent();
     writer.addEventListener("keydown", (event) => {
         void handleEditorKeydown(event);
     });

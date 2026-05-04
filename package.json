@@ -8,6 +8,7 @@
     "check": "tsc --noEmit",
     "dev": "npm run build && tsx watch src/server.ts",
     "export:static": "npm run build && tsx src/export-static.ts",
+    "seed:supabase": "tsx src/scripts/seed-supabase.ts",
     "start": "node dist/server.js"
   },
   "keywords": [

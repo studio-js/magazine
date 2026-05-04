@@ -1,8 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { articles, site } from "./content/magazine";
+import { loadPublishedContent } from "./content/runtime";
 import { issueSlug, renderAboutPage, renderArchivePage, renderArticlePage, renderHomePage, renderIssueCollectionPage, renderIssuePage, renderNotFoundPage, renderWritePage } from "./render/pages";
-import type { Locale } from "./types";
+import type { Article, Locale, SiteContent } from "./types";
 
 const projectRoot = path.resolve(__dirname, "..");
 const outputDir = path.join(projectRoot, "docs");
@@ -10,6 +11,8 @@ const publicDir = path.join(projectRoot, "public");
 const distClient = path.join(projectRoot, "dist", "client.js");
 const basePath = process.env.BASE_PATH ?? "/magazine";
 const pageSize = 5;
+let exportSite: SiteContent = site;
+let exportArticles: Article[] = articles;
 
 const pageCount = (itemCount: number): number => Math.max(1, Math.ceil(itemCount / pageSize));
 
@@ -34,83 +37,83 @@ const writeHtml = async (relativePath: string, html: string): Promise<void> => {
 const writeLocalizedPages = async (locale: Locale): Promise<void> => {
   const prefix = locale === "en" ? "en/" : "";
 
-  await writeHtml(`${prefix}index.html`, renderHomePage(site, articles, locale, "/"));
-  await writeHtml(`${prefix}issues/index.html`, renderIssueCollectionPage(site, locale, "/issues"));
-  await writeHtml(`${prefix}about/index.html`, renderAboutPage(site, locale, "/about"));
-  await writeHtml(`${prefix}write/index.html`, renderWritePage(site, articles, locale, "/write"));
-  await writeHtml(`${prefix}archive/index.html`, renderArchivePage(site, articles, locale, "/archive"));
+  await writeHtml(`${prefix}index.html`, renderHomePage(exportSite, exportArticles, locale, "/"));
+  await writeHtml(`${prefix}issues/index.html`, renderIssueCollectionPage(exportSite, locale, "/issues"));
+  await writeHtml(`${prefix}about/index.html`, renderAboutPage(exportSite, locale, "/about"));
+  await writeHtml(`${prefix}write/index.html`, renderWritePage(exportSite, exportArticles, locale, "/write"));
+  await writeHtml(`${prefix}archive/index.html`, renderArchivePage(exportSite, exportArticles, locale, "/archive"));
 
   await Promise.all(
-    Array.from({ length: pageCount(site.issueProjects.length) - 1 }, (_, index) => index + 2).map((page) =>
-      writeHtml(`${prefix}issues/page/${page}/index.html`, renderIssueCollectionPage(site, locale, `/issues/page/${page}/`, page))
+    Array.from({ length: pageCount(exportSite.issueProjects.length) - 1 }, (_, index) => index + 2).map((page) =>
+      writeHtml(`${prefix}issues/page/${page}/index.html`, renderIssueCollectionPage(exportSite, locale, `/issues/page/${page}/`, page))
     )
   );
 
   await Promise.all(
-    Array.from({ length: pageCount(articles.length) - 1 }, (_, index) => index + 2).map((page) =>
-      writeHtml(`${prefix}archive/page/${page}/index.html`, renderArchivePage(site, articles, locale, `/archive/page/${page}/`, undefined, undefined, page))
+    Array.from({ length: pageCount(exportArticles.length) - 1 }, (_, index) => index + 2).map((page) =>
+      writeHtml(`${prefix}archive/page/${page}/index.html`, renderArchivePage(exportSite, exportArticles, locale, `/archive/page/${page}/`, undefined, undefined, page))
     )
   );
 
   await Promise.all(
-    site.issueProjects.map((issue) =>
+    exportSite.issueProjects.map((issue) =>
       writeHtml(
         `${prefix}issues/${issueSlug(issue)}/index.html`,
-        renderIssuePage(site, articles, locale, `/issues/${issueSlug(issue)}/`, issue)
+        renderIssuePage(exportSite, exportArticles, locale, `/issues/${issueSlug(issue)}/`, issue)
       )
     )
   );
 
   await Promise.all(
-    site.categories.map((category) =>
+    exportSite.categories.map((category) =>
       writeHtml(
         `${prefix}archive/${category.key}/index.html`,
-        renderArchivePage(site, articles, locale, `/archive/${category.key}/`, category.key)
+        renderArchivePage(exportSite, exportArticles, locale, `/archive/${category.key}/`, category.key)
       )
     )
   );
 
   await Promise.all(
-    site.categories.flatMap((category) => {
-      const count = articles.filter((article) => article.category === category.key).length;
+    exportSite.categories.flatMap((category) => {
+      const count = exportArticles.filter((article) => article.category === category.key).length;
       return Array.from({ length: pageCount(count) - 1 }, (_, index) => index + 2).map((page) =>
         writeHtml(
           `${prefix}archive/${category.key}/page/${page}/index.html`,
-          renderArchivePage(site, articles, locale, `/archive/${category.key}/page/${page}/`, category.key, undefined, page)
+          renderArchivePage(exportSite, exportArticles, locale, `/archive/${category.key}/page/${page}/`, category.key, undefined, page)
         )
       );
     })
   );
 
   await Promise.all(
-    site.categories.flatMap((category) =>
+    exportSite.categories.flatMap((category) =>
       category.subcategories.map((subcategory) =>
         writeHtml(
           `${prefix}archive/${category.key}/${subcategory.key}/index.html`,
-          renderArchivePage(site, articles, locale, `/archive/${category.key}/${subcategory.key}/`, category.key, subcategory.key)
+          renderArchivePage(exportSite, exportArticles, locale, `/archive/${category.key}/${subcategory.key}/`, category.key, subcategory.key)
         )
       )
     )
   );
 
   await Promise.all(
-    site.categories.flatMap((category) =>
+    exportSite.categories.flatMap((category) =>
       category.subcategories.flatMap((subcategory) => {
-        const count = articles.filter((article) => article.category === category.key && article.subcategoryKeys.some((key) => key === subcategory.key)).length;
+        const count = exportArticles.filter((article) => article.category === category.key && article.subcategoryKeys.some((key) => key === subcategory.key)).length;
         return Array.from({ length: pageCount(count) - 1 }, (_, index) => index + 2).map((page) =>
           writeHtml(
             `${prefix}archive/${category.key}/${subcategory.key}/page/${page}/index.html`,
-            renderArchivePage(site, articles, locale, `/archive/${category.key}/${subcategory.key}/page/${page}/`, category.key, subcategory.key, page)
+            renderArchivePage(exportSite, exportArticles, locale, `/archive/${category.key}/${subcategory.key}/page/${page}/`, category.key, subcategory.key, page)
           )
         );
       })
     )
   );
 
-  for (const article of articles) {
+  for (const article of exportArticles) {
     await writeHtml(
       `${prefix}articles/${article.slug}/index.html`,
-      renderArticlePage(site, article, articles.filter((item) => item.slug !== article.slug).slice(0, 3), locale, `/articles/${article.slug}`)
+      renderArticlePage(exportSite, article, exportArticles.filter((item) => item.slug !== article.slug).slice(0, 3), locale, `/articles/${article.slug}`)
     );
   }
 };
@@ -126,9 +129,17 @@ const main = async (): Promise<void> => {
   const css = await fs.readFile(cssPath, "utf8");
   await fs.writeFile(cssPath, prefixCssUrls(css), "utf8");
 
+  const content = await loadPublishedContent(site, articles);
+  exportSite = content.site;
+  exportArticles = content.articles;
+
+  if (content.source === "supabase") {
+    console.log(`Using Supabase content snapshot${content.updatedAt ? ` updated at ${content.updatedAt}` : ""}`);
+  }
+
   await writeLocalizedPages("ko");
   await writeLocalizedPages("en");
-  await writeHtml("404.html", renderNotFoundPage(site, "ko", "/404"));
+  await writeHtml("404.html", renderNotFoundPage(exportSite, "ko", "/404"));
 
   console.log(`Static export written to ${outputDir}`);
 };
