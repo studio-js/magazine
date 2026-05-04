@@ -20780,7 +20780,7 @@ html[lang="ko"] .home-index-row strong {
 .home-index-row[data-scroll-motion],
 .home-index-row:first-child,
 .home-index-row[data-scroll-motion]:first-child {
-  --home-index-row-pad: clamp(0.34rem, 0.46vw, 0.52rem);
+  --home-index-row-pad: clamp(0.72rem, 0.95vw, 0.98rem);
   position: relative !important;
   display: grid !important;
   grid-template-columns: clamp(1.8rem, 2.18vw, 2.35rem) minmax(0, 1fr) !important;
@@ -20796,7 +20796,10 @@ html[lang="ko"] .home-index-row strong {
   color: var(--ink) !important;
   opacity: 1 !important;
   transform: none !important;
-  transition: color 160ms ease, border-color 160ms ease !important;
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    padding-bottom 620ms cubic-bezier(0.19, 1, 0.22, 1) !important;
 }
 
 .home-index-row::before {
@@ -20837,7 +20840,7 @@ html[lang="ko"] .home-index-row strong {
 
 .home-index-row:hover,
 .home-index-row:focus-visible {
-  padding: var(--home-index-row-pad) 0 !important;
+  padding: var(--home-index-row-pad) 0 clamp(1rem, 1.34vw, 1.28rem) !important;
   border-bottom-color: rgba(24, 23, 19, 0.16) !important;
   background: transparent !important;
   background-size: 0 0 !important;
@@ -20873,7 +20876,7 @@ html[lang="ko"] .home-index-row strong {
 .home-index-copy {
   display: grid !important;
   align-content: start !important;
-  gap: clamp(0.1rem, 0.18vw, 0.18rem) !important;
+  gap: clamp(0.18rem, 0.34vw, 0.32rem) !important;
   min-width: 0 !important;
   transform: none !important;
   transition: color 160ms ease !important;
@@ -20921,7 +20924,34 @@ html[lang="ko"] .home-index-row strong {
 }
 
 .home-index-copy em {
-  display: none !important;
+  display: block !important;
+  max-height: 0 !important;
+  max-width: min(100%, 38rem) !important;
+  margin-top: 0 !important;
+  overflow: hidden !important;
+  color: rgba(24, 23, 19, 0.58) !important;
+  font-style: normal !important;
+  font-size: clamp(0.88rem, 0.94vw, 1rem) !important;
+  line-height: 1.58 !important;
+  opacity: 0 !important;
+  clip-path: inset(0 0 100% 0) !important;
+  transform: translateY(-0.24rem) !important;
+  transition:
+    max-height 620ms cubic-bezier(0.19, 1, 0.22, 1),
+    margin-top 620ms cubic-bezier(0.19, 1, 0.22, 1),
+    clip-path 620ms cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 280ms ease-out 80ms,
+    transform 620ms cubic-bezier(0.19, 1, 0.22, 1) !important;
+  word-break: keep-all !important;
+}
+
+.home-index-row:hover .home-index-copy em,
+.home-index-row:focus-visible .home-index-copy em {
+  max-height: 6.5rem !important;
+  margin-top: clamp(0.28rem, 0.48vw, 0.5rem) !important;
+  clip-path: inset(0) !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
 .home-recent-spread {
