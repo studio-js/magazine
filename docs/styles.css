@@ -26,12 +26,11 @@
 }
 
 @font-face {
-  font-family: "SUIT Local";
-  src: url("/magazine/fonts/SUIT-Variable.woff2") format("woff2");
+  font-family: "Pretendard Local";
+  src: url("/magazine/fonts/PretendardVariable.woff2") format("woff2-variations");
   font-display: swap;
   font-style: normal;
-  font-weight: 100 900;
-  unicode-range: U+AC00-D7A3, U+1100-11FF, U+3130-318F, U+3000-303F, U+FF00-FFEF;
+  font-weight: 45 920;
 }
 
 :root {
@@ -53,9 +52,9 @@
   --shadow: 0 1.5rem 4.5rem rgba(24, 23, 19, 0.08);
   --max: 1520px;
   --side: clamp(1rem, 3vw, 3.8rem);
-  --latin: "Jost Local", "Avenir Next", "Futura", sans-serif;
-  --kr: "SUIT Local", "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
-  --body: var(--latin), var(--kr);
+  --latin: "Jost Local", "Avenir Next", "Futura";
+  --kr: "Pretendard Local", "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic";
+  --body: var(--latin), var(--kr), sans-serif;
   --accent: #181713;
   --accent-soft: rgba(24, 23, 19, 0.055);
   --focus: rgba(24, 23, 19, 0.28);
