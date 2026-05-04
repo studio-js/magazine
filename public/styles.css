@@ -17539,6 +17539,114 @@ html[lang="en"] .habitus-strand-labels .is-choice {
   transform: none;
 }
 
+.habitus-board[data-habitus-board] {
+  --habitus-experience-x: 0px;
+  --habitus-experience-y: 0px;
+  --habitus-repeat-x: 0px;
+  --habitus-repeat-y: 0px;
+  --habitus-lens-x: 0px;
+  --habitus-lens-y: 0px;
+  --habitus-choice-y: 0px;
+  border-radius: 1.6rem;
+  outline: none;
+}
+
+.habitus-board[data-habitus-board]:focus-visible {
+  outline: 1px solid rgba(123, 91, 66, 0.34);
+  outline-offset: 0.45rem;
+}
+
+.habitus-board[data-habitus-board] .habitus-venn-circle,
+.habitus-board[data-habitus-board] .habitus-venn-ring,
+.habitus-board[data-habitus-board] .habitus-venn-lens,
+.habitus-board[data-habitus-board] .habitus-strand-labels text,
+.habitus-board[data-habitus-board] .habitus-choice-arrow,
+.habitus-board[data-habitus-board] .habitus-choice-head,
+.habitus-board[data-habitus-board] .habitus-choice-copy {
+  transition-property: opacity, transform, fill, stroke;
+  will-change: transform;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .habitus-board[data-habitus-board]:hover {
+    --habitus-experience-x: -7px;
+    --habitus-experience-y: -2px;
+    --habitus-repeat-x: 7px;
+    --habitus-repeat-y: -2px;
+    --habitus-lens-y: -3px;
+    --habitus-choice-y: 5px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .habitus-board[data-habitus-board]:focus-visible {
+    --habitus-experience-x: -7px;
+    --habitus-experience-y: -2px;
+    --habitus-repeat-x: 7px;
+    --habitus-repeat-y: -2px;
+    --habitus-lens-y: -3px;
+    --habitus-choice-y: 5px;
+  }
+
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-venn-circle.is-experience,
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-venn-ring.is-experience,
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-strand-labels .is-experience-label {
+    transform: translate(var(--habitus-experience-x), var(--habitus-experience-y)) scale(1.012);
+  }
+
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-venn-circle.is-repeat,
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-venn-ring.is-repeat,
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-strand-labels .is-repeat-label {
+    transform: translate(var(--habitus-repeat-x), var(--habitus-repeat-y)) scale(1.012);
+  }
+
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-venn-circle.is-experience {
+    fill: rgba(24, 23, 19, 0.024);
+  }
+
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-venn-circle.is-repeat {
+    fill: rgba(123, 91, 66, 0.04);
+  }
+
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-venn-ring {
+    stroke: rgba(24, 23, 19, 0.29);
+  }
+
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-venn-ring.is-repeat {
+    stroke: rgba(123, 91, 66, 0.34);
+  }
+
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-venn-lens,
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-strand-labels .is-habit {
+    transform: translate(var(--habitus-lens-x), var(--habitus-lens-y)) scale(1.026);
+  }
+
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-venn-lens {
+    fill: rgba(190, 161, 124, 0.58);
+  }
+
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-strand-labels .is-habit,
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-strand-labels .is-choice {
+    fill: rgba(71, 46, 31, 1);
+  }
+
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-choice-arrow,
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-choice-head,
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-strand-labels .is-choice,
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-choice-copy {
+    transform: translate(0, var(--habitus-choice-y));
+  }
+
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-choice-arrow,
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-choice-head {
+    stroke: rgba(94, 72, 54, 0.82);
+  }
+
+  .habitus-board[data-habitus-board]:is(:hover, :focus-visible, .is-interacting) .habitus-choice-copy {
+    fill: rgba(94, 72, 54, 0.78);
+  }
+}
+
 @media (max-width: 680px) {
   .habitus-board,
   .habitus-board[data-scroll-motion],

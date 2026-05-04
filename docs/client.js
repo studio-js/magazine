@@ -453,8 +453,8 @@ const renderRuntimeIssuePrototype = (issue, locale, variant = "detail") => {
           </div>
         </figure>`;
 };
-const renderRuntimeHabitusBoard = (locale) => `      <div class="habitus-board" data-reveal>
-        <svg class="habitus-system" viewBox="0 0 960 430" role="img" aria-label="${runtimeEscapeHtml(locale === "ko" ? "경험과 반복의 교집합에서 습관이 생기고 선택으로 이어지는 아비투스 도식" : "A habitus diagram where the overlap of experience and repetition forms habit and leads to choice")}">
+const renderRuntimeHabitusBoard = (locale) => `      <div class="habitus-board" data-reveal data-habitus-board tabindex="0" role="img" aria-label="${runtimeEscapeHtml(locale === "ko" ? "경험과 반복의 교집합에서 습관이 생기고 선택으로 이어지는 아비투스 도식" : "A habitus diagram where the overlap of experience and repetition forms habit and leads to choice")}">
+        <svg class="habitus-system" viewBox="0 0 960 430" aria-hidden="true" focusable="false">
           <defs>
             <clipPath id="habitus-venn-overlap">
               <circle cx="430" cy="150" r="126" />
@@ -3525,6 +3525,57 @@ if (revealItems.length > 0) {
     else {
         revealItems.forEach((item) => item.classList.add("is-visible"));
     }
+}
+const habitusBoards = document.querySelectorAll("[data-habitus-board]");
+if (habitusBoards.length > 0 && !reduceMotion) {
+    habitusBoards.forEach((board) => {
+        let clearTimer = 0;
+        const clearHabitusDrift = () => {
+            if (clearTimer !== 0) {
+                window.clearTimeout(clearTimer);
+                clearTimer = 0;
+            }
+            board.classList.remove("is-interacting");
+            [
+                "--habitus-experience-x",
+                "--habitus-experience-y",
+                "--habitus-repeat-x",
+                "--habitus-repeat-y",
+                "--habitus-lens-x",
+                "--habitus-lens-y",
+                "--habitus-choice-y"
+            ].forEach((property) => board.style.removeProperty(property));
+        };
+        const setHabitusDrift = (event) => {
+            const rect = board.getBoundingClientRect();
+            const x = rect.width === 0 ? 0 : Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width - 0.5) * 2));
+            const y = rect.height === 0 ? 0 : Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height - 0.5) * 2));
+            const lift = -2 + y * 1.5;
+            board.classList.add("is-interacting");
+            board.style.setProperty("--habitus-experience-x", `${(-7 + x * 2).toFixed(2)}px`);
+            board.style.setProperty("--habitus-experience-y", `${lift.toFixed(2)}px`);
+            board.style.setProperty("--habitus-repeat-x", `${(7 + x * 2).toFixed(2)}px`);
+            board.style.setProperty("--habitus-repeat-y", `${lift.toFixed(2)}px`);
+            board.style.setProperty("--habitus-lens-x", `${(x * 2).toFixed(2)}px`);
+            board.style.setProperty("--habitus-lens-y", `${(-3 + y).toFixed(2)}px`);
+            board.style.setProperty("--habitus-choice-y", `${(5 + Math.max(0, y) * 2).toFixed(2)}px`);
+        };
+        const holdHabitusDrift = () => {
+            if (clearTimer !== 0) {
+                window.clearTimeout(clearTimer);
+            }
+            clearTimer = window.setTimeout(clearHabitusDrift, 1200);
+        };
+        board.addEventListener("pointerenter", setHabitusDrift);
+        board.addEventListener("pointermove", setHabitusDrift);
+        board.addEventListener("pointerdown", (event) => {
+            setHabitusDrift(event);
+            holdHabitusDrift();
+        });
+        board.addEventListener("pointerleave", clearHabitusDrift);
+        board.addEventListener("pointercancel", clearHabitusDrift);
+        board.addEventListener("blur", clearHabitusDrift);
+    });
 }
 const previewRows = document.querySelectorAll("[data-preview-class]");
 const previewImage = document.querySelector("[data-archive-preview-image]");
