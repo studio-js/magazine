@@ -22143,6 +22143,164 @@ html[lang="ko"] .nav span {
   color: rgba(24, 23, 19, 0.84) !important;
 }
 
+/* Write desk and long-form reading polish. */
+.language-switch a.is-active,
+html[lang="ko"] .language-switch a.is-active,
+.admin-language-tabs button.is-active,
+html[lang="ko"] .admin-language-tabs button.is-active {
+  background: var(--ink) !important;
+  color: var(--paper) !important;
+  box-shadow: none !important;
+}
+
+.admin-language-tabs {
+  width: min(100%, 11.6rem) !important;
+  border-radius: 999px !important;
+  padding: 0.22rem !important;
+  background: rgba(var(--paper-rgb), 0.68) !important;
+  box-shadow: inset 0 0 0 1px rgba(24, 23, 19, 0.14) !important;
+}
+
+.admin-language-tabs button {
+  display: grid !important;
+  place-items: center !important;
+  min-height: 2.2rem !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  padding: 0.38rem 0.72rem !important;
+  color: rgba(24, 23, 19, 0.62) !important;
+  text-align: center !important;
+  transition: background 160ms ease, color 160ms ease, transform 120ms ease !important;
+}
+
+.admin-language-tabs button:active {
+  transform: scale(0.96);
+}
+
+.writer-article,
+.writer-article .article-hero-grid,
+.writer-article .article-title-block,
+.writer-article .article-title-block p:not(.kicker),
+.writer-article [contenteditable="true"] {
+  overflow: visible !important;
+}
+
+.writer-article .article-hero-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.24fr) !important;
+  align-items: start !important;
+  width: min(100%, 82rem) !important;
+  margin-bottom: clamp(3.2rem, 6vw, 7rem) !important;
+}
+
+.writer-article .article-title-block p:not(.kicker) {
+  display: block !important;
+  max-width: min(100%, 64rem) !important;
+  max-height: none !important;
+  min-height: 2.2em !important;
+  padding-bottom: 0.35rem !important;
+  white-space: normal !important;
+}
+
+.admin-sidebar-actions button,
+.admin-sidebar-actions.is-export button {
+  transition: background 150ms ease, color 150ms ease, transform 120ms ease, box-shadow 150ms ease !important;
+}
+
+.admin-sidebar-actions button:active,
+.admin-sidebar-actions.is-export button:active,
+.admin-sidebar-actions button.is-pressed {
+  transform: translateY(1px) scale(0.985);
+}
+
+.admin-sidebar-actions button.is-saving {
+  background: rgba(24, 23, 19, 0.1) !important;
+  color: rgba(24, 23, 19, 0.68) !important;
+  cursor: wait !important;
+}
+
+.admin-sidebar-actions button.is-save-done {
+  background: var(--ink) !important;
+  color: var(--paper) !important;
+}
+
+.admin-sidebar-actions button.is-save-error {
+  background: rgba(137, 56, 34, 0.12) !important;
+  color: rgb(107, 44, 28) !important;
+}
+
+.article-detail:not(.writer-article) .article-body-grid {
+  width: min(100%, 88rem) !important;
+  margin-inline: auto !important;
+}
+
+.article-detail:not(.writer-article) .article-body {
+  display: block !important;
+  width: min(100%, 66rem) !important;
+  margin-inline: auto !important;
+}
+
+.article-detail:not(.writer-article) .article-section {
+  display: grid !important;
+  grid-template-columns: minmax(6.8rem, 0.16fr) minmax(0, 1fr) !important;
+  column-gap: clamp(1.8rem, 4vw, 5.4rem) !important;
+  max-width: 66rem !important;
+}
+
+.article-detail:not(.writer-article) .article-section h2,
+html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
+  grid-column: 1 !important;
+  max-width: 11ch !important;
+}
+
+.article-detail:not(.writer-article) .article-section p,
+.article-detail:not(.writer-article) .article-section .article-inline-quote,
+.article-detail:not(.writer-article) .article-section-figure {
+  grid-column: 2 !important;
+}
+
+.article-detail:not(.writer-article) .article-section p {
+  max-width: 76ch !important;
+  font-size: clamp(1.04rem, 1.12vw, 1.18rem) !important;
+  line-height: 1.9 !important;
+}
+
+html[lang="ko"] .article-detail:not(.writer-article) .article-section p {
+  max-width: 74ch !important;
+  font-size: clamp(1rem, 1.08vw, 1.14rem) !important;
+  line-height: 1.92 !important;
+}
+
+.article-detail:not(.writer-article) .article-section:first-of-type p:first-of-type::first-letter {
+  float: left;
+  margin: 0.08em 0.16em 0 0;
+  color: rgba(24, 23, 19, 0.9);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(4.2rem, 7vw, 7.2rem);
+  line-height: 0.72;
+}
+
+html[lang="ko"] .article-detail:not(.writer-article) .article-section:first-of-type p:first-of-type::first-letter {
+  margin: 0.08em 0.18em 0 0;
+  font-family: var(--kr-display) !important;
+  font-size: clamp(3.4rem, 5.6vw, 5.8rem);
+  font-weight: 400;
+  line-height: 0.82;
+}
+
+@media (max-width: 960px) {
+  .writer-article .article-hero-grid,
+  .article-detail:not(.writer-article) .article-section {
+    grid-template-columns: 1fr !important;
+  }
+
+  .article-detail:not(.writer-article) .article-section h2,
+  .article-detail:not(.writer-article) .article-section p,
+  .article-detail:not(.writer-article) .article-section .article-inline-quote,
+  .article-detail:not(.writer-article) .article-section-figure {
+    grid-column: 1 !important;
+  }
+}
+
 .header-tools > a,
 .language-switch a,
 .site-footer {

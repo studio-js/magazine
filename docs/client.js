@@ -1094,6 +1094,8 @@ if (writer) {
     const adminSearchInput = writer.querySelector("[data-admin-search-input]");
     const adminCount = writer.querySelector("[data-admin-count]");
     const currentTitle = writer.querySelector("[data-admin-current-title]");
+    const articleSaveButton = writer.querySelector("[data-admin-save-file]");
+    const issueSaveButton = writer.querySelector("[data-write-issue-save]");
     const outputArea = writer.querySelector("[data-write-output]");
     const status = writer.querySelector("[data-write-status]");
     const modeButtons = writer.querySelectorAll("[data-write-mode-button]");
@@ -1157,6 +1159,28 @@ if (writer) {
     const setIssueStatus = (message) => {
         if (issueStatus) {
             issueStatus.textContent = message;
+        }
+    };
+    const setSaveButtonState = (button, state) => {
+        if (!button) {
+            return;
+        }
+        button.dataset.idleText ||= button.textContent?.trim() || "저장";
+        button.classList.remove("is-saving", "is-save-done", "is-save-error", "is-pressed");
+        if (state === "idle") {
+            button.disabled = false;
+            button.textContent = button.dataset.idleText || "저장";
+            return;
+        }
+        button.disabled = state === "saving";
+        button.classList.add(state === "saving" ? "is-saving" : state === "done" ? "is-save-done" : "is-save-error", "is-pressed");
+        button.textContent = state === "saving"
+            ? activeWriteLocale === "ko" ? "저장 중" : "Saving"
+            : state === "done"
+                ? activeWriteLocale === "ko" ? "저장됨" : "Saved"
+                : activeWriteLocale === "ko" ? "실패" : "Failed";
+        if (state !== "saving") {
+            window.setTimeout(() => setSaveButtonState(button, "idle"), 1100);
         }
     };
     const setWriteMode = (mode) => {
@@ -2377,12 +2401,14 @@ if (writer) {
         return result || {};
     };
     const saveArticlesToProject = async () => {
+        setSaveButtonState(articleSaveButton, "saving");
         adminArticles[currentIndex] = formArticle();
         saveCollection("저장 중...");
         if (supabaseFunctionsUrl) {
             try {
                 const result = await saveContentToSupabase({ articles: adminArticles, issueProjects: adminIssues });
                 setStatus(`Supabase published snapshot에 저장했습니다.${result.articleCount ? ` (${result.articleCount}개)` : ""}`);
+                setSaveButtonState(articleSaveButton, "done");
                 return;
             }
             catch (error) {
@@ -2400,10 +2426,12 @@ if (writer) {
             }
             const result = await response.json().catch(() => null);
             setStatus(`src/content/magazine.ts에 저장했고 로컬 서버에 바로 반영했습니다.${result?.count ? ` (${result.count}개)` : ""}`);
+            setSaveButtonState(articleSaveButton, "done");
         }
         catch {
             downloadArticlesFile();
             setStatus("정적 페이지에서는 폴더 저장이 불가해 articles.ts를 내려받았습니다. 로컬 서버에서 열면 폴더에 저장됩니다.");
+            setSaveButtonState(articleSaveButton, "error");
         }
     };
     const saveIssueCollection = (message = "이슈 자동 저장됨") => {
@@ -2415,11 +2443,13 @@ if (writer) {
         setIssueStatus(message);
     };
     const saveIssueToProject = async () => {
+        setSaveButtonState(issueSaveButton, "saving");
         saveIssueCollection("이슈 저장 중...");
         if (supabaseFunctionsUrl) {
             try {
                 const result = await saveContentToSupabase({ articles: adminArticles, issueProjects: adminIssues });
                 setIssueStatus(`Supabase published snapshot에 저장했습니다.${result.issueCount ? ` (${result.issueCount}개 이슈)` : ""}`);
+                setSaveButtonState(issueSaveButton, "done");
                 return;
             }
             catch (error) {
@@ -2436,10 +2466,12 @@ if (writer) {
                 throw new Error(`Save failed: ${response.status}`);
             }
             setIssueStatus("src/content/magazine.ts의 issueProjects에 저장했고 로컬 서버에 바로 반영했습니다.");
+            setSaveButtonState(issueSaveButton, "done");
         }
         catch {
             downloadIssueFile();
             setIssueStatus("정적 페이지에서는 이슈 저장이 불가해 issue-projects.ts를 내려받았습니다. 로컬 서버에서 열면 폴더에 저장됩니다.");
+            setSaveButtonState(issueSaveButton, "error");
         }
     };
     const scheduleIssueSave = () => {

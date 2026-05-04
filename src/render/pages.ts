@@ -277,7 +277,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-runtime-content";
+const assetVersion = "20260504-write-reading-polish";
 
 const contentVersionHash = (value: string): string => {
   let hash = 5381;
@@ -699,7 +699,7 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
             <button type="button" data-admin-delete>${escapeHtml(locale === "ko" ? "삭제" : "Delete")}</button>
           </div>
           <div class="admin-sidebar-actions is-export">
-            <button type="button" class="is-primary" data-admin-save-file>${escapeHtml(locale === "ko" ? "저장" : "Save")}</button>
+            <button type="button" class="is-primary" data-admin-save-file aria-keyshortcuts="Meta+S Control+S" title="${escapeHtml(locale === "ko" ? "저장 (⌘/Ctrl+S)" : "Save (Cmd/Ctrl+S)")}">${escapeHtml(locale === "ko" ? "저장" : "Save")}</button>
             <button type="button" data-admin-copy-all>${escapeHtml(locale === "ko" ? "복사" : "Copy")}</button>
             <button type="button" data-admin-download-all>${escapeHtml(locale === "ko" ? "다운로드" : "Download")}</button>
           </div>
@@ -878,7 +878,7 @@ ${subcategoryOptions}
             <button type="button" data-write-issue-delete>${escapeHtml(locale === "ko" ? "삭제" : "Delete")}</button>
           </div>
           <div class="admin-sidebar-actions is-export">
-            <button type="button" class="is-primary" data-write-issue-save>${escapeHtml(locale === "ko" ? "저장" : "Save")}</button>
+            <button type="button" class="is-primary" data-write-issue-save aria-keyshortcuts="Meta+S Control+S" title="${escapeHtml(locale === "ko" ? "저장 (⌘/Ctrl+S)" : "Save (Cmd/Ctrl+S)")}">${escapeHtml(locale === "ko" ? "저장" : "Save")}</button>
             <button type="button" data-write-issue-copy>${escapeHtml(locale === "ko" ? "복사" : "Copy")}</button>
             <button type="button" data-write-issue-download>${escapeHtml(locale === "ko" ? "다운로드" : "Download")}</button>
             <button type="button" data-write-issue-reset>${escapeHtml(locale === "ko" ? "초기화" : "Reset")}</button>
