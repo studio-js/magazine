@@ -277,7 +277,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-habitus-interaction";
+const assetVersion = "20260504-interaction-audit";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 

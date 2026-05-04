@@ -5,7 +5,6 @@ const mobileMenu = document.querySelector<HTMLElement>("[data-mobile-menu]");
 const progressBar = document.querySelector<HTMLElement>("[data-scroll-progress]");
 const header = document.querySelector<HTMLElement>("[data-header]");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const scrollMotionItems = document.querySelectorAll<HTMLElement>("[data-scroll-motion]");
 const imageClasses = [
   "image-atelier",
   "image-signal",
@@ -939,6 +938,17 @@ const runtimeInitGalleries = (root: ParentNode): void => {
         return;
       }
 
+      event.preventDefault();
+      event.stopPropagation();
+      setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
+    });
+    frame?.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
       setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
     });
     setGalleryIndex(0);
@@ -1014,6 +1024,11 @@ const runtimeAfterRender = (data: RuntimeContentData, root: HTMLElement, locale:
   root.querySelectorAll<HTMLElement>("[data-reveal]").forEach((element) => element.classList.add("is-visible"));
   runtimeInitGalleries(root);
   runtimeInitArticleRail(root);
+  initActionSurfaces(root);
+  initHabitusBoards(root);
+  runtimeInitArchiveInteractions(root, locale);
+  runtimeInitScrollSections(root);
+  updateScrollState();
 
   const latestIssue = data.issueProjects[0];
   if (latestIssue) {
@@ -4385,7 +4400,7 @@ void hydrateRuntimeContent();
 
 let scrollFrame = 0;
 
-const updateScrollState = (): void => {
+function updateScrollState(): void {
   scrollFrame = 0;
 
   if (header) {
@@ -4399,7 +4414,7 @@ const updateScrollState = (): void => {
   }
 
   if (!reduceMotion) {
-    scrollMotionItems.forEach((item) => {
+    document.querySelectorAll<HTMLElement>("[data-scroll-motion]").forEach((item) => {
       const rect = item.getBoundingClientRect();
       const itemCenter = rect.top + rect.height / 2;
       const viewportCenter = window.innerHeight / 2;
@@ -4408,13 +4423,13 @@ const updateScrollState = (): void => {
       item.style.setProperty("--scroll-visibility", Math.max(0, 1 - Math.abs(shift) * 1.55).toFixed(3));
     });
   }
-};
+}
 
-const requestScrollState = (): void => {
+function requestScrollState(): void {
   if (scrollFrame === 0) {
     scrollFrame = window.requestAnimationFrame(updateScrollState);
   }
-};
+}
 
 updateScrollState();
 window.addEventListener("scroll", requestScrollState, { passive: true });
@@ -4442,10 +4457,80 @@ if (revealItems.length > 0) {
   }
 }
 
-const habitusBoards = document.querySelectorAll<HTMLElement>("[data-habitus-board]");
+function initActionSurfaces(root: ParentNode): void {
+  root.querySelectorAll<HTMLElement>(
+    [
+      "[data-action-card]",
+      ".home-index-row",
+      ".home-issue-link",
+      ".home-story-more",
+      ".issue-toc-row",
+      ".issue-feature-row",
+      ".filter-button",
+      ".subcategory-filter a",
+      ".subcategory-chips a"
+    ].join(", ")
+  ).forEach((surface) => {
+    if (surface.dataset.actionSurfaceReady === "true") {
+      return;
+    }
 
-if (habitusBoards.length > 0 && !reduceMotion) {
-  habitusBoards.forEach((board) => {
+    surface.dataset.actionSurfaceReady = "true";
+    let clearTimer = 0;
+    const clearTimerIfNeeded = (): void => {
+      if (clearTimer !== 0) {
+        window.clearTimeout(clearTimer);
+        clearTimer = 0;
+      }
+    };
+    const activate = (): void => {
+      clearTimerIfNeeded();
+      surface.classList.add("is-action-active");
+    };
+    const deactivate = (delay = 0): void => {
+      clearTimerIfNeeded();
+
+      if (delay === 0) {
+        surface.classList.remove("is-action-active");
+        return;
+      }
+
+      clearTimer = window.setTimeout(() => {
+        clearTimer = 0;
+        surface.classList.remove("is-action-active");
+      }, delay);
+    };
+
+    surface.addEventListener("pointerenter", activate);
+    surface.addEventListener("pointerleave", () => deactivate());
+    surface.addEventListener("focusin", activate);
+    surface.addEventListener("focusout", () => deactivate());
+    surface.addEventListener("pointerdown", () => {
+      activate();
+      deactivate(900);
+    });
+    surface.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
+
+      activate();
+      deactivate(900);
+    });
+  });
+}
+
+function initHabitusBoards(root: ParentNode): void {
+  if (reduceMotion) {
+    return;
+  }
+
+  root.querySelectorAll<HTMLElement>("[data-habitus-board]").forEach((board) => {
+    if (board.dataset.habitusInteractionReady === "true") {
+      return;
+    }
+
+    board.dataset.habitusInteractionReady = "true";
     let clearTimer = 0;
 
     const clearHabitusDrift = (): void => {
@@ -4501,6 +4586,180 @@ if (habitusBoards.length > 0 && !reduceMotion) {
     board.addEventListener("blur", clearHabitusDrift);
   });
 }
+
+function runtimeInitArchiveInteractions(root: ParentNode, locale: RuntimeLocale): void {
+  const previewRows = Array.from(root.querySelectorAll<HTMLElement>("[data-preview-class]"));
+  const previewImage = root.querySelector<HTMLElement>("[data-archive-preview-image]");
+  const previewKicker = root.querySelector<HTMLElement>("[data-archive-preview-kicker]");
+  const previewTitle = root.querySelector<HTMLElement>("[data-archive-preview-title]");
+  let setArchivePreview: ((row: HTMLElement) => void) | null = null;
+
+  if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
+    setArchivePreview = (row: HTMLElement): void => {
+      const imageClass = row.dataset.previewClass;
+
+      if (!imageClass) {
+        return;
+      }
+
+      previewRows.forEach((previewRow) => previewRow.classList.remove("is-active"));
+      row.classList.add("is-active");
+
+      setImageBlockVisual(previewImage, imageClass, row.dataset.previewImage || "");
+      previewKicker.textContent = row.dataset.previewKicker || "";
+      previewTitle.textContent = row.dataset.previewTitle || "";
+      animateTextSwap([previewKicker, previewTitle]);
+
+      if (!reduceMotion) {
+        previewImage.animate(
+          [
+            { filter: "contrast(0.94)", opacity: 0.72 },
+            { filter: "contrast(1)", opacity: 1 }
+          ],
+          { duration: 160, easing: "linear" }
+        );
+      }
+    };
+
+    previewRows.forEach((row) => {
+      if (row.dataset.archivePreviewReady === "true") {
+        return;
+      }
+
+      row.dataset.archivePreviewReady = "true";
+      row.addEventListener("pointerenter", () => setArchivePreview?.(row));
+      row.addEventListener("focus", () => setArchivePreview?.(row));
+    });
+
+    setArchivePreview(previewRows[0]);
+  }
+
+  const filterButtons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-filter]"));
+  const filterPanels = root.querySelectorAll<HTMLElement>("[data-filter-panel]");
+  const filterStatus = root.querySelector<HTMLElement>("[data-filter-status]");
+  const archiveBoard = root.querySelector<HTMLElement>("[data-archive-board]");
+
+  if (filterButtons.length === 0) {
+    return;
+  }
+
+  const applyFilter = (button: HTMLButtonElement, updateUrl = true): void => {
+    const selectedCategory = button.dataset.filter || "all";
+    const selectedLabel = button.dataset.filterLabel || button.textContent?.trim() || selectedCategory;
+    const visibleRows: HTMLElement[] = [];
+
+    filterButtons.forEach((filterButton) => {
+      const isActive = filterButton === button;
+      filterButton.classList.toggle("is-active", isActive);
+      filterButton.setAttribute("aria-pressed", String(isActive));
+    });
+
+    previewRows.forEach((row) => {
+      const shouldShow = selectedCategory === "all" || row.dataset.category === selectedCategory;
+      row.toggleAttribute("hidden", !shouldShow);
+
+      if (shouldShow) {
+        visibleRows.push(row);
+      }
+    });
+
+    filterPanels.forEach((panel) => {
+      const isActive = panel.dataset.filterPanel === selectedCategory;
+      panel.classList.toggle("is-active", isActive);
+      panel.toggleAttribute("hidden", !isActive);
+    });
+
+    if (filterStatus) {
+      filterStatus.textContent = `${selectedLabel} · ${visibleRows.length} ${locale === "ko" ? "개의 글 표시 중" : "articles showing"}`;
+    }
+
+    if (archiveBoard) {
+      archiveBoard.classList.toggle("is-filtered", selectedCategory !== "all");
+      archiveBoard.dataset.activeCategory = selectedCategory;
+    }
+
+    if (visibleRows[0]) {
+      setArchivePreview?.(visibleRows[0]);
+
+      if (!reduceMotion) {
+        visibleRows.forEach((row, index) => {
+          row.animate(
+            [
+              { opacity: 0.28, transform: "translateY(0.35rem)" },
+              { opacity: 1, transform: "translateY(0)" }
+            ],
+            { duration: 260, delay: Math.min(index, 5) * 28, easing: "cubic-bezier(.2,.8,.2,1)" }
+          );
+        });
+      }
+    }
+
+    if (updateUrl && window.location.pathname.includes("/archive")) {
+      const url = new URL(window.location.href);
+
+      if (selectedCategory === "all") {
+        url.searchParams.delete("category");
+      } else {
+        url.searchParams.set("category", selectedCategory);
+      }
+
+      window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+    }
+  };
+
+  filterButtons.forEach((button) => {
+    if (button.dataset.runtimeFilterReady === "true") {
+      return;
+    }
+
+    button.dataset.runtimeFilterReady = "true";
+    button.addEventListener("click", () => applyFilter(button));
+  });
+
+  const initialCategory = new URLSearchParams(window.location.search).get("category");
+  const initialButton = filterButtons.find((button) => button.dataset.filter === initialCategory);
+  const allButton = filterButtons.find((button) => button.dataset.filter === "all");
+  const fallbackButton = initialButton || allButton || filterButtons[0];
+
+  if (fallbackButton) {
+    applyFilter(fallbackButton, false);
+  }
+}
+
+function runtimeInitScrollSections(root: ParentNode): void {
+  const sections = Array.from(root.querySelectorAll<HTMLElement>("[data-scroll-section]"));
+
+  if (sections.length === 0) {
+    return;
+  }
+
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle("is-current-section", entry.isIntersecting);
+        });
+      },
+      { rootMargin: "-34% 0px -48%" }
+    );
+
+    sections.forEach((section) => {
+      if (section.dataset.scrollSectionReady === "true") {
+        return;
+      }
+
+      section.dataset.scrollSectionReady = "true";
+      sectionObserver.observe(section);
+    });
+
+    return;
+  }
+
+  sections.forEach((section) => section.classList.add("is-current-section"));
+}
+
+initActionSurfaces(document);
+initHabitusBoards(document);
 
 const previewRows = document.querySelectorAll<HTMLElement>("[data-preview-class]");
 const previewImage = document.querySelector<HTMLElement>("[data-archive-preview-image]");

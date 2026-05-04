@@ -5,7 +5,6 @@ const mobileMenu = document.querySelector("[data-mobile-menu]");
 const progressBar = document.querySelector("[data-scroll-progress]");
 const header = document.querySelector("[data-header]");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const scrollMotionItems = document.querySelectorAll("[data-scroll-motion]");
 const imageClasses = [
     "image-atelier",
     "image-signal",
@@ -738,6 +737,16 @@ const runtimeInitGalleries = (root) => {
             if (!(event.target instanceof HTMLElement) || event.target.closest("[data-gallery-prev], [data-gallery-next]")) {
                 return;
             }
+            event.preventDefault();
+            event.stopPropagation();
+            setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
+        });
+        frame?.addEventListener("keydown", (event) => {
+            if (event.key !== "Enter" && event.key !== " ") {
+                return;
+            }
+            event.preventDefault();
+            event.stopPropagation();
             setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
         });
         setGalleryIndex(0);
@@ -802,6 +811,11 @@ const runtimeAfterRender = (data, root, locale) => {
     root.querySelectorAll("[data-reveal]").forEach((element) => element.classList.add("is-visible"));
     runtimeInitGalleries(root);
     runtimeInitArticleRail(root);
+    initActionSurfaces(root);
+    initHabitusBoards(root);
+    runtimeInitArchiveInteractions(root, locale);
+    runtimeInitScrollSections(root);
+    updateScrollState();
     const latestIssue = data.issueProjects[0];
     if (latestIssue) {
         document.querySelectorAll(".issue-submenu a").forEach((link) => {
@@ -3480,7 +3494,7 @@ if (writer) {
 }
 void hydrateRuntimeContent();
 let scrollFrame = 0;
-const updateScrollState = () => {
+function updateScrollState() {
     scrollFrame = 0;
     if (header) {
         header.classList.toggle("is-scrolled", window.scrollY > 24);
@@ -3491,7 +3505,7 @@ const updateScrollState = () => {
         progressBar.style.transform = `scaleX(${progress})`;
     }
     if (!reduceMotion) {
-        scrollMotionItems.forEach((item) => {
+        document.querySelectorAll("[data-scroll-motion]").forEach((item) => {
             const rect = item.getBoundingClientRect();
             const itemCenter = rect.top + rect.height / 2;
             const viewportCenter = window.innerHeight / 2;
@@ -3500,12 +3514,12 @@ const updateScrollState = () => {
             item.style.setProperty("--scroll-visibility", Math.max(0, 1 - Math.abs(shift) * 1.55).toFixed(3));
         });
     }
-};
-const requestScrollState = () => {
+}
+function requestScrollState() {
     if (scrollFrame === 0) {
         scrollFrame = window.requestAnimationFrame(updateScrollState);
     }
-};
+}
 updateScrollState();
 window.addEventListener("scroll", requestScrollState, { passive: true });
 window.addEventListener("resize", requestScrollState);
@@ -3526,9 +3540,70 @@ if (revealItems.length > 0) {
         revealItems.forEach((item) => item.classList.add("is-visible"));
     }
 }
-const habitusBoards = document.querySelectorAll("[data-habitus-board]");
-if (habitusBoards.length > 0 && !reduceMotion) {
-    habitusBoards.forEach((board) => {
+function initActionSurfaces(root) {
+    root.querySelectorAll([
+        "[data-action-card]",
+        ".home-index-row",
+        ".home-issue-link",
+        ".home-story-more",
+        ".issue-toc-row",
+        ".issue-feature-row",
+        ".filter-button",
+        ".subcategory-filter a",
+        ".subcategory-chips a"
+    ].join(", ")).forEach((surface) => {
+        if (surface.dataset.actionSurfaceReady === "true") {
+            return;
+        }
+        surface.dataset.actionSurfaceReady = "true";
+        let clearTimer = 0;
+        const clearTimerIfNeeded = () => {
+            if (clearTimer !== 0) {
+                window.clearTimeout(clearTimer);
+                clearTimer = 0;
+            }
+        };
+        const activate = () => {
+            clearTimerIfNeeded();
+            surface.classList.add("is-action-active");
+        };
+        const deactivate = (delay = 0) => {
+            clearTimerIfNeeded();
+            if (delay === 0) {
+                surface.classList.remove("is-action-active");
+                return;
+            }
+            clearTimer = window.setTimeout(() => {
+                clearTimer = 0;
+                surface.classList.remove("is-action-active");
+            }, delay);
+        };
+        surface.addEventListener("pointerenter", activate);
+        surface.addEventListener("pointerleave", () => deactivate());
+        surface.addEventListener("focusin", activate);
+        surface.addEventListener("focusout", () => deactivate());
+        surface.addEventListener("pointerdown", () => {
+            activate();
+            deactivate(900);
+        });
+        surface.addEventListener("keydown", (event) => {
+            if (event.key !== "Enter" && event.key !== " ") {
+                return;
+            }
+            activate();
+            deactivate(900);
+        });
+    });
+}
+function initHabitusBoards(root) {
+    if (reduceMotion) {
+        return;
+    }
+    root.querySelectorAll("[data-habitus-board]").forEach((board) => {
+        if (board.dataset.habitusInteractionReady === "true") {
+            return;
+        }
+        board.dataset.habitusInteractionReady = "true";
         let clearTimer = 0;
         const clearHabitusDrift = () => {
             if (clearTimer !== 0) {
@@ -3577,6 +3652,137 @@ if (habitusBoards.length > 0 && !reduceMotion) {
         board.addEventListener("blur", clearHabitusDrift);
     });
 }
+function runtimeInitArchiveInteractions(root, locale) {
+    const previewRows = Array.from(root.querySelectorAll("[data-preview-class]"));
+    const previewImage = root.querySelector("[data-archive-preview-image]");
+    const previewKicker = root.querySelector("[data-archive-preview-kicker]");
+    const previewTitle = root.querySelector("[data-archive-preview-title]");
+    let setArchivePreview = null;
+    if (previewRows.length > 0 && previewImage && previewKicker && previewTitle) {
+        setArchivePreview = (row) => {
+            const imageClass = row.dataset.previewClass;
+            if (!imageClass) {
+                return;
+            }
+            previewRows.forEach((previewRow) => previewRow.classList.remove("is-active"));
+            row.classList.add("is-active");
+            setImageBlockVisual(previewImage, imageClass, row.dataset.previewImage || "");
+            previewKicker.textContent = row.dataset.previewKicker || "";
+            previewTitle.textContent = row.dataset.previewTitle || "";
+            animateTextSwap([previewKicker, previewTitle]);
+            if (!reduceMotion) {
+                previewImage.animate([
+                    { filter: "contrast(0.94)", opacity: 0.72 },
+                    { filter: "contrast(1)", opacity: 1 }
+                ], { duration: 160, easing: "linear" });
+            }
+        };
+        previewRows.forEach((row) => {
+            if (row.dataset.archivePreviewReady === "true") {
+                return;
+            }
+            row.dataset.archivePreviewReady = "true";
+            row.addEventListener("pointerenter", () => setArchivePreview?.(row));
+            row.addEventListener("focus", () => setArchivePreview?.(row));
+        });
+        setArchivePreview(previewRows[0]);
+    }
+    const filterButtons = Array.from(root.querySelectorAll("[data-filter]"));
+    const filterPanels = root.querySelectorAll("[data-filter-panel]");
+    const filterStatus = root.querySelector("[data-filter-status]");
+    const archiveBoard = root.querySelector("[data-archive-board]");
+    if (filterButtons.length === 0) {
+        return;
+    }
+    const applyFilter = (button, updateUrl = true) => {
+        const selectedCategory = button.dataset.filter || "all";
+        const selectedLabel = button.dataset.filterLabel || button.textContent?.trim() || selectedCategory;
+        const visibleRows = [];
+        filterButtons.forEach((filterButton) => {
+            const isActive = filterButton === button;
+            filterButton.classList.toggle("is-active", isActive);
+            filterButton.setAttribute("aria-pressed", String(isActive));
+        });
+        previewRows.forEach((row) => {
+            const shouldShow = selectedCategory === "all" || row.dataset.category === selectedCategory;
+            row.toggleAttribute("hidden", !shouldShow);
+            if (shouldShow) {
+                visibleRows.push(row);
+            }
+        });
+        filterPanels.forEach((panel) => {
+            const isActive = panel.dataset.filterPanel === selectedCategory;
+            panel.classList.toggle("is-active", isActive);
+            panel.toggleAttribute("hidden", !isActive);
+        });
+        if (filterStatus) {
+            filterStatus.textContent = `${selectedLabel} · ${visibleRows.length} ${locale === "ko" ? "개의 글 표시 중" : "articles showing"}`;
+        }
+        if (archiveBoard) {
+            archiveBoard.classList.toggle("is-filtered", selectedCategory !== "all");
+            archiveBoard.dataset.activeCategory = selectedCategory;
+        }
+        if (visibleRows[0]) {
+            setArchivePreview?.(visibleRows[0]);
+            if (!reduceMotion) {
+                visibleRows.forEach((row, index) => {
+                    row.animate([
+                        { opacity: 0.28, transform: "translateY(0.35rem)" },
+                        { opacity: 1, transform: "translateY(0)" }
+                    ], { duration: 260, delay: Math.min(index, 5) * 28, easing: "cubic-bezier(.2,.8,.2,1)" });
+                });
+            }
+        }
+        if (updateUrl && window.location.pathname.includes("/archive")) {
+            const url = new URL(window.location.href);
+            if (selectedCategory === "all") {
+                url.searchParams.delete("category");
+            }
+            else {
+                url.searchParams.set("category", selectedCategory);
+            }
+            window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+        }
+    };
+    filterButtons.forEach((button) => {
+        if (button.dataset.runtimeFilterReady === "true") {
+            return;
+        }
+        button.dataset.runtimeFilterReady = "true";
+        button.addEventListener("click", () => applyFilter(button));
+    });
+    const initialCategory = new URLSearchParams(window.location.search).get("category");
+    const initialButton = filterButtons.find((button) => button.dataset.filter === initialCategory);
+    const allButton = filterButtons.find((button) => button.dataset.filter === "all");
+    const fallbackButton = initialButton || allButton || filterButtons[0];
+    if (fallbackButton) {
+        applyFilter(fallbackButton, false);
+    }
+}
+function runtimeInitScrollSections(root) {
+    const sections = Array.from(root.querySelectorAll("[data-scroll-section]"));
+    if (sections.length === 0) {
+        return;
+    }
+    if ("IntersectionObserver" in window && !reduceMotion) {
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                entry.target.classList.toggle("is-current-section", entry.isIntersecting);
+            });
+        }, { rootMargin: "-34% 0px -48%" });
+        sections.forEach((section) => {
+            if (section.dataset.scrollSectionReady === "true") {
+                return;
+            }
+            section.dataset.scrollSectionReady = "true";
+            sectionObserver.observe(section);
+        });
+        return;
+    }
+    sections.forEach((section) => section.classList.add("is-current-section"));
+}
+initActionSurfaces(document);
+initHabitusBoards(document);
 const previewRows = document.querySelectorAll("[data-preview-class]");
 const previewImage = document.querySelector("[data-archive-preview-image]");
 const previewKicker = document.querySelector("[data-archive-preview-kicker]");
