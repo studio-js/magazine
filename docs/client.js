@@ -53,6 +53,765 @@ const fetchSupabaseSnapshot = async () => {
         updatedAt: row.updated_at
     };
 };
+const runtimeCategories = [
+    {
+        key: "art",
+        label: { ko: "예술", en: "Art" },
+        description: { ko: "카메라, 이미지, 사운드처럼 감각을 만드는 도구와 장면을 읽습니다.", en: "Tools and scenes that make sense: cameras, images, and sound." },
+        subcategories: [
+            { key: "exhibitions", label: { ko: "전시", en: "Exhibitions" } },
+            { key: "artists", label: { ko: "작가", en: "Artists" } },
+            { key: "images", label: { ko: "이미지", en: "Images" } },
+            { key: "sound", label: { ko: "사운드", en: "Sound" } }
+        ]
+    },
+    {
+        key: "tech",
+        label: { ko: "테크", en: "Tech" },
+        description: { ko: "공간 컴퓨팅, 작업 도구, 센서와 기본값이 생활의 리듬을 바꾸는 방식을 봅니다.", en: "Spatial computing, work tools, sensors, and defaults that change daily rhythm." },
+        subcategories: [
+            { key: "ai", label: { ko: "AI", en: "AI" } },
+            { key: "interface", label: { ko: "인터페이스", en: "Interface" } },
+            { key: "tools", label: { ko: "도구", en: "Tools" } },
+            { key: "systems", label: { ko: "시스템", en: "Systems" } }
+        ]
+    },
+    {
+        key: "design",
+        label: { ko: "디자인", en: "Design" },
+        description: { ko: "제품의 형태, 브랜드의 표준, 손이 기억하는 조작을 따라갑니다.", en: "Product form, brand standards, and controls remembered by the hand." },
+        subcategories: [
+            { key: "graphic", label: { ko: "그래픽", en: "Graphic" } },
+            { key: "product", label: { ko: "제품", en: "Product" } },
+            { key: "brand", label: { ko: "브랜드", en: "Brand" } }
+        ]
+    },
+    {
+        key: "space",
+        label: { ko: "공간", en: "Space" },
+        description: { ko: "브랜드 공간, 매장 동선, 방 안에서 물건이 시간을 만드는 방식을 읽습니다.", en: "Brand spaces, store routes, and how objects make time in rooms." },
+        subcategories: [
+            { key: "interior", label: { ko: "인테리어", en: "Interior" } },
+            { key: "architecture", label: { ko: "건축", en: "Architecture" } },
+            { key: "urban", label: { ko: "도시", en: "Urban" } }
+        ]
+    },
+    {
+        key: "beauty",
+        label: { ko: "뷰티", en: "Beauty" },
+        description: { ko: "향, 헤어케어, 피부와 루틴이 몸의 시간을 조절하는 방식을 봅니다.", en: "Fragrance, haircare, skin, and routines that tune bodily time." },
+        subcategories: [
+            { key: "skincare", label: { ko: "스킨케어", en: "Skincare" } },
+            { key: "makeup", label: { ko: "메이크업", en: "Makeup" } },
+            { key: "fragrance", label: { ko: "향", en: "Fragrance" } },
+            { key: "haircare", label: { ko: "헤어케어", en: "Haircare" } }
+        ]
+    },
+    {
+        key: "philosophy",
+        label: { ko: "철학", en: "Philosophy" },
+        description: { ko: "소유, 프라이버시, 수리 가능성처럼 취향 뒤의 판단 구조를 묻습니다.", en: "Ownership, privacy, repairability, and the structures of judgment behind taste." },
+        subcategories: [
+            { key: "thought", label: { ko: "사유", en: "Thought" } },
+            { key: "ethics", label: { ko: "윤리", en: "Ethics" } },
+            { key: "time", label: { ko: "시간", en: "Time" } },
+            { key: "body", label: { ko: "몸", en: "Body" } }
+        ]
+    }
+];
+const runtimeLabels = {
+    ko: {
+        selectedStories: "SELECTED STORIES",
+        fullArchive: "All Articles",
+        archiveLead: "날짜, 제목, 분야만 먼저 남겨 읽는 순서를 만드는 목록입니다.",
+        related: "이어 읽기",
+        back: "아카이브로 돌아가기"
+    },
+    en: {
+        selectedStories: "Selected Stories",
+        fullArchive: "All Articles",
+        archiveLead: "A compact index ordered by date, title, and department.",
+        related: "Related Reading",
+        back: "Back to Archive"
+    }
+};
+const runtimePageSize = 5;
+let runtimeArticleRailCleanup = null;
+const runtimeEscapeHtml = (value) => value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+const runtimeText = (value, locale) => value?.[locale] || value?.ko || value?.en || "";
+const runtimeList = (value, locale) => value?.[locale] || value?.ko || value?.en || [];
+const runtimeLocale = () => {
+    let pathname = window.location.pathname;
+    if (clientBasePath && pathname.startsWith(clientBasePath)) {
+        pathname = pathname.slice(clientBasePath.length) || "/";
+    }
+    return pathname === "/en" || pathname.startsWith("/en/") || document.documentElement.lang === "en" ? "en" : "ko";
+};
+const runtimePath = () => {
+    let pathname = window.location.pathname;
+    if (clientBasePath && pathname === clientBasePath) {
+        pathname = "/";
+    }
+    else if (clientBasePath && pathname.startsWith(`${clientBasePath}/`)) {
+        pathname = pathname.slice(clientBasePath.length) || "/";
+    }
+    pathname = pathname.replace(/^\/en(?=\/|$)/, "") || "/";
+    return pathname.replace(/\/$/, "") || "/";
+};
+const runtimeHref = (path, locale) => {
+    const [pathAndQuery, hash] = path.split("#");
+    const [pathname, query] = pathAndQuery.split("?");
+    const localizedPath = locale === "en" ? (pathname === "/" ? "/en/" : `/en${pathname}`) : pathname;
+    return `${clientBasePath}${localizedPath}${query ? `?${query}` : ""}${hash ? `#${hash}` : ""}`;
+};
+const runtimeArticleHref = (article, locale) => runtimeHref(`/articles/${article.slug}/`, locale);
+const runtimeIssueSlug = (issue) => issue.number.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "issue";
+const runtimeIssueHref = (issue, locale) => runtimeHref(`/issues/${runtimeIssueSlug(issue)}/`, locale);
+const runtimeArchiveHref = (locale, category, subcategory) => runtimeHref(category ? subcategory ? `/archive/${category}/${subcategory}/` : `/archive/${category}/` : "/archive/", locale);
+const runtimeIssueIndexHref = (locale, page = 1) => runtimeHref(page <= 1 ? "/issues/" : `/issues/page/${page}/`, locale);
+const runtimePageCount = (itemCount) => Math.max(1, Math.ceil(itemCount / runtimePageSize));
+const runtimeFormatDate = (date, locale) => new Intl.DateTimeFormat(locale === "ko" ? "ko-KR" : "en-US", {
+    year: "numeric",
+    month: locale === "ko" ? "2-digit" : "short",
+    day: "2-digit"
+}).format(new Date(date)).replace(/\. /g, ".").replace(/\.$/, "");
+const runtimeCategory = (key) => runtimeCategories.find((category) => category.key === key);
+const runtimeCategoryLabel = (key, locale) => runtimeText(runtimeCategory(key)?.label, locale) || key;
+const runtimeSubcategoryLabel = (categoryKey, subcategoryKey, locale) => runtimeText(runtimeCategory(categoryKey)?.subcategories.find((subcategory) => subcategory.key === subcategoryKey)?.label, locale) || subcategoryKey;
+const runtimeImageBlock = (visualClass, imageUrl = "", attributes = "") => `<span class="image-block ${runtimeEscapeHtml(visualClass || "image-material")}${imageUrl ? " has-custom-image" : ""}"${attributes ? ` ${attributes}` : ""}>${imageUrl ? `<img src="${runtimeEscapeHtml(imageUrl)}" alt="" loading="lazy" decoding="async" data-image-source />` : ""}</span>`;
+const runtimeSnapshotData = (snapshot) => {
+    if (!snapshot || !Array.isArray(snapshot.articles) || !Array.isArray(snapshot.issueProjects)) {
+        return null;
+    }
+    return {
+        articles: snapshot.articles,
+        issueProjects: snapshot.issueProjects
+    };
+};
+const runtimeSetDocumentMeta = (title, description) => {
+    document.title = title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", description);
+};
+const runtimePagination = (currentPage, totalPages, hrefForPage, locale) => `<nav class="pagination" aria-label="${runtimeEscapeHtml(locale === "ko" ? "페이지" : "Pagination")}">
+        <span>${runtimeEscapeHtml(locale === "ko" ? "페이지" : "Page")}</span>
+        <div>
+          ${Array.from({ length: totalPages }, (_, index) => {
+    const page = index + 1;
+    return `<a class="${page === currentPage ? "is-active" : ""}" href="${hrefForPage(page)}"${page === currentPage ? " aria-current=\"page\"" : ""}>${page}</a>`;
+}).join("\n          ")}
+        </div>
+      </nav>`;
+const runtimeArchivePageHref = (locale, page = 1, category, subcategory) => {
+    if (page <= 1) {
+        return runtimeArchiveHref(locale, category, subcategory);
+    }
+    if (category && subcategory) {
+        return runtimeHref(`/archive/${category}/${subcategory}/page/${page}/`, locale);
+    }
+    return runtimeHref(category ? `/archive/${category}/page/${page}/` : `/archive/page/${page}/`, locale);
+};
+const runtimeArticleHasSubcategory = (article, subcategory) => article.subcategoryKeys?.includes(subcategory) || article.subcategoryKey === subcategory;
+const runtimeArchiveRows = (articles, locale, selectedCategory, selectedSubcategory, rowOffset = 0) => articles
+    .map((article, index) => {
+    const fullLabel = `${runtimeCategoryLabel(article.category, locale)} / ${runtimeText(article.subcategory, locale)}`;
+    const rowLabel = selectedSubcategory
+        ? runtimeCategoryLabel(article.category, locale)
+        : selectedCategory
+            ? runtimeText(article.subcategory, locale)
+            : fullLabel;
+    return `      <a href="${runtimeArticleHref(article, locale)}" class="archive-row" data-preview-class="${runtimeEscapeHtml(article.heroClass)}" data-preview-image="${runtimeEscapeHtml(article.heroImage || "")}" data-preview-kicker="${runtimeEscapeHtml(fullLabel)}" data-preview-title="${runtimeEscapeHtml(runtimeText(article.title, locale))}" data-category="${runtimeEscapeHtml(article.category)}" data-action-card>
+        <span class="archive-date"><b>${String(rowOffset + index + 1).padStart(2, "0")}</b><small>${runtimeFormatDate(article.date, locale)}</small></span>
+        <span class="archive-title">${runtimeEscapeHtml(runtimeText(article.title, locale))}</span>
+        <span class="archive-category"><span>${runtimeEscapeHtml(rowLabel)}</span><small>${runtimeEscapeHtml(runtimeText(article.location, locale))}</small></span>
+        <span class="archive-info"><span>${runtimeEscapeHtml(runtimeText(article.readTime, locale))}</span></span>
+        <span class="archive-summary">${runtimeEscapeHtml(runtimeText(article.excerpt, locale))}</span>
+      </a>`;
+})
+    .join("\n");
+const runtimeArchiveBoard = (articles, locale, selectedCategory, selectedSubcategory, page = 1) => {
+    const visibleArticles = articles.filter((article) => {
+        if (selectedCategory && article.category !== selectedCategory) {
+            return false;
+        }
+        return !selectedSubcategory || runtimeArticleHasSubcategory(article, selectedSubcategory);
+    });
+    const totalPages = runtimePageCount(visibleArticles.length);
+    const currentPage = Math.min(Math.max(Math.trunc(page) || 1, 1), totalPages);
+    const pagedArticles = visibleArticles.slice((currentPage - 1) * runtimePageSize, currentPage * runtimePageSize);
+    return `    <div class="archive-board ${visibleArticles.length === 0 ? "is-empty" : ""}" data-archive-board data-reveal>
+      <div class="archive-list" data-archive-list>
+        ${pagedArticles.length > 0
+        ? runtimeArchiveRows(pagedArticles, locale, selectedCategory, selectedSubcategory, (currentPage - 1) * runtimePageSize)
+        : `<p class="archive-empty">${runtimeEscapeHtml(locale === "ko" ? "아직 이 하위 카테고리로 묶인 글이 없습니다. 다른 하위 카테고리를 선택해 주세요." : "No articles are filed under this subcategory yet. Choose another subcategory to continue reading.")}</p>`}
+      </div>
+    </div>${runtimePagination(currentPage, totalPages, (pageNumber) => runtimeArchivePageHref(locale, pageNumber, selectedCategory, selectedSubcategory), locale)}`;
+};
+const runtimeArchiveControl = (articles, locale, selectedCategory, selectedSubcategory) => {
+    const selectedCategoryDefinition = selectedCategory ? runtimeCategory(selectedCategory) : undefined;
+    const selectedSubcategoryDefinition = selectedCategoryDefinition?.subcategories.find((subcategory) => subcategory.key === selectedSubcategory);
+    const countText = (count) => locale === "ko" ? `${count}개` : `${count} ${count === 1 ? "article" : "articles"}`;
+    if (!selectedCategoryDefinition) {
+        return `
+          <div class="archive-control" data-archive-control>
+            <label>
+              <span>${runtimeEscapeHtml(locale === "ko" ? "분야" : "Department")}</span>
+              <select data-navigation-select aria-label="${runtimeEscapeHtml(locale === "ko" ? "아카이브 분야 선택" : "Choose an archive department")}">
+                <option value="${runtimeArchiveHref(locale)}" selected>${runtimeEscapeHtml(runtimeLabels[locale].fullArchive)} · ${countText(articles.length)}</option>
+                ${runtimeCategories.map((category) => `<option value="${runtimeArchiveHref(locale, category.key)}">${runtimeEscapeHtml(runtimeText(category.label, locale))} · ${countText(articles.filter((article) => article.category === category.key).length)}</option>`).join("")}
+              </select>
+            </label>
+            <span>${runtimeEscapeHtml(countText(articles.length))}</span>
+          </div>`;
+    }
+    const categoryCount = articles.filter((article) => article.category === selectedCategoryDefinition.key).length;
+    const currentCount = selectedSubcategoryDefinition
+        ? articles.filter((article) => article.category === selectedCategoryDefinition.key && runtimeArticleHasSubcategory(article, selectedSubcategoryDefinition.key)).length
+        : categoryCount;
+    const categoryLabel = runtimeText(selectedCategoryDefinition.label, locale);
+    return `
+          <div class="archive-control" data-archive-control>
+            <label>
+              <span>${runtimeEscapeHtml(locale === "ko" ? "세부 분야" : "Subcategory")}</span>
+              <select data-navigation-select aria-label="${runtimeEscapeHtml(locale === "ko" ? `${categoryLabel} 세부 분야 선택` : `Choose a ${categoryLabel} subcategory`)}">
+                <option value="${runtimeArchiveHref(locale, selectedCategoryDefinition.key)}"${selectedSubcategoryDefinition ? "" : " selected"}>${runtimeEscapeHtml(locale === "ko" ? `전체 ${categoryLabel}` : `All ${categoryLabel}`)} · ${countText(categoryCount)}</option>
+                ${selectedCategoryDefinition.subcategories.map((subcategory) => {
+        const count = articles.filter((article) => article.category === selectedCategoryDefinition.key && runtimeArticleHasSubcategory(article, subcategory.key)).length;
+        return `<option value="${runtimeArchiveHref(locale, selectedCategoryDefinition.key, subcategory.key)}"${selectedSubcategoryDefinition?.key === subcategory.key ? " selected" : ""}>${runtimeEscapeHtml(runtimeText(subcategory.label, locale))} · ${countText(count)}</option>`;
+    }).join("")}
+              </select>
+            </label>
+            <span>${runtimeEscapeHtml(countText(currentCount))}</span>
+          </div>`;
+};
+const renderRuntimeArchivePage = (articles, locale, selectedCategory, selectedSubcategory, page = 1) => {
+    const selectedCategoryDefinition = selectedCategory ? runtimeCategory(selectedCategory) : undefined;
+    const selectedSubcategoryDefinition = selectedCategoryDefinition?.subcategories.find((subcategory) => subcategory.key === selectedSubcategory);
+    const archiveTitle = selectedSubcategoryDefinition
+        ? runtimeText(selectedSubcategoryDefinition.label, locale)
+        : selectedCategoryDefinition
+            ? runtimeText(selectedCategoryDefinition.label, locale)
+            : runtimeLabels[locale].fullArchive;
+    const archiveLead = selectedCategoryDefinition ? runtimeText(selectedCategoryDefinition.description, locale) : runtimeLabels[locale].archiveLead;
+    runtimeSetDocumentMeta(`${archiveTitle} | Habitus`, archiveLead);
+    return `
+    <section class="archive archive-page section-pad" aria-labelledby="archive-title">
+      <div class="archive-heading" data-reveal>
+        <div>
+          <p class="kicker">Archive</p>
+          <h1 id="archive-title">${runtimeEscapeHtml(archiveTitle)}</h1>${runtimeArchiveControl(articles, locale, selectedCategory, selectedSubcategory)}
+        </div>
+        <p>${runtimeEscapeHtml(archiveLead)}</p>
+      </div>
+
+      ${runtimeArchiveBoard(articles, locale, selectedCategory, selectedSubcategory, page)}
+    </section>`;
+};
+const renderRuntimeGallery = (article, images, caption, locale) => {
+    const visibleImages = images.filter((image) => image.image || image.imageClass);
+    if (visibleImages.length === 0) {
+        return "";
+    }
+    const imageItems = visibleImages.map((image, index) => `                      <span class="article-gallery-item${index === 0 ? " is-active" : ""}" data-gallery-item${index === 0 ? "" : " hidden"}>
+                        ${runtimeImageBlock(image.imageClass || article.heroClass, image.image || "", image.image ? "" : `data-visual-cycle role="button" tabindex="0" aria-label="${runtimeEscapeHtml(locale === "ko" ? "본문 비주얼 바꾸기" : "Cycle inline visual")}"`)}
+                      </span>`).join("\n");
+    const controlsMarkup = visibleImages.length > 1 ? `
+                    <div class="article-gallery-controls" aria-label="${runtimeEscapeHtml(locale === "ko" ? "본문 이미지 순환" : "Body image carousel")}">
+                      <button type="button" data-gallery-prev>${runtimeEscapeHtml(locale === "ko" ? "이전" : "Prev")}</button>
+                      <span data-gallery-count>1/${visibleImages.length}</span>
+                      <button type="button" data-gallery-next>${runtimeEscapeHtml(locale === "ko" ? "다음" : "Next")}</button>
+                    </div>` : "";
+    const captionText = runtimeText(caption, locale);
+    return `
+                  <figure class="article-section-figure article-section-gallery" data-gallery data-gallery-index="0">
+                    <div class="article-gallery-frame"${visibleImages.length > 1 ? ` data-gallery-frame role="button" tabindex="0" aria-label="${runtimeEscapeHtml(locale === "ko" ? "본문 이미지 다음으로 보기" : "Show next body image")}"` : ""}>
+${imageItems}
+                    </div>${controlsMarkup}${captionText ? `
+                    <figcaption>${runtimeEscapeHtml(captionText)}</figcaption>` : ""}
+                  </figure>`;
+};
+const renderRuntimeArticlePage = (article, relatedArticles, locale) => {
+    const firstSection = article.sections[0];
+    const railVisuals = article.sections.map((section, index) => section.railClass || article.railClass || relatedArticles[index]?.heroClass || article.heroClass);
+    const railImageHidden = article.sections.map((section) => Boolean(section.hideRailImage || article.hideRailImage));
+    const railImages = article.sections.map((section, index) => {
+        if (railImageHidden[index]) {
+            return "";
+        }
+        return section.railImage || article.railImage || (section.railClass || article.railClass ? "" : relatedArticles[index]?.heroImage || article.heroImage || "");
+    });
+    const railMode = article.railMode || "default";
+    const firstRailTitle = runtimeText(firstSection?.railTitle, locale) || runtimeText(article.railTitle, locale) || runtimeText(firstSection?.heading, locale) || runtimeText(article.subtitle, locale);
+    const firstRailText = runtimeText(firstSection?.railText, locale) || runtimeText(article.railText, locale) || runtimeList(firstSection?.paragraphs, locale)[0] || runtimeText(article.subtitle, locale);
+    const category = runtimeCategoryLabel(article.category, locale);
+    const metaLabels = locale === "ko"
+        ? { date: "발행", location: "장소", readTime: "읽기", tags: "태그" }
+        : { date: "Published", location: "Location", readTime: "Reading", tags: "Tags" };
+    const renderSectionBlock = (block) => {
+        if (block.type === "quote") {
+            const quoteText = runtimeText(block.text, locale).trim();
+            return quoteText ? `<blockquote class="article-inline-quote" data-reveal>${runtimeEscapeHtml(quoteText)}</blockquote>` : "";
+        }
+        if (block.type === "gallery") {
+            return renderRuntimeGallery(article, block.images || [], block.caption, locale);
+        }
+        const paragraphText = runtimeText(block.text, locale).trim();
+        return paragraphText ? `<p>${runtimeEscapeHtml(paragraphText)}</p>` : "";
+    };
+    const renderSectionContent = (section) => {
+        if (section.blocks && section.blocks.length > 0) {
+            return section.blocks.map(renderSectionBlock).join("");
+        }
+        const legacyGallery = section.hideSectionImage || (!section.sectionImage && !section.sectionImageClass)
+            ? ""
+            : renderRuntimeGallery(article, [{ imageClass: section.sectionImageClass || section.railClass || article.heroClass, image: section.sectionImage || "" }], section.sectionImageCaption, locale);
+        return `${legacyGallery}${runtimeList(section.paragraphs, locale).map((paragraph) => `<p>${runtimeEscapeHtml(paragraph)}</p>`).join("")}`;
+    };
+    const articleVisual = article.hideHeroImage ? "" : `      <div class="article-visual" data-reveal data-action-card data-scroll-motion>
+        ${runtimeImageBlock(article.heroClass, article.heroImage || "", article.heroImage ? "" : `data-visual-cycle role="button" tabindex="0" aria-label="${runtimeEscapeHtml(locale === "ko" ? "대표 비주얼 바꾸기" : "Cycle hero visual")}"`)}
+      </div>
+
+`;
+    runtimeSetDocumentMeta(`${runtimeText(article.title, locale)} | Habitus`, runtimeText(article.deck, locale));
+    return `
+    <article class="article-detail section-pad">
+      <header class="article-hero-grid" data-reveal>
+        <div class="article-title-block">
+          <a class="back-link" href="${runtimeHref("/archive/", locale)}">${runtimeEscapeHtml(runtimeLabels[locale].back)}</a>
+          <p class="kicker">${runtimeEscapeHtml(category)} / ${runtimeEscapeHtml(runtimeText(article.subcategory, locale))}</p>
+          <h1>${runtimeEscapeHtml(runtimeText(article.title, locale))}</h1>
+          <p>${runtimeEscapeHtml(runtimeText(article.deck, locale))}</p>
+        </div>
+        <div class="article-meta-card" aria-label="${runtimeEscapeHtml(locale === "ko" ? "기사 정보" : "Article details")}">
+          <span><small>${runtimeEscapeHtml(metaLabels.date)}</small><strong>${runtimeFormatDate(article.date, locale)}</strong></span>
+          <span><small>${runtimeEscapeHtml(metaLabels.location)}</small><strong>${runtimeEscapeHtml(runtimeText(article.location, locale))}</strong></span>
+          <span><small>${runtimeEscapeHtml(metaLabels.readTime)}</small><strong>${runtimeEscapeHtml(runtimeText(article.readTime, locale))}</strong></span>
+          <span><small>${runtimeEscapeHtml(metaLabels.tags)}</small><strong>${runtimeList(article.tags, locale).map(runtimeEscapeHtml).join(" / ")}</strong></span>
+        </div>
+      </header>
+
+${articleVisual}      <div class="article-body-grid">
+        <aside class="article-side article-side-${runtimeEscapeHtml(railMode)}${railImageHidden[0] ? " is-rail-image-hidden" : ""}" data-reveal data-article-rail>
+          <span class="article-rail-no" data-article-rail-no>01</span>
+          ${runtimeImageBlock(railVisuals[0] || article.heroClass, railImages[0] || "", `data-article-rail-visual data-visual-cycle role="button" tabindex="0" aria-label="${runtimeEscapeHtml(locale === "ko" ? "레일 비주얼 바꾸기" : "Cycle rail visual")}"`)}
+          <strong data-article-rail-title>${runtimeEscapeHtml(firstRailTitle)}</strong>
+          <p data-article-rail-text>${runtimeEscapeHtml(firstRailText)}</p>
+        </aside>
+
+        <div class="article-body">
+          <blockquote data-reveal>${runtimeEscapeHtml(runtimeText(article.quote, locale))}</blockquote>
+          ${article.sections.map((section, index) => `
+                <section class="article-section" data-reveal data-article-section data-rail-no="${String(index + 1).padStart(2, "0")}" data-rail-title="${runtimeEscapeHtml(runtimeText(section.railTitle, locale) || runtimeText(section.heading, locale))}" data-rail-text="${runtimeEscapeHtml(runtimeText(section.railText, locale) || runtimeList(section.paragraphs, locale)[0] || "")}" data-rail-visual="${runtimeEscapeHtml(railVisuals[index] || article.heroClass)}" data-rail-image="${runtimeEscapeHtml(railImages[index] || "")}" data-rail-image-hidden="${railImageHidden[index] ? "true" : "false"}">
+                  <h2>${runtimeEscapeHtml(runtimeText(section.heading, locale))}</h2>${renderSectionContent(section)}
+                </section>`).join("")}
+        </div>
+      </div>
+    </article>
+
+    <section class="related section-pad" aria-labelledby="related-title">
+      <div class="section-heading" data-reveal>
+        <p class="kicker">Related</p>
+        <h2 id="related-title">${runtimeEscapeHtml(runtimeLabels[locale].related)}</h2>
+      </div>
+      <div class="related-grid">
+        ${relatedArticles.map((related) => `
+              <a class="story-card" href="${runtimeArticleHref(related, locale)}" data-reveal data-action-card>
+                ${runtimeImageBlock(related.heroClass, related.heroImage || "")}
+                <div>
+                  <p class="kicker">${runtimeEscapeHtml(runtimeCategoryLabel(related.category, locale))} / ${runtimeEscapeHtml(runtimeText(related.subcategory, locale))}</p>
+                  <h3>${runtimeEscapeHtml(runtimeText(related.title, locale))}</h3>
+                  <p>${runtimeEscapeHtml(runtimeText(related.excerpt, locale))}</p>
+                </div>
+              </a>`).join("")}
+      </div>
+    </section>`;
+};
+const renderRuntimeIssuePrototype = (issue, locale, variant = "detail") => {
+    const coverImage = issue.coverImage || issue.features.find((feature) => feature.heroImage)?.heroImage || "";
+    const coverVisual = issue.features.find((feature) => feature.heroImage === coverImage)?.heroClass || issue.features[0]?.heroClass || "image-material";
+    return `<figure class="magazine-prototype magazine-prototype-${variant}" aria-label="${runtimeEscapeHtml(locale === "ko" ? `${issue.number} 잡지 프로토타입` : `${issue.number} magazine prototype`)}">
+          <div class="magazine-prototype-stage">
+            <div class="magazine-cover-stack">
+              <div class="magazine-cover-sheet">
+                ${runtimeImageBlock(coverVisual, coverImage)}
+                <div class="magazine-cover-type">
+                  <div class="magazine-cover-topline"><span>Habitus</span><small>${runtimeEscapeHtml(issue.number)}</small></div>
+                  <div class="magazine-cover-title"><strong>${runtimeEscapeHtml(runtimeText(issue.title, locale))}</strong></div>
+                  <em>${runtimeEscapeHtml(locale === "ko" ? "취향에 관하여" : "On Taste")}</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </figure>`;
+};
+const renderRuntimeHomePage = (data, locale) => {
+    const currentIssue = data.issueProjects[0];
+    const selectedArticles = data.articles.slice(0, 5);
+    const leadArticle = selectedArticles[0];
+    const secondaryArticles = selectedArticles.slice(1, 5);
+    const issueRows = (currentIssue?.features || []).map((feature, index) => `              <a class="home-index-row" href="${runtimeIssueHref(currentIssue, locale)}#issue-${runtimeEscapeHtml(feature.slug)}" data-scroll-motion>
+                <span class="home-index-order">${String(index + 1).padStart(2, "0")}</span>
+                <span class="home-index-copy">
+                  <strong>${runtimeEscapeHtml(runtimeText(feature.title, locale))}</strong>
+                  <span class="home-index-meta">${runtimeEscapeHtml(runtimeText(feature.role, locale))}</span>
+                  <em>${runtimeEscapeHtml(runtimeText(feature.intro, locale))}</em>
+                </span>
+              </a>`).join("\n");
+    const homeRecentLead = leadArticle ? `          <a class="home-recent-lead" href="${runtimeArticleHref(leadArticle, locale)}" data-reveal data-action-card>
+            <span class="home-recent-visual" aria-hidden="true">${runtimeImageBlock(leadArticle.heroClass, leadArticle.heroImage || "")}</span>
+            <span class="home-recent-copy">
+              <small>${runtimeEscapeHtml(runtimeCategoryLabel(leadArticle.category, locale))} / ${runtimeEscapeHtml(runtimeFormatDate(leadArticle.date, locale))}</small>
+              <strong>${runtimeEscapeHtml(runtimeText(leadArticle.title, locale))}</strong>
+              <em>${runtimeEscapeHtml(runtimeText(leadArticle.excerpt, locale))}</em>
+            </span>
+          </a>` : "";
+    const storyRows = secondaryArticles.map((article, index) => `              <a class="home-story-line" href="${runtimeArticleHref(article, locale)}" data-reveal data-action-card>
+                <span>${String(index + 2).padStart(2, "0")}</span>
+                <strong>${runtimeEscapeHtml(runtimeText(article.title, locale))}</strong>
+                <small>${runtimeEscapeHtml(runtimeCategoryLabel(article.category, locale))} / ${runtimeEscapeHtml(runtimeFormatDate(article.date, locale))}</small>
+                <em>${runtimeEscapeHtml(runtimeText(article.excerpt, locale))}</em>
+              </a>`).join("\n");
+    if (!currentIssue) {
+        return "";
+    }
+    runtimeSetDocumentMeta("Habitus", locale === "ko" ? "취향에 관하여" : "On Taste");
+    return `
+    <section class="cover section-pad" aria-labelledby="hero-title" data-scroll-section>
+      <div class="cover-grid home-cover-grid">
+        <div class="cover-copy" data-reveal>
+          <div class="cover-edition" aria-label="Publication context"><span>${runtimeEscapeHtml(`${currentIssue.number} · ${runtimeText(currentIssue.date, locale)}`)}</span></div>
+          <p class="kicker">Current Issue</p>
+          <h1 id="hero-title">${runtimeEscapeHtml(runtimeText(currentIssue.title, locale))}</h1>
+          <p class="cover-deck">${runtimeEscapeHtml(runtimeText(currentIssue.deck, locale))}</p>
+          <a class="home-issue-link" href="${runtimeIssueHref(currentIssue, locale)}"><span>${runtimeEscapeHtml(locale === "ko" ? "최신 이슈 읽기" : "Read Latest Issue")}</span><small>${runtimeEscapeHtml(currentIssue.number)}</small></a>
+        </div>
+
+        <section class="home-issue-index" aria-labelledby="home-issue-index-title" data-reveal data-scroll-motion>
+          <header class="home-index-headline"><p class="kicker" id="home-issue-index-title">Issue Index</p></header>
+          <div class="home-index-list" aria-label="${runtimeEscapeHtml(locale === "ko" ? "이슈 읽기 순서" : "Issue reading order")}">
+${issueRows}
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="story-river home-stories section-pad" id="features" aria-labelledby="features-title" data-scroll-section>
+      <div class="section-head" data-reveal>
+        <p class="kicker">${runtimeEscapeHtml(runtimeLabels[locale].selectedStories)}</p>
+        <h2 id="features-title">${runtimeEscapeHtml(locale === "ko" ? "최근 글" : "Recent Stories")}</h2>
+      </div>
+      <div class="home-recent-spread">
+${homeRecentLead}
+        <div class="home-story-index-list">
+${storyRows}
+          <a class="home-story-more" href="${runtimeArchiveHref(locale)}" data-reveal><span>${runtimeEscapeHtml(locale === "ko" ? "전체 보기" : "View all")}</span><strong>${runtimeEscapeHtml(runtimeLabels[locale].fullArchive)}</strong></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-habitus section-pad" id="notes" aria-labelledby="notes-title" data-scroll-section>
+      <div class="habitus-copy" data-reveal>
+        <h2 id="notes-title">${runtimeEscapeHtml(locale === "ko" ? "Habitus, 취향에 관하여." : "Habitus, on taste.")}</h2>
+        <p>${runtimeEscapeHtml(locale === "ko" ? "취향은 결과가 아니라 거르는 방식입니다. 경험과 반복이 만든 기준을 알면 무엇을 고를지보다 왜 고르는지가 먼저 보입니다." : "Taste is not the result but the way things are filtered. When the criteria shaped by experience and repetition are visible, the reason behind a choice becomes clearer.")}</p>
+      </div>
+    </section>`;
+};
+const renderRuntimeIssueCollectionItems = (issues, locale, offset = 0, selectedIssue) => issues
+    .map((issue, index) => {
+    const absoluteIndex = offset + index;
+    const isCurrent = selectedIssue ? runtimeIssueSlug(issue) === runtimeIssueSlug(selectedIssue) : false;
+    const scenes = issue.features.slice(0, 3).map((feature, featureIndex) => `          <span>
+            <small>${String(featureIndex + 1).padStart(2, "0")} / ${runtimeEscapeHtml(runtimeText(feature.role, locale))}</small>
+            <strong>${runtimeEscapeHtml(runtimeText(feature.title, locale))}</strong>
+          </span>`).join("\n");
+    return `        <a class="issue-collection-item ${absoluteIndex === 0 ? "is-latest" : ""} ${isCurrent ? "is-current" : ""}" href="${runtimeIssueHref(issue, locale)}"${isCurrent ? " aria-current=\"page\"" : ""} data-reveal data-action-card>
+          <div class="issue-collection-cover" aria-label="${runtimeEscapeHtml(locale === "ko" ? "이슈 커버" : "Issue cover")}">${renderRuntimeIssuePrototype(issue, locale, "collection")}</div>
+          <div class="issue-collection-copy">
+            <p class="kicker">${runtimeEscapeHtml(absoluteIndex === 0 ? (locale === "ko" ? "최신호" : "Latest issue") : (locale === "ko" ? "지난호" : "Past issue"))} / ${runtimeEscapeHtml(runtimeText(issue.date, locale))}</p>
+            <div class="issue-collection-title"><span>${runtimeEscapeHtml(issue.number)}</span><h2>${runtimeEscapeHtml(runtimeText(issue.title, locale))}</h2></div>
+            <p>${runtimeEscapeHtml(runtimeText(issue.deck, locale))}</p>
+            <div class="issue-collection-meta"><span>${runtimeEscapeHtml(runtimeText(issue.format, locale))}</span><span>${runtimeEscapeHtml(runtimeText(issue.availability, locale))}</span><span>${issue.features.length} ${runtimeEscapeHtml(locale === "ko" ? "장면" : "scenes")}</span></div>
+          </div>
+          <div class="issue-collection-scenes" aria-label="${runtimeEscapeHtml(locale === "ko" ? "이슈 장면 요약" : "Issue scene summary")}">
+${scenes}
+          </div>
+        </a>`;
+})
+    .join("\n");
+const renderRuntimeIssueCollectionPage = (issues, locale, page = 1) => {
+    const latest = issues[0];
+    const totalPages = runtimePageCount(issues.length);
+    const currentPage = Math.min(Math.max(Math.trunc(page) || 1, 1), totalPages);
+    const pagedIssues = issues.slice((currentPage - 1) * runtimePageSize, currentPage * runtimePageSize);
+    if (!latest) {
+        return "";
+    }
+    runtimeSetDocumentMeta("Issue Index | Habitus", locale === "ko" ? "아비투스의 모든 이슈를 모아둔 발행 인덱스입니다." : "An index of every edition published by Habitus.");
+    return `
+    <section class="issue-index-page section-pad" aria-labelledby="issue-index-title">
+      <header class="issue-index-hero" data-reveal>
+        <p class="kicker">Issues</p>
+        <h1 id="issue-index-title">Issue Index</h1>
+        <p>${runtimeEscapeHtml(locale === "ko" ? "발행된 이슈를 모았습니다. 최신호와 지난호를 한곳에서 봅니다." : "Latest and past issues in one place.")}</p>
+        <a class="issue-index-latest" href="${runtimeIssueHref(latest, locale)}">${runtimeEscapeHtml(locale === "ko" ? "최신호 열기" : "Open latest issue")}</a>
+      </header>
+      <div class="issue-collection-list" aria-label="${runtimeEscapeHtml(locale === "ko" ? "전체 이슈" : "All issues")}">
+${renderRuntimeIssueCollectionItems(pagedIssues, locale, (currentPage - 1) * runtimePageSize)}
+      </div>${runtimePagination(currentPage, totalPages, (pageNumber) => runtimeIssueIndexHref(locale, pageNumber), locale)}
+    </section>`;
+};
+const renderRuntimeIssuePage = (issues, issue, locale) => {
+    const issueIndex = issues.findIndex((item) => runtimeIssueSlug(item) === runtimeIssueSlug(issue));
+    const issueRows = issue.features.map((feature, index) => `        <a class="issue-toc-row issue-feature-row" href="#issue-${runtimeEscapeHtml(feature.slug)}" data-reveal>
+          <span class="issue-toc-no">${String(index + 1).padStart(2, "0")}</span>
+          <span class="issue-toc-meta">${runtimeEscapeHtml(runtimeText(feature.role, locale))}</span>
+          <strong>${runtimeEscapeHtml(runtimeText(feature.title, locale))}</strong>
+          <em>${runtimeEscapeHtml(runtimeText(feature.excerpt, locale))}</em>
+        </a>`).join("\n");
+    const issueChapters = issue.features.map((feature, index) => `        <section class="issue-chapter" id="issue-${runtimeEscapeHtml(feature.slug)}" aria-labelledby="issue-chapter-${runtimeEscapeHtml(feature.slug)}" data-reveal>
+          <div class="issue-chapter-media">
+            ${runtimeImageBlock(feature.heroClass, feature.heroImage || "", feature.heroImage ? "" : `data-visual-cycle role="button" tabindex="0" aria-label="${runtimeEscapeHtml(locale === "ko" ? "이슈 장면 비주얼 바꾸기" : "Cycle issue scene visual")}"`)}
+            <p>${runtimeEscapeHtml(runtimeText(feature.credit, locale))} / ${runtimeEscapeHtml(runtimeText(feature.location, locale))}</p>
+          </div>
+          <div class="issue-chapter-copy">
+            <p class="kicker">${runtimeEscapeHtml(`${String(index + 1).padStart(2, "0")} / ${runtimeText(feature.role, locale)}`)}</p>
+            <h2 id="issue-chapter-${runtimeEscapeHtml(feature.slug)}">${runtimeEscapeHtml(runtimeText(feature.title, locale))}</h2>
+            <p class="issue-chapter-intro">${runtimeEscapeHtml(runtimeText(feature.intro, locale))}</p>
+            ${runtimeList(feature.body, locale).map((paragraph) => `<p>${runtimeEscapeHtml(paragraph)}</p>`).join("\n            ")}
+          </div>
+        </section>`).join("\n");
+    const credits = issue.credits.map((credit) => `        <span><small>${runtimeEscapeHtml(runtimeText(credit.label, locale))}</small><strong>${runtimeEscapeHtml(runtimeText(credit.value, locale))}</strong></span>`).join("\n");
+    runtimeSetDocumentMeta(`${issue.number} · ${runtimeText(issue.title, locale)} | Habitus`, runtimeText(issue.deck, locale));
+    return `
+    <section class="issue-page issue-project-page section-pad" aria-labelledby="issue-page-title">
+      <header class="issue-project-hero" data-reveal>
+        <div class="issue-project-title">
+          <p class="kicker">${runtimeEscapeHtml(issueIndex <= 0 ? "Latest Magazine Issue" : "Magazine Issue")}</p>
+          <span class="issue-project-no">${runtimeEscapeHtml(issue.number)}</span>
+          <h1 id="issue-page-title">${runtimeEscapeHtml(runtimeText(issue.title, locale))}</h1>
+          <p>${runtimeEscapeHtml(runtimeText(issue.subtitle, locale))}</p>
+        </div>
+        <aside class="issue-cover-card" aria-label="${runtimeEscapeHtml(locale === "ko" ? "이슈 커버" : "Issue cover")}">${renderRuntimeIssuePrototype(issue, locale, "detail")}</aside>
+      </header>
+      <div class="issue-project-ledger" data-reveal>
+        <span><small>${runtimeEscapeHtml(locale === "ko" ? "발행" : "Published")}</small><strong>${runtimeEscapeHtml(runtimeText(issue.date, locale))}</strong></span>
+        <span><small>${runtimeEscapeHtml(locale === "ko" ? "형식" : "Format")}</small><strong>${runtimeEscapeHtml(runtimeText(issue.format, locale))}</strong></span>
+        <span><small>${runtimeEscapeHtml(locale === "ko" ? "상태" : "Access")}</small><strong>${runtimeEscapeHtml(runtimeText(issue.availability, locale))}</strong></span>
+      </div>
+      <section class="issue-editorial-note" aria-label="${runtimeEscapeHtml(locale === "ko" ? "편집 노트" : "Editor's note")}" data-reveal>
+        <div><p class="kicker">Editor's Note</p><h2>${runtimeEscapeHtml(locale === "ko" ? "이 호를 여는 편집 노트" : "The editor's note for this edition")}</h2></div>
+        <div class="issue-editorial-copy"><p>${runtimeEscapeHtml(runtimeText(issue.deck, locale))}</p><p>${runtimeEscapeHtml(runtimeText(issue.editorNote, locale))}</p></div>
+      </section>
+      <section class="issue-contents" aria-labelledby="issue-contents-title">
+        <div class="issue-section-heading" data-reveal><p class="kicker">Contents</p><h2 id="issue-contents-title">${runtimeEscapeHtml(locale === "ko" ? "이 호의 장면" : "Scenes in this issue")}</h2></div>
+        <div class="issue-toc" aria-label="${runtimeEscapeHtml(locale === "ko" ? "이슈 목차" : "Issue table of contents")}">
+${issueRows}
+        </div>
+      </section>
+      <div class="issue-chapters" aria-label="${runtimeEscapeHtml(locale === "ko" ? "이슈 소개" : "Issue introductions")}">
+${issueChapters}
+      </div>
+      <div class="issue-credit-grid" aria-label="${runtimeEscapeHtml(locale === "ko" ? "이슈 크레딧" : "Issue credits")}" data-reveal>
+${credits}
+      </div>
+      <nav class="issue-project-actions" aria-label="${runtimeEscapeHtml(locale === "ko" ? "이슈 탐색" : "Issue navigation")}" data-reveal><a href="${runtimeHref("/issues/", locale)}">Issue Index</a></nav>
+    </section>`;
+};
+const runtimeArchiveRoute = (path) => {
+    const parts = path.split("/").filter(Boolean);
+    if (parts[0] !== "archive") {
+        return null;
+    }
+    if (parts.length === 1) {
+        return { page: 1 };
+    }
+    if (parts[1] === "page") {
+        return { page: Number(parts[2]) || 1 };
+    }
+    if (parts[2] === "page") {
+        return { selectedCategory: parts[1], page: Number(parts[3]) || 1 };
+    }
+    if (parts[3] === "page") {
+        return { selectedCategory: parts[1], selectedSubcategory: parts[2], page: Number(parts[4]) || 1 };
+    }
+    return { selectedCategory: parts[1], selectedSubcategory: parts[2], page: 1 };
+};
+const runtimeIssuesRoutePage = (path) => {
+    const match = /^\/issues(?:\/page\/(\d+))?$/.exec(path);
+    return match ? Number(match[1]) || 1 : null;
+};
+const runtimeRenderForPath = (data, path, locale) => {
+    if (path === "/") {
+        return renderRuntimeHomePage(data, locale);
+    }
+    const archiveRoute = runtimeArchiveRoute(path);
+    if (archiveRoute) {
+        if (archiveRoute.selectedCategory && !runtimeCategory(archiveRoute.selectedCategory)) {
+            return null;
+        }
+        if (archiveRoute.selectedCategory && archiveRoute.selectedSubcategory) {
+            const category = runtimeCategory(archiveRoute.selectedCategory);
+            if (!category?.subcategories.some((subcategory) => subcategory.key === archiveRoute.selectedSubcategory)) {
+                return null;
+            }
+        }
+        return renderRuntimeArchivePage(data.articles, locale, archiveRoute.selectedCategory, archiveRoute.selectedSubcategory, archiveRoute.page);
+    }
+    const issuePage = runtimeIssuesRoutePage(path);
+    if (issuePage !== null) {
+        return renderRuntimeIssueCollectionPage(data.issueProjects, locale, issuePage);
+    }
+    const issueSlugMatch = /^\/issues\/([^/]+)$/.exec(path);
+    if (issueSlugMatch) {
+        const issue = data.issueProjects.find((item) => runtimeIssueSlug(item) === issueSlugMatch[1]);
+        return issue ? renderRuntimeIssuePage(data.issueProjects, issue, locale) : null;
+    }
+    const articleSlugMatch = /^\/articles\/([^/]+)$/.exec(path);
+    if (articleSlugMatch) {
+        const article = data.articles.find((item) => item.slug === articleSlugMatch[1]);
+        return article ? renderRuntimeArticlePage(article, data.articles.filter((item) => item.slug !== article.slug).slice(0, 3), locale) : null;
+    }
+    return null;
+};
+const runtimeInitGalleries = (root) => {
+    root.querySelectorAll("[data-gallery]").forEach((gallery) => {
+        if (gallery.dataset.runtimeGalleryReady === "true") {
+            return;
+        }
+        gallery.dataset.runtimeGalleryReady = "true";
+        const items = Array.from(gallery.querySelectorAll("[data-gallery-item]"));
+        const count = gallery.querySelector("[data-gallery-count]");
+        const frame = gallery.querySelector(".article-gallery-frame");
+        if (items.length <= 1) {
+            return;
+        }
+        const setGalleryIndex = (index) => {
+            const nextIndex = (index + items.length) % items.length;
+            gallery.dataset.galleryIndex = String(nextIndex);
+            items.forEach((item, itemIndex) => {
+                const isActive = itemIndex === nextIndex;
+                item.classList.toggle("is-active", isActive);
+                item.toggleAttribute("hidden", !isActive);
+            });
+            if (count) {
+                count.textContent = `${nextIndex + 1}/${items.length}`;
+            }
+        };
+        gallery.querySelector("[data-gallery-prev]")?.addEventListener("click", () => setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) - 1));
+        gallery.querySelector("[data-gallery-next]")?.addEventListener("click", () => setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1));
+        frame?.addEventListener("click", (event) => {
+            if (!(event.target instanceof HTMLElement) || event.target.closest("[data-gallery-prev], [data-gallery-next]")) {
+                return;
+            }
+            setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
+        });
+        setGalleryIndex(0);
+    });
+};
+const runtimeInitArticleRail = (root) => {
+    runtimeArticleRailCleanup?.();
+    runtimeArticleRailCleanup = null;
+    const articleRail = root.querySelector("[data-article-rail]");
+    const articleRailNo = root.querySelector("[data-article-rail-no]");
+    const articleRailTitle = root.querySelector("[data-article-rail-title]");
+    const articleRailText = root.querySelector("[data-article-rail-text]");
+    const articleRailVisual = root.querySelector("[data-article-rail-visual]");
+    const articleSections = root.querySelectorAll("[data-article-section]");
+    if (!articleRail || !articleRailNo || !articleRailTitle || !articleRailText || articleSections.length === 0) {
+        return;
+    }
+    let activeSection = null;
+    let frame = 0;
+    const setRail = (section) => {
+        if (activeSection === section) {
+            return;
+        }
+        activeSection = section;
+        articleRailNo.textContent = section.dataset.railNo || "";
+        articleRailTitle.textContent = section.dataset.railTitle || "";
+        articleRailText.textContent = section.dataset.railText || "";
+        articleRail.classList.toggle("is-rail-image-hidden", section.dataset.railImageHidden === "true");
+        if (articleRailVisual && section.dataset.railVisual) {
+            setImageBlockVisual(articleRailVisual, section.dataset.railVisual, section.dataset.railImage || "");
+        }
+        articleSections.forEach((articleSection) => articleSection.classList.toggle("is-active-section", articleSection === section));
+    };
+    const updateRail = () => {
+        frame = 0;
+        const activationPoint = Math.max(170, window.innerHeight * (window.innerWidth <= 960 ? 0.52 : 0.38));
+        let nextSection = articleSections[0];
+        articleSections.forEach((section) => {
+            if (section.getBoundingClientRect().top <= activationPoint) {
+                nextSection = section;
+            }
+        });
+        setRail(nextSection);
+    };
+    const requestUpdate = () => {
+        if (frame === 0) {
+            frame = window.requestAnimationFrame(updateRail);
+        }
+    };
+    updateRail();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+    runtimeArticleRailCleanup = () => {
+        window.removeEventListener("scroll", requestUpdate);
+        window.removeEventListener("resize", requestUpdate);
+        if (frame !== 0) {
+            window.cancelAnimationFrame(frame);
+        }
+    };
+};
+const runtimeAfterRender = (data, root, locale) => {
+    root.querySelectorAll("[data-reveal]").forEach((element) => element.classList.add("is-visible"));
+    runtimeInitGalleries(root);
+    runtimeInitArticleRail(root);
+    const latestIssue = data.issueProjects[0];
+    if (latestIssue) {
+        document.querySelectorAll(".issue-submenu a").forEach((link) => {
+            link.href = runtimeIssueHref(latestIssue, locale);
+            const label = link.querySelector("span");
+            if (label) {
+                label.textContent = `${latestIssue.number} · ${runtimeText(latestIssue.title, locale)}`;
+            }
+        });
+    }
+    document.querySelectorAll("[data-navigation-select]").forEach((select) => {
+        if (select.dataset.runtimeNavigationReady === "true") {
+            return;
+        }
+        select.dataset.runtimeNavigationReady = "true";
+        select.addEventListener("change", () => {
+            if (select.value && select.value !== window.location.pathname) {
+                window.location.href = select.value;
+            }
+        });
+    });
+};
+const hydrateRuntimeContent = async () => {
+    if (document.querySelector("[data-write-editor]") || !document.querySelector("main")) {
+        return;
+    }
+    const snapshot = await fetchSupabaseSnapshot().catch(() => null);
+    const data = runtimeSnapshotData(snapshot);
+    if (!data) {
+        return;
+    }
+    const locale = runtimeLocale();
+    const renderedBody = runtimeRenderForPath(data, runtimePath(), locale);
+    const main = document.querySelector("main");
+    if (!renderedBody || !main) {
+        return;
+    }
+    main.innerHTML = renderedBody;
+    document.documentElement.dataset.runtimeContent = "supabase";
+    runtimeAfterRender(data, main, locale);
+};
 const setImageBlockVisual = (element, visualClass, imageUrl = "") => {
     const existingImage = element.querySelector("[data-image-source]");
     element.classList.remove(...imageClasses);
@@ -2624,6 +3383,7 @@ if (writer) {
         }
     });
 }
+void hydrateRuntimeContent();
 let scrollFrame = 0;
 const updateScrollState = () => {
     scrollFrame = 0;

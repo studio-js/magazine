@@ -277,7 +277,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-supabase-content";
+const assetVersion = "20260504-runtime-content";
 
 const contentVersionHash = (value: string): string => {
   let hash = 5381;
