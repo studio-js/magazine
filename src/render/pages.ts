@@ -276,7 +276,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-mobile-spread-card";
+const assetVersion = "20260504-home-type-balance";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -943,11 +943,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
   const secondaryArticles = selectedArticles.slice(1, 5);
   const homeIndexRows = issueFeatures
     .map((feature, index) => {
-      const featureBody = feature.body[locale] ?? [];
-      const spreadImage = issueFeatureImage(feature);
-      const slotAttributes = spreadSlotDataAttributes(issueFeatures, index);
-
-      return `              <a class="home-index-row" href="${issueHref(currentIssue, locale)}#issue-${escapeHtml(feature.slug)}" data-scroll-motion data-issue-spread-row data-spread-no="${String(index + 1).padStart(2, "0")}" data-spread-title="${escapeHtml(text(feature.title, locale))}" data-spread-role="${escapeHtml(text(feature.role, locale))}" data-spread-intro="${escapeHtml(text(feature.intro, locale))}" data-spread-copy-a="${escapeHtml(featureBody[0] ?? text(feature.excerpt, locale))}" data-spread-copy-b="${escapeHtml(featureBody[1] ?? text(currentIssue.editorNote, locale))}" data-spread-deck="${escapeHtml(text(feature.excerpt, locale))}" data-spread-visual="${escapeHtml(feature.heroClass)}" data-spread-image="${escapeHtml(spreadImage)}" ${slotAttributes}>
+      return `              <a class="home-index-row" href="${issueHref(currentIssue, locale)}#issue-${escapeHtml(feature.slug)}" data-scroll-motion>
                 <span class="home-index-order">${String(index + 1).padStart(2, "0")}</span>
                 <span class="home-index-copy">
                   <strong>${escapeHtml(text(feature.title, locale))}</strong>
@@ -979,9 +975,6 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
       "              </a>"
     ].filter(Boolean).join("\n"))
     .join("\n");
-  const homeIssuePrototype = `          <a class="home-issue-prototype" href="${issueHref(currentIssue, locale)}" data-action-card>
-${renderIssueSpread(currentIssue, locale)}
-          </a>`;
   const body = `
     <section class="cover section-pad" aria-labelledby="hero-title" data-scroll-section>
       <div class="cover-grid home-cover-grid">
@@ -996,7 +989,6 @@ ${renderIssueSpread(currentIssue, locale)}
             <span>${escapeHtml(locale === "ko" ? "최신 이슈 읽기" : "Read Latest Issue")}</span>
             <small>${escapeHtml(currentIssue.number)}</small>
           </a>
-${homeIssuePrototype}
         </div>
 
         <section class="home-issue-index" aria-labelledby="home-issue-index-title" data-reveal data-scroll-motion>
