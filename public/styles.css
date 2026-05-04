@@ -20827,7 +20827,7 @@ html[lang="ko"] .home-index-row strong {
   display: grid !important;
   grid-template-columns: clamp(1.8rem, 2.18vw, 2.35rem) minmax(0, 1fr) !important;
   gap: clamp(0.52rem, 0.78vw, 0.82rem) !important;
-  align-items: baseline !important;
+  align-items: start !important;
   min-height: 0 !important;
   height: auto !important;
   padding: var(--home-index-row-pad) 0 !important;
@@ -20910,7 +20910,7 @@ html[lang="ko"] .home-index-row strong {
 .home-index-order {
   position: relative !important;
   top: 0 !important;
-  align-self: baseline !important;
+  align-self: start !important;
   padding: 0 !important;
   color: rgba(24, 23, 19, 0.52) !important;
   font-size: clamp(0.7rem, 0.74vw, 0.82rem) !important;
@@ -20922,7 +20922,7 @@ html[lang="ko"] .home-index-row strong {
 
 .home-index-copy {
   display: grid !important;
-  align-self: baseline !important;
+  align-self: start !important;
   align-content: start !important;
   gap: clamp(0.18rem, 0.34vw, 0.32rem) !important;
   min-width: 0 !important;
@@ -21156,7 +21156,7 @@ html[lang="ko"] .home-story-line strong {
 .home-story-line small {
   position: relative !important;
   top: 0 !important;
-  align-self: baseline !important;
+  align-self: start !important;
   padding-left: 0 !important;
   color: rgba(24, 23, 19, 0.48) !important;
   font-size: clamp(0.66rem, 0.7vw, 0.78rem) !important;
@@ -21167,7 +21167,7 @@ html[lang="ko"] .home-story-line strong {
 }
 
 .home-story-line strong {
-  align-self: baseline !important;
+  align-self: start !important;
   max-width: min(100%, 39rem) !important;
   color: currentColor !important;
   font-size: clamp(1.08rem, 1.48vw, 1.78rem) !important;
