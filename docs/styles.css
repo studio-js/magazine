@@ -22126,3 +22126,116 @@ html[lang="ko"] .filter-button {
   font-weight: 450 !important;
   letter-spacing: 0.006em !important;
 }
+
+/* Screenshot tuning: keep the geometry in structure, not in the editorial voice. */
+.nav span,
+html[lang="ko"] .nav span {
+  color: rgba(24, 23, 19, 0.58) !important;
+  font-size: clamp(0.76rem, 0.84vw, 0.94rem) !important;
+  font-weight: 430 !important;
+  letter-spacing: 0.028em !important;
+}
+
+.nav-link:hover span,
+.nav-link.is-active span,
+.nav-item:focus-within .nav-link span,
+.nav-item:hover .nav-link span {
+  color: rgba(24, 23, 19, 0.84) !important;
+}
+
+.header-tools > a,
+.language-switch a,
+.site-footer {
+  color: rgba(24, 23, 19, 0.56) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.1em !important;
+}
+
+.home-cover-grid .cover-copy h1,
+html[lang="ko"] .home-cover-grid .cover-copy h1 {
+  max-width: 13.5ch !important;
+  font-size: clamp(3rem, 5.65vw, 6.85rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.045em !important;
+  line-height: 1.02 !important;
+}
+
+html[lang="ko"] .home-cover-grid .cover-copy h1 {
+  font-family: var(--kr-display) !important;
+  font-size: clamp(2.7rem, 4.85vw, 5.75rem) !important;
+  letter-spacing: -0.018em !important;
+  line-height: 1.18 !important;
+}
+
+.cover-edition,
+html[lang="ko"] .cover-edition,
+.kicker,
+html[lang="ko"] .kicker {
+  color: rgba(24, 23, 19, 0.62) !important;
+  font-size: clamp(0.7rem, 0.76vw, 0.84rem) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.095em !important;
+}
+
+.home-index-row strong,
+html[lang="ko"] .home-index-row strong {
+  color: rgba(24, 23, 19, 0.88) !important;
+  font-size: clamp(1rem, 1.18vw, 1.48rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.012em !important;
+  line-height: 1.32 !important;
+}
+
+html[lang="ko"] .home-index-row strong {
+  max-width: min(100%, 22ch) !important;
+  letter-spacing: -0.008em !important;
+  line-height: 1.42 !important;
+}
+
+.home-index-order,
+html[lang="ko"] .home-index-order,
+.home-index-meta,
+html[lang="ko"] .home-index-meta {
+  color: rgba(24, 23, 19, 0.46) !important;
+  font-weight: 500 !important;
+}
+
+.home-recent-copy strong,
+html[lang="ko"] .home-recent-copy strong {
+  color: rgba(24, 23, 19, 0.86) !important;
+  font-size: clamp(1.2rem, 1.72vw, 2.38rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.018em !important;
+  line-height: 1.28 !important;
+}
+
+html[lang="ko"] .home-recent-copy strong {
+  max-width: min(100%, 17ch) !important;
+  font-size: clamp(1.12rem, 1.48vw, 2.02rem) !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.42 !important;
+}
+
+.home-story-line strong,
+html[lang="ko"] .home-story-line strong {
+  color: rgba(24, 23, 19, 0.84) !important;
+  font-weight: 400 !important;
+}
+
+.home-story-line span,
+.home-story-line small,
+html[lang="ko"] .home-story-line span,
+html[lang="ko"] .home-story-line small,
+.home-recent-copy small,
+html[lang="ko"] .home-recent-copy small {
+  color: rgba(24, 23, 19, 0.5) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.07em !important;
+}
+
+@media (max-width: 680px) {
+  .home-cover-grid .cover-copy h1,
+  html[lang="ko"] .home-cover-grid .cover-copy h1 {
+    font-size: clamp(2.45rem, 11.5vw, 4.35rem) !important;
+  }
+}
