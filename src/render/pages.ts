@@ -278,7 +278,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-stable-venn";
+const assetVersion = "20260504-home-density";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
@@ -968,6 +968,9 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
   const selectedArticles = articleList.slice(0, 5);
   const leadArticle = selectedArticles[0];
   const secondaryArticles = selectedArticles.slice(1, 5);
+  const issueRouteText = issueFeatures.slice(0, 3).map((feature) => text(feature.readTime, locale)).filter(Boolean).join(" · ") || text(currentIssue.format, locale);
+  const issueAccessText = text(currentIssue.availability, locale);
+  const storyRangeText = selectedArticles.length ? `01-${String(selectedArticles.length).padStart(2, "0")}` : "00";
   const homeIndexRows = issueFeatures
     .map((feature, index) => {
       return `              <a class="home-index-row" href="${issueHref(currentIssue, locale)}#issue-${escapeHtml(feature.slug)}" data-scroll-motion>
@@ -989,6 +992,10 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
               <small>${escapeHtml(categoryLabel(site.categories, leadArticle.category, locale))} / ${escapeHtml(formatDate(leadArticle.date, locale))}</small>
               <strong>${escapeHtml(text(leadArticle.title, locale))}</strong>
               <em>${escapeHtml(text(leadArticle.excerpt, locale))}</em>
+              <span class="home-recent-context" aria-label="${escapeHtml(locale === "ko" ? "대표 글 맥락" : "Lead story context")}">
+                <span><small>${escapeHtml(locale === "ko" ? "대표" : "Lead")}</small><strong>01</strong></span>
+                <span><small>${escapeHtml(locale === "ko" ? "이어 읽기" : "Next")}</small><strong>${secondaryArticles.length} ${escapeHtml(locale === "ko" ? "편" : "entries")}</strong></span>
+              </span>
             </span>
           </a>`
     : "";
@@ -1012,6 +1019,11 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
           <p class="kicker">Current Issue</p>
           <h1 id="hero-title">${escapeHtml(text(currentIssue.title, locale))}</h1>
           <p class="cover-deck">${escapeHtml(text(currentIssue.deck, locale))}</p>
+          <div class="home-cover-ledger" aria-label="${escapeHtml(locale === "ko" ? "이슈 요약" : "Issue summary")}">
+            <span><small>${escapeHtml(locale === "ko" ? "장면" : "Scenes")}</small><strong>${String(issueFeatures.length).padStart(2, "0")}</strong></span>
+            <span><small>${escapeHtml(locale === "ko" ? "공개" : "Access")}</small><strong>${escapeHtml(issueAccessText)}</strong></span>
+            <span><small>${escapeHtml(locale === "ko" ? "경로" : "Route")}</small><strong>${escapeHtml(issueRouteText)}</strong></span>
+          </div>
           <a class="home-issue-link" href="${issueHref(currentIssue, locale)}">
             <span>${escapeHtml(locale === "ko" ? "최신 이슈 읽기" : "Read Latest Issue")}</span>
             <small>${escapeHtml(currentIssue.number)}</small>
@@ -1021,7 +1033,9 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
         <section class="home-issue-index" aria-labelledby="home-issue-index-title" data-reveal data-scroll-motion>
           <header class="home-index-headline">
             <p class="kicker" id="home-issue-index-title">Issue Index</p>
+            <span class="home-index-scope">${escapeHtml(currentIssue.number)} / ${String(issueFeatures.length).padStart(2, "0")} ${escapeHtml(locale === "ko" ? "장면" : "Scenes")}</span>
           </header>
+          <p class="home-index-note">${escapeHtml(text(currentIssue.subtitle, locale))}</p>
           <div class="home-index-list" aria-label="${escapeHtml(locale === "ko" ? "이슈 읽기 순서" : "Issue reading order")}">
 ${homeIndexRows}
           </div>
@@ -1035,7 +1049,7 @@ ${homeIndexRows}
         <h2 id="features-title">${locale === "ko" ? "최근 글" : "Recent Stories"}</h2>
       </div>
 
-      <div class="home-recent-spread">
+      <div class="home-recent-spread" data-story-label="${escapeHtml(locale === "ko" ? "최근 읽기" : "Recent")}" data-story-range="${escapeHtml(storyRangeText)}">
 ${homeRecentLead}
         <div class="home-story-index-list">
 ${storyRows}

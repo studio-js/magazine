@@ -22673,6 +22673,159 @@ html[lang="ko"] .home-recent-copy small {
   will-change: opacity, fill, stroke;
 }
 
+/* Home density pass: add quiet editorial cues without changing the primary layout. */
+.home-cover-ledger {
+  display: grid;
+  grid-template-columns: minmax(3.8rem, 0.2fr) minmax(0, 0.36fr) minmax(0, 0.44fr);
+  gap: clamp(0.72rem, 1.35vw, 1.2rem);
+  width: min(100%, 33rem);
+  margin-top: clamp(1.15rem, 2.2vw, 2rem);
+  padding-top: clamp(0.72rem, 1.15vw, 1rem);
+  border-top: 1px solid rgba(24, 23, 19, 0.13);
+}
+
+.home-cover-ledger span,
+.home-recent-context span {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.home-cover-ledger small,
+.home-index-scope,
+.home-recent-context small {
+  color: rgba(24, 23, 19, 0.46);
+  font-size: clamp(0.62rem, 0.68vw, 0.76rem);
+  font-weight: 560;
+  letter-spacing: 0.085em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.home-cover-ledger strong {
+  color: rgba(24, 23, 19, 0.74);
+  font-size: clamp(0.88rem, 0.95vw, 1.08rem);
+  font-weight: 430;
+  letter-spacing: -0.012em;
+  line-height: 1.28;
+  word-break: keep-all;
+}
+
+.home-index-headline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.home-index-scope {
+  justify-self: end;
+  white-space: nowrap;
+}
+
+.home-index-note {
+  width: min(100%, 34rem);
+  margin: clamp(-0.28rem, -0.3vw, -0.1rem) 0 clamp(0.12rem, 0.35vw, 0.32rem);
+  color: rgba(24, 23, 19, 0.52);
+  font-size: clamp(0.92rem, 1.04vw, 1.08rem);
+  line-height: 1.68;
+  text-wrap: pretty;
+  word-break: keep-all;
+}
+
+.home-recent-context {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(6.8rem, max-content));
+  gap: clamp(0.9rem, 1.8vw, 1.7rem);
+  width: fit-content;
+  max-width: 100%;
+  margin-top: clamp(0.4rem, 1.2vw, 1.2rem);
+  padding-top: clamp(0.62rem, 1vw, 0.86rem);
+  border-top: 1px solid rgba(24, 23, 19, 0.13);
+}
+
+.home-recent-spread {
+  position: relative;
+}
+
+.home-recent-spread::before {
+  content: attr(data-story-label) " / " attr(data-story-range);
+  position: absolute;
+  left: 48%;
+  top: clamp(0.1rem, 0.7vw, 0.7rem);
+  color: rgba(24, 23, 19, 0.34);
+  font-size: clamp(0.62rem, 0.66vw, 0.74rem);
+  font-weight: 560;
+  letter-spacing: 0.09em;
+  line-height: 1;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+  writing-mode: vertical-rl;
+}
+
+.home-recent-copy .home-recent-context strong,
+html[lang="ko"] .home-recent-copy .home-recent-context strong {
+  max-width: none !important;
+  color: rgba(24, 23, 19, 0.72) !important;
+  font-size: clamp(0.86rem, 0.92vw, 1.04rem) !important;
+  font-weight: 430 !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.18 !important;
+  white-space: nowrap;
+}
+
+.js .cover .cover-copy[data-reveal] .home-cover-ledger,
+.js .cover .home-issue-index[data-reveal] .home-index-scope,
+.js .cover .home-issue-index[data-reveal] .home-index-note,
+.js .home-stories .home-recent-copy .home-recent-context {
+  clip-path: inset(0) !important;
+  translate: 0 0 !important;
+  transition:
+    clip-path 780ms cubic-bezier(0.16, 1, 0.3, 1),
+    translate 780ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: clip-path, translate;
+}
+
+.js .cover .cover-copy[data-reveal]:not(.is-visible) .home-cover-ledger,
+.js .cover .home-issue-index[data-reveal]:not(.is-visible) .home-index-scope,
+.js .cover .home-issue-index[data-reveal]:not(.is-visible) .home-index-note,
+.js .home-stories .home-recent-lead:not(.is-visible) .home-recent-context {
+  clip-path: inset(0 100% 0 0) !important;
+  translate: -0.42rem 0 !important;
+}
+
+.js .cover .cover-copy[data-reveal] .home-cover-ledger { transition-delay: 330ms !important; }
+.js .cover .home-issue-index[data-reveal] .home-index-scope { transition-delay: 150ms !important; }
+.js .cover .home-issue-index[data-reveal] .home-index-note { transition-delay: 210ms !important; }
+.js .home-stories .home-recent-copy .home-recent-context { transition-delay: 240ms !important; }
+
+@media (max-width: 680px) {
+  .home-index-headline {
+    display: block;
+  }
+
+  .home-cover-grid .cover-copy h1,
+  html[lang="ko"] .home-cover-grid .cover-copy h1 {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+  .home-cover-ledger,
+  .home-recent-context {
+    grid-template-columns: 1fr;
+    width: min(100%, 18rem);
+  }
+
+  .home-index-scope {
+    display: none;
+  }
+
+  .home-recent-spread::before {
+    content: none;
+  }
+}
+
 /* Editorial row expansion guard: keep row actions while preventing short clamps. */
 .archive-row:hover .archive-summary,
 .archive-row:focus-visible .archive-summary,

@@ -482,7 +482,14 @@ const renderRuntimeHomePage = (data, locale) => {
     const selectedArticles = data.articles.slice(0, 5);
     const leadArticle = selectedArticles[0];
     const secondaryArticles = selectedArticles.slice(1, 5);
-    const issueRows = (currentIssue?.features || []).map((feature, index) => `              <a class="home-index-row" href="${runtimeIssueHref(currentIssue, locale)}#issue-${runtimeEscapeHtml(feature.slug)}" data-scroll-motion>
+    if (!currentIssue) {
+        return "";
+    }
+    const issueFeatures = currentIssue.features || [];
+    const issueRouteText = issueFeatures.slice(0, 3).map((feature) => runtimeText(feature.readTime, locale)).filter(Boolean).join(" · ") || runtimeText(currentIssue.format, locale);
+    const issueAccessText = runtimeText(currentIssue.availability, locale);
+    const storyRangeText = selectedArticles.length ? `01-${String(selectedArticles.length).padStart(2, "0")}` : "00";
+    const issueRows = issueFeatures.map((feature, index) => `              <a class="home-index-row" href="${runtimeIssueHref(currentIssue, locale)}#issue-${runtimeEscapeHtml(feature.slug)}" data-scroll-motion>
                 <span class="home-index-order">${String(index + 1).padStart(2, "0")}</span>
                 <span class="home-index-copy">
                   <strong>${runtimeEscapeHtml(runtimeText(feature.title, locale))}</strong>
@@ -496,6 +503,10 @@ const renderRuntimeHomePage = (data, locale) => {
               <small>${runtimeEscapeHtml(runtimeCategoryLabel(leadArticle.category, locale))} / ${runtimeEscapeHtml(runtimeFormatDate(leadArticle.date, locale))}</small>
               <strong>${runtimeEscapeHtml(runtimeText(leadArticle.title, locale))}</strong>
               <em>${runtimeEscapeHtml(runtimeText(leadArticle.excerpt, locale))}</em>
+              <span class="home-recent-context" aria-label="${runtimeEscapeHtml(locale === "ko" ? "대표 글 맥락" : "Lead story context")}">
+                <span><small>${runtimeEscapeHtml(locale === "ko" ? "대표" : "Lead")}</small><strong>01</strong></span>
+                <span><small>${runtimeEscapeHtml(locale === "ko" ? "이어 읽기" : "Next")}</small><strong>${secondaryArticles.length} ${runtimeEscapeHtml(locale === "ko" ? "편" : "entries")}</strong></span>
+              </span>
             </span>
           </a>` : "";
     const storyRows = secondaryArticles.map((article, index) => `              <a class="home-story-line" href="${runtimeArticleHref(article, locale)}" data-reveal data-action-card>
@@ -504,9 +515,6 @@ const renderRuntimeHomePage = (data, locale) => {
                 <small>${runtimeEscapeHtml(runtimeCategoryLabel(article.category, locale))} / ${runtimeEscapeHtml(runtimeFormatDate(article.date, locale))}</small>
                 <em>${runtimeEscapeHtml(runtimeText(article.excerpt, locale))}</em>
               </a>`).join("\n");
-    if (!currentIssue) {
-        return "";
-    }
     runtimeSetDocumentMeta("Habitus", locale === "ko" ? "취향에 관하여" : "On Taste");
     return `
     <section class="cover section-pad" aria-labelledby="hero-title" data-scroll-section>
@@ -516,11 +524,17 @@ const renderRuntimeHomePage = (data, locale) => {
           <p class="kicker">Current Issue</p>
           <h1 id="hero-title">${runtimeEscapeHtml(runtimeText(currentIssue.title, locale))}</h1>
           <p class="cover-deck">${runtimeEscapeHtml(runtimeText(currentIssue.deck, locale))}</p>
+          <div class="home-cover-ledger" aria-label="${runtimeEscapeHtml(locale === "ko" ? "이슈 요약" : "Issue summary")}">
+            <span><small>${runtimeEscapeHtml(locale === "ko" ? "장면" : "Scenes")}</small><strong>${String(issueFeatures.length).padStart(2, "0")}</strong></span>
+            <span><small>${runtimeEscapeHtml(locale === "ko" ? "공개" : "Access")}</small><strong>${runtimeEscapeHtml(issueAccessText)}</strong></span>
+            <span><small>${runtimeEscapeHtml(locale === "ko" ? "경로" : "Route")}</small><strong>${runtimeEscapeHtml(issueRouteText)}</strong></span>
+          </div>
           <a class="home-issue-link" href="${runtimeIssueHref(currentIssue, locale)}"><span>${runtimeEscapeHtml(locale === "ko" ? "최신 이슈 읽기" : "Read Latest Issue")}</span><small>${runtimeEscapeHtml(currentIssue.number)}</small></a>
         </div>
 
         <section class="home-issue-index" aria-labelledby="home-issue-index-title" data-reveal data-scroll-motion>
-          <header class="home-index-headline"><p class="kicker" id="home-issue-index-title">Issue Index</p></header>
+          <header class="home-index-headline"><p class="kicker" id="home-issue-index-title">Issue Index</p><span class="home-index-scope">${runtimeEscapeHtml(currentIssue.number)} / ${String(issueFeatures.length).padStart(2, "0")} ${runtimeEscapeHtml(locale === "ko" ? "장면" : "Scenes")}</span></header>
+          <p class="home-index-note">${runtimeEscapeHtml(runtimeText(currentIssue.subtitle, locale))}</p>
           <div class="home-index-list" aria-label="${runtimeEscapeHtml(locale === "ko" ? "이슈 읽기 순서" : "Issue reading order")}">
 ${issueRows}
           </div>
@@ -533,7 +547,7 @@ ${issueRows}
         <p class="kicker">${runtimeEscapeHtml(runtimeLabels[locale].selectedStories)}</p>
         <h2 id="features-title">${runtimeEscapeHtml(locale === "ko" ? "최근 글" : "Recent Stories")}</h2>
       </div>
-      <div class="home-recent-spread">
+      <div class="home-recent-spread" data-story-label="${runtimeEscapeHtml(locale === "ko" ? "최근 읽기" : "Recent")}" data-story-range="${runtimeEscapeHtml(storyRangeText)}">
 ${homeRecentLead}
         <div class="home-story-index-list">
 ${storyRows}
