@@ -16,6 +16,9 @@ const imageClasses = [
   "image-library",
   "image-field"
 ];
+const galleryLayouts = ["standard", "wide", "portrait", "diptych", "strip"] as const;
+type GalleryLayout = typeof galleryLayouts[number];
+const normalizeGalleryLayout = (value?: string): GalleryLayout => galleryLayouts.includes(value as GalleryLayout) ? value as GalleryLayout : "standard";
 const clientScriptSrc = document.querySelector<HTMLScriptElement>('script[src*="client.js"]')?.getAttribute("src") || "/client.js";
 const clientBasePath = new URL(clientScriptSrc, window.location.href).pathname.replace(/\/client\.js$/, "");
 const apiPath = (path: string): string => `${clientBasePath}${path}`;
@@ -48,7 +51,7 @@ interface RuntimeArticleBlockImage {
 type RuntimeArticleSectionBlock =
   | { type: "paragraph"; text: RuntimeLocalizedText }
   | { type: "quote"; text: RuntimeLocalizedText }
-  | { type: "gallery"; images: RuntimeArticleBlockImage[]; caption?: RuntimeLocalizedText };
+  | { type: "gallery"; images: RuntimeArticleBlockImage[]; layout?: GalleryLayout; caption?: RuntimeLocalizedText };
 
 interface RuntimeArticleSection {
   heading: RuntimeLocalizedText;
@@ -461,17 +464,19 @@ const renderRuntimeArchivePage = (articles: RuntimeArticle[], locale: RuntimeLoc
     </section>`;
 };
 
-const renderRuntimeGallery = (article: RuntimeArticle, images: RuntimeArticleBlockImage[], caption: RuntimeLocalizedText | undefined, locale: RuntimeLocale): string => {
+const renderRuntimeGallery = (article: RuntimeArticle, images: RuntimeArticleBlockImage[], caption: RuntimeLocalizedText | undefined, locale: RuntimeLocale, layoutValue?: string): string => {
   const visibleImages = images.filter((image) => image.image || image.imageClass);
 
   if (visibleImages.length === 0) {
     return "";
   }
 
-  const imageItems = visibleImages.map((image, index) => `                      <span class="article-gallery-item${index === 0 ? " is-active" : ""}" data-gallery-item${index === 0 ? "" : " hidden"}>
+  const layout = normalizeGalleryLayout(layoutValue);
+  const isStaticImageSet = layout === "diptych" || layout === "strip";
+  const imageItems = visibleImages.map((image, index) => `                      <span class="article-gallery-item${!isStaticImageSet && index === 0 ? " is-active" : ""}"${!isStaticImageSet ? ` data-gallery-item${index === 0 ? "" : " hidden"}` : ""}>
                         ${runtimeImageBlock(image.imageClass || article.heroClass, image.image || "", image.image ? "" : `data-visual-cycle role="button" tabindex="0" aria-label="${runtimeEscapeHtml(locale === "ko" ? "본문 비주얼 바꾸기" : "Cycle inline visual")}"`)}
                       </span>`).join("\n");
-  const controlsMarkup = visibleImages.length > 1 ? `
+  const controlsMarkup = !isStaticImageSet && visibleImages.length > 1 ? `
                     <div class="article-gallery-controls" aria-label="${runtimeEscapeHtml(locale === "ko" ? "본문 이미지 순환" : "Body image carousel")}">
                       <button type="button" data-gallery-prev>${runtimeEscapeHtml(locale === "ko" ? "이전" : "Prev")}</button>
                       <span data-gallery-count>1/${visibleImages.length}</span>
@@ -480,8 +485,8 @@ const renderRuntimeGallery = (article: RuntimeArticle, images: RuntimeArticleBlo
   const captionText = runtimeText(caption, locale);
 
   return `
-                  <figure class="article-section-figure article-section-gallery" data-gallery data-gallery-index="0">
-                    <div class="article-gallery-frame"${visibleImages.length > 1 ? ` data-gallery-frame role="button" tabindex="0" aria-label="${runtimeEscapeHtml(locale === "ko" ? "본문 이미지 다음으로 보기" : "Show next body image")}"` : ""}>
+                  <figure class="article-section-figure article-section-gallery article-gallery-${layout}" data-gallery-layout="${layout}"${!isStaticImageSet ? " data-gallery data-gallery-index=\"0\"" : ""}>
+                    <div class="article-gallery-frame"${!isStaticImageSet && visibleImages.length > 1 ? ` data-gallery-frame role="button" tabindex="0" aria-label="${runtimeEscapeHtml(locale === "ko" ? "본문 이미지 다음으로 보기" : "Show next body image")}"` : ""}>
 ${imageItems}
                     </div>${controlsMarkup}${captionText ? `
                     <figcaption>${runtimeEscapeHtml(captionText)}</figcaption>` : ""}
@@ -513,7 +518,7 @@ const renderRuntimeArticlePage = (article: RuntimeArticle, relatedArticles: Runt
     }
 
     if (block.type === "gallery") {
-      return renderRuntimeGallery(article, block.images || [], block.caption, locale);
+      return renderRuntimeGallery(article, block.images || [], block.caption, locale, block.layout);
     }
 
     const paragraphText = runtimeText(block.text, locale).trim();
@@ -1376,6 +1381,7 @@ if (writer) {
     | {
       type: "gallery";
       images: AdminBlockImage[];
+      layout?: GalleryLayout;
       caption?: AdminLocalizedText;
     };
   type AdminSection = {
@@ -1789,7 +1795,7 @@ if (writer) {
         .filter((image) => image.imageClass || image.image);
 
       return images.length > 0
-        ? { type: "gallery", images, caption: normalizeBlockText(block.caption) }
+        ? { type: "gallery", images, layout: normalizeGalleryLayout(block.layout), caption: normalizeBlockText(block.caption) }
         : null;
     }
 
@@ -2037,6 +2043,13 @@ if (writer) {
   };
 
   const imageClassOptions = imageClasses.map((imageClass) => ({ value: imageClass, label: imageClass }));
+  const galleryLayoutOptions = [
+    { value: "standard", label: "기본" },
+    { value: "wide", label: "와이드" },
+    { value: "portrait", label: "포트레이트" },
+    { value: "diptych", label: "2열" },
+    { value: "strip", label: "필름스트립" }
+  ];
 
   const cycleSelectVisual = (select: HTMLSelectElement | null, direction: number): string => {
     if (!select) {
@@ -2299,13 +2312,26 @@ if (writer) {
     return item;
   };
 
-  const createGalleryBlock = (images: AdminBlockImage[] = [{ imageClass: "image-material", image: "" }], caption = ""): HTMLElement => {
+  const updateGalleryLayout = (gallery: HTMLElement, value?: string): void => {
+    const layout = normalizeGalleryLayout(value);
+    gallery.dataset.writeGalleryLayout = layout;
+    galleryLayouts.forEach((galleryLayout) => gallery.classList.remove(`writer-gallery-${galleryLayout}`));
+    gallery.classList.add(`writer-gallery-${layout}`);
+    const select = gallery.querySelector<HTMLSelectElement>("[data-write-gallery-layout]");
+
+    if (select && select.value !== layout) {
+      select.value = layout;
+    }
+  };
+
+  const createGalleryBlock = (images: AdminBlockImage[] = [{ imageClass: "image-material", image: "" }], caption = "", layoutValue = "standard"): HTMLElement => {
     const gallery = document.createElement("figure");
     gallery.className = "writer-section-media writer-section-gallery";
     gallery.dataset.writeBlock = "gallery";
     gallery.dataset.writeSectionMedia = "";
     gallery.dataset.writeSectionGallery = "";
     gallery.contentEditable = "false";
+    updateGalleryLayout(gallery, layoutValue);
 
     const items = document.createElement("div");
     items.className = "writer-gallery-items";
@@ -2323,6 +2349,13 @@ if (writer) {
     tools.className = "writer-gallery-tools";
     tools.contentEditable = "false";
 
+    const layoutLabel = document.createElement("label");
+    const layoutText = document.createElement("span");
+    layoutText.textContent = "레이아웃";
+    const layoutSelect = createSelect(galleryLayoutOptions, gallery.dataset.writeGalleryLayout || "standard");
+    layoutSelect.dataset.writeGalleryLayout = "";
+    layoutLabel.append(layoutText, layoutSelect);
+
     const addImage = document.createElement("button");
     addImage.type = "button";
     addImage.dataset.writeGalleryAddImage = "";
@@ -2333,7 +2366,7 @@ if (writer) {
     removeGallery.dataset.writeGalleryRemove = "";
     removeGallery.textContent = "갤러리 삭제";
 
-    tools.append(addImage, removeGallery);
+    tools.append(layoutLabel, addImage, removeGallery);
     gallery.append(items, figcaption, tools);
     return gallery;
   };
@@ -2354,7 +2387,7 @@ if (writer) {
         }
 
         if (block.type === "gallery") {
-          return createGalleryBlock(block.images, activeText(block.caption));
+          return createGalleryBlock(block.images, activeText(block.caption), block.layout);
         }
 
         return createParagraph(activeText(block.text));
@@ -2656,7 +2689,7 @@ if (writer) {
   type SectionDraftBlock =
     | { type: "paragraph"; text: string }
     | { type: "quote"; text: string }
-    | { type: "gallery"; images: AdminBlockImage[]; caption: string };
+    | { type: "gallery"; images: AdminBlockImage[]; layout: GalleryLayout; caption: string };
 
   type SectionDraft = {
     heading: string;
@@ -2684,7 +2717,7 @@ if (writer) {
         .filter((image) => image.imageClass || image.image);
 
       return images.length > 0
-        ? { type: "gallery", images, caption: block.querySelector<HTMLElement>("[data-write-gallery-caption]")?.innerText.trim() || "" }
+        ? { type: "gallery", images, layout: normalizeGalleryLayout(block.querySelector<HTMLSelectElement>("[data-write-gallery-layout]")?.value || block.dataset.writeGalleryLayout), caption: block.querySelector<HTMLElement>("[data-write-gallery-caption]")?.innerText.trim() || "" }
         : null;
     }
 
@@ -2779,6 +2812,7 @@ if (writer) {
       blocks.push({
         type: "gallery",
         images: [{ imageClass: section.sectionImageClass || section.railClass || "image-material", image: section.sectionImage || "" }],
+        layout: "standard",
         caption: section.sectionImageCaption || blankLocalizedText()
       });
     }
@@ -2803,6 +2837,7 @@ if (writer) {
       return {
         type: "gallery",
         images: block.images,
+        layout: block.layout,
         caption: localizedText(previousGallery?.caption || blankLocalizedText(), block.caption)
       };
     }
@@ -3620,6 +3655,14 @@ if (writer) {
         }
 
         target.value = "";
+      }
+    }
+
+    if (target instanceof HTMLSelectElement && target.matches("[data-write-gallery-layout]")) {
+      const gallery = target.closest<HTMLElement>("[data-write-section-gallery]");
+
+      if (gallery) {
+        updateGalleryLayout(gallery, target.value);
       }
     }
 

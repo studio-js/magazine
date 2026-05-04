@@ -42,6 +42,8 @@ export type VisualClass =
 
 export type ArticleRailMode = "default" | "image" | "text";
 
+export type ArticleGalleryLayout = "standard" | "wide" | "portrait" | "diptych" | "strip";
+
 export interface ArticleBlockImage {
   imageClass?: VisualClass;
   image?: string;
@@ -59,6 +61,7 @@ export type ArticleSectionBlock =
   | {
     type: "gallery";
     images: ArticleBlockImage[];
+    layout?: ArticleGalleryLayout;
     caption?: LocalizedText;
   };
 

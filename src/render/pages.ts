@@ -1,5 +1,5 @@
 import { supabasePublicConfig } from "../config/supabase";
-import type { Article, ArticleBlockImage, ArticleSection, ArticleSectionBlock, CategoryDefinition, IssueFeature, IssueProject, Locale, LocalizedText, Note, PrimaryCategory, SiteContent, SubcategoryKey } from "../types";
+import type { Article, ArticleBlockImage, ArticleGalleryLayout, ArticleSection, ArticleSectionBlock, CategoryDefinition, IssueFeature, IssueProject, Locale, LocalizedText, Note, PrimaryCategory, SiteContent, SubcategoryKey } from "../types";
 
 interface LayoutOptions {
   title: string;
@@ -277,7 +277,11 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-write-reading-polish";
+const assetVersion = "20260504-image-layouts";
+
+const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
+
+const galleryLayout = (value?: string): ArticleGalleryLayout => galleryLayouts.includes(value as ArticleGalleryLayout) ? value as ArticleGalleryLayout : "standard";
 
 const contentVersionHash = (value: string): string => {
   let hash = 5381;
@@ -1305,23 +1309,25 @@ export const renderArticlePage = (
   const metaLabels = locale === "ko"
     ? { date: "발행", location: "장소", readTime: "읽기", tags: "태그" }
     : { date: "Published", location: "Location", readTime: "Reading", tags: "Tags" };
-  const renderGalleryFigure = (images: ArticleBlockImage[], caption?: LocalizedText): string => {
+  const renderGalleryFigure = (images: ArticleBlockImage[], caption?: LocalizedText, layoutValue?: ArticleGalleryLayout): string => {
     const visibleImages = images.filter((image) => image.image || image.imageClass);
 
     if (visibleImages.length === 0) {
       return "";
     }
 
+    const layout = galleryLayout(layoutValue);
+    const isStaticImageSet = layout === "diptych" || layout === "strip";
     const captionText = caption ? text(caption, locale) : "";
     const imageItems = visibleImages
       .map((image, index) => {
         const cycleAttributes = image.image ? "" : `data-visual-cycle role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "본문 비주얼 바꾸기" : "Cycle inline visual")}"`;
-        return `                      <span class="article-gallery-item${index === 0 ? " is-active" : ""}" data-gallery-item${index === 0 ? "" : " hidden"}>
+        return `                      <span class="article-gallery-item${!isStaticImageSet && index === 0 ? " is-active" : ""}"${!isStaticImageSet ? ` data-gallery-item${index === 0 ? "" : " hidden"}` : ""}>
                         ${renderImageBlock(image.imageClass || article.heroClass, image.image, cycleAttributes)}
                       </span>`;
       })
       .join("\n");
-    const controlsMarkup = visibleImages.length > 1 ? `
+    const controlsMarkup = !isStaticImageSet && visibleImages.length > 1 ? `
                     <div class="article-gallery-controls" aria-label="${escapeHtml(locale === "ko" ? "본문 이미지 순환" : "Body image carousel")}">
                       <button type="button" data-gallery-prev>${escapeHtml(locale === "ko" ? "이전" : "Prev")}</button>
                       <span data-gallery-count>1/${visibleImages.length}</span>
@@ -1331,8 +1337,8 @@ export const renderArticlePage = (
                     <figcaption>${escapeHtml(captionText)}</figcaption>` : "";
 
     return `
-                  <figure class="article-section-figure article-section-gallery" data-gallery data-gallery-index="0">
-                    <div class="article-gallery-frame"${visibleImages.length > 1 ? ` data-gallery-frame role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "본문 이미지 다음으로 보기" : "Show next body image")}"` : ""}>
+                  <figure class="article-section-figure article-section-gallery article-gallery-${layout}" data-gallery-layout="${layout}"${!isStaticImageSet ? " data-gallery data-gallery-index=\"0\"" : ""}>
+                    <div class="article-gallery-frame"${!isStaticImageSet && visibleImages.length > 1 ? ` data-gallery-frame role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "본문 이미지 다음으로 보기" : "Show next body image")}"` : ""}>
 ${imageItems}
                     </div>${controlsMarkup}${captionMarkup}
                   </figure>`;
@@ -1361,7 +1367,7 @@ ${imageItems}
     }
 
     if (block.type === "gallery") {
-      return renderGalleryFigure(block.images, block.caption);
+      return renderGalleryFigure(block.images, block.caption, block.layout);
     }
 
     const paragraphText = text(block.text, locale).trim();

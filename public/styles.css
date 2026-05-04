@@ -22397,3 +22397,157 @@ html[lang="ko"] .home-recent-copy small {
     font-size: clamp(2.45rem, 11.5vw, 4.35rem) !important;
   }
 }
+
+/* Article text guard: never crop wrapped editorial copy. */
+.article-detail,
+.article-detail .article-hero-grid,
+.article-detail .article-title-block,
+.article-detail .article-title-block h1,
+.article-detail .article-title-block p:not(.kicker),
+.article-detail .article-body,
+.article-detail .article-section,
+.article-detail .article-section h2,
+.article-detail .article-section p,
+.writer-article [contenteditable="true"] {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.article-detail .article-hero-grid {
+  align-items: start !important;
+  grid-auto-rows: minmax(min-content, auto) !important;
+}
+
+.article-detail .article-title-block p:not(.kicker),
+.article-detail .article-section p,
+.writer-article .writer-section [data-write-paragraph] {
+  display: block !important;
+  min-height: 0 !important;
+  padding-bottom: 0.24em !important;
+  white-space: normal !important;
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+}
+
+/* Article image layout variants for repeatable body galleries. */
+.article-detail:not(.writer-article) .article-section-gallery.article-gallery-wide,
+.article-detail:not(.writer-article) .article-section-gallery.article-gallery-diptych,
+.article-detail:not(.writer-article) .article-section-gallery.article-gallery-strip {
+  grid-column: 1 / -1 !important;
+  justify-self: center !important;
+  width: min(100%, 66rem) !important;
+  max-width: 66rem !important;
+}
+
+.article-detail:not(.writer-article) .article-section-gallery.article-gallery-portrait {
+  width: min(100%, 28rem) !important;
+  max-width: 28rem !important;
+}
+
+.article-gallery-wide .article-gallery-item .image-block {
+  aspect-ratio: 16 / 10;
+}
+
+.article-gallery-portrait .article-gallery-item .image-block {
+  aspect-ratio: 4 / 5;
+}
+
+.article-gallery-diptych .article-gallery-frame,
+.article-gallery-strip .article-gallery-frame {
+  display: grid;
+  gap: clamp(0.8rem, 1.8vw, 1.6rem);
+  overflow: visible;
+  background: transparent;
+}
+
+.article-gallery-diptych .article-gallery-frame {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+
+.article-gallery-strip .article-gallery-frame {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+}
+
+.article-gallery-diptych .article-gallery-item .image-block {
+  aspect-ratio: 4 / 5;
+}
+
+.article-gallery-strip .article-gallery-item .image-block {
+  aspect-ratio: 3 / 2;
+}
+
+.article-gallery-diptych .article-gallery-controls,
+.article-gallery-strip .article-gallery-controls {
+  display: none;
+}
+
+.article-detail:not(.writer-article) .article-gallery-wide figcaption,
+.article-detail:not(.writer-article) .article-gallery-diptych figcaption,
+.article-detail:not(.writer-article) .article-gallery-strip figcaption {
+  width: min(100%, 42.5rem);
+  max-width: 42.5rem;
+  margin-inline: auto;
+}
+
+.writer-gallery-tools label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+}
+
+.writer-gallery-tools label span {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.writer-gallery-tools select {
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 0.34rem 0.58rem;
+  background: rgba(var(--paper-rgb), 0.66);
+  color: rgba(24, 23, 19, 0.76);
+  font: inherit;
+  font-size: 0.7rem;
+}
+
+.writer-article .writer-section-gallery.writer-gallery-wide,
+.writer-article .writer-section-gallery.writer-gallery-diptych,
+.writer-article .writer-section-gallery.writer-gallery-strip {
+  width: min(100%, 58rem);
+  max-width: 58rem;
+}
+
+.writer-article .writer-section-gallery.writer-gallery-portrait {
+  width: min(100%, 28rem);
+  max-width: 28rem;
+}
+
+.writer-gallery-diptych .writer-gallery-items {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.writer-gallery-strip .writer-gallery-items {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+}
+
+.writer-gallery-wide .writer-gallery-item .writer-section-media-button .image-block {
+  aspect-ratio: 16 / 10;
+}
+
+.writer-gallery-portrait .writer-gallery-item .writer-section-media-button .image-block,
+.writer-gallery-diptych .writer-gallery-item .writer-section-media-button .image-block {
+  aspect-ratio: 4 / 5;
+}
+
+.writer-gallery-strip .writer-gallery-item .writer-section-media-button .image-block {
+  aspect-ratio: 3 / 2;
+}
+
+@media (max-width: 680px) {
+  .article-gallery-diptych .article-gallery-frame,
+  .writer-gallery-diptych .writer-gallery-items {
+    grid-template-columns: 1fr;
+  }
+}

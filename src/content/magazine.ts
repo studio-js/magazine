@@ -1,4 +1,4 @@
-import type { Article, ArticleBlockImage, ArticleSection, ArticleSectionBlock, CategoryDefinition, IssueProject, LocalizedText, Note, SiteContent, VisualClass } from "../types";
+import type { Article, ArticleBlockImage, ArticleGalleryLayout, ArticleSection, ArticleSectionBlock, CategoryDefinition, IssueProject, LocalizedText, Note, SiteContent, VisualClass } from "../types";
 
 const imageUrls = {
   appleVisionHero: "https://www.apple.com/v/apple-vision-pro/k/images/overview/hero/hero__cvgr5aj1ttsi_large_2x.jpg",
@@ -1937,9 +1937,10 @@ const quoteBlock = (ko: string, en: string): ArticleSectionBlock => ({
   text: localized(ko, en)
 });
 
-const galleryBlock = (images: ArticleBlockImage[], ko: string, en: string): ArticleSectionBlock => ({
+const galleryBlock = (images: ArticleBlockImage[], ko: string, en: string, layout?: ArticleGalleryLayout): ArticleSectionBlock => ({
   type: 'gallery',
   images,
+  ...(layout ? { layout } : {}),
   caption: localized(ko, en)
 });
 
