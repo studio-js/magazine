@@ -276,7 +276,17 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-quiet-geometry";
+const assetVersion = "20260504-write-sync";
+
+const contentVersionHash = (value: string): string => {
+  let hash = 5381;
+
+  for (let index = 0; index < value.length; index += 1) {
+    hash = ((hash << 5) + hash) ^ value.charCodeAt(index);
+  }
+
+  return (hash >>> 0).toString(36);
+};
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
@@ -592,6 +602,7 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
   const currentIssue = latestIssue(site);
   const articleJson = JSON.stringify(articleList).replace(/</g, "\\u003c");
   const issueJson = JSON.stringify(site.issueProjects).replace(/</g, "\\u003c");
+  const writeContentVersion = contentVersionHash(`${articleJson}|${issueJson}`);
   const issueField = (label: string, key: string, value: string, multiline = false, rows = multiline ? 3 : 1): string => `            <label>
               <span>${escapeHtml(label)}</span>
               ${multiline
@@ -629,7 +640,7 @@ export const renderWritePage = (site: SiteContent, articleList: Article[], local
     .map((heroClass) => `<option value="${heroClass}"${heroClass === "image-material" ? " selected" : ""}>${heroClass}</option>`)
     .join("");
   const body = `
-    <section class="admin-page section-pad" data-write-editor data-write-mode="article" data-write-storage-key="the-thing-admin-articles" data-admin-password="promise">
+    <section class="admin-page section-pad" data-write-editor data-write-mode="article" data-write-storage-key="the-thing-admin-articles" data-write-content-version="${writeContentVersion}" data-admin-password="promise">
       <div class="admin-lock" data-admin-lock>
         <form class="admin-lock-card" data-admin-login>
           <p class="kicker">Admin</p>

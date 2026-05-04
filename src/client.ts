@@ -444,6 +444,9 @@ if (writer) {
 
   const storageKey = writer.dataset.writeStorageKey || "the-thing-admin-articles";
   const issueStorageKey = `${storageKey}-issue`;
+  const sourceVersion = writer.dataset.writeContentVersion || "";
+  const articleSourceVersionKey = `${storageKey}-source-version`;
+  const issueSourceVersionKey = `${issueStorageKey}-source-version`;
   const modeStorageKey = `${storageKey}-mode`;
   const localeStorageKey = `${storageKey}-locale`;
   const authKey = `${storageKey}-auth`;
@@ -847,10 +850,16 @@ if (writer) {
     const stored = window.localStorage.getItem(storageKey);
 
     if (stored) {
-      try {
-        return (JSON.parse(stored) as AdminArticle[]).map(normalizeArticle);
-      } catch {
+      if (sourceVersion && window.localStorage.getItem(articleSourceVersionKey) !== sourceVersion) {
         window.localStorage.removeItem(storageKey);
+        window.localStorage.removeItem(articleSourceVersionKey);
+      } else {
+        try {
+          return (JSON.parse(stored) as AdminArticle[]).map(normalizeArticle);
+        } catch {
+          window.localStorage.removeItem(storageKey);
+          window.localStorage.removeItem(articleSourceVersionKey);
+        }
       }
     }
 
@@ -876,10 +885,16 @@ if (writer) {
     const stored = window.localStorage.getItem(issueStorageKey);
 
     if (stored) {
-      try {
-        return normalizeIssueCollection(JSON.parse(stored));
-      } catch {
+      if (sourceVersion && window.localStorage.getItem(issueSourceVersionKey) !== sourceVersion) {
         window.localStorage.removeItem(issueStorageKey);
+        window.localStorage.removeItem(issueSourceVersionKey);
+      } else {
+        try {
+          return normalizeIssueCollection(JSON.parse(stored));
+        } catch {
+          window.localStorage.removeItem(issueStorageKey);
+          window.localStorage.removeItem(issueSourceVersionKey);
+        }
       }
     }
 
@@ -1997,6 +2012,9 @@ if (writer) {
   const saveIssueCollection = (message = "이슈 자동 저장됨"): void => {
     updateIssueOutput();
     window.localStorage.setItem(issueStorageKey, JSON.stringify(adminIssues));
+    if (sourceVersion) {
+      window.localStorage.setItem(issueSourceVersionKey, sourceVersion);
+    }
     setIssueStatus(message);
   };
 
@@ -2029,6 +2047,9 @@ if (writer) {
 
   const saveCollection = (message = "자동 저장됨"): void => {
     window.localStorage.setItem(storageKey, JSON.stringify(adminArticles));
+    if (sourceVersion) {
+      window.localStorage.setItem(articleSourceVersionKey, sourceVersion);
+    }
     setStatus(message);
   };
 
