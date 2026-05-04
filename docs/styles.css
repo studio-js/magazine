@@ -20552,3 +20552,126 @@ html[lang="ko"] .home-index-row strong {
 .issue-cover-card .magazine-cover-sheet {
   box-shadow: 0 0 0 1px rgba(24, 23, 19, 0.1) !important;
 }
+
+/* Minimal hover actions: reveal focus without hiding editorial content. */
+.home-issue-link,
+.home-index-row,
+.home-story-line,
+.home-recent-lead,
+.home-story-more {
+  position: relative;
+}
+
+.home-issue-link::after,
+.home-index-row::after,
+.home-story-line::after,
+.home-story-more::after {
+  content: "" !important;
+  position: absolute;
+  display: block !important;
+  height: 1px;
+  background: rgba(123, 91, 66, 0.44);
+  opacity: 0;
+  transform: scaleX(0.36);
+  transform-origin: right center;
+  transition: opacity 160ms ease, transform 220ms cubic-bezier(0.2, 0.7, 0, 1);
+  pointer-events: none;
+}
+
+.home-issue-link::after,
+.home-story-more::after {
+  right: 0;
+  bottom: 0;
+  width: clamp(2rem, 3.2vw, 3.4rem);
+}
+
+.home-index-row::after,
+.home-story-line::after {
+  right: 0;
+  top: 50%;
+  width: clamp(2.4rem, 4vw, 4.6rem);
+}
+
+.home-index-copy,
+.home-index-order,
+.home-story-line span,
+.home-story-line strong,
+.home-story-line small,
+.home-recent-copy strong,
+.home-issue-link span,
+.home-issue-link small,
+.home-story-more strong {
+  transition: color 160ms ease, transform 220ms cubic-bezier(0.2, 0.7, 0, 1), background-size 220ms ease;
+}
+
+.home-recent-visual .image-block {
+  transition: filter 180ms ease, transform 260ms cubic-bezier(0.2, 0.7, 0, 1) !important;
+}
+
+.home-recent-copy strong,
+.home-story-line strong {
+  background: linear-gradient(180deg, transparent 72%, rgba(123, 91, 66, 0.12) 72% 100%) no-repeat 0 100% / 0 100%;
+}
+
+.home-issue-link:hover::after,
+.home-issue-link:focus-visible::after,
+.home-index-row:hover::after,
+.home-index-row:focus-visible::after,
+.home-story-line:hover::after,
+.home-story-line:focus-visible::after,
+.home-story-more:hover::after,
+.home-story-more:focus-visible::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.home-index-row:hover .home-index-copy,
+.home-index-row:focus-visible .home-index-copy,
+.home-story-line:hover strong,
+.home-story-line:focus-visible strong {
+  transform: translateX(0.26rem);
+}
+
+.home-index-row:hover .home-index-order,
+.home-index-row:focus-visible .home-index-order,
+.home-story-line:hover span,
+.home-story-line:focus-visible span,
+.home-issue-link:hover small,
+.home-issue-link:focus-visible small {
+  color: rgba(24, 23, 19, 0.82);
+}
+
+.home-recent-lead:hover .home-recent-visual .image-block,
+.home-recent-lead:focus-visible .home-recent-visual .image-block {
+  filter: contrast(1.03) saturate(0.94) !important;
+  transform: scale(1.012);
+}
+
+.home-recent-lead:hover .home-recent-copy strong,
+.home-recent-lead:focus-visible .home-recent-copy strong,
+.home-story-line:hover strong,
+.home-story-line:focus-visible strong {
+  background-size: 100% 100%;
+}
+
+.home-story-more:hover strong,
+.home-story-more:focus-visible strong,
+.home-issue-link:hover span,
+.home-issue-link:focus-visible span {
+  transform: translateX(0.18rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-index-copy,
+  .home-index-order,
+  .home-story-line span,
+  .home-story-line strong,
+  .home-story-line small,
+  .home-recent-copy strong,
+  .home-issue-link span,
+  .home-issue-link small,
+  .home-story-more strong,
+  .home-recent-visual .image-block {
+    transition: none !important;
+  }
+}
