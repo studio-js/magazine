@@ -276,7 +276,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-number-top-align";
+const assetVersion = "20260504-number-title-line-align";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
