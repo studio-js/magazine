@@ -20816,6 +20816,90 @@ html[lang="ko"] .home-index-row strong {
   background: linear-gradient(180deg, rgba(24, 23, 19, 0.08), rgba(24, 23, 19, 0.24), rgba(24, 23, 19, 0.08)) !important;
   transform: none !important;
   transform-origin: top !important;
+  transition: transform 780ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.js .cover .cover-copy[data-reveal],
+.js .cover .home-issue-index[data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  animation: none !important;
+}
+
+.js .cover .cover-copy[data-reveal] .cover-edition,
+.js .cover .cover-copy[data-reveal] .kicker,
+.js .cover .cover-copy[data-reveal] h1,
+.js .cover .cover-copy[data-reveal] .cover-deck,
+.js .cover .cover-copy[data-reveal] .home-issue-link,
+.js .cover .home-issue-index[data-reveal] .home-index-headline .kicker,
+.js .cover .home-issue-index[data-reveal] .home-index-order,
+.js .cover .home-issue-index[data-reveal] .home-index-copy {
+  clip-path: inset(0) !important;
+  filter: none !important;
+  translate: 0 0 !important;
+  transition:
+    clip-path 780ms cubic-bezier(0.16, 1, 0.3, 1),
+    translate 780ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 160ms ease !important;
+  will-change: clip-path, translate;
+}
+
+.js .cover .cover-copy[data-reveal]:not(.is-visible) .cover-edition,
+.js .cover .cover-copy[data-reveal]:not(.is-visible) .kicker,
+.js .cover .cover-copy[data-reveal]:not(.is-visible) h1,
+.js .cover .cover-copy[data-reveal]:not(.is-visible) .cover-deck,
+.js .cover .cover-copy[data-reveal]:not(.is-visible) .home-issue-link,
+.js .cover .home-issue-index[data-reveal]:not(.is-visible) .home-index-headline .kicker,
+.js .cover .home-issue-index[data-reveal]:not(.is-visible) .home-index-order,
+.js .cover .home-issue-index[data-reveal]:not(.is-visible) .home-index-copy {
+  clip-path: inset(0 100% 0 0) !important;
+  translate: -0.54rem 0 !important;
+}
+
+.js .cover .cover-copy[data-reveal] .cover-edition { transition-delay: 40ms !important; }
+.js .cover .cover-copy[data-reveal] .kicker { transition-delay: 110ms !important; }
+.js .cover .cover-copy[data-reveal] h1 { transition-delay: 180ms !important; }
+.js .cover .cover-copy[data-reveal] .cover-deck { transition-delay: 270ms !important; }
+.js .cover .cover-copy[data-reveal] .home-issue-link { transition-delay: 360ms !important; }
+.js .cover .home-issue-link:hover,
+.js .cover .home-issue-link:focus-visible { transition-delay: 0ms !important; }
+
+.js .cover .home-issue-index[data-reveal]:not(.is-visible) .home-index-list::before {
+  transform: scaleY(0) !important;
+}
+
+.js .cover .home-index-row:nth-child(1) { --home-index-assemble-delay: 180ms; }
+.js .cover .home-index-row:nth-child(2) { --home-index-assemble-delay: 260ms; }
+.js .cover .home-index-row:nth-child(3) { --home-index-assemble-delay: 340ms; }
+.js .cover .home-index-row:nth-child(4) { --home-index-assemble-delay: 420ms; }
+.js .cover .home-index-row:nth-child(5) { --home-index-assemble-delay: 500ms; }
+
+.js .cover .home-index-row::before,
+.js .cover .home-index-row::after,
+.js .cover .home-index-order,
+.js .cover .home-index-copy {
+  transition-delay: var(--home-index-assemble-delay, 0ms) !important;
+}
+
+.js .cover .home-index-row:hover::before,
+.js .cover .home-index-row:focus-visible::before,
+.js .cover .home-index-row:hover::after,
+.js .cover .home-index-row:focus-visible::after,
+.js .cover .home-index-row:hover .home-index-copy,
+.js .cover .home-index-row:focus-visible .home-index-copy,
+.js .cover .home-index-row:hover .home-index-order,
+.js .cover .home-index-row:focus-visible .home-index-order {
+  transition-delay: 0ms !important;
+}
+
+.js .cover .home-issue-index[data-reveal]:not(.is-visible) .home-index-row::before {
+  transform: translateY(-50%) rotate(-45deg) scale(0) !important;
+}
+
+.js .cover .home-issue-index[data-reveal]:not(.is-visible) .home-index-row::after {
+  opacity: 0 !important;
+  transform: translateY(-50%) scaleX(0) !important;
 }
 
 .home-index-row,
@@ -21338,6 +21422,14 @@ html[lang="ko"] .home-story-line strong {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .js .cover .cover-copy[data-reveal] .cover-edition,
+  .js .cover .cover-copy[data-reveal] .kicker,
+  .js .cover .cover-copy[data-reveal] h1,
+  .js .cover .cover-copy[data-reveal] .cover-deck,
+  .js .cover .cover-copy[data-reveal] .home-issue-link,
+  .js .cover .home-issue-index[data-reveal] .home-index-headline .kicker,
+  .js .cover .home-issue-index[data-reveal] .home-index-order,
+  .js .cover .home-issue-index[data-reveal] .home-index-copy,
   .js .home-stories .home-recent-lead .home-recent-visual,
   .js .home-stories .home-recent-copy small,
   .js .home-stories .home-recent-copy strong,
@@ -21351,6 +21443,9 @@ html[lang="ko"] .home-story-line strong {
     transition: none !important;
   }
 
+  .home-index-list::before,
+  .home-index-row::before,
+  .home-index-row::after,
   .home-index-row,
   .home-story-line,
   .home-story-line em,
