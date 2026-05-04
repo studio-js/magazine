@@ -18,7 +18,8 @@ const imageClasses = [
 ];
 const galleryLayouts = ["standard", "wide", "portrait", "diptych", "strip"] as const;
 type GalleryLayout = typeof galleryLayouts[number];
-const normalizeGalleryLayout = (value?: string): GalleryLayout => galleryLayouts.includes(value as GalleryLayout) ? value as GalleryLayout : "standard";
+const defaultGalleryLayout = (imageCount: number): GalleryLayout => imageCount >= 3 ? "strip" : imageCount === 2 ? "diptych" : "standard";
+const normalizeGalleryLayout = (value: string | undefined, imageCount = 1): GalleryLayout => galleryLayouts.includes(value as GalleryLayout) ? value as GalleryLayout : defaultGalleryLayout(imageCount);
 const clientScriptSrc = document.querySelector<HTMLScriptElement>('script[src*="client.js"]')?.getAttribute("src") || "/client.js";
 const clientBasePath = new URL(clientScriptSrc, window.location.href).pathname.replace(/\/client\.js$/, "");
 const apiPath = (path: string): string => `${clientBasePath}${path}`;
@@ -471,7 +472,7 @@ const renderRuntimeGallery = (article: RuntimeArticle, images: RuntimeArticleBlo
     return "";
   }
 
-  const layout = normalizeGalleryLayout(layoutValue);
+  const layout = normalizeGalleryLayout(layoutValue, visibleImages.length);
   const isStaticImageSet = layout === "diptych" || layout === "strip";
   const imageItems = visibleImages.map((image, index) => `                      <span class="article-gallery-item${!isStaticImageSet && index === 0 ? " is-active" : ""}"${!isStaticImageSet ? ` data-gallery-item${index === 0 ? "" : " hidden"}` : ""}>
                         ${runtimeImageBlock(image.imageClass || article.heroClass, image.image || "", image.image ? "" : `data-visual-cycle role="button" tabindex="0" aria-label="${runtimeEscapeHtml(locale === "ko" ? "본문 비주얼 바꾸기" : "Cycle inline visual")}"`)}
@@ -1795,7 +1796,7 @@ if (writer) {
         .filter((image) => image.imageClass || image.image);
 
       return images.length > 0
-        ? { type: "gallery", images, layout: normalizeGalleryLayout(block.layout), caption: normalizeBlockText(block.caption) }
+        ? { type: "gallery", images, layout: normalizeGalleryLayout(block.layout, images.length), caption: normalizeBlockText(block.caption) }
         : null;
     }
 
@@ -2312,8 +2313,8 @@ if (writer) {
     return item;
   };
 
-  const updateGalleryLayout = (gallery: HTMLElement, value?: string): void => {
-    const layout = normalizeGalleryLayout(value);
+  const updateGalleryLayout = (gallery: HTMLElement, value?: string, imageCount = 1): void => {
+    const layout = normalizeGalleryLayout(value, imageCount);
     gallery.dataset.writeGalleryLayout = layout;
     galleryLayouts.forEach((galleryLayout) => gallery.classList.remove(`writer-gallery-${galleryLayout}`));
     gallery.classList.add(`writer-gallery-${layout}`);
@@ -2324,14 +2325,14 @@ if (writer) {
     }
   };
 
-  const createGalleryBlock = (images: AdminBlockImage[] = [{ imageClass: "image-material", image: "" }], caption = "", layoutValue = "standard"): HTMLElement => {
+  const createGalleryBlock = (images: AdminBlockImage[] = [{ imageClass: "image-material", image: "" }], caption = "", layoutValue?: string): HTMLElement => {
     const gallery = document.createElement("figure");
     gallery.className = "writer-section-media writer-section-gallery";
     gallery.dataset.writeBlock = "gallery";
     gallery.dataset.writeSectionMedia = "";
     gallery.dataset.writeSectionGallery = "";
     gallery.contentEditable = "false";
-    updateGalleryLayout(gallery, layoutValue);
+    updateGalleryLayout(gallery, layoutValue, images.length);
 
     const items = document.createElement("div");
     items.className = "writer-gallery-items";

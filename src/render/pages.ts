@@ -277,11 +277,13 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-image-layouts";
+const assetVersion = "20260504-image-layouts-auto";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
-const galleryLayout = (value?: string): ArticleGalleryLayout => galleryLayouts.includes(value as ArticleGalleryLayout) ? value as ArticleGalleryLayout : "standard";
+const defaultGalleryLayout = (imageCount: number): ArticleGalleryLayout => imageCount >= 3 ? "strip" : imageCount === 2 ? "diptych" : "standard";
+
+const galleryLayout = (value: string | undefined, imageCount: number): ArticleGalleryLayout => galleryLayouts.includes(value as ArticleGalleryLayout) ? value as ArticleGalleryLayout : defaultGalleryLayout(imageCount);
 
 const contentVersionHash = (value: string): string => {
   let hash = 5381;
@@ -1316,7 +1318,7 @@ export const renderArticlePage = (
       return "";
     }
 
-    const layout = galleryLayout(layoutValue);
+    const layout = galleryLayout(layoutValue, visibleImages.length);
     const isStaticImageSet = layout === "diptych" || layout === "strip";
     const captionText = caption ? text(caption, locale) : "";
     const imageItems = visibleImages

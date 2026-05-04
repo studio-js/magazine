@@ -17,7 +17,8 @@ const imageClasses = [
     "image-field"
 ];
 const galleryLayouts = ["standard", "wide", "portrait", "diptych", "strip"];
-const normalizeGalleryLayout = (value) => galleryLayouts.includes(value) ? value : "standard";
+const defaultGalleryLayout = (imageCount) => imageCount >= 3 ? "strip" : imageCount === 2 ? "diptych" : "standard";
+const normalizeGalleryLayout = (value, imageCount = 1) => galleryLayouts.includes(value) ? value : defaultGalleryLayout(imageCount);
 const clientScriptSrc = document.querySelector('script[src*="client.js"]')?.getAttribute("src") || "/client.js";
 const clientBasePath = new URL(clientScriptSrc, window.location.href).pathname.replace(/\/client\.js$/, "");
 const apiPath = (path) => `${clientBasePath}${path}`;
@@ -318,7 +319,7 @@ const renderRuntimeGallery = (article, images, caption, locale, layoutValue) => 
     if (visibleImages.length === 0) {
         return "";
     }
-    const layout = normalizeGalleryLayout(layoutValue);
+    const layout = normalizeGalleryLayout(layoutValue, visibleImages.length);
     const isStaticImageSet = layout === "diptych" || layout === "strip";
     const imageItems = visibleImages.map((image, index) => `                      <span class="article-gallery-item${!isStaticImageSet && index === 0 ? " is-active" : ""}"${!isStaticImageSet ? ` data-gallery-item${index === 0 ? "" : " hidden"}` : ""}>
                         ${runtimeImageBlock(image.imageClass || article.heroClass, image.image || "", image.image ? "" : `data-visual-cycle role="button" tabindex="0" aria-label="${runtimeEscapeHtml(locale === "ko" ? "본문 비주얼 바꾸기" : "Cycle inline visual")}"`)}
@@ -1367,7 +1368,7 @@ if (writer) {
             }))
                 .filter((image) => image.imageClass || image.image);
             return images.length > 0
-                ? { type: "gallery", images, layout: normalizeGalleryLayout(block.layout), caption: normalizeBlockText(block.caption) }
+                ? { type: "gallery", images, layout: normalizeGalleryLayout(block.layout, images.length), caption: normalizeBlockText(block.caption) }
                 : null;
         }
         if (block.type === "quote") {
@@ -1807,8 +1808,8 @@ if (writer) {
         item.append(button, tools);
         return item;
     };
-    const updateGalleryLayout = (gallery, value) => {
-        const layout = normalizeGalleryLayout(value);
+    const updateGalleryLayout = (gallery, value, imageCount = 1) => {
+        const layout = normalizeGalleryLayout(value, imageCount);
         gallery.dataset.writeGalleryLayout = layout;
         galleryLayouts.forEach((galleryLayout) => gallery.classList.remove(`writer-gallery-${galleryLayout}`));
         gallery.classList.add(`writer-gallery-${layout}`);
@@ -1817,14 +1818,14 @@ if (writer) {
             select.value = layout;
         }
     };
-    const createGalleryBlock = (images = [{ imageClass: "image-material", image: "" }], caption = "", layoutValue = "standard") => {
+    const createGalleryBlock = (images = [{ imageClass: "image-material", image: "" }], caption = "", layoutValue) => {
         const gallery = document.createElement("figure");
         gallery.className = "writer-section-media writer-section-gallery";
         gallery.dataset.writeBlock = "gallery";
         gallery.dataset.writeSectionMedia = "";
         gallery.dataset.writeSectionGallery = "";
         gallery.contentEditable = "false";
-        updateGalleryLayout(gallery, layoutValue);
+        updateGalleryLayout(gallery, layoutValue, images.length);
         const items = document.createElement("div");
         items.className = "writer-gallery-items";
         items.dataset.writeGalleryItems = "";
