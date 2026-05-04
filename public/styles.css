@@ -21050,8 +21050,14 @@ html[lang="ko"] .home-story-line strong {
 .home-recent-visual .image-block,
 .home-recent-lead:hover .home-recent-visual .image-block,
 .home-recent-lead:focus-visible .home-recent-visual .image-block {
+  aspect-ratio: 4 / 3 !important;
   clip-path: inset(0) !important;
   filter: none !important;
+}
+
+.home-recent-visual .image-block.has-custom-image img {
+  object-fit: cover !important;
+  object-position: center center !important;
 }
 
 .home-recent-lead:hover .home-recent-visual .image-block,

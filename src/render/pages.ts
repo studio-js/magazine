@@ -276,7 +276,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-home-rhythm-highlight";
+const assetVersion = "20260504-home-image-aperture";
 
 const renderLanguageSwitch = (currentPath: string, locale: Locale): string => `
   <div class="language-switch" aria-label="Language switcher">
