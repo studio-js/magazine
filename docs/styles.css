@@ -21002,12 +21002,25 @@ html[lang="ko"] .home-index-row strong {
 }
 
 .home-recent-spread {
-  gap: clamp(1.6rem, 4.2vw, 5.4rem) !important;
+  width: min(100%, 84rem) !important;
+  margin-inline: 0 auto !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: clamp(2.2rem, 5.4vw, 6.2rem) !important;
   align-items: start !important;
+}
+
+.home-stories .section-head {
+  width: min(100%, 84rem) !important;
+  margin-inline: 0 auto !important;
 }
 
 .home-recent-lead,
 .home-recent-lead[data-scroll-motion] {
+  display: grid !important;
+  grid-template-columns: minmax(14rem, 0.36fr) minmax(0, 0.64fr) !important;
+  gap: clamp(1.35rem, 3.2vw, 3.8rem) !important;
+  width: 100% !important;
   padding-bottom: 0 !important;
   border: 0 !important;
   background: transparent !important;
@@ -21016,6 +21029,34 @@ html[lang="ko"] .home-index-row strong {
   opacity: 1 !important;
   transform: none !important;
   transition: color 180ms ease !important;
+}
+
+.home-recent-copy {
+  gap: clamp(0.72rem, 1.35vw, 1.12rem) !important;
+}
+
+.home-recent-copy small {
+  font-size: clamp(0.72rem, 0.82vw, 0.86rem) !important;
+  line-height: 1.18 !important;
+}
+
+.home-recent-copy strong,
+html[lang="ko"] .home-recent-copy strong {
+  max-width: min(100%, 17ch) !important;
+  font-size: clamp(1.72rem, 3.55vw, 4.15rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.034em !important;
+}
+
+html[lang="ko"] .home-recent-copy strong {
+  max-width: min(100%, 15ch) !important;
+  line-height: 1.16 !important;
+}
+
+.home-recent-copy em {
+  max-width: min(100%, 44rem) !important;
+  font-size: clamp(1rem, 1.16vw, 1.2rem) !important;
+  line-height: 1.68 !important;
 }
 
 .home-recent-lead::before,
@@ -21068,6 +21109,8 @@ html[lang="ko"] .home-story-line strong {
 .home-story-index-list {
   display: grid !important;
   gap: clamp(0.18rem, 0.38vw, 0.42rem) !important;
+  width: auto !important;
+  margin-left: clamp(2.4rem, 7vw, 7.4rem) !important;
   padding-top: 0 !important;
   border: 0 !important;
 }
@@ -21236,6 +21279,31 @@ html[lang="ko"] .home-story-line strong {
 .js .home-stories .home-story-line:nth-child(4) small { transition-delay: 280ms !important; }
 
 @media (max-width: 680px) {
+  .home-recent-spread {
+    gap: clamp(1.7rem, 8vw, 2.6rem) !important;
+  }
+
+  .home-recent-lead,
+  .home-recent-lead[data-scroll-motion] {
+    grid-template-columns: 1fr !important;
+    gap: clamp(0.95rem, 4.5vw, 1.35rem) !important;
+  }
+
+  .home-recent-visual {
+    width: 100% !important;
+  }
+
+  .home-recent-copy strong,
+  html[lang="ko"] .home-recent-copy strong {
+    max-width: 100% !important;
+    font-size: clamp(1.46rem, 8vw, 2.55rem) !important;
+  }
+
+  .home-story-index-list {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
   .home-index-row,
   .home-index-row[data-scroll-motion],
   .home-index-row:first-child,
