@@ -22552,19 +22552,7 @@ html[lang="ko"] .home-recent-copy small {
   }
 }
 
-/* Editorial row expansion guard: expanded summaries must grow with content. */
-.archive-row:hover,
-.archive-row:focus-visible,
-.archive-row.is-active,
-.home-index-row:hover,
-.home-index-row:focus-visible,
-.home-story-line:hover,
-.home-story-line:focus-visible {
-  height: auto !important;
-  max-height: none !important;
-  overflow: visible !important;
-}
-
+/* Editorial row expansion guard: keep row actions while preventing short clamps. */
 .archive-row:hover .archive-summary,
 .archive-row:focus-visible .archive-summary,
 .archive-row.is-active .archive-summary,
@@ -22573,12 +22561,10 @@ html[lang="ko"] .home-recent-copy small {
 .home-story-line:hover em,
 .home-story-line:focus-visible em {
   display: block !important;
-  height: auto !important;
-  max-height: none !important;
+  max-height: 100rem !important;
   overflow: visible !important;
   opacity: 1 !important;
   clip-path: inset(0) !important;
-  transform: none !important;
   -webkit-line-clamp: unset !important;
   line-clamp: unset !important;
 }

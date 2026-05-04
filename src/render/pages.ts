@@ -277,7 +277,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-gallery-center";
+const assetVersion = "20260504-row-actions";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
