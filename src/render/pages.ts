@@ -278,7 +278,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260504-home-density";
+const assetVersion = "20260505-home-stories";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
@@ -970,7 +970,13 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
   const secondaryArticles = selectedArticles.slice(1, 5);
   const issueRouteText = issueFeatures.slice(0, 3).map((feature) => text(feature.readTime, locale)).filter(Boolean).join(" · ") || text(currentIssue.format, locale);
   const issueAccessText = text(currentIssue.availability, locale);
-  const storyRangeText = selectedArticles.length ? `01-${String(selectedArticles.length).padStart(2, "0")}` : "00";
+  const homeRecentVisual = leadArticle
+    ? `          <a class="home-recent-media" href="${articleHref(leadArticle, locale)}" data-reveal data-action-card aria-label="${escapeHtml(text(leadArticle.title, locale))}">
+            <span class="home-recent-visual" aria-hidden="true">
+              ${renderImageBlock(leadArticle.heroClass, leadArticle.heroImage)}
+            </span>
+          </a>`
+    : "";
   const homeIndexRows = issueFeatures
     .map((feature, index) => {
       return `              <a class="home-index-row" href="${issueHref(currentIssue, locale)}#issue-${escapeHtml(feature.slug)}" data-scroll-motion>
@@ -985,9 +991,6 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
     .join("\n");
   const homeRecentLead = leadArticle
     ? `          <a class="home-recent-lead" href="${articleHref(leadArticle, locale)}" data-reveal data-action-card>
-            <span class="home-recent-visual" aria-hidden="true">
-              ${renderImageBlock(leadArticle.heroClass, leadArticle.heroImage)}
-            </span>
             <span class="home-recent-copy">
               <small>${escapeHtml(categoryLabel(site.categories, leadArticle.category, locale))} / ${escapeHtml(formatDate(leadArticle.date, locale))}</small>
               <strong>${escapeHtml(text(leadArticle.title, locale))}</strong>
@@ -1049,7 +1052,9 @@ ${homeIndexRows}
         <h2 id="features-title">${locale === "ko" ? "최근 글" : "Recent Stories"}</h2>
       </div>
 
-      <div class="home-recent-spread" data-story-label="${escapeHtml(locale === "ko" ? "최근 읽기" : "Recent")}" data-story-range="${escapeHtml(storyRangeText)}">
+      <div class="home-recent-spread">
+${homeRecentVisual}
+        <div class="home-recent-stack">
 ${homeRecentLead}
         <div class="home-story-index-list">
 ${storyRows}
@@ -1057,6 +1062,7 @@ ${storyRows}
             <span>${escapeHtml(locale === "ko" ? "전체 보기" : "View all")}</span>
             <strong>${escapeHtml(labels.fullArchive)}</strong>
           </a>
+        </div>
         </div>
       </div>
     </section>

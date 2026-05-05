@@ -488,7 +488,9 @@ const renderRuntimeHomePage = (data, locale) => {
     const issueFeatures = currentIssue.features || [];
     const issueRouteText = issueFeatures.slice(0, 3).map((feature) => runtimeText(feature.readTime, locale)).filter(Boolean).join(" · ") || runtimeText(currentIssue.format, locale);
     const issueAccessText = runtimeText(currentIssue.availability, locale);
-    const storyRangeText = selectedArticles.length ? `01-${String(selectedArticles.length).padStart(2, "0")}` : "00";
+    const homeRecentVisual = leadArticle ? `          <a class="home-recent-media" href="${runtimeArticleHref(leadArticle, locale)}" data-reveal data-action-card aria-label="${runtimeEscapeHtml(runtimeText(leadArticle.title, locale))}">
+            <span class="home-recent-visual" aria-hidden="true">${runtimeImageBlock(leadArticle.heroClass, leadArticle.heroImage || "")}</span>
+          </a>` : "";
     const issueRows = issueFeatures.map((feature, index) => `              <a class="home-index-row" href="${runtimeIssueHref(currentIssue, locale)}#issue-${runtimeEscapeHtml(feature.slug)}" data-scroll-motion>
                 <span class="home-index-order">${String(index + 1).padStart(2, "0")}</span>
                 <span class="home-index-copy">
@@ -498,7 +500,6 @@ const renderRuntimeHomePage = (data, locale) => {
                 </span>
               </a>`).join("\n");
     const homeRecentLead = leadArticle ? `          <a class="home-recent-lead" href="${runtimeArticleHref(leadArticle, locale)}" data-reveal data-action-card>
-            <span class="home-recent-visual" aria-hidden="true">${runtimeImageBlock(leadArticle.heroClass, leadArticle.heroImage || "")}</span>
             <span class="home-recent-copy">
               <small>${runtimeEscapeHtml(runtimeCategoryLabel(leadArticle.category, locale))} / ${runtimeEscapeHtml(runtimeFormatDate(leadArticle.date, locale))}</small>
               <strong>${runtimeEscapeHtml(runtimeText(leadArticle.title, locale))}</strong>
@@ -547,11 +548,14 @@ ${issueRows}
         <p class="kicker">${runtimeEscapeHtml(runtimeLabels[locale].selectedStories)}</p>
         <h2 id="features-title">${runtimeEscapeHtml(locale === "ko" ? "최근 글" : "Recent Stories")}</h2>
       </div>
-      <div class="home-recent-spread" data-story-label="${runtimeEscapeHtml(locale === "ko" ? "최근 읽기" : "Recent")}" data-story-range="${runtimeEscapeHtml(storyRangeText)}">
+      <div class="home-recent-spread">
+${homeRecentVisual}
+        <div class="home-recent-stack">
 ${homeRecentLead}
         <div class="home-story-index-list">
 ${storyRows}
           <a class="home-story-more" href="${runtimeArchiveHref(locale)}" data-reveal><span>${runtimeEscapeHtml(locale === "ko" ? "전체 보기" : "View all")}</span><strong>${runtimeEscapeHtml(runtimeLabels[locale].fullArchive)}</strong></a>
+        </div>
         </div>
       </div>
     </section>
