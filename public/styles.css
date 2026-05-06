@@ -23641,3 +23641,11 @@ html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
     gap: clamp(0.86rem, 3.6vw, 1.35rem) !important;
   }
 }
+
+/* Home recent CTA nudge: keep the right rail connected to the story list. */
+@media (min-width: 981px) {
+  .home-recent-spread > .home-story-index-list .home-story-more,
+  .home-recent-spread > .home-story-index-list .home-story-more[data-scroll-motion] {
+    margin-top: clamp(-0.95rem, -0.72vw, -0.45rem) !important;
+  }
+}
