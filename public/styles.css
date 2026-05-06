@@ -22997,6 +22997,120 @@ html[lang="ko"] .home-recent-spread > .home-story-index-list .home-story-line st
   margin-inline: auto !important;
 }
 
+/* Home hero trim and recent balance pass. */
+.home-cover-ledger {
+  display: none !important;
+}
+
+.home-index-headline {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  justify-content: start !important;
+  justify-items: start !important;
+  align-items: start !important;
+  gap: clamp(0.2rem, 0.45vw, 0.42rem) !important;
+}
+
+.home-index-scope {
+  justify-self: start !important;
+  color: rgba(24, 23, 19, 0.42) !important;
+  font-size: clamp(0.62rem, 0.68vw, 0.76rem) !important;
+  font-weight: 430 !important;
+  letter-spacing: 0.04em !important;
+  line-height: 1.2 !important;
+  text-transform: none !important;
+  white-space: nowrap !important;
+}
+
+.home-recent-spread {
+  grid-template-columns: minmax(0, 0.54fr) minmax(20rem, 0.46fr) !important;
+  gap: clamp(1.45rem, 3.4vw, 4.25rem) !important;
+}
+
+.home-recent-media .home-recent-visual .image-block {
+  aspect-ratio: 7 / 5 !important;
+}
+
+.home-recent-spread > .home-story-index-list {
+  padding-top: clamp(0.05rem, 0.25vw, 0.22rem) !important;
+}
+
+@media (max-width: 980px) {
+  .home-recent-spread {
+    grid-template-columns: 1fr !important;
+    gap: clamp(1.7rem, 5vw, 2.7rem) !important;
+  }
+
+  .home-recent-media .home-recent-visual .image-block {
+    aspect-ratio: 4 / 3 !important;
+  }
+}
+
+html[data-runtime-hydration="pending"] main .image-block.has-custom-image img {
+  opacity: 0 !important;
+}
+
+html[data-runtime-hydration="pending"] main .image-block.has-custom-image {
+  background-color: rgba(24, 23, 19, 0.035);
+}
+
+html:not([data-runtime-hydration="pending"]) main .image-block.has-custom-image img {
+  opacity: 1;
+  transition: opacity 160ms ease;
+}
+
+.home-recent-feature .home-recent-copy strong,
+html[lang="ko"] .home-recent-feature .home-recent-copy strong {
+  max-width: min(100%, 19ch) !important;
+  font-size: clamp(1.95rem, 3.45vw, 4.55rem) !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1.06 !important;
+}
+
+html[lang="ko"] .home-recent-feature .home-recent-copy strong {
+  max-width: min(100%, 18ch) !important;
+  letter-spacing: -0.016em !important;
+  line-height: 1.14 !important;
+}
+
+.home-recent-feature .home-recent-copy strong,
+html[lang="ko"] .home-recent-feature .home-recent-copy strong {
+  max-width: min(100%, 20ch) !important;
+  font-size: clamp(1.72rem, 3.05vw, 4.05rem) !important;
+  font-weight: 360 !important;
+  letter-spacing: -0.018em !important;
+  line-height: 1.1 !important;
+}
+
+html[lang="ko"] .home-recent-feature .home-recent-copy strong {
+  max-width: min(100%, 19ch) !important;
+  letter-spacing: -0.008em !important;
+  line-height: 1.18 !important;
+}
+
+.home-recent-feature .home-recent-copy em {
+  color: rgba(24, 23, 19, 0.64) !important;
+  font-size: clamp(0.94rem, 1vw, 1.08rem) !important;
+  line-height: 1.76 !important;
+}
+
+html[lang="ko"] .home-recent-feature .home-recent-copy em {
+  color: rgba(24, 23, 19, 0.64) !important;
+  font-size: clamp(0.92rem, 0.96vw, 1.02rem) !important;
+  font-weight: 340 !important;
+  letter-spacing: -0.002em !important;
+  line-height: 1.82 !important;
+}
+
+.home-recent-spread .home-story-line em,
+html[lang="ko"] .home-recent-spread .home-story-line em,
+.home-recent-spread .home-story-line.is-action-active em,
+html[lang="ko"] .home-recent-spread .home-story-line.is-action-active em {
+  color: rgba(24, 23, 19, 0.64) !important;
+  font-weight: 340 !important;
+  letter-spacing: -0.002em !important;
+}
+
 /* Interaction audit: class state mirrors hover/focus after runtime hydration and touch. */
 :where(
   [data-action-card],
@@ -23129,5 +23243,401 @@ html[lang="ko"] .archive-row.is-action-active .archive-title {
     .subcategory-chips a
   ).is-action-active * {
     transition: none !important;
+  }
+}
+
+/* Home editorial type system: final cascade for a quieter, legible Aesop-like tone. */
+:root {
+  --home-type-title: rgba(24, 23, 19, 0.86);
+  --home-type-copy: rgba(52, 49, 40, 0.72);
+  --home-type-meta: rgba(52, 49, 40, 0.58);
+}
+
+.home-index-row strong,
+.home-recent-feature .home-recent-copy strong,
+.home-story-line strong,
+.habitus-copy h2,
+html[lang="ko"] .home-index-row strong,
+html[lang="ko"] .home-recent-feature .home-recent-copy strong,
+html[lang="ko"] .home-story-line strong,
+html[lang="ko"] .habitus-copy h2 {
+  color: var(--home-type-title) !important;
+  font-weight: 380 !important;
+  font-variation-settings: normal !important;
+}
+
+.home-index-row strong,
+html[lang="ko"] .home-index-row strong {
+  font-size: clamp(1.04rem, 1.26vw, 1.62rem) !important;
+  letter-spacing: -0.004em !important;
+  line-height: 1.36 !important;
+}
+
+.home-recent-feature .home-recent-copy strong,
+html[lang="ko"] .home-recent-feature .home-recent-copy strong {
+  max-width: min(100%, 20ch) !important;
+  font-size: clamp(1.68rem, 2.95vw, 3.9rem) !important;
+  letter-spacing: -0.006em !important;
+  line-height: 1.18 !important;
+}
+
+.home-story-line strong,
+html[lang="ko"] .home-story-line strong,
+.home-recent-spread > .home-story-index-list .home-story-line strong,
+html[lang="ko"] .home-recent-spread > .home-story-index-list .home-story-line strong {
+  font-size: clamp(0.98rem, 1.18vw, 1.44rem) !important;
+  letter-spacing: -0.004em !important;
+  line-height: 1.38 !important;
+}
+
+.habitus-copy h2,
+html[lang="ko"] .habitus-copy h2 {
+  font-weight: 360 !important;
+  letter-spacing: -0.006em !important;
+  line-height: 1.18 !important;
+}
+
+.home-index-copy em,
+.home-index-note,
+.home-recent-feature .home-recent-copy em,
+.home-story-line em,
+.habitus-copy p:not(.kicker),
+.home-index-row.is-action-active .home-index-copy em,
+.home-story-line.is-action-active em,
+html[lang="ko"] .home-index-copy em,
+html[lang="ko"] .home-index-note,
+html[lang="ko"] .home-recent-feature .home-recent-copy em,
+html[lang="ko"] .home-story-line em,
+html[lang="ko"] .habitus-copy p:not(.kicker),
+html[lang="ko"] .home-index-row.is-action-active .home-index-copy em,
+html[lang="ko"] .home-story-line.is-action-active em {
+  color: var(--home-type-copy) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.002em !important;
+  line-height: 1.78 !important;
+}
+
+.home-index-copy em,
+.home-story-line em,
+html[lang="ko"] .home-index-copy em,
+html[lang="ko"] .home-story-line em {
+  font-size: clamp(0.86rem, 0.94vw, 1rem) !important;
+}
+
+.home-recent-feature .home-recent-copy em,
+html[lang="ko"] .home-recent-feature .home-recent-copy em,
+.habitus-copy p:not(.kicker),
+html[lang="ko"] .habitus-copy p:not(.kicker) {
+  font-size: clamp(0.94rem, 1vw, 1.08rem) !important;
+}
+
+.home-index-order,
+.home-index-meta,
+.home-recent-copy small,
+.home-story-line span,
+.home-story-line small,
+.home-story-more span,
+html[lang="ko"] .home-index-order,
+html[lang="ko"] .home-index-meta,
+html[lang="ko"] .home-recent-copy small,
+html[lang="ko"] .home-story-line span,
+html[lang="ko"] .home-story-line small,
+html[lang="ko"] .home-story-more span {
+  color: var(--home-type-meta) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.045em !important;
+}
+
+.home-recent-spread > .home-story-index-list .home-story-line strong,
+html[lang="ko"] .home-recent-spread > .home-story-index-list .home-story-line strong {
+  color: var(--home-type-title) !important;
+  font-weight: 380 !important;
+}
+
+.home-recent-spread > .home-story-index-list .home-story-line em,
+.home-recent-spread > .home-story-index-list .home-story-line.is-action-active em,
+html[lang="ko"] .home-recent-spread > .home-story-index-list .home-story-line em,
+html[lang="ko"] .home-recent-spread > .home-story-index-list .home-story-line.is-action-active em,
+.home-habitus .habitus-copy p:not(.kicker),
+html[lang="ko"] .home-habitus .habitus-copy p:not(.kicker) {
+  color: var(--home-type-copy) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.002em !important;
+  line-height: 1.78 !important;
+}
+
+.home-habitus .habitus-copy h2,
+html[lang="ko"] .home-habitus .habitus-copy h2 {
+  color: var(--home-type-title) !important;
+  font-weight: 360 !important;
+  letter-spacing: -0.006em !important;
+  line-height: 1.18 !important;
+}
+
+/* Home balance pass: reduce heroic pressure and tighten editorial rhythm. */
+.home-cover-grid .cover-copy h1,
+html[lang="ko"] .home-cover-grid .cover-copy h1 {
+  color: rgba(24, 23, 19, 0.9) !important;
+  font-size: clamp(4.2rem, 6.75vw, 8.15rem) !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.055em !important;
+  line-height: 0.96 !important;
+}
+
+html[lang="ko"] .home-cover-grid .cover-copy h1 {
+  font-size: clamp(3.2rem, 5.9vw, 6.7rem) !important;
+  font-weight: 380 !important;
+  letter-spacing: -0.012em !important;
+  line-height: 1.1 !important;
+}
+
+.home-cover-grid .cover-deck,
+html[lang="ko"] .home-cover-grid .cover-deck {
+  color: var(--home-type-copy) !important;
+  font-weight: 400 !important;
+  line-height: 1.76 !important;
+}
+
+.home-issue-index,
+.home-issue-index[data-scroll-motion] {
+  gap: clamp(0.78rem, 1.28vw, 1.18rem) !important;
+}
+
+.home-index-note,
+html[lang="ko"] .home-index-note {
+  color: rgba(52, 49, 40, 0.66) !important;
+  font-size: clamp(0.88rem, 0.96vw, 1rem) !important;
+  line-height: 1.66 !important;
+}
+
+.home-index-list {
+  gap: 0 !important;
+}
+
+.home-index-list::before {
+  background: rgba(24, 23, 19, 0.11) !important;
+}
+
+.home-index-row,
+.home-index-row[data-scroll-motion] {
+  padding: clamp(0.72rem, 1.18vw, 1.05rem) 0 !important;
+  border-bottom-color: rgba(24, 23, 19, 0.075) !important;
+}
+
+.home-index-row::before {
+  box-shadow: inset 0 0 0 1px rgba(24, 23, 19, 0.12) !important;
+}
+
+.home-index-row::after {
+  background: rgba(24, 23, 19, 0.095) !important;
+}
+
+.home-recent-media .home-recent-visual .image-block {
+  aspect-ratio: 8 / 5 !important;
+}
+
+.home-recent-spread > .home-story-index-list {
+  gap: clamp(0.92rem, 1.62vw, 1.75rem) !important;
+}
+
+.home-recent-spread > .home-story-index-list .home-story-line strong,
+html[lang="ko"] .home-recent-spread > .home-story-index-list .home-story-line strong {
+  font-size: clamp(1.04rem, 1.28vw, 1.54rem) !important;
+}
+
+.home-recent-spread > .home-story-index-list .home-story-line,
+.home-recent-spread > .home-story-index-list .home-story-line[data-scroll-motion] {
+  grid-template-columns: 1.75rem minmax(0, 1fr) !important;
+  gap: 0 clamp(0.45rem, 0.8vw, 0.7rem) !important;
+}
+
+.home-recent-spread > .home-story-index-list .home-story-line span {
+  top: clamp(0.34rem, 0.56vw, 0.62rem) !important;
+  padding-left: 0 !important;
+}
+
+.home-recent-spread > .home-story-index-list .home-story-line small {
+  top: 0 !important;
+  grid-column: 2 !important;
+  margin-top: clamp(0.3rem, 0.48vw, 0.5rem) !important;
+}
+
+@media (max-width: 980px) {
+  .home-recent-media .home-recent-visual .image-block {
+    aspect-ratio: 4 / 3 !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .home-cover-grid .cover-copy h1,
+  html[lang="ko"] .home-cover-grid .cover-copy h1 {
+    font-size: clamp(3rem, 16vw, 4.6rem) !important;
+  }
+
+  .home-recent-spread > .home-story-index-list .home-story-line,
+  .home-recent-spread > .home-story-index-list .home-story-line[data-scroll-motion] {
+    grid-template-columns: 1.75rem minmax(0, 1fr) !important;
+  }
+}
+
+/* Editorial pages balance pass: preserve restraint while keeping wrapped article copy open. */
+:root {
+  --editorial-page-title: rgba(24, 23, 19, 0.86);
+  --editorial-page-copy: rgba(52, 49, 40, 0.74);
+  --editorial-page-meta: rgba(52, 49, 40, 0.58);
+}
+
+.archive-page .archive-heading h1,
+.archive-page .archive-heading h2,
+.archive-page .archive-title,
+.article-detail:not(.writer-article) .article-title-block h1,
+.article-detail:not(.writer-article) .article-section h2,
+html[lang="ko"] .archive-page .archive-heading h1,
+html[lang="ko"] .archive-page .archive-heading h2,
+html[lang="ko"] .archive-page .archive-title,
+html[lang="ko"] .article-detail:not(.writer-article) .article-title-block h1,
+html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
+  color: var(--editorial-page-title) !important;
+  font-weight: 380 !important;
+  font-variation-settings: normal !important;
+}
+
+.archive-page .archive-heading > p,
+.archive-page .archive-summary,
+.article-detail:not(.writer-article) .article-title-block p:not(.kicker),
+.article-detail:not(.writer-article) .article-section p,
+.article-detail:not(.writer-article) .article-body > blockquote,
+.article-detail:not(.writer-article) .article-section .article-inline-quote,
+html[lang="ko"] .archive-page .archive-heading > p,
+html[lang="ko"] .archive-page .archive-summary,
+html[lang="ko"] .article-detail:not(.writer-article) .article-title-block p:not(.kicker),
+html[lang="ko"] .article-detail:not(.writer-article) .article-section p,
+html[lang="ko"] .article-detail:not(.writer-article) .article-body > blockquote,
+html[lang="ko"] .article-detail:not(.writer-article) .article-section .article-inline-quote {
+  color: var(--editorial-page-copy) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.002em !important;
+}
+
+.archive-page .archive-date,
+.archive-page .archive-category,
+.archive-page .archive-info,
+.article-detail:not(.writer-article) .article-meta-card small,
+.article-detail:not(.writer-article) .back-link,
+.article-detail:not(.writer-article) .kicker,
+html[lang="ko"] .archive-page .archive-date,
+html[lang="ko"] .archive-page .archive-category,
+html[lang="ko"] .archive-page .archive-info,
+html[lang="ko"] .article-detail:not(.writer-article) .article-meta-card small,
+html[lang="ko"] .article-detail:not(.writer-article) .back-link,
+html[lang="ko"] .article-detail:not(.writer-article) .kicker {
+  color: var(--editorial-page-meta) !important;
+}
+
+.article-detail:not(.writer-article) .article-body > blockquote,
+.article-detail:not(.writer-article) .article-section .article-inline-quote {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+}
+
+@media (max-width: 960px) {
+  .article-detail:not(.writer-article) .article-section h2,
+  html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
+    max-width: min(100%, 28rem) !important;
+    margin-bottom: clamp(1.1rem, 4vw, 1.6rem) !important;
+  }
+
+  .article-detail:not(.writer-article) .article-body > blockquote,
+  html[lang="ko"] .article-detail:not(.writer-article) .article-body > blockquote,
+  .article-detail:not(.writer-article) .article-section p,
+  html[lang="ko"] .article-detail:not(.writer-article) .article-section p {
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .archive-page .archive-heading > p,
+  html[lang="ko"] .archive-page .archive-heading > p {
+    font-size: clamp(0.94rem, 4vw, 1.02rem) !important;
+    line-height: 1.7 !important;
+  }
+
+  .article-detail:not(.writer-article) .article-title-block h1,
+  html[lang="ko"] .article-detail:not(.writer-article) .article-title-block h1 {
+    font-size: clamp(2rem, 8.3vw, 3.15rem) !important;
+    line-height: 1.18 !important;
+  }
+
+  .article-detail:not(.writer-article) .article-title-block p:not(.kicker),
+  html[lang="ko"] .article-detail:not(.writer-article) .article-title-block p:not(.kicker) {
+    font-size: clamp(0.96rem, 4vw, 1.06rem) !important;
+    line-height: 1.74 !important;
+  }
+}
+
+/* Quiet title pass: keep lists as indexes, not cards. */
+.archive-page .archive-title,
+html[lang="ko"] .archive-page .archive-title {
+  color: rgba(24, 23, 19, 0.76) !important;
+  font-size: clamp(1rem, 1.14vw, 1.42rem) !important;
+  font-weight: 360 !important;
+  letter-spacing: -0.002em !important;
+  line-height: 1.46 !important;
+}
+
+html[lang="ko"] .archive-page .archive-title {
+  font-size: clamp(1.02rem, 1.2vw, 1.5rem) !important;
+  line-height: 1.48 !important;
+}
+
+.archive-row.is-action-active .archive-title,
+.archive-page .archive-row:hover .archive-title,
+.archive-page .archive-row:focus-visible .archive-title {
+  color: rgba(24, 23, 19, 0.86) !important;
+}
+
+.article-detail:not(.writer-article) .article-section h2,
+html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
+  color: rgba(24, 23, 19, 0.72) !important;
+  font-size: clamp(1.04rem, 1.18vw, 1.42rem) !important;
+  font-weight: 360 !important;
+  line-height: 1.44 !important;
+}
+
+html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
+  font-size: clamp(1.02rem, 1.14vw, 1.34rem) !important;
+  line-height: 1.5 !important;
+}
+
+@media (max-width: 680px) {
+  .archive-page .archive-title,
+  html[lang="ko"] .archive-page .archive-title {
+    font-size: clamp(1.04rem, 5vw, 1.34rem) !important;
+    line-height: 1.42 !important;
+  }
+
+  .article-detail:not(.writer-article) .article-section h2,
+  html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
+    font-size: clamp(1rem, 4.7vw, 1.22rem) !important;
+    line-height: 1.48 !important;
+  }
+}
+
+/* Home recent rhythm: use the right column more evenly without adding furniture. */
+.home-recent-spread > .home-story-index-list {
+  gap: clamp(1.05rem, 1.9vw, 2.08rem) !important;
+}
+
+.home-recent-spread > .home-story-index-list .home-story-more,
+.home-recent-spread > .home-story-index-list .home-story-more[data-scroll-motion] {
+  margin-top: clamp(0.45rem, 0.95vw, 1.05rem) !important;
+}
+
+@media (max-width: 980px) {
+  .home-recent-spread > .home-story-index-list {
+    gap: clamp(0.86rem, 3.6vw, 1.35rem) !important;
   }
 }

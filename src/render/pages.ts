@@ -278,7 +278,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260506-home-stories-stack";
+const assetVersion = "20260506-home-recent-rhythm";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
@@ -311,6 +311,8 @@ const renderLayout = ({ title, description, body, locale, currentPath, site, con
   const currentPathname = currentPath.split(/[?#]/)[0].replace(/\/$/, "") || "/";
   const bodyVersion = contentVersionHash(body);
   const contentVersionAttribute = contentVersion ? ` data-runtime-content-version="${escapeHtml(contentVersion)}"` : "";
+  const runtimeHydrationAttribute = supabasePublicConfig.enabled ? ` data-runtime-hydration="pending"` : "";
+  const runtimeHydrationNoscript = supabasePublicConfig.enabled ? `\n    <noscript><style>html[data-runtime-hydration="pending"] main .image-block.has-custom-image img{opacity:1!important}</style></noscript>` : "";
   const supabaseAttributes = supabasePublicConfig.enabled
     ? ` data-supabase-url="${escapeHtml(supabasePublicConfig.url)}" data-supabase-anon-key="${escapeHtml(supabasePublicConfig.anonKey)}" data-supabase-functions-url="${escapeHtml(supabasePublicConfig.functionsUrl)}"`
     : "";
@@ -351,14 +353,14 @@ const renderLayout = ({ title, description, body, locale, currentPath, site, con
     .join("\n");
 
   return `<!doctype html>
-<html lang="${locale}">
+<html lang="${locale}"${runtimeHydrationAttribute}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="${escapeHtml(description)}" />
     <title>${escapeHtml(title)}</title>
     <link rel="stylesheet" href="/styles.css?v=${assetVersion}" />
-    <script src="/client.js?v=${assetVersion}" defer></script>
+    <script src="/client.js?v=${assetVersion}" defer></script>${runtimeHydrationNoscript}
   </head>
   <body${supabaseAttributes}>
     <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
@@ -968,8 +970,6 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
   const selectedArticles = articleList.slice(0, 5);
   const leadArticle = selectedArticles[0];
   const secondaryArticles = selectedArticles.slice(1, 5);
-  const issueRouteText = issueFeatures.slice(0, 3).map((feature) => text(feature.readTime, locale)).filter(Boolean).join(" · ") || text(currentIssue.format, locale);
-  const issueAccessText = text(currentIssue.availability, locale);
   const homeRecentVisual = leadArticle
     ? `          <a class="home-recent-media" href="${articleHref(leadArticle, locale)}" data-reveal data-action-card aria-label="${escapeHtml(text(leadArticle.title, locale))}">
             <span class="home-recent-visual" aria-hidden="true">
@@ -1018,11 +1018,6 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
           <p class="kicker">Current Issue</p>
           <h1 id="hero-title">${escapeHtml(text(currentIssue.title, locale))}</h1>
           <p class="cover-deck">${escapeHtml(text(currentIssue.deck, locale))}</p>
-          <div class="home-cover-ledger" aria-label="${escapeHtml(locale === "ko" ? "이슈 요약" : "Issue summary")}">
-            <span><small>${escapeHtml(locale === "ko" ? "장면" : "Scenes")}</small><strong>${String(issueFeatures.length).padStart(2, "0")}</strong></span>
-            <span><small>${escapeHtml(locale === "ko" ? "공개" : "Access")}</small><strong>${escapeHtml(issueAccessText)}</strong></span>
-            <span><small>${escapeHtml(locale === "ko" ? "경로" : "Route")}</small><strong>${escapeHtml(issueRouteText)}</strong></span>
-          </div>
           <a class="home-issue-link" href="${issueHref(currentIssue, locale)}">
             <span>${escapeHtml(locale === "ko" ? "최신 이슈 읽기" : "Read Latest Issue")}</span>
             <small>${escapeHtml(currentIssue.number)}</small>
@@ -1032,7 +1027,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
         <section class="home-issue-index" aria-labelledby="home-issue-index-title" data-reveal data-scroll-motion>
           <header class="home-index-headline">
             <p class="kicker" id="home-issue-index-title">Issue Index</p>
-            <span class="home-index-scope">${escapeHtml(currentIssue.number)} / ${String(issueFeatures.length).padStart(2, "0")} ${escapeHtml(locale === "ko" ? "장면" : "Scenes")}</span>
+            <span class="home-index-scope">${escapeHtml(currentIssue.number)}</span>
           </header>
           <p class="home-index-note">${escapeHtml(text(currentIssue.subtitle, locale))}</p>
           <div class="home-index-list" aria-label="${escapeHtml(locale === "ko" ? "이슈 읽기 순서" : "Issue reading order")}">

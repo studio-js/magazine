@@ -24,6 +24,38 @@ const apiPath = (path) => `${clientBasePath}${path}`;
 const supabaseUrl = document.body.dataset.supabaseUrl || "";
 const supabaseAnonKey = document.body.dataset.supabaseAnonKey || "";
 const supabaseFunctionsUrl = document.body.dataset.supabaseFunctionsUrl || (supabaseUrl ? `${supabaseUrl}/functions/v1` : "");
+const runtimeSnapshotCacheKey = "habitus.publishedSnapshot.v1";
+const isRuntimeContentSnapshot = (value) => {
+    if (!value || typeof value !== "object") {
+        return false;
+    }
+    const snapshot = value;
+    return Array.isArray(snapshot.articles) && Array.isArray(snapshot.issueProjects);
+};
+const readCachedRuntimeSnapshot = () => {
+    try {
+        const rawSnapshot = window.localStorage.getItem(runtimeSnapshotCacheKey);
+        const snapshot = rawSnapshot ? JSON.parse(rawSnapshot) : null;
+        return isRuntimeContentSnapshot(snapshot) ? snapshot : null;
+    }
+    catch {
+        return null;
+    }
+};
+const writeCachedRuntimeSnapshot = (snapshot) => {
+    if (!isRuntimeContentSnapshot(snapshot)) {
+        return;
+    }
+    try {
+        window.localStorage.setItem(runtimeSnapshotCacheKey, JSON.stringify(snapshot));
+    }
+    catch {
+        // Private browsing or storage limits should not block publishing/rendering.
+    }
+};
+const finishRuntimeHydration = () => {
+    delete document.documentElement.dataset.runtimeHydration;
+};
 const contentHashClient = (value) => {
     let hash = 5381;
     for (let index = 0; index < value.length; index += 1) {
@@ -54,11 +86,13 @@ const fetchSupabaseSnapshot = async () => {
     if (!row?.data) {
         return null;
     }
-    return {
+    const snapshot = {
         articles: row.data.articles,
         issueProjects: row.data.issueProjects,
         updatedAt: row.updated_at
     };
+    writeCachedRuntimeSnapshot(snapshot);
+    return snapshot;
 };
 const runtimeCategories = [
     {
@@ -486,8 +520,6 @@ const renderRuntimeHomePage = (data, locale) => {
         return "";
     }
     const issueFeatures = currentIssue.features || [];
-    const issueRouteText = issueFeatures.slice(0, 3).map((feature) => runtimeText(feature.readTime, locale)).filter(Boolean).join(" · ") || runtimeText(currentIssue.format, locale);
-    const issueAccessText = runtimeText(currentIssue.availability, locale);
     const homeRecentVisual = leadArticle ? `          <a class="home-recent-media" href="${runtimeArticleHref(leadArticle, locale)}" data-reveal data-action-card aria-label="${runtimeEscapeHtml(runtimeText(leadArticle.title, locale))}">
             <span class="home-recent-visual" aria-hidden="true">${runtimeImageBlock(leadArticle.heroClass, leadArticle.heroImage || "")}</span>
           </a>` : "";
@@ -521,16 +553,11 @@ const renderRuntimeHomePage = (data, locale) => {
           <p class="kicker">Current Issue</p>
           <h1 id="hero-title">${runtimeEscapeHtml(runtimeText(currentIssue.title, locale))}</h1>
           <p class="cover-deck">${runtimeEscapeHtml(runtimeText(currentIssue.deck, locale))}</p>
-          <div class="home-cover-ledger" aria-label="${runtimeEscapeHtml(locale === "ko" ? "이슈 요약" : "Issue summary")}">
-            <span><small>${runtimeEscapeHtml(locale === "ko" ? "장면" : "Scenes")}</small><strong>${String(issueFeatures.length).padStart(2, "0")}</strong></span>
-            <span><small>${runtimeEscapeHtml(locale === "ko" ? "공개" : "Access")}</small><strong>${runtimeEscapeHtml(issueAccessText)}</strong></span>
-            <span><small>${runtimeEscapeHtml(locale === "ko" ? "경로" : "Route")}</small><strong>${runtimeEscapeHtml(issueRouteText)}</strong></span>
-          </div>
           <a class="home-issue-link" href="${runtimeIssueHref(currentIssue, locale)}"><span>${runtimeEscapeHtml(locale === "ko" ? "최신 이슈 읽기" : "Read Latest Issue")}</span><small>${runtimeEscapeHtml(currentIssue.number)}</small></a>
         </div>
 
         <section class="home-issue-index" aria-labelledby="home-issue-index-title" data-reveal data-scroll-motion>
-          <header class="home-index-headline"><p class="kicker" id="home-issue-index-title">Issue Index</p><span class="home-index-scope">${runtimeEscapeHtml(currentIssue.number)} / ${String(issueFeatures.length).padStart(2, "0")} ${runtimeEscapeHtml(locale === "ko" ? "장면" : "Scenes")}</span></header>
+          <header class="home-index-headline"><p class="kicker" id="home-issue-index-title">Issue Index</p><span class="home-index-scope">${runtimeEscapeHtml(currentIssue.number)}</span></header>
           <p class="home-index-note">${runtimeEscapeHtml(runtimeText(currentIssue.subtitle, locale))}</p>
           <div class="home-index-list" aria-label="${runtimeEscapeHtml(locale === "ko" ? "이슈 읽기 순서" : "Issue reading order")}">
 ${issueRows}
@@ -853,34 +880,46 @@ const runtimeAfterRender = (data, root, locale) => {
     });
 };
 const hydrateRuntimeContent = async () => {
-    if (document.querySelector("[data-write-editor]") || !document.querySelector("main")) {
-        return;
+    try {
+        const main = document.querySelector("main");
+        if (document.querySelector("[data-write-editor]") || !main) {
+            return;
+        }
+        const locale = runtimeLocale();
+        const path = runtimePath();
+        const applyRuntimeSnapshot = (snapshot) => {
+            const data = runtimeSnapshotData(snapshot);
+            if (!data) {
+                return false;
+            }
+            const renderedBody = runtimeRenderForPath(data, path, locale);
+            if (!renderedBody) {
+                return false;
+            }
+            const nextContentVersion = runtimeContentVersion(data, path);
+            const nextBodyVersion = contentHashClient(renderedBody);
+            if (main.dataset.runtimeContentVersion === nextContentVersion || main.dataset.runtimeBodyVersion === nextBodyVersion) {
+                document.documentElement.dataset.runtimeContent = "supabase";
+                main.dataset.runtimeContentVersion = nextContentVersion;
+                main.dataset.runtimeBodyVersion = nextBodyVersion;
+                return true;
+            }
+            main.innerHTML = renderedBody;
+            main.dataset.runtimeContentVersion = nextContentVersion;
+            main.dataset.runtimeBodyVersion = nextBodyVersion;
+            document.documentElement.dataset.runtimeContent = "supabase";
+            runtimeAfterRender(data, main, locale);
+            return true;
+        };
+        const cachedSnapshot = readCachedRuntimeSnapshot();
+        if (cachedSnapshot) {
+            applyRuntimeSnapshot(cachedSnapshot);
+        }
+        applyRuntimeSnapshot(await fetchSupabaseSnapshot().catch(() => null));
     }
-    const snapshot = await fetchSupabaseSnapshot().catch(() => null);
-    const data = runtimeSnapshotData(snapshot);
-    if (!data) {
-        return;
+    finally {
+        finishRuntimeHydration();
     }
-    const locale = runtimeLocale();
-    const path = runtimePath();
-    const renderedBody = runtimeRenderForPath(data, path, locale);
-    const main = document.querySelector("main");
-    if (!renderedBody || !main) {
-        return;
-    }
-    const nextContentVersion = runtimeContentVersion(data, path);
-    const nextBodyVersion = contentHashClient(renderedBody);
-    if (main.dataset.runtimeContentVersion === nextContentVersion || main.dataset.runtimeBodyVersion === nextBodyVersion) {
-        document.documentElement.dataset.runtimeContent = "supabase";
-        main.dataset.runtimeContentVersion = nextContentVersion;
-        main.dataset.runtimeBodyVersion = nextBodyVersion;
-        return;
-    }
-    main.innerHTML = renderedBody;
-    main.dataset.runtimeContentVersion = nextContentVersion;
-    main.dataset.runtimeBodyVersion = nextBodyVersion;
-    document.documentElement.dataset.runtimeContent = "supabase";
-    runtimeAfterRender(data, main, locale);
 };
 const setImageBlockVisual = (element, visualClass, imageUrl = "") => {
     const existingImage = element.querySelector("[data-image-source]");
@@ -2503,6 +2542,7 @@ if (writer) {
         if (supabaseFunctionsUrl) {
             try {
                 const result = await saveContentToSupabase({ articles: adminArticles, issueProjects: adminIssues });
+                writeCachedRuntimeSnapshot({ articles: adminArticles, issueProjects: adminIssues, updatedAt: new Date().toISOString() });
                 setStatus(`Supabase published snapshot에 저장했습니다.${result.articleCount ? ` (${result.articleCount}개)` : ""}`);
                 setSaveButtonState(articleSaveButton, "done");
                 return;
@@ -2544,6 +2584,7 @@ if (writer) {
         if (supabaseFunctionsUrl) {
             try {
                 const result = await saveContentToSupabase({ articles: adminArticles, issueProjects: adminIssues });
+                writeCachedRuntimeSnapshot({ articles: adminArticles, issueProjects: adminIssues, updatedAt: new Date().toISOString() });
                 setIssueStatus(`Supabase published snapshot에 저장했습니다.${result.issueCount ? ` (${result.issueCount}개 이슈)` : ""}`);
                 setSaveButtonState(issueSaveButton, "done");
                 return;
