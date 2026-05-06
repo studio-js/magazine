@@ -278,7 +278,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260506-hydration-image-guard";
+const assetVersion = "20260506-hydration-visual-guard";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
@@ -312,7 +312,7 @@ const renderLayout = ({ title, description, body, locale, currentPath, site, con
   const bodyVersion = contentVersionHash(body);
   const contentVersionAttribute = contentVersion ? ` data-runtime-content-version="${escapeHtml(contentVersion)}"` : "";
   const runtimeHydrationAttribute = supabasePublicConfig.enabled ? ` data-runtime-hydration="pending"` : "";
-  const runtimeHydrationCriticalStyle = supabasePublicConfig.enabled ? `\n    <style>html[data-runtime-hydration="pending"] main .image-block.has-custom-image img{opacity:0!important}html[data-runtime-hydration="pending"] main .image-block.has-custom-image{background-color:rgba(24,23,19,.035)}</style>` : "";
+  const runtimeHydrationCriticalStyle = supabasePublicConfig.enabled ? `\n    <style>html[data-runtime-hydration="pending"] main .image-block.has-custom-image img{opacity:0!important}html[data-runtime-hydration="pending"] main .image-block.has-custom-image{background:rgba(24,23,19,.035)!important}html[data-runtime-hydration="pending"] main .image-block.has-custom-image::before,html[data-runtime-hydration="pending"] main .image-block.has-custom-image::after{display:none!important}</style>` : "";
   const runtimeHydrationNoscript = supabasePublicConfig.enabled ? `\n    <noscript><style>html[data-runtime-hydration="pending"] main .image-block.has-custom-image img{opacity:1!important}</style></noscript>` : "";
   const supabaseAttributes = supabasePublicConfig.enabled
     ? ` data-supabase-url="${escapeHtml(supabasePublicConfig.url)}" data-supabase-anon-key="${escapeHtml(supabasePublicConfig.anonKey)}" data-supabase-functions-url="${escapeHtml(supabasePublicConfig.functionsUrl)}"`

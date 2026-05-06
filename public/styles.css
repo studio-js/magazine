@@ -23051,7 +23051,12 @@ html[data-runtime-hydration="pending"] main .image-block.has-custom-image img {
 }
 
 html[data-runtime-hydration="pending"] main .image-block.has-custom-image {
-  background-color: rgba(24, 23, 19, 0.035);
+  background: rgba(24, 23, 19, 0.035) !important;
+}
+
+html[data-runtime-hydration="pending"] main .image-block.has-custom-image::before,
+html[data-runtime-hydration="pending"] main .image-block.has-custom-image::after {
+  display: none !important;
 }
 
 html:not([data-runtime-hydration="pending"]) main .image-block.has-custom-image img {
