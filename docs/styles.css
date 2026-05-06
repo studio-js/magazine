@@ -23820,12 +23820,15 @@ html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
 
 .home-habitus .habitus-copy h2,
 html[lang="ko"] .home-habitus .habitus-copy h2 {
-  max-width: 13.6ch !important;
-  font-size: clamp(2.65rem, 5.15vw, 5.95rem) !important;
+  max-width: 14.2ch !important;
+  font-size: clamp(2.4rem, 4.25vw, 5rem) !important;
+  letter-spacing: -0.004em !important;
+  line-height: 1.08 !important;
 }
 
 html[lang="ko"] .home-habitus .habitus-copy h2 {
-  max-width: 13ch !important;
+  max-width: 12.8ch !important;
+  line-height: 1.14 !important;
 }
 
 .home-habitus .habitus-copy p:not(.kicker),
@@ -23856,8 +23859,14 @@ html[lang="ko"] .home-habitus .habitus-copy p:not(.kicker) {
 
   .home-habitus .habitus-copy h2,
   html[lang="ko"] .home-habitus .habitus-copy h2 {
-    max-width: 11.8ch !important;
-    font-size: clamp(2.58rem, 13.4vw, 4.75rem) !important;
+    max-width: 12.2ch !important;
+    font-size: clamp(2.24rem, 11.1vw, 4.05rem) !important;
+    line-height: 1.1 !important;
+  }
+
+  html[lang="ko"] .home-habitus .habitus-copy h2 {
+    max-width: 11.6ch !important;
+    line-height: 1.15 !important;
   }
 
   .home-habitus .habitus-copy p:not(.kicker),
@@ -23869,15 +23878,15 @@ html[lang="ko"] .home-habitus .habitus-copy p:not(.kicker) {
   .home-habitus .habitus-board,
   .home-habitus .habitus-board[data-scroll-motion] {
     width: min(100%, 36rem) !important;
-    min-height: clamp(19.5rem, 88vw, 25rem) !important;
+    min-height: clamp(21rem, 98vw, 28rem) !important;
     overflow: hidden !important;
   }
 
   .home-habitus .habitus-system {
     width: 100% !important;
     max-width: none !important;
-    transform: scale(1.12) !important;
-    transform-origin: center !important;
+    transform: scale(1.82) !important;
+    transform-origin: 50% 35% !important;
   }
 }
 
@@ -23885,12 +23894,13 @@ html[lang="ko"] .home-habitus .habitus-copy p:not(.kicker) {
   .home-habitus .habitus-board,
   .home-habitus .habitus-board[data-scroll-motion] {
     width: 100% !important;
-    min-height: clamp(18.8rem, 94vw, 22.5rem) !important;
+    min-height: clamp(21rem, 104vw, 27rem) !important;
   }
 
   .home-habitus .habitus-system {
     width: 100% !important;
-    transform: scale(1.18) !important;
+    transform: scale(2.05) !important;
+    transform-origin: 50% 35% !important;
   }
 
   .home-habitus .habitus-strand-labels text,
