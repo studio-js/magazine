@@ -278,7 +278,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260505-home-stories";
+const assetVersion = "20260506-home-stories-stack";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
@@ -995,10 +995,6 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
               <small>${escapeHtml(categoryLabel(site.categories, leadArticle.category, locale))} / ${escapeHtml(formatDate(leadArticle.date, locale))}</small>
               <strong>${escapeHtml(text(leadArticle.title, locale))}</strong>
               <em>${escapeHtml(text(leadArticle.excerpt, locale))}</em>
-              <span class="home-recent-context" aria-label="${escapeHtml(locale === "ko" ? "대표 글 맥락" : "Lead story context")}">
-                <span><small>${escapeHtml(locale === "ko" ? "대표" : "Lead")}</small><strong>01</strong></span>
-                <span><small>${escapeHtml(locale === "ko" ? "이어 읽기" : "Next")}</small><strong>${secondaryArticles.length} ${escapeHtml(locale === "ko" ? "편" : "entries")}</strong></span>
-              </span>
             </span>
           </a>`
     : "";
@@ -1053,16 +1049,16 @@ ${homeIndexRows}
       </div>
 
       <div class="home-recent-spread">
+        <div class="home-recent-feature">
 ${homeRecentVisual}
-        <div class="home-recent-stack">
 ${homeRecentLead}
+        </div>
         <div class="home-story-index-list">
 ${storyRows}
           <a class="home-story-more" href="${archiveHref(locale)}" data-reveal>
             <span>${escapeHtml(locale === "ko" ? "전체 보기" : "View all")}</span>
             <strong>${escapeHtml(labels.fullArchive)}</strong>
           </a>
-        </div>
         </div>
       </div>
     </section>

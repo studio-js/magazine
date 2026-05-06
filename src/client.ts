@@ -674,10 +674,6 @@ const renderRuntimeHomePage = (data: RuntimeContentData, locale: RuntimeLocale):
               <small>${runtimeEscapeHtml(runtimeCategoryLabel(leadArticle.category, locale))} / ${runtimeEscapeHtml(runtimeFormatDate(leadArticle.date, locale))}</small>
               <strong>${runtimeEscapeHtml(runtimeText(leadArticle.title, locale))}</strong>
               <em>${runtimeEscapeHtml(runtimeText(leadArticle.excerpt, locale))}</em>
-              <span class="home-recent-context" aria-label="${runtimeEscapeHtml(locale === "ko" ? "대표 글 맥락" : "Lead story context")}">
-                <span><small>${runtimeEscapeHtml(locale === "ko" ? "대표" : "Lead")}</small><strong>01</strong></span>
-                <span><small>${runtimeEscapeHtml(locale === "ko" ? "이어 읽기" : "Next")}</small><strong>${secondaryArticles.length} ${runtimeEscapeHtml(locale === "ko" ? "편" : "entries")}</strong></span>
-              </span>
             </span>
           </a>` : "";
   const storyRows = secondaryArticles.map((article, index) => `              <a class="home-story-line" href="${runtimeArticleHref(article, locale)}" data-reveal data-action-card>
@@ -721,13 +717,13 @@ ${issueRows}
         <h2 id="features-title">${runtimeEscapeHtml(locale === "ko" ? "최근 글" : "Recent Stories")}</h2>
       </div>
       <div class="home-recent-spread">
+        <div class="home-recent-feature">
 ${homeRecentVisual}
-        <div class="home-recent-stack">
 ${homeRecentLead}
+        </div>
         <div class="home-story-index-list">
 ${storyRows}
           <a class="home-story-more" href="${runtimeArchiveHref(locale)}" data-reveal><span>${runtimeEscapeHtml(locale === "ko" ? "전체 보기" : "View all")}</span><strong>${runtimeEscapeHtml(runtimeLabels[locale].fullArchive)}</strong></a>
-        </div>
         </div>
       </div>
     </section>
