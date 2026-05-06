@@ -278,7 +278,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260506-mobile-action-rail";
+const assetVersion = "20260506-habitus-row-persist";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 

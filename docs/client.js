@@ -9,6 +9,9 @@ const coarsePointer = window.matchMedia("(pointer: coarse)");
 const noHoverPointer = window.matchMedia("(hover: none)");
 const mobileViewport = window.matchMedia("(max-width: 980px)");
 const isMobileActionMode = () => coarsePointer.matches || noHoverPointer.matches || mobileViewport.matches;
+const persistentMobileActionRowSelector = ".archive-row, .home-story-line";
+let activeMobileActionSurface = null;
+let mobileActionDismissalReady = false;
 const imageClasses = [
     "image-atelier",
     "image-signal",
@@ -3632,6 +3635,28 @@ window.addEventListener("scroll", requestScrollState, { passive: true });
 window.addEventListener("resize", requestScrollState);
 initRevealItems(document);
 function initActionSurfaces(root) {
+    if (!mobileActionDismissalReady) {
+        mobileActionDismissalReady = true;
+        document.addEventListener("pointerdown", (event) => {
+            if (!isMobileActionMode()) {
+                return;
+            }
+            const target = event.target instanceof Element ? event.target : null;
+            if (target?.closest(persistentMobileActionRowSelector)) {
+                return;
+            }
+            if (activeMobileActionSurface) {
+                activeMobileActionSurface.classList.remove("is-action-active");
+                activeMobileActionSurface = null;
+            }
+        }, { passive: true });
+        window.addEventListener("resize", () => {
+            if (!isMobileActionMode() && activeMobileActionSurface) {
+                activeMobileActionSurface.classList.remove("is-action-active");
+                activeMobileActionSurface = null;
+            }
+        });
+    }
     root.querySelectorAll([
         "[data-action-card]",
         ".home-index-row",
@@ -3648,6 +3673,14 @@ function initActionSurfaces(root) {
         }
         surface.dataset.actionSurfaceReady = "true";
         let clearTimer = 0;
+        const isPersistentMobileAction = (event) => surface.matches(persistentMobileActionRowSelector) && (isMobileActionMode() || event.pointerType !== "mouse");
+        const clearActiveMobileActionSurface = () => {
+            if (!activeMobileActionSurface || activeMobileActionSurface === surface) {
+                return;
+            }
+            activeMobileActionSurface.classList.remove("is-action-active");
+            activeMobileActionSurface = null;
+        };
         const clearTimerIfNeeded = () => {
             if (clearTimer !== 0) {
                 window.clearTimeout(clearTimer);
@@ -3660,6 +3693,9 @@ function initActionSurfaces(root) {
         };
         const deactivate = (delay = 0) => {
             clearTimerIfNeeded();
+            if (activeMobileActionSurface === surface) {
+                return;
+            }
             if (delay === 0) {
                 surface.classList.remove("is-action-active");
                 return;
@@ -3684,15 +3720,28 @@ function initActionSurfaces(root) {
         surface.addEventListener("focusin", activate);
         surface.addEventListener("focusout", () => deactivate());
         surface.addEventListener("pointerdown", (event) => {
+            if (isPersistentMobileAction(event)) {
+                clearActiveMobileActionSurface();
+                activeMobileActionSurface = surface;
+                activate();
+                return;
+            }
+            clearActiveMobileActionSurface();
             activate();
             deactivate(isMobileActionMode() || event.pointerType !== "mouse" ? 180 : 900);
         });
         surface.addEventListener("pointerup", (event) => {
+            if (isPersistentMobileAction(event)) {
+                return;
+            }
             if (isMobileActionMode() || event.pointerType !== "mouse") {
                 deactivate(90);
             }
         });
         surface.addEventListener("pointercancel", () => {
+            if (activeMobileActionSurface === surface) {
+                return;
+            }
             deactivate();
         });
         surface.addEventListener("keydown", (event) => {
