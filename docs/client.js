@@ -2602,6 +2602,8 @@ if (writer) {
             }
             catch (error) {
                 setStatus(error instanceof Error ? `Supabase 저장 실패: ${error.message}` : "Supabase 저장에 실패했습니다.");
+                setSaveButtonState(articleSaveButton, "error");
+                return;
             }
         }
         try {
@@ -2644,6 +2646,8 @@ if (writer) {
             }
             catch (error) {
                 setIssueStatus(error instanceof Error ? `Supabase 저장 실패: ${error.message}` : "Supabase 저장에 실패했습니다.");
+                setSaveButtonState(issueSaveButton, "error");
+                return;
             }
         }
         try {
@@ -2663,6 +2667,20 @@ if (writer) {
             setIssueStatus("정적 페이지에서는 이슈 저장이 불가해 issue-projects.ts를 내려받았습니다. 로컬 서버에서 열면 폴더에 저장됩니다.");
             setSaveButtonState(issueSaveButton, "error");
         }
+    };
+    const saveCurrentEditorMode = async () => {
+        if (writer.dataset.writeMode === "issue") {
+            await saveIssueToProject();
+        }
+        else {
+            await saveArticlesToProject();
+        }
+    };
+    const isSaveShortcut = (event) => (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "s";
+    const handleSaveShortcut = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        void saveCurrentEditorMode();
     };
     const scheduleIssueSave = () => {
         updateIssueOutput();
@@ -2887,14 +2905,8 @@ if (writer) {
         if (!(target instanceof HTMLElement)) {
             return;
         }
-        if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "s") {
-            event.preventDefault();
-            if (writer.dataset.writeMode === "issue") {
-                await saveIssueToProject();
-            }
-            else {
-                await saveArticlesToProject();
-            }
+        if (isSaveShortcut(event)) {
+            handleSaveShortcut(event);
             return;
         }
         const section = target.closest("[data-write-section]");
@@ -3097,6 +3109,11 @@ if (writer) {
     applyIssue(0);
     applyArticle(0);
     void loadSupabaseContent();
+    window.addEventListener("keydown", (event) => {
+        if (isSaveShortcut(event)) {
+            handleSaveShortcut(event);
+        }
+    }, { capture: true });
     writer.addEventListener("keydown", (event) => {
         void handleEditorKeydown(event);
     });
