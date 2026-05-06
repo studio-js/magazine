@@ -360,8 +360,8 @@ const runtimeCategoryLabel = (key: string, locale: RuntimeLocale): string => run
 const runtimeSubcategoryLabel = (categoryKey: string, subcategoryKey: string, locale: RuntimeLocale): string =>
   runtimeText(runtimeCategory(categoryKey)?.subcategories.find((subcategory) => subcategory.key === subcategoryKey)?.label, locale) || subcategoryKey;
 
-const runtimeImageBlock = (visualClass: string, imageUrl = "", attributes = ""): string =>
-  `<span class="image-block ${runtimeEscapeHtml(visualClass || "image-material")}${imageUrl ? " has-custom-image" : ""}"${attributes ? ` ${attributes}` : ""}>${imageUrl ? `<img src="${runtimeEscapeHtml(imageUrl)}" alt="" loading="lazy" decoding="async" data-image-source />` : ""}</span>`;
+const runtimeImageBlock = (visualClass: string, imageUrl = "", attributes = "", imageAttributes = `loading="lazy" decoding="async"`): string =>
+  `<span class="image-block ${runtimeEscapeHtml(visualClass || "image-material")}${imageUrl ? " has-custom-image" : ""}"${attributes ? ` ${attributes}` : ""}>${imageUrl ? `<img src="${runtimeEscapeHtml(imageUrl)}" alt="" ${imageAttributes} data-image-source />` : ""}</span>`;
 
 const runtimeSnapshotData = (snapshot: RuntimeContentSnapshot | null): RuntimeContentData | null => {
   if (!snapshot || !Array.isArray(snapshot.articles) || !Array.isArray(snapshot.issueProjects)) {
@@ -696,7 +696,7 @@ const renderRuntimeHomePage = (data: RuntimeContentData, locale: RuntimeLocale):
 
   const issueFeatures = currentIssue.features || [];
   const homeRecentVisual = leadArticle ? `          <a class="home-recent-media" href="${runtimeArticleHref(leadArticle, locale)}" data-reveal data-action-card aria-label="${runtimeEscapeHtml(runtimeText(leadArticle.title, locale))}">
-            <span class="home-recent-visual" aria-hidden="true">${runtimeImageBlock(leadArticle.heroClass, leadArticle.heroImage || "")}</span>
+            <span class="home-recent-visual" aria-hidden="true">${runtimeImageBlock(leadArticle.heroClass, leadArticle.heroImage || "", "", `loading="eager" decoding="async" fetchpriority="high"`)}</span>
           </a>` : "";
   const issueRows = issueFeatures.map((feature, index) => `              <a class="home-index-row" href="${runtimeIssueHref(currentIssue, locale)}#issue-${runtimeEscapeHtml(feature.slug)}" data-scroll-motion>
                 <span class="home-index-order">${String(index + 1).padStart(2, "0")}</span>

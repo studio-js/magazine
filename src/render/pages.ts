@@ -152,8 +152,8 @@ const renderPagination = (currentPage: number, totalPages: number, hrefForPage: 
 const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, locale: Locale): string =>
   text(categories.find((category) => category.key === key)?.label ?? { ko: key, en: key }, locale);
 
-const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = ""): string =>
-  `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${attributes ? ` ${attributes}` : ""}>${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="" loading="lazy" decoding="async" data-image-source />` : ""}</span>`;
+const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = "", imageAttributes = `loading="lazy" decoding="async"`): string =>
+  `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${attributes ? ` ${attributes}` : ""}>${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="" ${imageAttributes} data-image-source />` : ""}</span>`;
 
 const issueCoverVisual = (issue: IssueProject): string =>
   issue.features.find((feature) => feature.heroImage && feature.heroImage === issue.coverImage)?.heroClass
@@ -278,7 +278,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260506-custom-image-bg-guard";
+const assetVersion = "20260506-image-reveal-guard";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
@@ -312,7 +312,7 @@ const renderLayout = ({ title, description, body, locale, currentPath, site, con
   const bodyVersion = contentVersionHash(body);
   const contentVersionAttribute = contentVersion ? ` data-runtime-content-version="${escapeHtml(contentVersion)}"` : "";
   const runtimeHydrationAttribute = supabasePublicConfig.enabled ? ` data-runtime-hydration="pending"` : "";
-  const runtimeHydrationCriticalStyle = supabasePublicConfig.enabled ? `\n    <style>html[data-runtime-hydration="pending"] main .image-block.has-custom-image img{opacity:0!important}html[data-runtime-hydration="pending"] main .image-block.has-custom-image{background:rgba(24,23,19,.035)!important}html[data-runtime-hydration="pending"] main .image-block.has-custom-image::before,html[data-runtime-hydration="pending"] main .image-block.has-custom-image::after{display:none!important}</style>` : "";
+  const runtimeHydrationCriticalStyle = supabasePublicConfig.enabled ? `\n    <style>html[data-runtime-hydration="pending"] main .image-block.has-custom-image{background:rgba(24,23,19,.035)!important}html[data-runtime-hydration="pending"] main .image-block.has-custom-image::before,html[data-runtime-hydration="pending"] main .image-block.has-custom-image::after{display:none!important}</style>` : "";
   const runtimeHydrationNoscript = supabasePublicConfig.enabled ? `\n    <noscript><style>html[data-runtime-hydration="pending"] main .image-block.has-custom-image img{opacity:1!important}</style></noscript>` : "";
   const supabaseAttributes = supabasePublicConfig.enabled
     ? ` data-supabase-url="${escapeHtml(supabasePublicConfig.url)}" data-supabase-anon-key="${escapeHtml(supabasePublicConfig.anonKey)}" data-supabase-functions-url="${escapeHtml(supabasePublicConfig.functionsUrl)}"`
@@ -974,7 +974,7 @@ export const renderHomePage = (site: SiteContent, articleList: Article[], locale
   const homeRecentVisual = leadArticle
     ? `          <a class="home-recent-media" href="${articleHref(leadArticle, locale)}" data-reveal data-action-card aria-label="${escapeHtml(text(leadArticle.title, locale))}">
             <span class="home-recent-visual" aria-hidden="true">
-              ${renderImageBlock(leadArticle.heroClass, leadArticle.heroImage)}
+              ${renderImageBlock(leadArticle.heroClass, leadArticle.heroImage, "", `loading="eager" decoding="async" fetchpriority="high"`)}
             </span>
           </a>`
     : "";

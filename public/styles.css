@@ -23047,10 +23047,6 @@ html[lang="ko"] .home-recent-spread > .home-story-index-list .home-story-line st
   }
 }
 
-html[data-runtime-hydration="pending"] main .image-block.has-custom-image img {
-  opacity: 0 !important;
-}
-
 html[data-runtime-hydration="pending"] main .image-block.has-custom-image {
   background: rgba(24, 23, 19, 0.035) !important;
 }
@@ -23058,11 +23054,6 @@ html[data-runtime-hydration="pending"] main .image-block.has-custom-image {
 html[data-runtime-hydration="pending"] main .image-block.has-custom-image::before,
 html[data-runtime-hydration="pending"] main .image-block.has-custom-image::after {
   display: none !important;
-}
-
-html:not([data-runtime-hydration="pending"]) main .image-block.has-custom-image img {
-  opacity: 1;
-  transition: opacity 160ms ease;
 }
 
 .home-recent-feature .home-recent-copy strong,
