@@ -80,9 +80,11 @@ const fetchSupabaseSnapshot = async () => {
         return null;
     }
     const response = await fetch(`${supabaseUrl}/rest/v1/content_snapshots?id=eq.published&select=data,updated_at&limit=1`, {
+        cache: "no-store",
         headers: {
             apikey: supabaseAnonKey,
-            Authorization: `Bearer ${supabaseAnonKey}`
+            Authorization: `Bearer ${supabaseAnonKey}`,
+            "Cache-Control": "no-cache"
         }
     });
     if (!response.ok) {
@@ -2550,6 +2552,15 @@ if (writer) {
         }
         return password;
     };
+    const deploymentMessage = (deployment) => {
+        if (!deployment) {
+            return "";
+        }
+        if (deployment.requested) {
+            return " 정적 배포를 요청했습니다.";
+        }
+        return deployment.message ? ` 정적 배포 요청은 건너뛰었습니다: ${deployment.message}` : " 정적 배포 요청은 건너뛰었습니다.";
+    };
     const saveContentToSupabase = async (payload) => {
         if (!supabaseFunctionsUrl) {
             throw new Error("Supabase function URL missing");
@@ -2585,7 +2596,7 @@ if (writer) {
             try {
                 const result = await saveContentToSupabase({ articles: adminArticles, issueProjects: adminIssues });
                 writeCachedRuntimeSnapshot({ articles: adminArticles, issueProjects: adminIssues, updatedAt: new Date().toISOString() });
-                setStatus(`Supabase published snapshot에 저장했습니다.${result.articleCount ? ` (${result.articleCount}개)` : ""}`);
+                setStatus(`Supabase published snapshot에 저장했습니다.${result.articleCount ? ` (${result.articleCount}개)` : ""}${deploymentMessage(result.deployment)}`);
                 setSaveButtonState(articleSaveButton, "done");
                 return;
             }
@@ -2627,7 +2638,7 @@ if (writer) {
             try {
                 const result = await saveContentToSupabase({ articles: adminArticles, issueProjects: adminIssues });
                 writeCachedRuntimeSnapshot({ articles: adminArticles, issueProjects: adminIssues, updatedAt: new Date().toISOString() });
-                setIssueStatus(`Supabase published snapshot에 저장했습니다.${result.issueCount ? ` (${result.issueCount}개 이슈)` : ""}`);
+                setIssueStatus(`Supabase published snapshot에 저장했습니다.${result.issueCount ? ` (${result.issueCount}개 이슈)` : ""}${deploymentMessage(result.deployment)}`);
                 setSaveButtonState(issueSaveButton, "done");
                 return;
             }

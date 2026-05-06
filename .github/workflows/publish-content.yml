@@ -1,0 +1,62 @@
+name: Publish content snapshot
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: Why this publish was triggered
+        required: false
+        default: supabase-save
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: publish-content
+  cancel-in-progress: true
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Export static site
+        run: npm run export:static
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+
+      - name: Commit generated pages
+        id: commit-pages
+        run: |
+          if git diff --quiet -- docs; then
+            echo "No generated page changes."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          git commit -m "Publish content snapshot"
+          git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Request Pages build
+        if: steps.commit-pages.outputs.changed == 'true'
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
+        env:
+          GH_TOKEN: ${{ github.token }}

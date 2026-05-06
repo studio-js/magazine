@@ -19,10 +19,19 @@ interface AdminPayload {
   issueProjects?: unknown;
 }
 
+interface DeploymentResult {
+  requested: boolean;
+  message?: string;
+}
+
 const supabaseUrl = Deno.env.get("SUPABASE_URL")?.replace(/\/+$/, "") || "";
 const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
 const adminPassword = Deno.env.get("ADMIN_PASSWORD") || "";
 const allowedOrigin = Deno.env.get("ALLOWED_ORIGIN") || "*";
+const githubDispatchToken = Deno.env.get("GITHUB_DISPATCH_TOKEN") || "";
+const githubRepository = Deno.env.get("GITHUB_REPOSITORY") || "studio-js/magazine";
+const githubWorkflowId = Deno.env.get("GITHUB_WORKFLOW_ID") || "publish-content.yml";
+const githubRef = Deno.env.get("GITHUB_REF") || "main";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": allowedOrigin,
@@ -104,6 +113,34 @@ const upsertSnapshot = async (data: SnapshotData): Promise<void> => {
   }]);
 };
 
+const triggerStaticDeploy = async (reason: string): Promise<DeploymentResult> => {
+  if (!githubDispatchToken || !githubRepository || !githubWorkflowId || !githubRef) {
+    return { requested: false, message: "GitHub dispatch is not configured" };
+  }
+
+  const response = await fetch(`https://api.github.com/repos/${githubRepository}/actions/workflows/${encodeURIComponent(githubWorkflowId)}/dispatches`, {
+    method: "POST",
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${githubDispatchToken}`,
+      "Content-Type": "application/json",
+      "User-Agent": "habitus-admin-content",
+      "X-GitHub-Api-Version": "2022-11-28"
+    },
+    body: JSON.stringify({
+      ref: githubRef,
+      inputs: { reason }
+    })
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    return { requested: false, message: message || `GitHub dispatch failed: ${response.status}` };
+  }
+
+  return { requested: true };
+};
+
 serve(async (request: Request): Promise<Response> => {
   if (request.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -151,11 +188,13 @@ serve(async (request: Request): Promise<Response> => {
       data: issue
     })), "number");
     await upsertSnapshot({ articles: nextArticles, issueProjects: nextIssues });
+    const deployment = await triggerStaticDeploy(payload.articles !== undefined ? "article-save" : "issue-save");
 
     return json({
       ok: true,
       articleCount: nextArticles.length,
-      issueCount: nextIssues.length
+      issueCount: nextIssues.length,
+      deployment
     });
   } catch (error) {
     return json({ ok: false, message: error instanceof Error ? error.message : "Save failed" }, 500);

@@ -35,9 +35,11 @@ export const loadPublishedContent = async (site: SiteContent, articles: Article[
 
   try {
     const response = await fetch(`${supabasePublicConfig.url}/rest/v1/content_snapshots?id=eq.published&select=data,updated_at&limit=1`, {
+      cache: "no-store",
       headers: {
         apikey: supabasePublicConfig.anonKey,
-        Authorization: `Bearer ${supabasePublicConfig.anonKey}`
+        Authorization: `Bearer ${supabasePublicConfig.anonKey}`,
+        "Cache-Control": "no-cache"
       },
       signal: controller.signal
     });

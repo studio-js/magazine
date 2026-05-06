@@ -4,8 +4,10 @@
 2. Set Edge Function secrets in Supabase:
 
 ```sh
-supabase secrets set SUPABASE_SERVICE_ROLE_KEY=... ADMIN_PASSWORD=promise ALLOWED_ORIGIN=https://studio-js.github.io
+supabase secrets set SUPABASE_SERVICE_ROLE_KEY=... ADMIN_PASSWORD=promise ALLOWED_ORIGIN=https://studio-js.github.io GITHUB_DISPATCH_TOKEN=... GITHUB_REPOSITORY=studio-js/magazine GITHUB_WORKFLOW_ID=publish-content.yml GITHUB_REF=main
 ```
+
+`GITHUB_DISPATCH_TOKEN` should be a fine-grained token limited to this repository with permission to dispatch Actions workflows. Keep it in Supabase secrets only.
 
 3. Deploy the write function:
 
