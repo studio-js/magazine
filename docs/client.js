@@ -777,6 +777,31 @@ const waitForGalleryImage = (item) => {
         preload.addEventListener("error", () => resolve(), { once: true });
     });
 };
+const preloadGalleryItem = (item) => {
+    if (item.dataset.galleryPreloadState === "pending" || item.dataset.galleryPreloadState === "ready") {
+        return;
+    }
+    item.dataset.galleryPreloadState = "pending";
+    void waitForGalleryImage(item).then(() => {
+        item.dataset.galleryPreloadState = "ready";
+    });
+};
+const preloadGalleryNeighbors = (items, activeIndex) => {
+    const orderedIndexes = [
+        activeIndex + 1,
+        activeIndex - 1,
+        ...items.map((_, index) => index)
+    ];
+    const queuedIndexes = new Set();
+    orderedIndexes.forEach((rawIndex, order) => {
+        const index = (rawIndex + items.length) % items.length;
+        if (index === activeIndex || queuedIndexes.has(index)) {
+            return;
+        }
+        queuedIndexes.add(index);
+        window.setTimeout(() => preloadGalleryItem(items[index]), order < 2 ? 0 : 180 + order * 90);
+    });
+};
 const initGalleryElement = (gallery, readyKey) => {
     if (gallery.dataset[readyKey] === "true") {
         return;
@@ -800,7 +825,10 @@ const initGalleryElement = (gallery, readyKey) => {
         if (nextIndex !== currentIndex || !currentItem?.classList.contains("is-active")) {
             const currentTransitionId = ++transitionId;
             gallery.classList.add("is-gallery-loading");
-            await waitForGalleryImage(nextItem);
+            if (nextItem.dataset.galleryPreloadState !== "ready") {
+                await waitForGalleryImage(nextItem);
+                nextItem.dataset.galleryPreloadState = "ready";
+            }
             if (currentTransitionId !== transitionId) {
                 return;
             }
@@ -815,6 +843,7 @@ const initGalleryElement = (gallery, readyKey) => {
             count.textContent = `${nextIndex + 1}/${items.length}`;
         }
         gallery.classList.remove("is-gallery-loading");
+        preloadGalleryNeighbors(items, nextIndex);
     };
     gallery.querySelector("[data-gallery-prev]")?.addEventListener("click", () => {
         void setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) - 1);
