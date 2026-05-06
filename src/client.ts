@@ -958,56 +958,122 @@ const runtimeRenderForPath = (data: RuntimeContentData, path: string, locale: Ru
   return null;
 };
 
+const waitForGalleryImage = (item: HTMLElement): Promise<void> => {
+  const image = item.querySelector<HTMLImageElement>("[data-image-source]");
+
+  if (!image || (image.complete && image.naturalWidth > 0)) {
+    return Promise.resolve();
+  }
+
+  const imageSource = image.currentSrc || image.src;
+
+  if (!imageSource) {
+    return Promise.resolve();
+  }
+
+  image.loading = "eager";
+  image.decoding = "async";
+
+  const preload = new Image();
+  preload.decoding = "async";
+  preload.src = imageSource;
+
+  if (typeof preload.decode === "function") {
+    return preload.decode().catch(() => undefined);
+  }
+
+  return new Promise((resolve) => {
+    preload.addEventListener("load", () => resolve(), { once: true });
+    preload.addEventListener("error", () => resolve(), { once: true });
+  });
+};
+
+const initGalleryElement = (gallery: HTMLElement, readyKey: "galleryReady" | "runtimeGalleryReady"): void => {
+  if (gallery.dataset[readyKey] === "true") {
+    return;
+  }
+
+  gallery.dataset[readyKey] = "true";
+  const items = Array.from(gallery.querySelectorAll<HTMLElement>("[data-gallery-item]"));
+  const count = gallery.querySelector<HTMLElement>("[data-gallery-count]");
+  const frame = gallery.querySelector<HTMLElement>(".article-gallery-frame");
+
+  if (items.length <= 1) {
+    return;
+  }
+
+  let transitionId = 0;
+  const setGalleryIndex = async (index: number): Promise<void> => {
+    const nextIndex = (index + items.length) % items.length;
+    const nextItem = items[nextIndex];
+
+    if (!nextItem) {
+      return;
+    }
+
+    const currentIndex = Number(gallery.dataset.galleryIndex || 0);
+    const currentItem = items[currentIndex];
+
+    if (nextIndex !== currentIndex || !currentItem?.classList.contains("is-active")) {
+      const currentTransitionId = ++transitionId;
+      gallery.classList.add("is-gallery-loading");
+      await waitForGalleryImage(nextItem);
+
+      if (currentTransitionId !== transitionId) {
+        return;
+      }
+    }
+
+    gallery.dataset.galleryIndex = String(nextIndex);
+    items.forEach((item, itemIndex) => {
+      const isActive = itemIndex === nextIndex;
+      item.classList.toggle("is-active", isActive);
+      item.toggleAttribute("hidden", !isActive);
+    });
+
+    if (count) {
+      count.textContent = `${nextIndex + 1}/${items.length}`;
+    }
+
+    gallery.classList.remove("is-gallery-loading");
+  };
+
+  gallery.querySelector<HTMLButtonElement>("[data-gallery-prev]")?.addEventListener("click", () => {
+    void setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) - 1);
+  });
+
+  gallery.querySelector<HTMLButtonElement>("[data-gallery-next]")?.addEventListener("click", () => {
+    void setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
+  });
+
+  gallery.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (!(target instanceof HTMLElement) || target.closest("[data-gallery-prev], [data-gallery-next]") || !target.closest(".article-gallery-frame")) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    void setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
+  });
+
+  frame?.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    void setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
+  });
+
+  void setGalleryIndex(Number(gallery.dataset.galleryIndex || 0));
+};
+
 const runtimeInitGalleries = (root: ParentNode): void => {
   root.querySelectorAll<HTMLElement>("[data-gallery]").forEach((gallery) => {
-    if (gallery.dataset.runtimeGalleryReady === "true") {
-      return;
-    }
-
-    gallery.dataset.runtimeGalleryReady = "true";
-    const items = Array.from(gallery.querySelectorAll<HTMLElement>("[data-gallery-item]"));
-    const count = gallery.querySelector<HTMLElement>("[data-gallery-count]");
-    const frame = gallery.querySelector<HTMLElement>(".article-gallery-frame");
-
-    if (items.length <= 1) {
-      return;
-    }
-
-    const setGalleryIndex = (index: number): void => {
-      const nextIndex = (index + items.length) % items.length;
-      gallery.dataset.galleryIndex = String(nextIndex);
-      items.forEach((item, itemIndex) => {
-        const isActive = itemIndex === nextIndex;
-        item.classList.toggle("is-active", isActive);
-        item.toggleAttribute("hidden", !isActive);
-      });
-
-      if (count) {
-        count.textContent = `${nextIndex + 1}/${items.length}`;
-      }
-    };
-
-    gallery.querySelector<HTMLButtonElement>("[data-gallery-prev]")?.addEventListener("click", () => setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) - 1));
-    gallery.querySelector<HTMLButtonElement>("[data-gallery-next]")?.addEventListener("click", () => setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1));
-    frame?.addEventListener("click", (event) => {
-      if (!(event.target instanceof HTMLElement) || event.target.closest("[data-gallery-prev], [data-gallery-next]")) {
-        return;
-      }
-
-      event.preventDefault();
-      event.stopPropagation();
-      setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
-    });
-    frame?.addEventListener("keydown", (event) => {
-      if (event.key !== "Enter" && event.key !== " ") {
-        return;
-      }
-
-      event.preventDefault();
-      event.stopPropagation();
-      setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
-    });
-    setGalleryIndex(0);
+    initGalleryElement(gallery, "runtimeGalleryReady");
   });
 };
 
@@ -1246,57 +1312,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 document.querySelectorAll<HTMLElement>("[data-gallery]").forEach((gallery) => {
-  const items = Array.from(gallery.querySelectorAll<HTMLElement>("[data-gallery-item]"));
-  const count = gallery.querySelector<HTMLElement>("[data-gallery-count]");
-  const frame = gallery.querySelector<HTMLElement>(".article-gallery-frame");
-
-  if (items.length <= 1) {
-    return;
-  }
-
-  const setGalleryIndex = (index: number): void => {
-    const nextIndex = (index + items.length) % items.length;
-    gallery.dataset.galleryIndex = String(nextIndex);
-    items.forEach((item, itemIndex) => {
-      const isActive = itemIndex === nextIndex;
-      item.classList.toggle("is-active", isActive);
-      item.toggleAttribute("hidden", !isActive);
-    });
-
-    if (count) {
-      count.textContent = `${nextIndex + 1}/${items.length}`;
-    }
-  };
-
-  gallery.querySelector<HTMLButtonElement>("[data-gallery-prev]")?.addEventListener("click", () => {
-    setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) - 1);
-  });
-
-  gallery.querySelector<HTMLButtonElement>("[data-gallery-next]")?.addEventListener("click", () => {
-    setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
-  });
-
-  gallery.addEventListener("click", (event) => {
-    const target = event.target;
-
-    if (!(target instanceof HTMLElement) || target.closest("[data-gallery-prev], [data-gallery-next]") || !target.closest(".article-gallery-frame")) {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-    setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
-  });
-
-  frame?.addEventListener("keydown", (event) => {
-    if (event.key !== "Enter" && event.key !== " ") {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-    setGalleryIndex(Number(gallery.dataset.galleryIndex || 0) + 1);
-  });
+  initGalleryElement(gallery, "galleryReady");
 });
 
 const animateTextSwap = (elements: HTMLElement[]): void => {

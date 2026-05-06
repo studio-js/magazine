@@ -278,7 +278,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260506-habitus-title-quiet";
+const assetVersion = "20260506-gallery-preload";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
