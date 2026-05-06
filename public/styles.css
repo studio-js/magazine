@@ -23820,15 +23820,15 @@ html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
 
 .home-habitus .habitus-copy h2,
 html[lang="ko"] .home-habitus .habitus-copy h2 {
-  max-width: 14.2ch !important;
-  font-size: clamp(2.4rem, 4.25vw, 5rem) !important;
+  max-width: 15.2ch !important;
+  font-size: clamp(2.05rem, 3.2vw, 3.85rem) !important;
   letter-spacing: -0.004em !important;
-  line-height: 1.08 !important;
+  line-height: 1.12 !important;
 }
 
 html[lang="ko"] .home-habitus .habitus-copy h2 {
-  max-width: 12.8ch !important;
-  line-height: 1.14 !important;
+  max-width: 13.8ch !important;
+  line-height: 1.18 !important;
 }
 
 .home-habitus .habitus-copy p:not(.kicker),
@@ -23859,14 +23859,14 @@ html[lang="ko"] .home-habitus .habitus-copy p:not(.kicker) {
 
   .home-habitus .habitus-copy h2,
   html[lang="ko"] .home-habitus .habitus-copy h2 {
-    max-width: 12.2ch !important;
-    font-size: clamp(2.24rem, 11.1vw, 4.05rem) !important;
-    line-height: 1.1 !important;
+    max-width: 13.4ch !important;
+    font-size: clamp(1.94rem, 8.7vw, 3.1rem) !important;
+    line-height: 1.14 !important;
   }
 
   html[lang="ko"] .home-habitus .habitus-copy h2 {
-    max-width: 11.6ch !important;
-    line-height: 1.15 !important;
+    max-width: 12.4ch !important;
+    line-height: 1.2 !important;
   }
 
   .home-habitus .habitus-copy p:not(.kicker),
