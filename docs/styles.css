@@ -1318,6 +1318,7 @@ html[lang="ko"] .archive-preview h3 {
 
 .image-block.has-custom-image {
   background-color: var(--quiet-2);
+  background-image: none !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
