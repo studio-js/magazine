@@ -23646,3 +23646,165 @@ html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
     margin-top: clamp(-0.95rem, -0.72vw, -0.45rem) !important;
   }
 }
+
+/* Mobile action tuning: keep scroll reveals, but make touch feedback stable and non-layout-shifting. */
+@media (hover: none), (pointer: coarse), (max-width: 980px) {
+  .site-header {
+    padding-right: var(--side) !important;
+  }
+
+  .header-tools {
+    justify-content: flex-end !important;
+    margin-left: auto !important;
+  }
+
+  .menu-button,
+  .menu-button:hover,
+  .menu-button[aria-expanded="true"] {
+    left: auto !important;
+    right: calc(var(--side) + env(safe-area-inset-right)) !important;
+    top: calc(0.92rem + env(safe-area-inset-top)) !important;
+    transform: none !important;
+  }
+
+  :where(
+    [data-action-card],
+    .home-index-row,
+    .home-story-line,
+    .home-issue-link,
+    .home-story-more,
+    .issue-toc-row,
+    .issue-feature-row,
+    .filter-button,
+    .subcategory-filter a,
+    .subcategory-chips a
+  ) {
+    -webkit-tap-highlight-color: rgba(123, 91, 66, 0.12);
+  }
+
+  :where(
+    [data-action-card],
+    .home-index-row,
+    .home-story-line,
+    .home-issue-link,
+    .home-story-more,
+    .issue-toc-row,
+    .issue-feature-row,
+    .filter-button,
+    .subcategory-filter a,
+    .subcategory-chips a
+  ).is-action-active {
+    opacity: 0.96 !important;
+    transform: none !important;
+    transition-duration: 120ms !important;
+  }
+
+  .home-index-row:hover,
+  .home-index-row:focus-visible,
+  .home-index-row.is-action-active {
+    padding: var(--home-index-row-pad) 0 !important;
+    border-bottom-color: rgba(24, 23, 19, 0.08) !important;
+  }
+
+  .home-story-line:hover,
+  .home-story-line:focus-visible,
+  .home-story-line.is-action-active {
+    padding: var(--home-story-row-pad) 0 !important;
+  }
+
+  .home-index-row:hover::before,
+  .home-index-row:focus-visible::before,
+  .home-index-row.is-action-active::before {
+    background: var(--paper) !important;
+    border-color: rgba(24, 23, 19, 0.24) !important;
+    transform: translateY(-50%) rotate(0deg) scale(0.78) !important;
+  }
+
+  .home-index-row:hover::after,
+  .home-index-row:focus-visible::after,
+  .home-index-row.is-action-active::after {
+    background: rgba(24, 23, 19, 0.16) !important;
+    transform: translateY(-50%) scaleX(1) !important;
+  }
+
+  .home-index-row:hover .home-index-copy em,
+  .home-index-row:focus-visible .home-index-copy em,
+  .home-index-row.is-action-active .home-index-copy em,
+  .home-story-line:hover em,
+  .home-story-line:focus-visible em,
+  .home-story-line.is-action-active em,
+  .archive-row.is-action-active .archive-summary {
+    max-height: 0 !important;
+    margin-top: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    transform: translateY(-0.24rem) !important;
+  }
+
+  .home-recent-lead.is-action-active .home-recent-visual .image-block,
+  .story-card.is-action-active .image-block,
+  .article-visual.is-action-active .image-block,
+  .issue-collection-item.is-action-active .image-block,
+  .story-card:hover .image-block,
+  .article-visual:hover .image-block {
+    filter: none !important;
+    transform: none !important;
+  }
+}
+
+/* Article rail balance: give side headings room and align section numbers with the copy start. */
+.article-detail:not(.writer-article) .article-body-grid {
+  grid-template-columns: minmax(13.5rem, 0.26fr) minmax(0, 0.74fr) !important;
+  gap: clamp(2.4rem, 4.4vw, 5.4rem) !important;
+}
+
+.article-detail:not(.writer-article) .article-side {
+  max-width: min(100%, 18rem) !important;
+}
+
+.article-detail:not(.writer-article) .article-side strong {
+  max-width: min(100%, 16.5rem) !important;
+  font-size: clamp(1rem, 1.08vw, 1.2rem) !important;
+  line-height: 1.42 !important;
+}
+
+.article-detail:not(.writer-article) .article-side p {
+  max-width: min(100%, 17.5rem) !important;
+  font-size: clamp(0.82rem, 0.86vw, 0.94rem) !important;
+  line-height: 1.72 !important;
+}
+
+.article-detail:not(.writer-article) .article-section {
+  grid-template-columns: minmax(12.5rem, 0.24fr) minmax(0, 0.76fr) !important;
+  column-gap: clamp(2.1rem, 4.1vw, 5.2rem) !important;
+}
+
+.article-detail:not(.writer-article) .article-section h2,
+html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
+  display: grid !important;
+  grid-template-columns: 2.35rem minmax(0, 1fr) !important;
+  column-gap: clamp(0.7rem, 1vw, 1rem) !important;
+  align-items: start !important;
+  max-width: min(100%, 17rem) !important;
+  line-height: 1.34 !important;
+}
+
+.article-detail:not(.writer-article) .article-section h2::before {
+  margin: 0 !important;
+  transform: translateY(0.22em) !important;
+}
+
+@media (max-width: 960px) {
+  .article-detail:not(.writer-article) .article-body-grid,
+  .article-detail:not(.writer-article) .article-section {
+    grid-template-columns: 1fr !important;
+  }
+
+  .article-detail:not(.writer-article) .article-side,
+  .article-detail:not(.writer-article) .article-side strong,
+  .article-detail:not(.writer-article) .article-side p,
+  .article-detail:not(.writer-article) .article-section h2,
+  html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
+    max-width: 100% !important;
+  }
+}

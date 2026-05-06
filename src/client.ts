@@ -5,6 +5,10 @@ const mobileMenu = document.querySelector<HTMLElement>("[data-mobile-menu]");
 const progressBar = document.querySelector<HTMLElement>("[data-scroll-progress]");
 const header = document.querySelector<HTMLElement>("[data-header]");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const coarsePointer = window.matchMedia("(pointer: coarse)");
+const noHoverPointer = window.matchMedia("(hover: none)");
+const mobileViewport = window.matchMedia("(max-width: 980px)");
+const isMobileActionMode = (): boolean => coarsePointer.matches || noHoverPointer.matches || mobileViewport.matches;
 const imageClasses = [
   "image-atelier",
   "image-signal",
@@ -4608,13 +4612,33 @@ function initActionSurfaces(root: ParentNode): void {
       }, delay);
     };
 
-    surface.addEventListener("pointerenter", activate);
-    surface.addEventListener("pointerleave", () => deactivate());
+    surface.addEventListener("pointerenter", (event) => {
+      if (isMobileActionMode() || event.pointerType !== "mouse") {
+        return;
+      }
+
+      activate();
+    });
+    surface.addEventListener("pointerleave", (event) => {
+      if (isMobileActionMode() && event.pointerType !== "mouse") {
+        return;
+      }
+
+      deactivate();
+    });
     surface.addEventListener("focusin", activate);
     surface.addEventListener("focusout", () => deactivate());
-    surface.addEventListener("pointerdown", () => {
+    surface.addEventListener("pointerdown", (event) => {
       activate();
-      deactivate(900);
+      deactivate(isMobileActionMode() || event.pointerType !== "mouse" ? 180 : 900);
+    });
+    surface.addEventListener("pointerup", (event) => {
+      if (isMobileActionMode() || event.pointerType !== "mouse") {
+        deactivate(90);
+      }
+    });
+    surface.addEventListener("pointercancel", () => {
+      deactivate();
     });
     surface.addEventListener("keydown", (event) => {
       if (event.key !== "Enter" && event.key !== " ") {
