@@ -278,7 +278,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260506-save-shortcut";
+const assetVersion = "20260506-about-quiet-copy";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
@@ -1095,31 +1095,43 @@ ${storyRows}
 export const renderAboutPage = (site: SiteContent, locale: Locale, currentPath: string): string => {
   const labels = ui[locale];
   const latest = latestIssue(site);
+  const categoryLinks = site.categories
+    .map((category) => `<a href="${archiveHref(locale, category.key)}">${escapeHtml(text(category.label, locale))}</a>`)
+    .join("\n");
   const body = `
-    <section class="about-page section-pad" aria-labelledby="about-page-title">
-      <header class="about-page-hero" data-reveal>
+    <section class="about-page about-quiet-page section-pad" aria-labelledby="about-page-title">
+      <header class="about-quiet-hero" data-reveal>
         <p class="kicker">About ${escapeHtml(text(site.title, locale))}</p>
-        <h1 id="about-page-title">${escapeHtml(locale === "ko" ? "취향은 선택이 아니라 몸에 밴 질서입니다." : "Taste is not only choice. It is an embodied order.")}</h1>
-        <p>${escapeHtml(locale === "ko" ? "아비투스는 예술, 테크, 디자인, 뷰티, 철학을 통해 취향이 만들어지는 조건을 읽는 디지털 매거진입니다. 빠른 추천보다 오래 남는 감각의 출처, 좋아한다는 말 뒤의 사회적 배치, 반복되는 선택의 문장을 먼저 봅니다." : "Habitus is a digital magazine that reads the conditions that form taste through art, technology, design, beauty, and philosophy. It looks past quick recommendations toward the origins of lasting sense, the social arrangements behind liking, and the language of repeated choices.")}</p>
+        <h1 id="about-page-title">${escapeHtml(locale === "ko" ? "취향이 생기는 장면을 읽습니다." : "Reading the scenes where taste takes shape.")}</h1>
+        <p>${escapeHtml(locale === "ko" ? "Habitus는 물건, 공간, 이미지, 루틴이 선택으로 이어지는 방식을 기록하는 디지털 매거진입니다." : "Habitus is a digital magazine about how objects, rooms, images, and routines become choices.")}</p>
       </header>
 
-      <div class="about-page-grid">
-        <article data-reveal>
-          <span>01</span>
-          <h2>${escapeHtml(locale === "ko" ? "이슈는 취향의 장면입니다" : "Issues Are Scenes of Taste")}</h2>
-          <p>${escapeHtml(locale === "ko" ? `최신호는 ${latest.number} · ${text(latest.title, locale)}입니다. 각 호는 분야 묶음이 아니라 취향을 만드는 하나의 조건을 따라가는 발행본입니다.` : `The latest edition is ${latest.number} · ${text(latest.title, locale)}. Each issue follows one condition that forms taste instead of simply grouping categories.`)}</p>
-        </article>
-        <article data-reveal>
-          <span>02</span>
-          <h2>${escapeHtml(locale === "ko" ? "목록은 구별의 방식입니다" : "Lists Are Ways of Distinction")}</h2>
-          <p>${escapeHtml(locale === "ko" ? "날짜, 제목, 여백, 반복되는 선은 무엇을 가까이 두고 무엇을 멀리 둘지 정합니다. 아카이브는 취향의 질서를 드러내는 편집면입니다." : "Dates, titles, space, and repeated rules decide what stays close and what moves away. The archive is an edited surface where the order of taste appears.")}</p>
-        </article>
-        <article data-reveal>
-          <span>03</span>
-          <h2>${escapeHtml(locale === "ko" ? "움직임은 의미를 가져야 합니다" : "Motion Must Carry Meaning")}</h2>
-          <p>${escapeHtml(locale === "ko" ? "기하학과 움직임은 장식이 아니라 감각이 조립되는 과정을 보여줄 때 사용합니다. 화면은 과시보다 정확한 간격으로 오래 남아야 합니다." : "Geometry and motion are used when they show how sense is assembled, not as decoration. A screen should last through precise intervals rather than performance.")}</p>
-        </article>
-      </div>
+      <dl class="about-quiet-meta" data-reveal>
+        <div>
+          <dt>Current issue</dt>
+          <dd><a href="${issueHref(latest, locale)}">${escapeHtml(`${latest.number} · ${text(latest.title, locale)}`)}</a></dd>
+        </div>
+        <div>
+          <dt>Fields</dt>
+          <dd>${escapeHtml(site.categories.map((category) => text(category.label, locale)).join(" / "))}</dd>
+        </div>
+        <div>
+          <dt>Contact email</dt>
+          <dd><a href="mailto:kimjs0611@naver.com">kimjs0611@naver.com</a></dd>
+        </div>
+      </dl>
+
+      <section class="about-quiet-note" aria-label="${escapeHtml(locale === "ko" ? "편집 방향" : "Editorial direction")}" data-reveal>
+        <p>${escapeHtml(locale === "ko" ? "새로운 제품이나 장소를 다룰 때도 먼저 보는 것은 이름보다 조건입니다. 어디에 놓이고, 어떤 손길로 반복되며, 어떤 기준을 남기는지 살핍니다." : "Even with a new product or place, we look first at conditions rather than names: where it sits, how it is handled, and what standards it leaves behind.")}</p>
+        <p>${escapeHtml(locale === "ko" ? "글과 화면은 조용하게 정리합니다. 정보는 필요한 만큼만 남기고, 간격은 오래 읽히는 쪽으로 둡니다." : "Text and layout are kept quiet. Information is held to what is needed, and spacing is tuned for slower reading.")}</p>
+      </section>
+
+      <section class="about-quiet-index" aria-labelledby="about-index-title" data-reveal>
+        <p class="kicker" id="about-index-title">Index</p>
+        <div>
+${categoryLinks}
+        </div>
+      </section>
     </section>`;
 
   return renderLayout({ title: `${labels.about} | ${text(site.title, locale)}`, description: labels.aboutBody, body, locale, currentPath, site, contentVersion: contentDataVersion(site) });
