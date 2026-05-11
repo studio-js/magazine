@@ -81,11 +81,11 @@
   --body-ink: #343128;
   --muted: #777266;
   --faint: #a69e90;
-  --paper: #f2efe6;
-  --paper-rgb: 242, 239, 230;
-  --quiet: #e8e2d6;
-  --quiet-2: #d9d1c1;
-  --white: #fffdf7;
+  --paper: #fbfaf6;
+  --paper-rgb: 251, 250, 246;
+  --quiet: #f2eee6;
+  --quiet-2: #e8e2d8;
+  --white: #fffefb;
   --clay: #706557;
   --moss: #5f6658;
   --sage: #cfd7c8;
@@ -116,9 +116,7 @@ html {
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at 12% 0%, rgba(255, 253, 247, 0.9) 0 19rem, transparent 30rem),
-    linear-gradient(180deg, var(--paper), #ebe5d8 100%);
+  background: linear-gradient(180deg, #fffefb 0%, #faf8f2 100%);
   color: var(--ink);
   font-family: var(--body);
   font-synthesis: none;
@@ -182,7 +180,7 @@ button {
   gap: 1.1rem;
   min-height: 3.9rem;
   padding: 0 var(--side);
-  background: rgba(var(--paper-rgb), 0.82);
+  background: rgba(var(--paper-rgb), 0.96);
   backdrop-filter: blur(18px);
   transition: background 180ms ease, box-shadow 180ms ease, min-height 180ms ease;
 }
@@ -7473,7 +7471,7 @@ html[lang="ko"] .river-card-copy strong {
     border-radius: 0;
     background: rgba(var(--paper-rgb), 0.985);
     backdrop-filter: blur(18px);
-    box-shadow: 0 1.1rem 2.4rem rgba(23, 22, 20, 0.055);
+    box-shadow: 0 1rem 2rem rgba(23, 22, 20, 0.08);
     clip-path: inset(0 0 100% 0);
     opacity: 0;
     overflow: hidden;
@@ -7608,22 +7606,6 @@ html[lang="ko"] .river-card-copy strong {
 @media (max-width: 680px) {
   .department-list {
     grid-template-columns: 1fr;
-  }
-}
-
-/* Navigation push-down pass */
-@media (min-width: 961px) {
-  .site-header {
-    transition: background 180ms ease, box-shadow 180ms ease, min-height 180ms ease;
-  }
-
-  main {
-    margin-top: 0;
-    transition: margin-top 190ms cubic-bezier(0.2, 0.7, 0, 1);
-  }
-
-  .site-header.is-nav-expanded ~ main {
-    margin-top: var(--active-nav-height, 0px);
   }
 }
 
@@ -18839,11 +18821,11 @@ html[lang="ko"] .article-section h2 {
   counter-reset: article-sections;
 }
 
-.article-detail:not(.writer-article) .article-body blockquote,
-html[lang="ko"] .article-detail:not(.writer-article) .article-body blockquote {
-  width: 100%;
-  max-width: 31rem;
-  margin: 0 0 clamp(4rem, 7vw, 7.2rem);
+.article-detail:not(.writer-article) .article-body > blockquote:not(.article-inline-quote),
+html[lang="ko"] .article-detail:not(.writer-article) .article-body > blockquote:not(.article-inline-quote) {
+  width: min(100%, 62rem);
+  max-width: 62rem;
+  margin: 0 auto clamp(2.3rem, 4.2vw, 4.2rem);
   padding: 0;
   color: rgba(24, 23, 19, 0.56);
   font-size: clamp(1.1rem, 1.36vw, 1.48rem);
@@ -18851,10 +18833,12 @@ html[lang="ko"] .article-detail:not(.writer-article) .article-body blockquote {
   font-weight: 420;
   letter-spacing: -0.018em;
   line-height: 1.68;
+  text-wrap: balance;
 }
 
-html[lang="ko"] .article-detail:not(.writer-article) .article-body blockquote {
-  line-height: 1.78;
+html[lang="ko"] .article-detail:not(.writer-article) .article-body > blockquote:not(.article-inline-quote) {
+  font-size: clamp(1.18rem, 1.58vw, 1.72rem);
+  line-height: 1.66;
   word-break: keep-all;
 }
 
@@ -18954,7 +18938,7 @@ html[lang="ko"] .writer-article .article-body blockquote {
 html[lang="ko"] .article-detail:not(.writer-article) .article-section .article-inline-quote {
   width: min(100%, 34rem);
   max-width: 34rem;
-  margin: clamp(2.2rem, 4.2vw, 4.2rem) 0;
+  margin: clamp(1.2rem, 2vw, 2rem) 0 clamp(1.25rem, 2.2vw, 2.2rem);
   padding: 0 0 0 clamp(1.1rem, 2.2vw, 1.7rem);
   border-left: 1px solid rgba(24, 23, 19, 0.2) !important;
   color: rgba(24, 23, 19, 0.66);
@@ -18969,11 +18953,20 @@ html[lang="ko"] .article-detail:not(.writer-article) .article-section .article-i
   margin-top: clamp(1.6rem, 2.6vw, 2.4rem);
 }
 
-.article-detail:not(.writer-article) .article-section-figure,
-.article-detail:not(.writer-article) .article-section-gallery {
+.article-detail:not(.writer-article) .article-section-figure {
   width: min(100%, 42.5rem);
   max-width: 42.5rem;
   margin: clamp(2.3rem, 4.4vw, 4.6rem) 0;
+}
+
+.article-detail:not(.writer-article) .article-section-gallery {
+  grid-column: 1 / -1;
+  justify-self: center;
+  display: grid;
+  gap: 0;
+  width: min(100%, 70rem);
+  max-width: 70rem;
+  margin: clamp(1.8rem, 3vw, 3.2rem) auto;
 }
 
 .article-gallery-frame {
@@ -19007,15 +19000,16 @@ html[lang="ko"] .article-detail:not(.writer-article) .article-section .article-i
 }
 
 .article-gallery-controls {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 0.8rem;
-  margin-top: 0.72rem;
-  color: var(--muted);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  width: 100%;
+  margin-top: clamp(0.6rem, 0.9vw, 0.8rem);
+  color: rgba(52, 49, 40, 0.55);
+  font-size: clamp(0.72rem, 0.8vw, 0.82rem);
+  letter-spacing: 0.02em;
+  text-transform: none;
 }
 
 .article-gallery-controls button {
@@ -19025,8 +19019,24 @@ html[lang="ko"] .article-detail:not(.writer-article) .article-section .article-i
   color: inherit;
   cursor: pointer;
   font: inherit;
+  font-weight: 400;
   letter-spacing: inherit;
   text-transform: inherit;
+}
+
+.article-gallery-controls button:first-of-type {
+  justify-self: start;
+}
+
+.article-gallery-controls [data-gallery-count] {
+  justify-self: center;
+  color: rgba(52, 49, 40, 0.68);
+  font-weight: 450;
+  text-align: center;
+}
+
+.article-gallery-controls button:last-of-type {
+  justify-self: end;
 }
 
 .article-gallery-controls button:hover,
@@ -19086,11 +19096,41 @@ html[lang="ko"] .article-detail:not(.writer-article) .article-section .article-i
   align-items: center;
 }
 
+.writer-gallery-source-field {
+  flex: 1 1 12rem;
+  min-width: min(100%, 10rem);
+}
+
+.writer-gallery-source-field input {
+  flex: 1 1 7rem;
+  width: 100%;
+  min-width: 7rem;
+  box-sizing: border-box;
+  border: 0;
+  border-bottom: 1px solid var(--hairline);
+  border-radius: 0;
+  padding: 0.34rem 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+}
+
+.writer-gallery-source-field input:focus-visible {
+  outline: 1px solid rgba(24, 23, 19, 0.28);
+  outline-offset: 0.2rem;
+  border-bottom-color: rgba(24, 23, 19, 0.48);
+}
+
+.writer-gallery-source-field input::placeholder {
+  color: rgba(52, 49, 40, 0.38);
+}
+
 .writer-gallery-item-tools span,
 .writer-gallery-tools,
 .writer-gallery-tools button,
 .writer-gallery-item-tools button,
-.writer-gallery-item-tools select {
+.writer-gallery-item-tools select,
+.writer-gallery-item-tools input:not([type="file"]) {
   font-size: 0.7rem;
 }
 
@@ -23130,7 +23170,7 @@ html[lang="ko"] .admin-language-tabs button.is-active {
 
 .article-detail:not(.writer-article) .article-body {
   display: block !important;
-  width: min(100%, 66rem) !important;
+  width: min(100%, 72rem) !important;
   margin-inline: auto !important;
 }
 
@@ -23138,7 +23178,10 @@ html[lang="ko"] .admin-language-tabs button.is-active {
   display: grid !important;
   grid-template-columns: minmax(6.8rem, 0.16fr) minmax(0, 1fr) !important;
   column-gap: clamp(1.8rem, 4vw, 5.4rem) !important;
-  max-width: 66rem !important;
+  max-width: 72rem !important;
+  margin-bottom: clamp(1.4rem, 2.8vw, 2.7rem) !important;
+  padding-top: clamp(1.55rem, 2.8vw, 2.8rem) !important;
+  padding-bottom: clamp(1.55rem, 2.8vw, 2.8rem) !important;
 }
 
 .article-detail:not(.writer-article) .article-section h2,
@@ -23154,32 +23197,44 @@ html[lang="ko"] .article-detail:not(.writer-article) .article-section h2 {
 }
 
 .article-detail:not(.writer-article) .article-section p {
-  max-width: 76ch !important;
+  max-width: 82ch !important;
   font-size: clamp(1.04rem, 1.12vw, 1.18rem) !important;
   line-height: 1.9 !important;
 }
 
 html[lang="ko"] .article-detail:not(.writer-article) .article-section p {
-  max-width: 74ch !important;
+  max-width: 80ch !important;
   font-size: clamp(1rem, 1.08vw, 1.14rem) !important;
   line-height: 1.92 !important;
 }
 
 .article-detail:not(.writer-article) .article-section:first-of-type p:first-of-type::first-letter {
+  -webkit-initial-letter: 1.72 2;
+  initial-letter: 1.72 2;
   float: left;
-  margin: 0.08em 0.16em 0 0;
-  color: rgba(24, 23, 19, 0.9);
+  margin: 0.08em 0.2em 0 0;
+  color: rgba(24, 23, 19, 0.86);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(4.2rem, 7vw, 7.2rem);
-  line-height: 0.72;
+  font-size: clamp(1.9rem, 2.25vw, 2.42rem);
+  font-weight: 400;
+  line-height: 0.92;
 }
 
 html[lang="ko"] .article-detail:not(.writer-article) .article-section:first-of-type p:first-of-type::first-letter {
-  margin: 0.08em 0.18em 0 0;
+  -webkit-initial-letter: 2 2;
+  initial-letter: 2 2;
+  margin: 0.04em 0.2em 0 0;
   font-family: var(--kr-display) !important;
-  font-size: clamp(3.4rem, 5.6vw, 5.8rem);
+  font-size: clamp(1.98rem, 2.38vw, 2.58rem);
   font-weight: 400;
-  line-height: 0.82;
+  line-height: 0.92;
+}
+
+@media (max-width: 680px) {
+  .article-detail:not(.writer-article) .article-section:first-of-type p:first-of-type::first-letter,
+  html[lang="ko"] .article-detail:not(.writer-article) .article-section:first-of-type p:first-of-type::first-letter {
+    font-size: clamp(1.88rem, 8.5vw, 2.35rem) !important;
+  }
 }
 
 @media (max-width: 960px) {
@@ -23331,13 +23386,15 @@ html[lang="ko"] .home-recent-copy small {
 .article-detail:not(.writer-article) .article-section-gallery.article-gallery-strip {
   grid-column: 1 / -1 !important;
   justify-self: center !important;
-  width: min(100%, 66rem) !important;
-  max-width: 66rem !important;
+  width: min(100%, 70rem) !important;
+  max-width: 70rem !important;
 }
 
 .article-detail:not(.writer-article) .article-section-gallery.article-gallery-portrait {
-  width: min(100%, 28rem) !important;
-  max-width: 28rem !important;
+  grid-column: 1 / -1 !important;
+  justify-self: center !important;
+  width: min(100%, 31rem) !important;
+  max-width: 31rem !important;
 }
 
 .article-gallery-wide .article-gallery-item .image-block {
@@ -23376,14 +23433,6 @@ html[lang="ko"] .home-recent-copy small {
 .article-gallery-diptych .article-gallery-controls,
 .article-gallery-strip .article-gallery-controls {
   display: none;
-}
-
-.article-detail:not(.writer-article) .article-gallery-wide figcaption,
-.article-detail:not(.writer-article) .article-gallery-diptych figcaption,
-.article-detail:not(.writer-article) .article-gallery-strip figcaption {
-  width: min(100%, 42.5rem);
-  max-width: 42.5rem;
-  margin-inline: auto;
 }
 
 .writer-gallery-tools label {
@@ -23760,19 +23809,67 @@ html[lang="ko"] .home-recent-spread > .home-story-index-list .home-story-line st
   margin-top: clamp(0.28rem, 0.48vw, 0.5rem) !important;
 }
 
-/* Standard galleries are centered; only wide variants intentionally break out. */
+/* Published gallery metadata and source credits share the image center line. */
 .article-detail:not(.writer-article) .article-section-gallery.article-gallery-standard {
   grid-column: 1 / -1 !important;
   justify-self: center !important;
-  width: min(100%, 58rem) !important;
-  max-width: 58rem !important;
+  width: min(100%, 70rem) !important;
+  max-width: 70rem !important;
   margin-inline: auto !important;
 }
 
-.article-detail:not(.writer-article) .article-gallery-standard figcaption {
-  width: min(100%, 42.5rem);
-  max-width: 42.5rem;
-  margin-inline: auto;
+.article-detail:not(.writer-article) .article-section-gallery figcaption,
+.article-detail:not(.writer-article) .article-gallery-standard figcaption,
+.article-detail:not(.writer-article) .article-gallery-wide figcaption,
+.article-detail:not(.writer-article) .article-gallery-diptych figcaption,
+.article-detail:not(.writer-article) .article-gallery-strip figcaption {
+  width: min(100%, 62rem);
+  max-width: 62rem;
+  margin: clamp(0.72rem, 1vw, 0.95rem) auto 0;
+  color: rgba(52, 49, 40, 0.68);
+  font-size: clamp(0.82rem, 0.9vw, 0.96rem);
+  line-height: 1.62;
+}
+
+.article-gallery-source {
+  display: flex;
+  align-items: baseline;
+  gap: 0.42rem;
+  width: min(100%, 62rem);
+  max-width: 62rem;
+  margin: 0.28rem auto 0;
+  color: rgba(52, 49, 40, 0.46);
+  font-style: normal;
+}
+
+.article-gallery-source span,
+.article-gallery-source b {
+  overflow-wrap: anywhere;
+  color: inherit;
+  font-size: clamp(0.72rem, 0.78vw, 0.82rem);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.45;
+  text-transform: none;
+}
+
+.article-gallery-source span::after {
+  content: " ·";
+}
+
+@media (max-width: 680px) {
+  .article-gallery-source {
+    display: grid;
+    gap: 0.08rem;
+  }
+
+  .article-gallery-source span {
+    display: block;
+  }
+
+  .article-gallery-source span::after {
+    content: "";
+  }
 }
 
 .writer-article .writer-section-gallery.writer-gallery-standard {

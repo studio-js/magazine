@@ -155,6 +155,41 @@ const categoryLabel = (categories: CategoryDefinition[], key: PrimaryCategory, l
 const renderImageBlock = (visualClass: string, imageUrl?: string, attributes = "", imageAttributes = `loading="lazy" decoding="async"`): string =>
   `<span class="image-block ${escapeHtml(visualClass)}${imageUrl ? " has-custom-image" : ""}"${attributes ? ` ${attributes}` : ""}>${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="" ${imageAttributes} data-image-source />` : ""}</span>`;
 
+const imageSourceLabel = (imageUrl = ""): string => {
+  const lowerUrl = imageUrl.toLowerCase();
+
+  if (!lowerUrl) {
+    return "";
+  }
+
+  if (lowerUrl.includes("apple.com")) return "Apple";
+  if (lowerUrl.includes("dyson")) return "Dyson";
+  if (lowerUrl.includes("diptyque") || lowerUrl.includes("4sg0zck18nfj")) return "Diptyque";
+  if (lowerUrl.includes("leica-camera")) return "Leica Camera";
+  if (lowerUrl.includes("muji.com")) return "MUJI";
+  if (lowerUrl.includes("patagonia") || lowerUrl.includes("wornwear")) return "Patagonia";
+  if (lowerUrl.includes("8cd2csgvqd3m")) return "Bang & Olufsen";
+
+  try {
+    return new URL(imageUrl).hostname.replace(/^www\./, "");
+  } catch {
+    return "";
+  }
+};
+
+const renderGallerySource = (images: ArticleBlockImage[], locale: Locale): string => {
+  const sourceLabels = Array.from(new Set(images
+    .map((image) => image.source?.trim() || imageSourceLabel(image.image))
+    .filter(Boolean)));
+
+  if (sourceLabels.length === 0) {
+    return "";
+  }
+
+  return `
+                    <cite class="article-gallery-source"><span>${escapeHtml(locale === "ko" ? "이미지 출처" : "Image source")}</span><b>${escapeHtml(sourceLabels.join(" / "))}</b></cite>`;
+};
+
 const issueCoverVisual = (issue: IssueProject): string =>
   issue.features.find((feature) => feature.heroImage && feature.heroImage === issue.coverImage)?.heroClass
   ?? issue.features[0]?.heroClass
@@ -278,7 +313,7 @@ ${imageGrid}
         </figure>`;
 };
 
-const assetVersion = "20260506-about-quiet-copy";
+const assetVersion = "20260511-gallery-source-write";
 
 const galleryLayouts: ArticleGalleryLayout[] = ["standard", "wide", "portrait", "diptych", "strip"];
 
@@ -1364,12 +1399,13 @@ export const renderArticlePage = (
                     </div>` : "";
     const captionMarkup = captionText ? `
                     <figcaption>${escapeHtml(captionText)}</figcaption>` : "";
+    const sourceMarkup = renderGallerySource(visibleImages, locale);
 
     return `
                   <figure class="article-section-figure article-section-gallery article-gallery-${layout}" data-gallery-layout="${layout}"${!isStaticImageSet ? " data-gallery data-gallery-index=\"0\"" : ""}>
                     <div class="article-gallery-frame"${!isStaticImageSet && visibleImages.length > 1 ? ` data-gallery-frame role="button" tabindex="0" aria-label="${escapeHtml(locale === "ko" ? "본문 이미지 다음으로 보기" : "Show next body image")}"` : ""}>
 ${imageItems}
-                    </div>${controlsMarkup}${captionMarkup}
+                    </div>${controlsMarkup}${captionMarkup}${sourceMarkup}
                   </figure>`;
   };
 

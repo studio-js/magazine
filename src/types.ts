@@ -47,6 +47,7 @@ export type ArticleGalleryLayout = "standard" | "wide" | "portrait" | "diptych" 
 export interface ArticleBlockImage {
   imageClass?: VisualClass;
   image?: string;
+  source?: string;
 }
 
 export type ArticleSectionBlock =

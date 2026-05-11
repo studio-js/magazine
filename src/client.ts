@@ -54,6 +54,7 @@ interface RuntimeCategoryDefinition {
 interface RuntimeArticleBlockImage {
   imageClass?: string;
   image?: string;
+  source?: string;
 }
 
 type RuntimeArticleSectionBlock =
@@ -372,6 +373,41 @@ const runtimeSubcategoryLabel = (categoryKey: string, subcategoryKey: string, lo
 const runtimeImageBlock = (visualClass: string, imageUrl = "", attributes = "", imageAttributes = `loading="lazy" decoding="async"`): string =>
   `<span class="image-block ${runtimeEscapeHtml(visualClass || "image-material")}${imageUrl ? " has-custom-image" : ""}"${attributes ? ` ${attributes}` : ""}>${imageUrl ? `<img src="${runtimeEscapeHtml(imageUrl)}" alt="" ${imageAttributes} data-image-source />` : ""}</span>`;
 
+const runtimeImageSourceLabel = (imageUrl = ""): string => {
+  const lowerUrl = imageUrl.toLowerCase();
+
+  if (!lowerUrl) {
+    return "";
+  }
+
+  if (lowerUrl.includes("apple.com")) return "Apple";
+  if (lowerUrl.includes("dyson")) return "Dyson";
+  if (lowerUrl.includes("diptyque") || lowerUrl.includes("4sg0zck18nfj")) return "Diptyque";
+  if (lowerUrl.includes("leica-camera")) return "Leica Camera";
+  if (lowerUrl.includes("muji.com")) return "MUJI";
+  if (lowerUrl.includes("patagonia") || lowerUrl.includes("wornwear")) return "Patagonia";
+  if (lowerUrl.includes("8cd2csgvqd3m")) return "Bang & Olufsen";
+
+  try {
+    return new URL(imageUrl).hostname.replace(/^www\./, "");
+  } catch {
+    return "";
+  }
+};
+
+const renderRuntimeGallerySource = (images: RuntimeArticleBlockImage[], locale: RuntimeLocale): string => {
+  const sourceLabels = Array.from(new Set(images
+    .map((image) => image.source?.trim() || runtimeImageSourceLabel(image.image || ""))
+    .filter(Boolean)));
+
+  if (sourceLabels.length === 0) {
+    return "";
+  }
+
+  return `
+                    <cite class="article-gallery-source"><span>${runtimeEscapeHtml(locale === "ko" ? "이미지 출처" : "Image source")}</span><b>${runtimeEscapeHtml(sourceLabels.join(" / "))}</b></cite>`;
+};
+
 const runtimeSnapshotData = (snapshot: RuntimeContentSnapshot | null): RuntimeContentData | null => {
   if (!snapshot || !Array.isArray(snapshot.articles) || !Array.isArray(snapshot.issueProjects)) {
     return null;
@@ -538,13 +574,14 @@ const renderRuntimeGallery = (article: RuntimeArticle, images: RuntimeArticleBlo
                       <button type="button" data-gallery-next>${runtimeEscapeHtml(locale === "ko" ? "다음" : "Next")}</button>
                     </div>` : "";
   const captionText = runtimeText(caption, locale);
+  const sourceMarkup = renderRuntimeGallerySource(visibleImages, locale);
 
   return `
                   <figure class="article-section-figure article-section-gallery article-gallery-${layout}" data-gallery-layout="${layout}"${!isStaticImageSet ? " data-gallery data-gallery-index=\"0\"" : ""}>
                     <div class="article-gallery-frame"${!isStaticImageSet && visibleImages.length > 1 ? ` data-gallery-frame role="button" tabindex="0" aria-label="${runtimeEscapeHtml(locale === "ko" ? "본문 이미지 다음으로 보기" : "Show next body image")}"` : ""}>
 ${imageItems}
                     </div>${controlsMarkup}${captionText ? `
-                    <figcaption>${runtimeEscapeHtml(captionText)}</figcaption>` : ""}
+                    <figcaption>${runtimeEscapeHtml(captionText)}</figcaption>` : ""}${sourceMarkup}
                   </figure>`;
 };
 
@@ -1479,20 +1516,13 @@ if (desktopNav && desktopNavItems.length > 0) {
   const closeSubnav = (): void => {
     clearNavCloseTimer();
     activeSubnavItem = null;
-    document.documentElement.style.setProperty("--active-nav-height", "0px");
-    header?.classList.remove("is-nav-expanded");
     desktopNav.classList.remove("is-submenu-active");
     desktopNavItems.forEach((item) => item.classList.remove("is-submenu-open"));
   };
 
   const openSubnav = (item: HTMLElement): void => {
-    const submenu = item.querySelector<HTMLElement>(".nav-submenu");
-    const submenuHeight = submenu ? Math.ceil(submenu.getBoundingClientRect().height) : 0;
-
     clearNavCloseTimer();
     activeSubnavItem = item;
-    document.documentElement.style.setProperty("--active-nav-height", `${submenuHeight}px`);
-    header?.classList.add("is-nav-expanded");
     desktopNav.classList.add("is-submenu-active");
     desktopNavItems.forEach((navItem) => navItem.classList.toggle("is-submenu-open", navItem === item));
   };
@@ -1551,6 +1581,7 @@ if (writer) {
   type AdminBlockImage = {
     imageClass?: string;
     image?: string;
+    source?: string;
   };
   type AdminSectionBlock =
     | {
@@ -1968,13 +1999,20 @@ if (writer) {
     en: value?.en || ""
   });
 
+  const normalizeBlockImage = (image: AdminBlockImage): AdminBlockImage => {
+    const source = image.source?.trim() || "";
+
+    return {
+      imageClass: image.imageClass || "image-material",
+      image: image.image || "",
+      ...(source ? { source } : {})
+    };
+  };
+
   const normalizeSectionBlock = (block: AdminSectionBlock): AdminSectionBlock | null => {
     if (block.type === "gallery") {
       const images = (block.images || [])
-        .map((image) => ({
-          imageClass: image.imageClass || "image-material",
-          image: image.image || ""
-        }))
+        .map(normalizeBlockImage)
         .filter((image) => image.imageClass || image.image);
 
       return images.length > 0
@@ -2427,7 +2465,12 @@ if (writer) {
     return quote;
   };
 
-  const createGalleryItem = (imageClass = "image-material", image = ""): HTMLElement => {
+  const gallerySourcePlaceholder = (image = ""): string => {
+    const inferredSource = runtimeImageSourceLabel(image);
+    return inferredSource ? `자동: ${inferredSource}` : "예: Apple";
+  };
+
+  const createGalleryItem = (imageClass = "image-material", image = "", source = ""): HTMLElement => {
     const item = document.createElement("div");
     item.className = "writer-gallery-item";
     item.dataset.writeGalleryItem = "";
@@ -2464,6 +2507,18 @@ if (writer) {
     imageInput.value = image;
     imageInput.dataset.writeGalleryImage = "";
 
+    const sourceLabel = document.createElement("label");
+    sourceLabel.className = "writer-gallery-source-field";
+    const sourceText = document.createElement("span");
+    sourceText.textContent = "출처";
+    const sourceInput = document.createElement("input");
+    sourceInput.type = "text";
+    sourceInput.placeholder = gallerySourcePlaceholder(image);
+    sourceInput.value = source;
+    sourceInput.dataset.writeGalleryImageSource = "";
+    sourceInput.setAttribute("aria-label", "본문 갤러리 이미지 출처");
+    sourceLabel.append(sourceText, sourceInput);
+
     const imageFile = document.createElement("input");
     imageFile.type = "file";
     imageFile.accept = "image/gif,image/jpeg,image/png,image/webp";
@@ -2490,7 +2545,7 @@ if (writer) {
     removeImage.dataset.writeGalleryImageRemove = "";
     removeImage.textContent = "이미지 삭제";
 
-    tools.append(imageClassLabel, imageInput, imageFile, useUrl, useFile, useVisual, removeImage);
+    tools.append(imageClassLabel, sourceLabel, imageInput, imageFile, useUrl, useFile, useVisual, removeImage);
     item.append(button, tools);
     return item;
   };
@@ -2520,7 +2575,7 @@ if (writer) {
     items.className = "writer-gallery-items";
     items.dataset.writeGalleryItems = "";
     const visibleImages = images.length > 0 ? images : [{ imageClass: "image-material", image: "" }];
-    visibleImages.forEach((image) => items.append(createGalleryItem(image.imageClass || "image-material", image.image || "")));
+    visibleImages.forEach((image) => items.append(createGalleryItem(image.imageClass || "image-material", image.image || "", image.source || "")));
 
     const figcaption = document.createElement("figcaption");
     figcaption.contentEditable = "true";
@@ -2855,6 +2910,7 @@ if (writer) {
       section.querySelectorAll<HTMLElement>("[data-write-gallery-item]").forEach((item) => {
         const imageClass = item.querySelector<HTMLSelectElement>("[data-write-gallery-image-class]")?.value || railClass;
         const image = item.querySelector<HTMLInputElement>("[data-write-gallery-image]")?.value.trim() || "";
+        const sourceInput = item.querySelector<HTMLInputElement>("[data-write-gallery-image-source]");
         const imagePreview = item.querySelector<HTMLElement>("[data-write-gallery-image-preview]");
         const imageLabel = item.querySelector<HTMLElement>("[data-write-gallery-image-label]");
 
@@ -2864,6 +2920,10 @@ if (writer) {
 
         if (imageLabel) {
           imageLabel.textContent = image ? "본문 이미지 수정" : "자동 본문 이미지";
+        }
+
+        if (sourceInput && sourceInput.value.trim() === "") {
+          sourceInput.placeholder = gallerySourcePlaceholder(image);
         }
       });
     });
@@ -2893,9 +2953,10 @@ if (writer) {
 
     if (block.dataset.writeBlock === "gallery") {
       const images = Array.from(block.querySelectorAll<HTMLElement>("[data-write-gallery-item]"))
-        .map((item) => ({
+        .map((item) => normalizeBlockImage({
           imageClass: item.querySelector<HTMLSelectElement>("[data-write-gallery-image-class]")?.value || "image-material",
-          image: item.querySelector<HTMLInputElement>("[data-write-gallery-image]")?.value.trim() || ""
+          image: item.querySelector<HTMLInputElement>("[data-write-gallery-image]")?.value.trim() || "",
+          source: item.querySelector<HTMLInputElement>("[data-write-gallery-image-source]")?.value.trim() || ""
         }))
         .filter((image) => image.imageClass || image.image);
 
